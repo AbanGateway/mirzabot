@@ -43,7 +43,7 @@ _step_eta() {
         "Adding PHP repository"*|"Retrying PHP repository"*) echo 15 ;;
         "Updating & upgrading"*|"Re-running system update"*) echo 120 ;;
         "Installing base tools"*)            echo 25 ;;
-        "Installing PHP 8.2"*)               echo 30 ;;
+        "Installing PHP "*)                  echo 30 ;;
         "Installing web stack"*)             echo 90 ;;
         "Repairing broken MySQL"*)           echo 90 ;;
         "Re-installing web stack"*)          echo 90 ;;
@@ -52,7 +52,7 @@ _step_eta() {
         "Enabling & starting services"*)     echo 8  ;;
         "Configuring firewall"*)             echo 15 ;;
         "Restarting Apache"*)                echo 5  ;;
-        "Setting PHP 8.2 as the active"*)    echo 6  ;;
+        "Setting PHP as the active"*|"Setting PHP "*) echo 6  ;;
         "Downloading Mirza"*)                echo 20 ;;
         "Extracting source files"*)          echo 5  ;;
         "Configuring MySQL root access"*)    echo 10 ;;
@@ -1432,6 +1432,8 @@ preflight() {
 
 function install_bot() {
     BOT_DIR="/var/www/html/mirzaprobotconfig"
+    PHP_VER="$(state_get PHP_VER)"
+    [ -z "$PHP_VER" ] && PHP_VER="8.2"
 
     # ── Guard: only block when a PREVIOUS install fully COMPLETED ──
     if [ -f "$CONFIG_FILE_DEFAULT" ] && ! has_resumable_state; then
@@ -1543,13 +1545,17 @@ function install_bot() {
             "apt-get install -y software-properties-common git unzip curl wget jq" \
             || { show_step_error; install_pause "Installing base tools"; }
 
-        run_step "Installing PHP 8.2 (fpm + mysql)" \
-            "DEBIAN_FRONTEND=noninteractive apt install -y php8.2 php8.2-cli php8.2-fpm php8.2-mysql" \
-            || { show_step_error; install_pause "Installing PHP 8.2"; }
+        PHP_VER="$(resolve_php_ver)"; [ -z "$PHP_VER" ] && PHP_VER="8.2"
+        state_set PHP_VER "$PHP_VER"
+        echo -e "  ${C_DIM}Selected PHP version:${CR} ${C_KEY}${PHP_VER}${CR}"
+
+        run_step "Installing PHP ${PHP_VER} (fpm + mysql)" \
+            "DEBIAN_FRONTEND=noninteractive apt install -y php${PHP_VER} php${PHP_VER}-cli php${PHP_VER}-fpm php${PHP_VER}-mysql" \
+            || { show_step_error; install_pause "Installing PHP ${PHP_VER}"; }
 
         # Versioned packages only: unversioned (php-*, lamp-server^) would pull the
-        # PPA's newest PHP (e.g. 8.4) as default and break the bot's mysqli/curl.
-        WEBSTACK_CMD="DEBIAN_FRONTEND=noninteractive apt install -y mysql-server apache2 libapache2-mod-php8.2 php8.2-mbstring php8.2-zip php8.2-gd php8.2-curl php8.2-intl php8.2-xml php8.2-bcmath"
+        # newest PHP available as default and break the bot's mysqli/curl.
+        WEBSTACK_CMD="DEBIAN_FRONTEND=noninteractive apt install -y mysql-server apache2 libapache2-mod-php${PHP_VER} php${PHP_VER}-mbstring php${PHP_VER}-zip php${PHP_VER}-gd php${PHP_VER}-curl php${PHP_VER}-intl php${PHP_VER}-xml php${PHP_VER}-bcmath"
         if ! run_step "Installing web stack (Apache, MySQL, PHP modules)" "$WEBSTACK_CMD"; then
             # Most common cause: a broken/half-configured MySQL from an interrupted run.
             # Safe to repair here because the fresh-server check ran and no DB exists yet.
@@ -1559,9 +1565,13 @@ function install_bot() {
                 || { show_step_error; install_pause "Installing web stack"; }
         fi
 
-        run_step "Setting PHP 8.2 as the active version" \
-            "a2dismod php8.5 php8.4 php8.3 php8.1 php8.0 php7.4 mpm_event mpm_worker 2>/dev/null; a2enmod php8.2 mpm_prefork 2>/dev/null; update-alternatives --set php /usr/bin/php8.2 2>/dev/null; systemctl restart apache2" \
-            || { show_step_error; install_pause "Setting PHP 8.2 as default"; }
+        local _other_php="" _pv
+        for _pv in 8.5 8.4 8.3 8.2 8.1 8.0 7.4; do
+            [ "$_pv" = "$PHP_VER" ] || _other_php="$_other_php php$_pv"
+        done
+        run_step "Setting PHP ${PHP_VER} as the active version" \
+            "a2dismod${_other_php} mpm_event mpm_worker 2>/dev/null; a2enmod php${PHP_VER} mpm_prefork 2>/dev/null; update-alternatives --set php /usr/bin/php${PHP_VER} 2>/dev/null; systemctl restart apache2" \
+            || { show_step_error; install_pause "Setting PHP ${PHP_VER} as default"; }
 
         echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | sudo debconf-set-selections
         echo 'phpmyadmin phpmyadmin/app-password-confirm password mirzahipass' | sudo debconf-set-selections
@@ -1581,7 +1591,7 @@ function install_bot() {
         }
 
         run_step "Installing extra modules (php-soap, php-ssh2, libssh2)" \
-            "DEBIAN_FRONTEND=noninteractive apt-get install -y php8.2-soap php8.2-ssh2 libssh2-1-dev libssh2-1" \
+            "DEBIAN_FRONTEND=noninteractive apt-get install -y php${PHP_VER}-soap php${PHP_VER}-ssh2 libssh2-1-dev libssh2-1" \
             || { show_step_error; install_pause "Installing extra PHP modules"; }
 
         run_step "Enabling & starting services (MySQL, Apache)" \
@@ -1961,7 +1971,7 @@ EOF
         run_step "Starting Apache" "systemctl start apache2" \
             || { show_step_error; install_pause "Starting Apache"; }
         sleep 5
-        run_step "Initializing database tables" "cd '$BOT_DIR' && php8.2 table.php" \
+        run_step "Initializing database tables" "cd '$BOT_DIR' && php${PHP_VER} table.php" \
             || { show_step_error; install_pause "Initializing database tables"; }
         mark_phase WEBHOOK
     fi
