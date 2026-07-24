@@ -2,428 +2,417 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../function.php';
+require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/../botapi.php';
 require_once __DIR__ . '/../panels.php';
 
-// Set headers and configuration
 header('Content-Type: application/json; charset=UTF-8');
 date_default_timezone_set('Asia/Tehran');
-$topic_id = select("topicid", "*", null, null, "fetchAll");
-foreach ($topic_id as $topic) {
-    if ($topic['report'] == "reportnight")
-        $reportnight = $topic['idreport'];
-    if ($topic['report'] == 'reporttest')
-        $reporttest = $topic['idreport'];
-    if ($topic['report'] == 'errorreport')
-        $errorreport = $topic['idreport'];
-    if ($topic['report'] == 'porsantreport')
-        $porsantreport = $topic['idreport'];
-    if ($topic['report'] == 'reportcron')
-        $reportcron = $topic['idreport'];
-    if ($topic['report'] == 'backupfile')
-        $reportbackup = $topic['idreport'];
-    if ($topic['report'] == 'buyreport')
-        $buyreport = $topic['idreport'];
-    if ($topic['report'] == 'otherservice')
-        $otherservice = $topic['idreport'];
-    if ($topic['report'] == 'paymentreport')
-        $paymentreports = $topic['idreport'];
-
-}
 ini_set('default_charset', 'UTF-8');
 ini_set('error_log', 'error_log');
 
-/**
- * Utility Functions
- */
-function sendJsonResponse($status, $message, $data = [], $httpCode = 200)
-{
-    http_response_code($httpCode);
-    echo json_encode([
-        'status' => $status,
-        'msg' => $message,
-        'obj' => $data
-    ], JSON_UNESCAPED_UNICODE);
-    exit;
-}
+list($headers, $data, $action) = apiRequestContext();
+$method = $_SERVER['REQUEST_METHOD'];
+$setting = select("setting", "*");
 
-function sendReport($text, $groupid, $topic_id, $reply_markup = null)
-{
-    if (strlen($groupid) > 0) {
-        telegram('sendmessage', [
-            'chat_id' => $groupid,
-            'message_thread_id' => $topic_id,
-            'text' => $text,
-            'parse_mode' => "HTML",
-            'reply_markup' => $reply_markup
-        ]);
-    }
-}
+$editableColumns = [
+    'name' => 'name_panel',
+    'url' => 'url_panel',
+    'username_panel' => 'username_panel',
+    'password_panel' => 'password_panel',
+    'status' => 'status',
+    'agent' => 'agent',
+    'sublink' => 'sublink',
+    'config' => 'config',
+    'type' => 'type',
+    'MethodUsername' => 'MethodUsername',
+    'Methodextend' => 'Methodextend',
+    'TestAccount' => 'TestAccount',
+    'limit_panel' => 'limit_panel',
+    'namecustom' => 'namecustom',
+    'conecton' => 'conecton',
+    'linksubx' => 'linksubx',
+    'inboundid' => 'inboundid',
+    'inboundstatus' => 'inboundstatus',
+    'inbound_deactive' => 'inbound_deactive',
+    'time_usertest' => 'time_usertest',
+    'val_usertest' => 'val_usertest',
+    'secret_code' => 'secret_code',
+    'priceChangeloc' => 'priceChangeloc',
+    'status_extend' => 'status_extend',
+    'subvip' => 'subvip',
+    'changeloc' => 'changeloc',
+    'version_panel' => 'version_panel',
+    'on_hold_test' => 'on_hold_test',
+];
 
-function validateToken($headers)
-{
-    global $APIKEY;
-    if (!isset($headers['Token'])) {
-        return false;
-    }
-    if (is_file('hash.txt')) {
-        $token = file_get_contents('hash.txt');
-    } else {
-        return false;
-    }
-    $validTokens = [$token, $APIKEY];
-    return in_array($headers['Token'], $validTokens, true);
-}
+$jsonColumns = [
+    'priceextravolume' => 'priceextravolume',
+    'pricecustomvolume' => 'pricecustomvolume',
+    'pricecustomtime' => 'pricecustomtime',
+    'priceextratime' => 'priceextratime',
+    'mainvolume' => 'mainvolume',
+    'maxvolume' => 'maxvolume',
+    'maintime' => 'maintime',
+    'maxtime' => 'maxtime',
+    'customvolume' => 'customvolume',
+    'hide_user' => 'hide_user',
+];
 
-function sanitizeRecursive($data)
-{
-    if (is_array($data)) {
-        return array_map('sanitizeRecursive', $data);
-    }
-    return is_string($data) ? htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8') : $data;
-}
-
-function validateMethod($expected, $actual)
-{
-    if (strtoupper($expected) !== strtoupper($actual)) {
-        sendJsonResponse(false, "method invalid; method must be {$expected}");
-    }
-}
-
-function logApiRequest($headers, $data, $action)
+function panel_panels(array $data, string $method): void
 {
     global $pdo;
 
+    validateMethod('GET', $method);
+
+    $paging = paginationParams($data);
+    $limit = $paging['limit'];
+    $page = $paging['page'];
+    $offset = $paging['offset'];
+    $q = $paging['q'];
+
     try {
-        $stmt = $pdo->prepare(
-            "INSERT IGNORE INTO logs_api (header, data, time, ip, actions) VALUES (?, ?, ?, ?, ?)"
-        );
-        $stmt->execute([
-            json_encode($headers),
-            json_encode($data),
-            date('Y/m/d H:i:s'),
-            $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            $action
+        $search = "%$q%";
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM marzban_panel WHERE name_panel LIKE :name_panel");
+        $stmt->execute([':name_panel' => $search]);
+        $totalpanel = (int) $stmt->fetchColumn();
+        $totalPages = (int) ceil($totalpanel / $limit);
+
+        $stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE name_panel LIKE CONCAT('%', :name_panel, '%') ORDER BY id LIMIT :limit OFFSET :offset");
+        $stmt->bindValue(':name_panel', $q, PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $panels = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($panels as &$panelRow) {
+            unset($panelRow['password_panel'], $panelRow['datelogin'], $panelRow['secret_code']);
+        }
+        unset($panelRow);
+
+        sendJsonResponse(true, "Successful", [
+            'panels' => $panels,
+            'pagination' => [
+                'total_panel' => $totalpanel,
+                'total_pages' => $totalPages,
+                'current_page' => $page,
+                'per_page' => $limit
+            ]
         ]);
+
     } catch (Exception $e) {
-        error_log("API logging error: " . $e->getMessage());
+        error_log("Database error in panel: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
     }
 }
 
-/**
- * Main API Logic
- */
+function panel_panel(array $data, string $method): void
+{
+    global $jsonColumns;
 
-// Get and validate headers
-$headers = getallheaders();
-if (!validateToken($headers)) {
-    sendJsonResponse(false, "token invalid", [], 403);
-}
+    validateMethod('GET', $method);
+    requireFields($data, ['id']);
 
-// Get request method and data
-$method = $_SERVER['REQUEST_METHOD'];
-$rawData = file_get_contents("php://input");
-$data = json_decode($rawData, true);
-
-// Validate JSON data
-if (!is_array($data)) {
-    sendJsonResponse(false, "data invalid", []);
-}
-
-// Sanitize input data
-$data = sanitizeRecursive($data);
-
-// Log API request
-logApiRequest($headers, $data, $data['actions'] ?? 'unknown');
-
-// Get settings
-$setting = select("setting", "*");
-
-// Route based on action
-switch ($data['actions'] ?? '') {
-
-    case 'panels':
-        validateMethod('GET', $method);
-
-        // Validate and set limit
-        $limit = 50;
-        if (isset($data['limit']) && is_numeric($data['limit']))
-            $limit = min(max((int) $data['limit'], 1), 1000);
-
-        // Validate and set page
-        $page = isset($data['page']) && is_numeric($data['page']) ? max((int) $data['page'], 1) : 1;
-        $offset = ($page - 1) * $limit;
-        $q = isset($data['q']) ? $data['q'] : '';
-
-        try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM marzban_panel WHERE (name_panel LIKE :name_panel )");
-            $search = "%$q%";
-            $stmt->bindParam(':name_panel', $search, PDO::PARAM_STR);
-            $stmt->execute();
-            $totalpanel = (int) $stmt->fetchColumn();
-            $totalPages = ceil($totalpanel / $limit);
-            $query = "SELECT * FROM marzban_panel WHERE name_panel  LIKE CONCAT('%', :name_panel, '%') ORDER BY id LIMIT :limit OFFSET :offset";
-            $stmt = $pdo->prepare($query);
-            $stmt->bindValue(':name_panel', $q, PDO::PARAM_STR);
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            $stmt->execute();
-            $panels = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            sendJsonResponse(true, "Successful", [
-                'panels' => $panels,
-                'pagination' => [
-                    'total_panel' => $totalpanel,
-                    'total_pages' => $totalPages,
-                    'current_page' => $page,
-                    'per_page' => $limit
-                ]
-            ]);
-
-        } catch (Exception $e) {
-            error_log("Database error in panel: " . $e->getMessage());
-            sendJsonResponse(false, "Database error occurred", [], 500);
-        }
-        break;
-
-    case 'panel':
-        validateMethod('GET', $method);
-
-        // Validate id panel
-        if (!isset($data['id']) || empty($data['id'])) {
-            sendJsonResponse(false, "id empty", []);
-        }
-
-        try {
-            $panel = select("marzban_panel", "*", "id", $data['id'], "select");
-            if (!$panel) {
-                sendJsonResponse(false, "panel not found", [
-                    'panel' => [],
-                ]);
-            }
-            $panel['hide_panel'] = json_decode($panel['hide_panel'], true);
-            sendJsonResponse(true, "Successful", [
-                'panel' => $panel,
-                'category' => $category,
-            ]);
-        } catch (Exception $e) {
-            error_log("Database error in panel: " . $e->getMessage());
-            sendJsonResponse(false, "Database error occurred", [], 500);
-        }
-        break;
-
-    case 'panel_add':
-        validateMethod('POST', $method);
-        $required_fields = ['name', 'price', 'data_limit', 'time', 'location'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $panel = select("panel", "*", "name_panel", $data['name'], "count");
-        if ($panel != 0) {
-            sendJsonResponse(false, "panel name exits", [], 200);
-        }
-        $panel = select("marzban_panel", "*", "code_panel", $data['location'], "select");
-        if (!$panel & $data['location'] != "/all")
-            sendJsonResponse(false, "location not found", [], 200);
-        try {
-            $randomString = bin2hex(random_bytes(3));
-            // Prepare panel data
-            $panelData = [
-                'code_panel' => $randomString,
-                'name_panel' => $data['name'],
-                'price_panel' => $data['price'],
-                'Volume_constraint' => $data['data_limit'],
-                'Service_time' => $data['time'],
-                'Location' => $panel['name_panel'],
-                'agent' => empty($data['agent']) ? "f" : $data['agent'],
-                'note' => empty($data['note']) ? "" : $data['note'],
-                'data_limit_reset' => empty($data['data_limit_reset']) ? "no_reset" : $data['data_limit_reset'],
-                'inbounds' => empty($data['note']) ? null : $data['inbounds'],
-                'proxies' => empty($data['proxies']) ? null : $data['proxies'],
-                'category' => empty($data['category']) ? null : $data['category'],
-                'one_buy_status' => empty($data['one_buy_status']) ? 0 : $data['one_buy_status'],
-                'hide_panel' => empty($data['hide_panel']) ? "{}" : $data['hide_panel'],
-            ];
-
-            // Insert panel into database
-            $columns = implode(',', array_keys($panelData));
-            $placeholders = ':' . implode(', :', array_keys($panelData));
-
-            $stmt = $pdo->prepare(
-                "INSERT IGNORE INTO panel ({$columns}) VALUES ({$placeholders})"
-            );
-
-            foreach ($panelData as $key => $value) {
-                $stmt->bindValue(":{$key}", $value);
-            }
-
-            $stmt->execute();
-            sendJsonResponse(true, "Successful");
-
-        } catch (Exception $e) {
-            error_log("Error in panel_add: " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while editing panel");
-        }
-        break;
-
-
-    case 'panel_edit':
-        validateMethod('POST', $method);
-        $required_fields = ['id'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
+    try {
         $panel = select("marzban_panel", "*", "id", $data['id'], "select");
         if (!$panel) {
-            sendJsonResponse(false, "panel not found", [], 200);
+            sendJsonResponse(false, "panel not found", ['panel' => []], 200);
         }
-        if (isset($data['name']) && $panel['name_panel'] != $data['name']) {
-            $panel_check = select("panel", "*", "name_panel", $data['name'], "count");
-            if ($panel_check != 0)
-                sendJsonResponse(false, "panel name exits", [], 200);
-            update("invoice", "Service_location", $data['name'], "Service_location", $panel['name_panel']);
-        }
-
-        try {
-            $panelData = [
-                'name_panel' => isset($data['name']) ? $data['name'] : $panel['name_panel'],
-                'sublink' => isset($data['sublink']) ? $data['sublink'] : $panel['sublink'],
-                'config' => isset($data['config']) ? $data['config'] : $panel['config'],
-                'status' => isset($data['status']) ? $data['status'] : $panel['status'],
-                'Location' => isset($data['location']) ? $data['location'] : $panel['Location'],
-                'agent' => isset($data['agent']) ? $data['agent'] : $panel['agent'],
-                'note' => isset($data['note']) ? $data['note'] : $panel['note'],
-                'data_limit_reset' => isset($data['data_limit_reset']) ? $data['data_limit_reset'] : $panel['data_limit_reset'],
-                'inbounds' => isset($data['inbounds']) ? $data['inbounds'] : $panel['inbounds'],
-                'proxies' => isset($data['proxies']) ? $data['proxies'] : $panel['proxies'],
-                'category' => isset($data['category']) ? $data['category'] : $panel['category'],
-                'one_buy_status' => isset($data['one_buy_status']) ? $data['one_buy_status'] : $panel['one_buy_status'],
-                'hide_panel' => isset($data['hide_panel']) ? json_encode($data['hide_panel']) : $panel['hide_panel'],
-            ];
-            $setParts = [];
-            foreach ($panelData as $key => $value) {
-                $setParts[] = "{$key} = :{$key}";
+        unset($panel['password_panel'], $panel['datelogin'], $panel['secret_code']);
+        foreach (array_keys($jsonColumns) as $column) {
+            if (isset($panel[$column])) {
+                $decoded = json_decode($panel[$column], true);
+                $panel[$column] = $decoded === null ? $panel[$column] : $decoded;
             }
-            $setClause = implode(", ", $setParts);
-
-            $stmt = $pdo->prepare("UPDATE panel SET {$setClause} WHERE id = :id");
-
-            foreach ($panelData as $key => $value) {
-                $stmt->bindValue(":{$key}", $value);
-            }
-            $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
-
-            $stmt->execute();
-
-            sendJsonResponse(true, "panel updated successfully", [], 200);
-
-        } catch (Exception $e) {
-            error_log("Error in panel_edit: " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while adding panel");
         }
-        break;
-    case 'panel_delete':
-        validateMethod('POST', $method);
-        $required_fields = ['id'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $panel = select("panel", "*", "id", $data['id'], "select");
-        if (!$panel) {
-            sendJsonResponse(false, "panel not found", [], 200);
-        }
-        try {
-            $stmt = $pdo->prepare("DELETE FROM panel  WHERE id = :id");
-            $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            sendJsonResponse(true, "panel delete successfully", [], 200);
-
-        } catch (Exception $e) {
-            error_log("Error in panel delete : " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while delete panel");
-        }
-        break;
-    case 'set_inbounds':
-        validateMethod('POST', $method);
-        $required_fields = ['id', 'input'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $panel = select("panel", "*", "id", $data['id'], "select");
-        if (!$panel) {
-            sendJsonResponse(false, "panel not found", [], 200);
-        }
-        $panel = select("marzban_panel", "*", 'name_panel', $panel['Location'], "select");
-        if ($panel['type'] == "marzban") {
-            $DataUserOut = getuser($data['input'], $panel['name_panel']);
-            if (!empty($DataUserOut['error']))
-                sendJsonResponse(false, $DataUserOut['error'], [], 200);
-            if (!empty($DataUserOut['status']) && $DataUserOut['status'] != 200)
-                sendJsonResponse(false, $DataUserOut['msg'], [], 200);
-            $DataUserOut = json_decode($DataUserOut['body'], true);
-            if ((isset($DataUserOut['msg']) && $DataUserOut['msg'] == "User not found") or !isset($DataUserOut['proxies'])) {
-                sendJsonResponse(false, "User Not Found", [], 200);
-            }
-            foreach ($DataUserOut['proxies'] as $key => &$value) {
-                if ($key == "shadowsocks") {
-                    unset($DataUserOut['proxies'][$key]['password']);
-                } elseif ($key == "trojan") {
-                    unset($DataUserOut['proxies'][$key]['password']);
-                } else {
-                    unset($DataUserOut['proxies'][$key]['id']);
-                }
-                if (count($DataUserOut['proxies'][$key]) == 0) {
-                    $DataUserOut['proxies'][$key] = new stdClass();
-                }
-            }
-            $stmt = $pdo->prepare("UPDATE panel SET proxies = :proxies WHERE id = :id_panel");
-            $proxy_output = json_encode($DataUserOut['proxies']);
-            $stmt->bindParam(':proxies', $proxy_output);
-            $stmt->bindParam(':id_panel', $data['id']);
-            $stmt->execute();
-            $datainbound = json_encode($DataUserOut['inbounds']);
-        } elseif ($panel['type'] == "marzneshin") {
-            $userdata = json_decode(getuserm($data['input'], $panel['name_panel'])['body'], true);
-            if (isset($userdata['detail']) and $userdata['detail'] == "User not found")
-                sendJsonResponse(false, "User Not Found", [], 200);
-            $datainbound = json_encode($userdata['service_ids'], true);
-        } elseif ($panel['type'] == "x-ui_single") {
-            $user_data = get_clinets($data['input'], $panel['name_panel']);
-            if (!empty($user_data['error']))
-                sendJsonResponse(false, $user_data['error'], [], 200);
-            if (!empty($user_data['status']) && $user_data['status'] != 200)
-                sendJsonResponse(false, $user_data['msg'], [], 200);
-            $user_data = json_decode($user_data['body'], true)['obj'];
-            if ($user_data == null)
-                sendJsonResponse(false, "User Not Found", [], 200);
-            $datainbound = $user_data['inboundId'];
-        } elseif ($panel['type'] == "s_ui") {
-            $user_data = GetClientsS_UI($data['input'], $panel['name_panel']);
-            if (count($user_data) == 0) {
-                sendJsonResponse(false, "User Not Found", [], 200);
-            }
-            $servies = [];
-            foreach ($user_data['inbounds'] as $service) {
-                $servies[] = $service;
-            }
-            $datainbound = json_encode($servies);
-        } elseif ($panel['type'] == "ibsng" || $panel['type'] == "mikrotik") {
-            $datainbound = $data['input'];
-        } else {
-            sendJsonResponse(false, "panel_not_support_options", [], 200);
-        }
-        $stmt = $pdo->prepare("UPDATE panel SET inbounds = :inbounds WHERE id = :id_panel ");
-        $stmt->bindParam(':inbounds', $datainbound);
-        $stmt->bindParam(':id_panel', $data['id']);
-        $stmt->execute();
-        sendJsonResponse(true, "successfully", [], 200);
-    default:
-        sendJsonResponse(false, "Action Invalid");
-        break;
+        sendJsonResponse(true, "Successful", [
+            'panel' => $panel,
+            'category' => select("category", "*", null, null, "fetchAll"),
+        ]);
+    } catch (Exception $e) {
+        error_log("Database error in panel: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
+    }
 }
 
-?>
+function panel_panel_add(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['name', 'url', 'username_panel', 'password_panel']);
+
+    if (select("marzban_panel", "*", "name_panel", $data['name'], "count") != 0) {
+        sendJsonResponse(false, "panel name exits", [], 200);
+    }
+
+    try {
+        $defaultAgentValue = json_encode(['f' => '0', 'n' => '0', 'n2' => '0']);
+        $defaultPrice = json_encode(['f' => "4000", 'n' => "4000", 'n2' => "4000"]);
+        $defaultMain = json_encode(['f' => "1", 'n' => "1", 'n2' => "1"]);
+        $defaultMaxVolume = json_encode(['f' => "1000", 'n' => "1000", 'n2' => "1000"]);
+        $defaultMaxTime = json_encode(['f' => "365", 'n' => "365", 'n2' => "365"]);
+
+        $panelData = [
+            'code_panel' => bin2hex(random_bytes(3)),
+            'name_panel' => $data['name'],
+            'url_panel' => $data['url'],
+            'username_panel' => $data['username_panel'],
+            'password_panel' => $data['password_panel'],
+            'status' => empty($data['status']) ? "active" : $data['status'],
+            'agent' => empty($data['agent']) ? "all" : $data['agent'],
+            'sublink' => empty($data['sublink']) ? "onsublink" : $data['sublink'],
+            'config' => empty($data['config']) ? "offconfig" : $data['config'],
+            'type' => empty($data['type']) ? "marzban" : $data['type'],
+            'MethodUsername' => empty($data['MethodUsername']) ? null : $data['MethodUsername'],
+            'Methodextend' => empty($data['Methodextend']) ? null : $data['Methodextend'],
+            'TestAccount' => empty($data['TestAccount']) ? "ONTestAccount" : $data['TestAccount'],
+            'limit_panel' => empty($data['limit_panel']) ? "unlimted" : $data['limit_panel'],
+            'namecustom' => empty($data['namecustom']) ? "vpn" : $data['namecustom'],
+            'conecton' => "offconecton",
+            'linksubx' => empty($data['linksubx']) ? null : $data['linksubx'],
+            'inboundid' => empty($data['inboundid']) ? "1" : $data['inboundid'],
+            'inboundstatus' => "offinbounddisable",
+            'inbound_deactive' => "0",
+            'time_usertest' => empty($data['time_usertest']) ? "1" : $data['time_usertest'],
+            'val_usertest' => empty($data['val_usertest']) ? "100" : $data['val_usertest'],
+            'priceChangeloc' => "0",
+            'status_extend' => "on_extend",
+            'subvip' => "offsubvip",
+            'changeloc' => "offchangeloc",
+            'version_panel' => empty($data['version_panel']) ? "0" : $data['version_panel'],
+            'on_hold_test' => "1",
+            'priceextravolume' => $defaultPrice,
+            'pricecustomvolume' => $defaultPrice,
+            'pricecustomtime' => $defaultPrice,
+            'priceextratime' => $defaultPrice,
+            'mainvolume' => $defaultMain,
+            'maxvolume' => $defaultMaxVolume,
+            'maintime' => $defaultMain,
+            'maxtime' => $defaultMaxTime,
+            'customvolume' => $defaultAgentValue,
+        ];
+
+        $columns = implode(',', array_keys($panelData));
+        $placeholders = ':' . implode(', :', array_keys($panelData));
+
+        $stmt = $pdo->prepare("INSERT INTO marzban_panel ({$columns}) VALUES ({$placeholders})");
+        foreach ($panelData as $key => $value) {
+            $stmt->bindValue(":{$key}", $value);
+        }
+        $stmt->execute();
+
+        sendJsonResponse(true, "Successful");
+
+    } catch (Exception $e) {
+        error_log("Error in panel_add: " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while adding panel");
+    }
+}
+
+function panel_panel_edit(array $data, string $method): void
+{
+    global $pdo, $editableColumns, $jsonColumns;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['id']);
+
+    $panel = select("marzban_panel", "*", "id", $data['id'], "select");
+    if (!$panel) {
+        sendJsonResponse(false, "panel not found", [], 200);
+    }
+
+    // Renaming a panel has to follow the invoices that point at it by name.
+    if (isset($data['name']) && $panel['name_panel'] != $data['name']) {
+        if (select("marzban_panel", "*", "name_panel", $data['name'], "count") != 0) {
+            sendJsonResponse(false, "panel name exits", [], 200);
+        }
+        update("invoice", "Service_location", $data['name'], "Service_location", $panel['name_panel']);
+    }
+
+    // The panel/panels responses redact these, so a client that round-trips a
+    // record sends them back empty; ignore blanks instead of wiping the
+    // credentials the bot needs to reach the panel.
+    $redactedColumns = ['password_panel', 'secret_code'];
+
+    try {
+        $panelData = [];
+        foreach ($editableColumns as $field => $column) {
+            if (!array_key_exists($field, $data)) {
+                continue;
+            }
+            if (in_array($column, $redactedColumns, true) && trim((string) $data[$field]) === '') {
+                continue;
+            }
+            $panelData[$column] = $data[$field];
+        }
+        foreach ($jsonColumns as $field => $column) {
+            if (array_key_exists($field, $data)) {
+                $panelData[$column] = is_array($data[$field]) ? json_encode($data[$field]) : $data[$field];
+            }
+        }
+
+        if ($panelData === []) {
+            sendJsonResponse(false, "nothing to update", [], 200);
+        }
+
+        // Credential changes invalidate the cached panel session.
+        if (isset($panelData['url_panel']) || isset($panelData['username_panel']) || isset($panelData['password_panel'])) {
+            $panelData['datelogin'] = null;
+        }
+
+        $setParts = [];
+        foreach ($panelData as $column => $value) {
+            $setParts[] = "{$column} = :{$column}";
+        }
+        $stmt = $pdo->prepare("UPDATE marzban_panel SET " . implode(", ", $setParts) . " WHERE id = :id");
+        foreach ($panelData as $column => $value) {
+            $stmt->bindValue(":{$column}", $value);
+        }
+        $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        sendJsonResponse(true, "panel updated successfully", [], 200);
+
+    } catch (Exception $e) {
+        error_log("Error in panel_edit: " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while editing panel");
+    }
+}
+
+function panel_panel_delete(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['id']);
+
+    $panel = select("marzban_panel", "*", "id", $data['id'], "select");
+    if (!$panel) {
+        sendJsonResponse(false, "panel not found", [], 200);
+    }
+    try {
+        $stmt = $pdo->prepare("DELETE FROM marzban_panel WHERE id = :id");
+        $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        sendJsonResponse(true, "panel delete successfully", [], 200);
+
+    } catch (Exception $e) {
+        error_log("Error in panel delete : " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while delete panel");
+    }
+}
+
+function panel_set_inbounds(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['id', 'input']);
+
+    $panel = select("marzban_panel", "*", "id", $data['id'], "select");
+    if (!$panel) {
+        sendJsonResponse(false, "panel not found", [], 200);
+    }
+
+    $proxy_output = null;
+    if ($panel['type'] == "marzban") {
+        $DataUserOut = getuser($data['input'], $panel['name_panel']);
+        if (!empty($DataUserOut['error']))
+            sendJsonResponse(false, $DataUserOut['error'], [], 200);
+        if (!empty($DataUserOut['status']) && $DataUserOut['status'] != 200)
+            sendJsonResponse(false, $DataUserOut['msg'], [], 200);
+        $DataUserOut = json_decode($DataUserOut['body'] ?? '', true);
+        if (!is_array($DataUserOut))
+            sendJsonResponse(false, "User Not Found", [], 200);
+
+        // Marzban >= 1.0 renamed "proxies" to "proxy_settings" and moved the
+        // inbound list into "group_ids".
+        $isNewMarzban = $panel['version_panel'] == "1";
+        $proxyKey = $isNewMarzban ? 'proxy_settings' : 'proxies';
+        if ((isset($DataUserOut['msg']) && $DataUserOut['msg'] == "User not found") or !isset($DataUserOut[$proxyKey]))
+            sendJsonResponse(false, "User Not Found", [], 200);
+
+        foreach ($DataUserOut[$proxyKey] as $key => $value) {
+            if ($key == "shadowsocks" || $key == "trojan") {
+                unset($DataUserOut[$proxyKey][$key]['password']);
+            } elseif ($key == "wireguard") {
+                unset($DataUserOut[$proxyKey][$key]['private_key']);
+                unset($DataUserOut[$proxyKey][$key]['public_key']);
+                unset($DataUserOut[$proxyKey][$key]['peer_ips']);
+            } else {
+                unset($DataUserOut[$proxyKey][$key]['id']);
+            }
+            if (count($DataUserOut[$proxyKey][$key]) == 0) {
+                $DataUserOut[$proxyKey][$key] = new stdClass();
+            }
+        }
+        $proxy_output = json_encode($DataUserOut[$proxyKey]);
+        $datainbound = json_encode($isNewMarzban ? ($DataUserOut['group_ids'] ?? []) : ($DataUserOut['inbounds'] ?? []));
+    } elseif ($panel['type'] == "marzneshin") {
+        $userdata = json_decode(getuserm($data['input'], $panel['name_panel'])['body'] ?? '', true);
+        if (!is_array($userdata) || (isset($userdata['detail']) and $userdata['detail'] == "User not found"))
+            sendJsonResponse(false, "User Not Found", [], 200);
+        $datainbound = json_encode($userdata['service_ids'] ?? []);
+    } elseif ($panel['type'] == "x-ui_single") {
+        $user_data = get_clinets($data['input'], $panel['name_panel']);
+        if (!empty($user_data['error']))
+            sendJsonResponse(false, $user_data['error'], [], 200);
+        if (!empty($user_data['status']) && $user_data['status'] != 200)
+            sendJsonResponse(false, $user_data['msg'], [], 200);
+        $user_data = json_decode($user_data['body'] ?? '', true)['obj'] ?? null;
+        if ($user_data == null)
+            sendJsonResponse(false, "User Not Found", [], 200);
+        $datainbound = $user_data['inboundId'];
+    } elseif ($panel['type'] == "s_ui") {
+        $user_data = GetClientsS_UI($data['input'], $panel['name_panel']);
+        if (!is_array($user_data) || count($user_data) == 0 || !isset($user_data['inbounds'])) {
+            sendJsonResponse(false, "User Not Found", [], 200);
+        }
+        $servies = [];
+        foreach ($user_data['inbounds'] as $service) {
+            $servies[] = $service;
+        }
+        $datainbound = json_encode($servies);
+    } elseif ($panel['type'] == "ibsng" || $panel['type'] == "mikrotik") {
+        $datainbound = $data['input'];
+    } else {
+        sendJsonResponse(false, "panel_not_support_options", [], 200);
+    }
+
+    if ($proxy_output !== null) {
+        $stmt = $pdo->prepare("UPDATE marzban_panel SET proxies = :proxies WHERE id = :id_panel");
+        $stmt->execute([':proxies' => $proxy_output, ':id_panel' => $data['id']]);
+    }
+    $stmt = $pdo->prepare("UPDATE marzban_panel SET inbounds = :inbounds WHERE id = :id_panel");
+    $stmt->execute([':inbounds' => $datainbound, ':id_panel' => $data['id']]);
+    sendJsonResponse(true, "successfully", [], 200);
+}
+
+function panel_remove_inbounds(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['id']);
+
+    $panel = select("marzban_panel", "*", "id", $data['id'], "select");
+    if (!$panel) {
+        sendJsonResponse(false, "panel not found", [], 200);
+    }
+    $stmt = $pdo->prepare("UPDATE marzban_panel SET inbounds = NULL, proxies = NULL WHERE id = :id_panel");
+    $stmt->execute([':id_panel' => $data['id']]);
+    sendJsonResponse(true, "successfully", [], 200);
+}
+
+match ($action) {
+    'panels' => panel_panels($data, $method),
+    'panel' => panel_panel($data, $method),
+    'panel_add' => panel_panel_add($data, $method),
+    'panel_edit' => panel_panel_edit($data, $method),
+    'panel_delete' => panel_panel_delete($data, $method),
+    'set_inbounds' => panel_set_inbounds($data, $method),
+    'remove_inbounds' => panel_remove_inbounds($data, $method),
+    default => sendJsonResponse(false, "Action Invalid"),
+};
+

@@ -2,68 +2,71 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../function.php';
+require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/../botapi.php';
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=UTF-8');
 date_default_timezone_set('Asia/Tehran');
 ini_set('default_charset', 'UTF-8');
 ini_set('error_log', 'error_log');
 
 $headrs = getallheaders();
 $setting = select("setting", "*");
-$token = file_get_contents('hash.txt');
-if(!isset($headrs['Token']) or $token != $headrs['Token']){
-    echo json_encode(array(
-        'status' => false,
-        'msg' => "token invalid"
-        ));
-    return;
+if (!validateToken($headrs)) {
+    sendJsonResponse(false, "token invalid", [], 403);
 }
+
 $method = $_SERVER['REQUEST_METHOD'];
 
-$data = json_decode(file_get_contents("php://input"),true);
-if(!is_array($data)){
-    echo json_encode(array(
-        'status' => false,
-        'msg' => "data invalid",
-        'obj' => []
-        ));
-        return;
+$data = json_decode(file_get_contents("php://input"), true);
+if (!is_array($data)) {
+    sendJsonResponse(false, "data invalid", []);
 }
 $data = sanitize_recursive($data);
-$stmt = $pdo->prepare("INSERT IGNORE INTO logs_api (header,data,time,ip,actions) VALUES (:header,:data,:time,:ip,:actions)");
-$stmt->bindParam(':header',json_encode($headrs));
-$stmt->bindParam(':data',json_encode($data));
-$stmt->bindParam(':time',date('Y/m/d H:i:s'));
-$stmt->bindParam(':ip',$_SERVER['REMOTE_ADDR']);
-$stmt->bindParam(':actions',$data['actions']);
-$stmt->execute();
-switch ($data['actions']) {
-    case 'services':
-        if($method != "GET"){
-    echo json_encode(array(
-        'status' => false,
-        'msg' => "method invalid; is mthod must GET"
-        ));
-    return;
+$action = $data['actions'] ?? '';
+
+try {
+    $stmt = $pdo->prepare("INSERT IGNORE INTO logs_api (header,data,time,ip,actions) VALUES (:header,:data,:time,:ip,:actions)");
+    $stmt->execute([
+        ':header' => json_encode($headrs),
+        ':data' => json_encode($data),
+        ':time' => date('Y/m/d H:i:s'),
+        ':ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+        ':actions' => $action,
+    ]);
+} catch (Exception $e) {
+    error_log("API logging error: " . $e->getMessage());
 }
-        if (isset($data['limit']) && is_numeric($data['limit'])){
-            $limit = "LIMIT {$data['limit']}";
-        }else{
-            $limit = "";
+
+function svc_services(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('GET', $method);
+
+    // "limit" stays optional and unbounded by default, as callers of this
+    // endpoint have always relied on getting the full list back.
+    $limit = null;
+    if (isset($data['limit']) && is_numeric($data['limit'])) {
+        $limit = min(max((int) $data['limit'], 1), 1000);
+    }
+
+    try {
+        $sql = "SELECT id,id_user,username,time,price,type,status FROM service_other";
+        $stmt = $pdo->prepare($limit === null ? $sql : $sql . " LIMIT :limit");
+        if ($limit !== null) {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         }
-        $stmt = $pdo->prepare("SELECT id,id_user,username,time,price,type,status FROM service_other $limit");
         $stmt->execute();
-        $users = $stmt->fetchAll();
-        echo json_encode(array(
-        'status' => true,
-        'msg' => "Successful",
-        'obj' => $users
-        ));
-        break;
-    default:
-        echo json_encode(array(
-        'status' => false,
-        'msg' => "Action Invalid"
-        ));
-        break;
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        sendJsonResponse(true, "Successful", $users);
+    } catch (Exception $e) {
+        error_log("Database error in services: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
+    }
 }
+
+match ($action) {
+    'services' => svc_services($data, $method),
+    default => sendJsonResponse(false, "Action Invalid"),
+};
+

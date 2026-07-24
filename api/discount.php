@@ -2,426 +2,309 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../function.php';
+require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/../botapi.php';
 require_once __DIR__ . '/../panels.php';
 
-// Set headers and configuration
 header('Content-Type: application/json; charset=UTF-8');
 date_default_timezone_set('Asia/Tehran');
-$topic_id = select("topicid", "*", null, null, "fetchAll");
-foreach ($topic_id as $topic) {
-    if ($topic['report'] == "reportnight")
-        $reportnight = $topic['idreport'];
-    if ($topic['report'] == 'reporttest')
-        $reporttest = $topic['idreport'];
-    if ($topic['report'] == 'errorreport')
-        $errorreport = $topic['idreport'];
-    if ($topic['report'] == 'porsantreport')
-        $porsantreport = $topic['idreport'];
-    if ($topic['report'] == 'reportcron')
-        $reportcron = $topic['idreport'];
-    if ($topic['report'] == 'backupfile')
-        $reportbackup = $topic['idreport'];
-    if ($topic['report'] == 'buyreport')
-        $buyreport = $topic['idreport'];
-    if ($topic['report'] == 'otherservice')
-        $otherservice = $topic['idreport'];
-    if ($topic['report'] == 'paymentreport')
-        $paymentreports = $topic['idreport'];
-
-}
 ini_set('default_charset', 'UTF-8');
 ini_set('error_log', 'error_log');
 
-/**
- * Utility Functions
- */
-function sendJsonResponse($status, $message, $data = [], $httpCode = 200)
-{
-    http_response_code($httpCode);
-    echo json_encode([
-        'status' => $status,
-        'msg' => $message,
-        'obj' => $data
-    ], JSON_UNESCAPED_UNICODE);
-    exit;
-}
+list($headers, $data, $action) = apiRequestContext();
+$method = $_SERVER['REQUEST_METHOD'];
+$setting = select("setting", "*");
 
-function sendReport($text, $groupid, $topic_id, $reply_markup = null)
-{
-    if (strlen($groupid) > 0) {
-        telegram('sendmessage', [
-            'chat_id' => $groupid,
-            'message_thread_id' => $topic_id,
-            'text' => $text,
-            'parse_mode' => "HTML",
-            'reply_markup' => $reply_markup
-        ]);
-    }
-}
-
-function validateToken($headers)
-{
-    global $APIKEY;
-    if (!isset($headers['Token'])) {
-        return false;
-    }
-    if (is_file('hash.txt')) {
-        $token = file_get_contents('hash.txt');
-    } else {
-        return false;
-    }
-    $validTokens = [$token, $APIKEY];
-    return in_array($headers['Token'], $validTokens, true);
-}
-
-function sanitizeRecursive($data)
-{
-    if (is_array($data)) {
-        return array_map('sanitizeRecursive', $data);
-    }
-    return is_string($data) ? htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8') : $data;
-}
-
-function validateMethod($expected, $actual)
-{
-    if (strtoupper($expected) !== strtoupper($actual)) {
-        sendJsonResponse(false, "method invalid; method must be {$expected}");
-    }
-}
-
-function logApiRequest($headers, $data, $action)
+function disc_discounts(array $data, string $method): void
 {
     global $pdo;
 
+    validateMethod('GET', $method);
+
+    $paging = paginationParams($data);
+    $limit = $paging['limit'];
+    $page = $paging['page'];
+    $offset = $paging['offset'];
+    $q = $paging['q'];
+
     try {
-        $stmt = $pdo->prepare(
-            "INSERT IGNORE INTO logs_api (header, data, time, ip, actions) VALUES (?, ?, ?, ?, ?)"
-        );
-        $stmt->execute([
-            json_encode($headers),
-            json_encode($data),
-            date('Y/m/d H:i:s'),
-            $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            $action
+        $search = "%$q%";
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM Discount WHERE (code LIKE :code_discount)");
+        $stmt->execute([':code_discount' => $search]);
+        $totalDiscount = (int) $stmt->fetchColumn();
+        $totalPages = (int) ceil($totalDiscount / $limit);
+        $query = "SELECT * FROM Discount WHERE (code  LIKE CONCAT('%', :code_discount, '%')) ORDER BY id LIMIT :limit OFFSET :offset";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindValue(':code_discount', $q, PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $discount = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        sendJsonResponse(true, "Successful", [
+            'discount' => $discount,
+            'pagination' => [
+                'total_discount' => $totalDiscount,
+                'total_pages' => $totalPages,
+                'current_page' => $page,
+                'per_page' => $limit
+            ]
         ]);
+
     } catch (Exception $e) {
-        error_log("API logging error: " . $e->getMessage());
+        error_log("Database error in discount: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
     }
 }
 
-/**
- * Main API Logic
- */
+function disc_discount(array $data, string $method): void
+{
+    validateMethod('GET', $method);
 
-// Get and validate headers
-$headers = getallheaders();
-if (!validateToken($headers)) {
-    sendJsonResponse(false, "token invalid", [], 403);
+    if (!isset($data['id']) || empty($data['id'])) {
+        sendJsonResponse(false, "id empty", []);
+    }
+
+    try {
+        $discount = select("Discount", "*", "id", $data['id'], "select");
+        if (!$discount) {
+            sendJsonResponse(true, "Successful", [
+                'discount' => [],
+            ]);
+        }
+        sendJsonResponse(true, "Successful", [
+            'discount' => $discount,
+        ]);
+    } catch (Exception $e) {
+        error_log("Database error in discount: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
+    }
 }
 
-// Get request method and data
-$method = $_SERVER['REQUEST_METHOD'];
-$rawData = file_get_contents("php://input");
-$data = json_decode($rawData, true);
+function disc_discount_add(array $data, string $method): void
+{
+    global $pdo;
 
-// Validate JSON data
-if (!is_array($data)) {
-    sendJsonResponse(false, "data invalid", []);
+    validateMethod('POST', $method);
+    requireFields($data, ['code']);
+    $price = requireInt($data, 'price', 0);
+    $limitUse = requireInt($data, 'limit_use', 0);
+
+    if (!preg_match('/^[A-Za-z\d]+$/', $data['code'])) {
+        sendJsonResponse(false, "invalid code", [], 200);
+    }
+    if (select("Discount", "*", "code", $data['code'], "count") != 0) {
+        sendJsonResponse(false, "Discount code exits", [], 200);
+    }
+    try {
+        $productData = [
+            'code' => $data['code'],
+            'price' => $price,
+            'limituse' => $limitUse,
+            'limitused' => 0
+        ];
+
+        $columns = implode(',', array_keys($productData));
+        $placeholders = ':' . implode(', :', array_keys($productData));
+        $stmt = $pdo->prepare(
+            "INSERT IGNORE INTO Discount ({$columns}) VALUES ({$placeholders})"
+        );
+
+        foreach ($productData as $key => $value) {
+            $stmt->bindValue(":{$key}", $value);
+        }
+
+        $stmt->execute();
+        sendJsonResponse(true, "Successful");
+
+    } catch (Exception $e) {
+        error_log("Error in Discount add: " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while editing Discount");
+    }
 }
 
-// Sanitize input data
-$data = sanitizeRecursive($data);
+function disc_discount_delete(array $data, string $method): void
+{
+    global $pdo;
 
-// Log API request
-logApiRequest($headers, $data, $data['actions'] ?? 'unknown');
+    validateMethod('POST', $method);
+    requireFields($data, ['id']);
+    $product = select("Discount", "*", "id", $data['id'], "select");
+    if (!$product) {
+        sendJsonResponse(false, "Discount not found", [], 200);
+    }
+    try {
+        $stmt = $pdo->prepare("DELETE FROM Discount  WHERE id = :id");
+        $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
+        $stmt->execute();
 
-// Get settings
-$setting = select("setting", "*");
+        sendJsonResponse(true, "Discount delete successfully", [], 200);
 
-// Route based on action
-switch ($data['actions'] ?? '') {
-
-    case 'discounts':
-        validateMethod('GET', $method);
-
-        // Validate and set limit
-        $limit = 50;
-        if (isset($data['limit']) && is_numeric($data['limit']))
-            $limit = min(max((int) $data['limit'], 1), 1000);
-
-        // Validate and set page
-        $page = isset($data['page']) && is_numeric($data['page']) ? max((int) $data['page'], 1) : 1;
-        $offset = ($page - 1) * $limit;
-        $q = isset($data['q']) ? $data['q'] : '';
-
-        try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM Discount WHERE (code LIKE :code_discount)");
-            $search = "%$q%";
-            $stmt->bindParam(':code_discount', $search, PDO::PARAM_STR);
-            $stmt->execute();
-            $totalDiscount = (int) $stmt->fetchColumn();
-            $totalPages = ceil($totalDiscount / $limit);
-            $query = "SELECT * FROM Discount WHERE (code  LIKE CONCAT('%', :code_discount, '%')) ORDER BY id LIMIT :limit OFFSET :offset";
-            $stmt = $pdo->prepare($query);
-            $stmt->bindValue(':code_discount', $q, PDO::PARAM_STR);
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            $stmt->execute();
-            $discount = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            sendJsonResponse(true, "Successful", [
-                'discount' => $discount,
-                'pagination' => [
-                    'total_discount' => $totalDiscount,
-                    'total_pages' => $totalPages,
-                    'current_page' => $page,
-                    'per_page' => $limit
-                ]
-            ]);
-
-        } catch (Exception $e) {
-            error_log("Database error in discount: " . $e->getMessage());
-            sendJsonResponse(false, "Database error occurred", [], 500);
-        }
-        break;
-
-    case 'discount':
-        validateMethod('GET', $method);
-
-        // Validate id discount
-        if (!isset($data['id']) || empty($data['id'])) {
-            sendJsonResponse(false, "id empty", []);
-        }
-
-        try {
-            $discount = select("Discount", "*", "id", $data['id'], "select");
-            if (!$discount) {
-                sendJsonResponse(true, "Successful", [
-                    'discount' => [],
-                ]);
-            }
-            sendJsonResponse(true, "Successful", [
-                'discount' => $discount,
-            ]);
-        } catch (Exception $e) {
-            error_log("Database error in discount: " . $e->getMessage());
-            sendJsonResponse(false, "Database error occurred", [], 500);
-        }
-        break;
-
-    case 'discount_add':
-        validateMethod('POST', $method);
-        $required_fields = ['code', 'price', 'limit_use'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $discount = select("Discount", "*", "code", $data['code'], "count");
-        if ($discount != 0) {
-            sendJsonResponse(false, "Discount code exits", [], 200);
-        }
-        if (!preg_match('/^[A-Za-z\d]+$/', $data['code'])) {
-            sendJsonResponse(false, "invalid code", [], 200);
-        }
-        try {
-            // Prepare Discount data
-            $productData = [
-                'code' => $data['code'],
-                'price' => $data['price'],
-                'limituse' => $data['limit_use'],
-                'limitused' => 0
-            ];
-            // Insert Discount into database
-            $columns = implode(',', array_keys($productData));
-            $placeholders = ':' . implode(', :', array_keys($productData));
-            $stmt = $pdo->prepare(
-                "INSERT IGNORE INTO Discount ({$columns}) VALUES ({$placeholders})"
-            );
-
-            foreach ($productData as $key => $value) {
-                $stmt->bindValue(":{$key}", $value);
-            }
-
-            $stmt->execute();
-            sendJsonResponse(true, "Successful");
-
-        } catch (Exception $e) {
-            error_log("Error in Discount add: " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while editing Discount");
-        }
-        break;
-
-    case 'discount_delete':
-        validateMethod('POST', $method);
-        $required_fields = ['id'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $product = select("Discount", "*", "id", $data['id'], "select");
-        if (!$product) {
-            sendJsonResponse(false, "Discount not found", [], 200);
-        }
-        try {
-            $stmt = $pdo->prepare("DELETE FROM Discount  WHERE id = :id");
-            $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            sendJsonResponse(true, "Discount delete successfully", [], 200);
-
-        } catch (Exception $e) {
-            error_log("Error in Discount delete : " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while delete Discount");
-        }
-        break;
-    case 'discount_sell_lists':
-        validateMethod('GET', $method);
-
-        // Validate and set limit
-        $limit = 50;
-        if (isset($data['limit']) && is_numeric($data['limit']))
-            $limit = min(max((int) $data['limit'], 1), 1000);
-
-        // Validate and set page
-        $page = isset($data['page']) && is_numeric($data['page']) ? max((int) $data['page'], 1) : 1;
-        $offset = ($page - 1) * $limit;
-        $q = isset($data['q']) ? $data['q'] : '';
-
-        try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM DiscountSell WHERE (codeDiscount LIKE :code_discount)");
-            $search = "%$q%";
-            $stmt->bindParam(':code_discount', $search, PDO::PARAM_STR);
-            $stmt->execute();
-            $totalDiscount = (int) $stmt->fetchColumn();
-            $totalPages = ceil($totalDiscount / $limit);
-            $query = "SELECT * FROM DiscountSell WHERE (codeDiscount  LIKE CONCAT('%', :code_discount, '%')) ORDER BY id LIMIT :limit OFFSET :offset";
-            $stmt = $pdo->prepare($query);
-            $stmt->bindValue(':code_discount', $q, PDO::PARAM_STR);
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            $stmt->execute();
-            $discount = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $product = select("product", "code_product as id,name_product", null, null, "fetchAll");
-            $panel = select("marzban_panel", "code_panel,name_panel", "status", "active", "fetchAll");
-            sendJsonResponse(true, "Successful", [
-                'discount' => $discount,
-                'product' => $product,
-                'panel' => $panel,
-                'pagination' => [
-                    'total_discount' => $totalDiscount,
-                    'total_pages' => $totalPages,
-                    'current_page' => $page,
-                    'per_page' => $limit
-                ]
-            ]);
-
-        } catch (Exception $e) {
-            error_log("Database error in discount: " . $e->getMessage());
-            sendJsonResponse(false, "Database error occurred", [], 500);
-        }
-        break;
-    case 'discount_sell':
-        validateMethod('GET', $method);
-
-        // Validate id discount sell
-        if (!isset($data['id']) || empty($data['id'])) {
-            sendJsonResponse(false, "id empty", []);
-        }
-
-        try {
-            $discount = select("DiscountSell", "*", "id", $data['id'], "select");
-            if ($discount['code_product'] != "all")
-                $discount['code_product'] = select('product', "*", "code_product", $discount['code_product'], "select")['name_product'];
-            if ($discount['code_panel'] != "/all")
-                $discount['code_panel'] = select('marzban_panel', "*", "code_panel", $discount['code_panel'], "select")['name_panel'];
-            if (!$discount) {
-                sendJsonResponse(true, "Successful", [
-                    'discount' => [],
-                ]);
-            }
-            sendJsonResponse(true, "Successful", [
-                'discount' => $discount,
-            ]);
-        } catch (Exception $e) {
-            error_log("Database error in discount: " . $e->getMessage());
-            sendJsonResponse(false, "Database error occurred", [], 500);
-        }
-        break;
-
-    case 'discount_sell_delete':
-        validateMethod('POST', $method);
-        $required_fields = ['id'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $product = select("DiscountSell", "*", "id", $data['id'], "select");
-        if (!$product) {
-            sendJsonResponse(false, "DiscountSell not found", [], 200);
-        }
-        try {
-            $stmt = $pdo->prepare("DELETE FROM DiscountSell  WHERE id = :id");
-            $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
-            $stmt->execute();
-
-            sendJsonResponse(true, "DiscountSell delete successfully", [], 200);
-
-        } catch (Exception $e) {
-            error_log("Error in DiscountSell delete : " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while delete DiscountSell");
-        }
-        break;
-    case 'discount_sell_add':
-        validateMethod('POST', $method);
-        $required_fields = ['code', 'percent', 'limit_use'];
-        $missing_fields = array_diff($required_fields, array_keys($data));
-        if (!empty($missing_fields)) {
-            sendJsonResponse(false, "Missing required fields: " . implode(', ', $missing_fields), []);
-        }
-        $discount = select("DiscountSell", "*", "codeDiscount", $data['code'], "count");
-        if ($discount != 0) {
-            sendJsonResponse(false, "Discount code exits", [], 200);
-        }
-        if (!preg_match('/^[A-Za-z\d]+$/', $data['code'])) {
-            sendJsonResponse(false, "invalid code", [], 200);
-        }
-        try {
-            // Prepare Discount data
-            $productData = [
-                'codeDiscount' => $data['code'],
-                'price' => $data['percent'],
-                'limitDiscount' => $data['limit_use'],
-                'usedDiscount' => 0,
-                'agent' => empty($data['agent']) ? "allusers" : $data['agent'],
-                'usefirst' => empty($data['usefirst']) ? "0" : $data['usefirst'],
-                'useuser' => empty($data['useuser']) ? $data['useuser'] : $data['useuser'],
-                'code_product' => empty($data['code_product']) ? "all" : $data['code_product'],
-                'code_panel' => empty($data['code_panel']) ? "/all" : $data['code_panel'],
-                'time' => empty($data['time']) ? null : $data['time'],
-                'type' => empty($data['type']) ? "all" : $data['type'],
-            ];
-            // Insert Discount into database
-            $columns = implode(',', array_keys($productData));
-            $placeholders = ':' . implode(', :', array_keys($productData));
-            $stmt = $pdo->prepare(
-                "INSERT IGNORE INTO DiscountSell ({$columns}) VALUES ({$placeholders})"
-            );
-
-            foreach ($productData as $key => $value) {
-                $stmt->bindValue(":{$key}", $value);
-            }
-
-            $stmt->execute();
-            sendJsonResponse(true, "Successful");
-
-        } catch (Exception $e) {
-            error_log("Error in Discount add: " . $e->getMessage());
-            sendJsonResponse(false, "An error occurred while editing Discount");
-        }
-        break;
-    default:
-        sendJsonResponse(false, "Action Invalid");
-        break;
+    } catch (Exception $e) {
+        error_log("Error in Discount delete : " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while delete Discount");
+    }
 }
+
+function disc_discount_sell_lists(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('GET', $method);
+
+    $paging = paginationParams($data);
+    $limit = $paging['limit'];
+    $page = $paging['page'];
+    $offset = $paging['offset'];
+    $q = $paging['q'];
+
+    try {
+        $search = "%$q%";
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM DiscountSell WHERE (codeDiscount LIKE :code_discount)");
+        $stmt->execute([':code_discount' => $search]);
+        $totalDiscount = (int) $stmt->fetchColumn();
+        $totalPages = (int) ceil($totalDiscount / $limit);
+        $query = "SELECT * FROM DiscountSell WHERE (codeDiscount  LIKE CONCAT('%', :code_discount, '%')) ORDER BY id LIMIT :limit OFFSET :offset";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindValue(':code_discount', $q, PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $discount = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $product = select("product", "code_product as id,name_product", null, null, "fetchAll");
+        $panel = select("marzban_panel", "code_panel,name_panel", "status", "active", "fetchAll");
+        sendJsonResponse(true, "Successful", [
+            'discount' => $discount,
+            'product' => $product,
+            'panel' => $panel,
+            'pagination' => [
+                'total_discount' => $totalDiscount,
+                'total_pages' => $totalPages,
+                'current_page' => $page,
+                'per_page' => $limit
+            ]
+        ]);
+
+    } catch (Exception $e) {
+        error_log("Database error in discount: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
+    }
+}
+
+function disc_discount_sell(array $data, string $method): void
+{
+    validateMethod('GET', $method);
+
+    if (!isset($data['id']) || empty($data['id'])) {
+        sendJsonResponse(false, "id empty", []);
+    }
+
+    try {
+        $discount = select("DiscountSell", "*", "id", $data['id'], "select");
+        if (!$discount) {
+            sendJsonResponse(true, "Successful", [
+                'discount' => [],
+            ]);
+        }
+        if ($discount['code_product'] != "all") {
+            $product = select('product', "*", "code_product", $discount['code_product'], "select");
+            $discount['code_product'] = $product['name_product'] ?? $discount['code_product'];
+        }
+        if ($discount['code_panel'] != "/all") {
+            $panel = select('marzban_panel', "*", "code_panel", $discount['code_panel'], "select");
+            $discount['code_panel'] = $panel['name_panel'] ?? $discount['code_panel'];
+        }
+        sendJsonResponse(true, "Successful", [
+            'discount' => $discount,
+        ]);
+    } catch (Exception $e) {
+        error_log("Database error in discount: " . $e->getMessage());
+        sendJsonResponse(false, "Database error occurred", [], 500);
+    }
+}
+
+function disc_discount_sell_delete(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['id']);
+    $product = select("DiscountSell", "*", "id", $data['id'], "select");
+    if (!$product) {
+        sendJsonResponse(false, "DiscountSell not found", [], 200);
+    }
+    try {
+        $stmt = $pdo->prepare("DELETE FROM DiscountSell  WHERE id = :id");
+        $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        sendJsonResponse(true, "DiscountSell delete successfully", [], 200);
+
+    } catch (Exception $e) {
+        error_log("Error in DiscountSell delete : " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while delete DiscountSell");
+    }
+}
+
+function disc_discount_sell_add(array $data, string $method): void
+{
+    global $pdo;
+
+    validateMethod('POST', $method);
+    requireFields($data, ['code']);
+    $percent = requireInt($data, 'percent', 0, 100);
+    $limitUse = requireInt($data, 'limit_use', 0);
+
+    if (!preg_match('/^[A-Za-z\d]+$/', $data['code'])) {
+        sendJsonResponse(false, "invalid code", [], 200);
+    }
+    if (select("DiscountSell", "*", "codeDiscount", $data['code'], "count") != 0) {
+        sendJsonResponse(false, "Discount code exits", [], 200);
+    }
+    try {
+        $productData = [
+            'codeDiscount' => $data['code'],
+            'price' => $percent,
+            'limitDiscount' => $limitUse,
+            'usedDiscount' => 0,
+            'agent' => empty($data['agent']) ? "allusers" : $data['agent'],
+            'usefirst' => empty($data['usefirst']) ? "0" : $data['usefirst'],
+            'useuser' => empty($data['useuser']) ? null : $data['useuser'],
+            'code_product' => empty($data['code_product']) ? "all" : $data['code_product'],
+            'code_panel' => empty($data['code_panel']) ? "/all" : $data['code_panel'],
+            'time' => empty($data['time']) ? null : $data['time'],
+            'type' => empty($data['type']) ? "all" : $data['type'],
+        ];
+
+        $columns = implode(',', array_keys($productData));
+        $placeholders = ':' . implode(', :', array_keys($productData));
+        $stmt = $pdo->prepare(
+            "INSERT IGNORE INTO DiscountSell ({$columns}) VALUES ({$placeholders})"
+        );
+
+        foreach ($productData as $key => $value) {
+            $stmt->bindValue(":{$key}", $value);
+        }
+
+        $stmt->execute();
+        sendJsonResponse(true, "Successful");
+
+    } catch (Exception $e) {
+        error_log("Error in Discount add: " . $e->getMessage());
+        sendJsonResponse(false, "An error occurred while editing Discount");
+    }
+}
+
+match ($action) {
+    'discounts' => disc_discounts($data, $method),
+    'discount' => disc_discount($data, $method),
+    'discount_add' => disc_discount_add($data, $method),
+    'discount_delete' => disc_discount_delete($data, $method),
+    'discount_sell_lists' => disc_discount_sell_lists($data, $method),
+    'discount_sell' => disc_discount_sell($data, $method),
+    'discount_sell_delete' => disc_discount_sell_delete($data, $method),
+    'discount_sell_add' => disc_discount_sell_add($data, $method),
+    default => sendJsonResponse(false, "Action Invalid"),
+};
+
 
 ?>

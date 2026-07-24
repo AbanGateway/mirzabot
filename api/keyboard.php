@@ -2,17 +2,24 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../function.php';
+require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/../botapi.php';
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=UTF-8');
 date_default_timezone_set('Asia/Tehran');
 ini_set('default_charset', 'UTF-8');
 ini_set('error_log', 'error_log');
 
+requireApiTokenOrAdminSession(getallheaders());
 
 $textbotlang = languagechange();
-$keyboardmain = json_decode(select("setting", "keyboardmain", null, null, "select")['keyboardmain'], true);
 
-$list_keyboard = array(
+$keyboardSetting = select("setting", "keyboardmain", null, null, "select");
+$keyboardmain = json_decode($keyboardSetting['keyboardmain'] ?? '', true);
+if (!is_array($keyboardmain) || !isset($keyboardmain['keyboard']) || !is_array($keyboardmain['keyboard'])) {
+    $keyboardmain = ['keyboard' => []];
+}
+
+$list_keyboard = [
     'text_sell',
     'text_extend',
     'text_usertest',
@@ -23,7 +30,7 @@ $list_keyboard = array(
     'text_Tariff_list',
     'text_support',
     'text_help',
-);
+];
 $textbotlang['textbot'] = [
     'text_sell' => $textbotlang['textbot']['sell'],
     'text_extend' => $textbotlang['textbot']['extend'],
@@ -36,23 +43,30 @@ $textbotlang['textbot'] = [
     'text_support' => $textbotlang['textbot']['support'],
     'text_help' => $textbotlang['textbot']['help'],
 ];
+
 foreach ($keyboardmain['keyboard'] as $keyboard) {
+    if (!is_array($keyboard)) {
+        continue;
+    }
     foreach ($keyboard as $arrkey) {
-        if (in_array($arrkey['text'], $list_keyboard)) {
-            $index_number = array_search($arrkey['text'], $list_keyboard);
+        if (!is_array($arrkey) || !isset($arrkey['text'])) {
+            continue;
+        }
+        $index_number = array_search($arrkey['text'], $list_keyboard, true);
+        if ($index_number !== false) {
             unset($list_keyboard[$index_number]);
         }
     }
 }
 $list_keyboard = array_values($list_keyboard);
+
 $keyboard = [];
 foreach ($list_keyboard as $key) {
     $keyboard[] = [['text' => $key]];
 }
 
-$list_data = [
+echo json_encode([
     'keylist' => $keyboard,
     'userlist' => $keyboardmain['keyboard'],
     'text' => $textbotlang['textbot']
-];
-echo json_encode($list_data);
+], JSON_UNESCAPED_UNICODE);

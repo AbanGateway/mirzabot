@@ -2,15 +2,13 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../function.php';
+require_once __DIR__ . '/utils.php';
 
 header('Content-Type: application/json; charset=utf-8');
 date_default_timezone_set('Asia/Tehran');
 ini_set('default_charset', 'UTF-8');
 ini_set('error_log', 'error_log');
 
-/**
- * Send a JSON response and terminate script execution.
- */
 function respond_json(int $statusCode, array $payload): void
 {
     http_response_code($statusCode);
@@ -52,12 +50,6 @@ function normalize_init_value($value): string
     return (string) $value;
 }
 
-/**
- * Validate Telegram mini app init data and return decoded user information.
- *
- * @throws InvalidArgumentException when the payload is missing required data.
- * @throws RuntimeException when the signature is invalid or user data malformed.
- */
 function validate_telegram_init_data($rawData, string $botToken): array
 {
     if (is_string($rawData)) {
@@ -106,12 +98,6 @@ function validate_telegram_init_data($rawData, string $botToken): array
     sort($dataCheckArray, SORT_STRING);
     $dataCheckString = implode("\n", $dataCheckArray);
 
-    // Telegram mini app verification requires calculating the secret key by
-    // hashing the bot token with the constant "WebAppData" as the HMAC key.
-    // The previous implementation accidentally reversed the arguments of
-    // hash_hmac, which meant the bot token was used as the key and produced an
-    // incorrect secret key – causing every verification attempt to fail with
-    // "User verification failed".
     $secretKey = hash_hmac('sha256', $botToken, 'WebAppData', true);
     $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
 
@@ -164,13 +150,9 @@ $headerKeys = [
 ];
 
 foreach ($headerKeys as $headerKey) {
-    foreach ($headers as $name => $value) {
-        if (strcasecmp($name, $headerKey) === 0) {
-            $value = trim($value);
-            if ($value !== '') {
-                $candidates[] = $value;
-            }
-        }
+    $value = headerValue($headers, $headerKey);
+    if ($value !== null && trim($value) !== '') {
+        $candidates[] = trim($value);
     }
 }
 
