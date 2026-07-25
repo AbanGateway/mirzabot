@@ -3680,11 +3680,11 @@ elseif ($datain == "systemsms") {
             $ListSell->bindValue(2, $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
             $ListSell->execute();
             $ListSell = number_format($ListSell->fetch(PDO::FETCH_ASSOC)['COUNT(*)'] ?? 0);
-            $ListSell = $pdo->prepare("SELECT SUM(price_product) FROM invoice WHERE (status = 'active' OR status = 'end_of_time'  OR status = 'end_of_volume' OR status = 'sendedwarn' OR Status = 'send_on_hold') AND Service_location = ? AND name_product != ?");
-            $ListSell->bindValue(1, $marzban_list_get['name_panel'], PDO::PARAM_STR);
-            $ListSell->bindValue(2, $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
-            $ListSell->execute();
-            $ListSellSUM = number_format($ListSell->fetch(PDO::FETCH_ASSOC)['SUM(price_product)'] ?? 0);
+            $ListSellSum = $pdo->prepare("SELECT SUM(price_product) FROM invoice WHERE (status = 'active' OR status = 'end_of_time'  OR status = 'end_of_volume' OR status = 'sendedwarn' OR Status = 'send_on_hold') AND Service_location = ? AND name_product != ?");
+            $ListSellSum->bindValue(1, $marzban_list_get['name_panel'], PDO::PARAM_STR);
+            $ListSellSum->bindValue(2, $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
+            $ListSellSum->execute();
+            $ListSellSUM = number_format($ListSellSum->fetch(PDO::FETCH_ASSOC)['SUM(price_product)'] ?? 0);
             $text_marzban = sprintf($textbotlang['Admin']['stats']['panelSales'], $ListSell, $ListSellSUM, $marzban_list_get['agent']);
             sendmessage($from_id, $text_marzban, $optionrebecca, 'HTML');
         } elseif (!empty($Check_connection['status']) && $Check_connection['status'] == 401) {
