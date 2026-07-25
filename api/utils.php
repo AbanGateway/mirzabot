@@ -91,11 +91,33 @@ function requireApiToken($headers)
     }
 }
 
+function hasAdminSession()
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (empty($_SESSION['admin_user'])) {
+        return false;
+    }
+
+    try {
+        $admin = select("admin", "id_admin", "username", $_SESSION['admin_user'], "select");
+    } catch (Exception $e) {
+        error_log("Admin session check failed: " . $e->getMessage());
+        return false;
+    }
+
+    return is_array($admin) && isset($admin['id_admin']);
+}
+
 function requireApiTokenOrAdminSession($headers)
 {
-    if (!validateToken($headers)) {
-        sendJsonResponse(false, "token invalid", [], 403);
+    if (validateToken($headers) || hasAdminSession()) {
+        return;
     }
+
+    sendJsonResponse(false, "token invalid", [], 403);
 }
 
 function sanitizeRecursive($data)
