@@ -55,6 +55,7 @@ _step_eta() {
         "Setting PHP as the active"*|"Setting PHP "*) echo 6  ;;
         "Downloading Mirza"*)                echo 20 ;;
         "Extracting source files"*)          echo 5  ;;
+        "Installing PHP dependencies"*)      echo 60 ;;
         "Configuring MySQL root access"*)    echo 10 ;;
         "Opening firewall ports"*)           echo 4  ;;
         "Stopping Apache"*)                  echo 4  ;;
@@ -75,7 +76,7 @@ _step_eta() {
 plan_eta() {
     STEP_TOTAL=0; ETA_REMAINING=0; STEP_NO=0
     phase_done DEPS    || { STEP_TOTAL=$((STEP_TOTAL + 12)); ETA_REMAINING=$((ETA_REMAINING + 388)); }
-    phase_done FILES   || { STEP_TOTAL=$((STEP_TOTAL + 2));  ETA_REMAINING=$((ETA_REMAINING + 25)); }
+    phase_done FILES   || { STEP_TOTAL=$((STEP_TOTAL + 3));  ETA_REMAINING=$((ETA_REMAINING + 85)); }
     phase_done DBROOT  || { STEP_TOTAL=$((STEP_TOTAL + 1));  ETA_REMAINING=$((ETA_REMAINING + 10)); }
     if ! phase_done SSL; then
         if [ -f "/etc/letsencrypt/live/$(state_get DOMAIN)/fullchain.pem" ]; then
@@ -496,6 +497,64 @@ EOF
     return 0
 }
 export -f setup_mysql_root
+
+# Install Composer to /usr/local/bin/composer when it is not already available.
+# The installer is verified against the official signature before it is run.
+ensure_composer() {
+    if command -v composer >/dev/null 2>&1; then
+        return 0
+    fi
+
+    local php_bin setup expected actual
+    php_bin="$(command -v php)" || return 1
+    setup="$(mktemp /tmp/composer-setup.XXXXXX.php)"
+
+    expected="$("$php_bin" -r "echo @file_get_contents('https://composer.github.io/installer.sig');" 2>/dev/null | tr -d '[:space:]')"
+    if ! "$php_bin" -r "exit(@copy('https://getcomposer.org/installer', '$setup') ? 0 : 1);"; then
+        rm -f "$setup"
+        echo "Failed to download the Composer installer." >&2
+        return 1
+    fi
+
+    actual="$("$php_bin" -r "echo hash_file('sha384', '$setup');" 2>/dev/null | tr -d '[:space:]')"
+    if [ -z "$expected" ] || [ "$expected" != "$actual" ]; then
+        rm -f "$setup"
+        echo "Composer installer signature mismatch - refusing to run it." >&2
+        return 1
+    fi
+
+    "$php_bin" "$setup" --quiet --install-dir=/usr/local/bin --filename=composer
+    local rc=$?
+    rm -f "$setup"
+    [ "$rc" -eq 0 ] && command -v composer >/dev/null 2>&1
+}
+export -f ensure_composer
+
+# Build vendor/ from composer.json + composer.lock. vendor/ is not shipped in the
+# release archive, so this must run on every install, update and migration.
+install_php_deps() {
+    local dir="$1"
+
+    if [ ! -f "$dir/composer.json" ]; then
+        echo "No composer.json in $dir - skipping dependency installation."
+        return 0
+    fi
+
+    ensure_composer || return 1
+
+    COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_NO_INTERACTION=1 \
+        composer install --working-dir="$dir" \
+        --no-dev --optimize-autoloader --prefer-dist --no-progress || return 1
+
+    if [ ! -f "$dir/vendor/autoload.php" ]; then
+        echo "composer install finished but $dir/vendor/autoload.php is missing." >&2
+        return 1
+    fi
+
+    chown -R www-data:www-data "$dir/vendor" 2>/dev/null
+    return 0
+}
+export -f install_php_deps
 
 # True if a package is installed and configured.
 _pkg_installed() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'install ok installed'; }
@@ -1647,6 +1706,8 @@ function install_bot() {
         sudo chown -R www-data:www-data "$BOT_DIR"
         sudo chmod -R 755 "$BOT_DIR"
         wait
+        run_step "Installing PHP dependencies (composer)" "install_php_deps '$BOT_DIR'" \
+            || { show_step_error; install_pause "Installing PHP dependencies"; }
         mark_phase FILES
     else
         echo -e "  ${C_OK}●${CR} ${C_DIM}Bot files already downloaded - skipping.${CR}"
@@ -2088,6 +2149,8 @@ function update_bot() {
     fi
     sudo chown -R www-data:www-data "$BOT_DIR"
     sudo chmod -R 755 "$BOT_DIR"
+    run_step "Installing PHP dependencies (composer)" "install_php_deps '$BOT_DIR'" \
+        || { show_step_error; echo -e "\e[91mError: Failed to install PHP dependencies. The bot will not run until 'composer install' succeeds in $BOT_DIR.\033[0m"; exit 1; }
     DOMAIN_NAME=""
     if [ -f "$CONFIG_PATH" ]; then
         DOMAIN_NAME=$(grep "^\$domainhosts" "$CONFIG_PATH" | cut -d"'" -f2 | cut -d'/' -f1)
@@ -2403,6 +2466,8 @@ try { \$pdo = new PDO(\$dsn, \$usernamedb, \$passworddb, \$options); } catch (\P
 EOF
     chown -R www-data:www-data "$NEW_BOT_DIR"
     chmod -R 755 "$NEW_BOT_DIR"
+    run_step "Installing PHP dependencies (composer)" "install_php_deps '$NEW_BOT_DIR'" \
+        || { show_step_error; echo -e "\033[31mError: Failed to install PHP dependencies. Run 'composer install' in $NEW_BOT_DIR before using the bot.\033[0m"; exit 1; }
     echo -e "\033[33mReconfiguring Apache...\033[0m"
     a2dissite 000-default.conf 2>/dev/null || true
     a2dissite 000-default-le-ssl.conf 2>/dev/null || true
