@@ -10848,7 +10848,7 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     if (!in_array($bt_lang, ['fa', 'en', 'ru', 'zh'], true)) {
         $bt_lang = 'fa';
     }
-    sendmessage($from_id, $textbotlang['Admin']['adminphp']['ask_send_new_text'], $backadmin, 'HTML');
+    sendmessage($from_id, $textbotlang['Admin']['adminphp']['ask_send_new_text'] . "\n\n" . $textbotlang['bottext']['reset_hint'], $backadmin, 'HTML');
     savedata("clear", "bt_lang", $bt_lang);
     savedata("save", "bt_key", $bt_key);
     step("get_new_text", $from_id);
@@ -10887,10 +10887,22 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     $bt_parts = explode('.', $bt_key);
     $bt_p0 = $bt_parts[0] ?? '';
     $bt_p1 = $bt_parts[1] ?? '';
-    $bt_map[$bt_lang][$bt_p0][$bt_p1] = $bt_new;
-    update("setting", "text_edit", json_encode($bt_map, JSON_UNESCAPED_UNICODE), null, null);
+    $bt_reset = $bt_new === '0';
+    if ($bt_reset) {
+        unset($bt_map[$bt_lang][$bt_p0][$bt_p1]);
+        if (empty($bt_map[$bt_lang][$bt_p0])) {
+            unset($bt_map[$bt_lang][$bt_p0]);
+        }
+        if (empty($bt_map[$bt_lang])) {
+            unset($bt_map[$bt_lang]);
+        }
+    } else {
+        $bt_map[$bt_lang][$bt_p0][$bt_p1] = $bt_new;
+    }
+    update("setting", "text_edit", empty($bt_map) ? null : json_encode($bt_map, JSON_UNESCAPED_UNICODE), null, null);
     step('home', $from_id);
+    $textbotlang = languagechange();
     $bt_home = strtr($textbotlang['bottext']['home_text'], ['{lang}' => $textbotlang['bottext']['langs'][$bt_lang] ?? $bt_lang]);
-    sendmessage($from_id, $textbotlang['bottext']['msg_saved'], $keyboardadmin, 'HTML');
+    sendmessage($from_id, $bt_reset ? $textbotlang['bottext']['msg_reset_done'] : $textbotlang['bottext']['msg_saved'], $keyboardadmin, 'HTML');
     sendmessage($from_id, $bt_home, keyboard_list_text($bt_lang), 'HTML');
 }
