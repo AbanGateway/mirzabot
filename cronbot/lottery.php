@@ -50,12 +50,6 @@ if (intval($setting['scorestatus']) == 1) {
         $textlotterygroup = $textJson['Admin']['report']['lotteryTitle'];
 
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $userLang = isset($result['language']) && !empty($result['language']) ? $result['language'] : 'fa';
-            if (!isset($textJson[$userLang])) {
-                $userLang = 'fa'; // fallback to Persian
-            }
-            $textbotlang = $textJson[$userLang];
-
             if (!isset($Lottery_prize[$count])) {
                 error_log("No prize defined for rank " . ($count + 1));
                 break;

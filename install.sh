@@ -43,6 +43,7 @@ _step_eta() {
         "Adding PHP repository"*|"Retrying PHP repository"*) echo 15 ;;
         "Updating & upgrading"*|"Re-running system update"*) echo 120 ;;
         "Installing base tools"*)            echo 25 ;;
+        "Installing PHP dependencies"*)      echo 60 ;;
         "Installing PHP "*)                  echo 30 ;;
         "Installing web stack"*)             echo 90 ;;
         "Repairing broken MySQL"*)           echo 90 ;;
@@ -55,7 +56,6 @@ _step_eta() {
         "Setting PHP as the active"*|"Setting PHP "*) echo 6  ;;
         "Downloading Mirza"*)                echo 20 ;;
         "Extracting source files"*)          echo 5  ;;
-        "Installing PHP dependencies"*)      echo 60 ;;
         "Configuring MySQL root access"*)    echo 10 ;;
         "Opening firewall ports"*)           echo 4  ;;
         "Stopping Apache"*)                  echo 4  ;;
@@ -2110,6 +2110,13 @@ function update_bot() {
         echo -e "\e[91mError: Extracted update folder not found. Aborting before touching the current install.\033[0m"
         rm -rf "$TEMP_DIR"; sleep 2; show_menu; return 1
     fi
+    # Build vendor/ inside the extracted copy first. The live install is still
+    # untouched at this point, so a composer or network failure aborts the update
+    # instead of leaving the bot without its dependencies.
+    run_step "Installing PHP dependencies (composer)" "install_php_deps '$EXTRACTED_DIR'" \
+        || { show_step_error
+             echo -e "\e[91mError: Failed to install PHP dependencies. The update was aborted and your current installation was left untouched.\033[0m"
+             rm -rf "$TEMP_DIR"; sleep 2; show_menu; return 1; }
     CONFIG_PATH="$BOT_DIR/config.php"
     TEMP_CONFIG="/root/mirzapro_config_backup.php"
     if [ -f "$CONFIG_PATH" ]; then
@@ -2149,8 +2156,6 @@ function update_bot() {
     fi
     sudo chown -R www-data:www-data "$BOT_DIR"
     sudo chmod -R 755 "$BOT_DIR"
-    run_step "Installing PHP dependencies (composer)" "install_php_deps '$BOT_DIR'" \
-        || { show_step_error; echo -e "\e[91mError: Failed to install PHP dependencies. The bot will not run until 'composer install' succeeds in $BOT_DIR.\033[0m"; exit 1; }
     DOMAIN_NAME=""
     if [ -f "$CONFIG_PATH" ]; then
         DOMAIN_NAME=$(grep "^\$domainhosts" "$CONFIG_PATH" | cut -d"'" -f2 | cut -d'/' -f1)

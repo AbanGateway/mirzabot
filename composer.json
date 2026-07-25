@@ -14,13 +14,6 @@
         "sort-packages": true,
         "platform": {
             "php": "8.2.0"
-        },
-        "policy": {
-            "advisories": {
-                "ignore": [
-                    "phpoffice/phpspreadsheet"
-                ]
-            }
         }
     },
     "prefer-stable": true,
