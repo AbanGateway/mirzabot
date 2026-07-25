@@ -1793,6 +1793,10 @@ nowpayments.io
 
 Текущий адрес: %s',
                         'btn_token_api' => 'Ваш api-токен: <code>%s</code>',
+                        'msg_api_docs_link' => '📘 Полная документация API:
+%s
+
+Передавайте токен выше в заголовке <code>Token</code> каждого запроса.',
                         'ok_success_panel_5' => '✅  Ваша веб-панель успешно активирована.
 
 

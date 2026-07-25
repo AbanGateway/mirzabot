@@ -1792,6 +1792,10 @@ nowpayments.io
 
 آدرس فعلی: %s',
                         'btn_token_api' => 'توکن api شما : <code>%s</code>',
+                        'msg_api_docs_link' => '📘 مستندات کامل API:
+%s
+
+توکن بالا را در هدر <code>Token</code> هر درخواست قرار دهید.',
                         'ok_success_panel_5' => '✅  پنل تحت وب شما با موفقیت فعال گردید.
 
 

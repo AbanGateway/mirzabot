@@ -1792,6 +1792,10 @@ nowpayments.io
 
 当前地址：%s',
                         'btn_token_api' => '您的 api 令牌：<code>%s</code>',
+                        'msg_api_docs_link' => '📘 完整 API 文档：
+%s
+
+请在每个请求的 <code>Token</code> 头中携带上面的令牌。',
                         'ok_success_panel_5' => '✅  您的网页面板已成功激活。
 
 

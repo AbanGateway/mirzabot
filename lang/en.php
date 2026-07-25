@@ -1792,6 +1792,10 @@ Numeric ID of the cancellation requester: %s',
 
 Current address: %s',
                         'btn_token_api' => 'Your api token: <code>%s</code>',
+                        'msg_api_docs_link' => '📘 Full API reference:
+%s
+
+Send the token above in the <code>Token</code> header of every request.',
                         'ok_success_panel_5' => '✅  Your web panel was activated successfully.
 
 
