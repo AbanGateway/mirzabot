@@ -659,11 +659,11 @@ class ManagePanel
             }
             if ((intval($user_data['client']['totalGB'])) != 0) {
                 if ((intval($user_data['client']['totalGB']) - ($used_data_3xui['obj']['up'] + $used_data_3xui['obj']['down'])) <= 0)
-                    $user_data['enable'] = "limited";
+                    $user_data['client']['enable'] = "limited";
             }
             if (intval($user_data['client']['expiryTime']) != 0) {
                 if ($expire - time() <= 0)
-                    $user_data['enable'] = "expired";
+                    $user_data['client']['enable'] = "expired";
             }
             if ($user_data['client']['expiryTime'] < -10000) {
                 $user_data['client']['enable'] = "on_hold";
