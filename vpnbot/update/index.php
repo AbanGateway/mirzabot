@@ -66,7 +66,7 @@ if (!is_dir('data')) {
 }
 if (!in_array($from_id, $users_ids) && $settingmain['statusnewuser'] == "onnewuser" && $from_id != 0) {
 
-    $newuser = sprintf($textbotlang['Admin']['manageUser']['newUser'], $first_name, $username, "<a href = \"tg://user?id=$from_id\">$from_id</a>");
+    $newuser = sprintf($textbotlang['Admin']['reportgroup']['newUser'], $first_name, $username, "<a href = \"tg://user?id=$from_id\">$from_id</a>");
     foreach ($admin_ids as $admin) {
         sendmessage($admin, $newuser, null, 'HTML');
     }
@@ -591,7 +591,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     $locationproduct->bindValue(1, $userbot['agent'], PDO::PARAM_STR);
     $locationproduct->execute();
     if (($locationproduct)->rowCount() == 0) {
-        sendmessage($from_id, $textbotlang['Admin']['managepanel']['nullPanel'], null, 'HTML');
+        sendmessage($from_id, $textbotlang['users']['sell']['nullPanel'], null, 'HTML');
         return;
     }
     if (($locationproduct)->rowCount() == 1) {
@@ -604,7 +604,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
         if ($locationproduct['hide_user'] != null) {
             $list_user = json_decode($locationproduct['hide_user'], true);
             if (in_array($from_id, $list_user)) {
-                sendmessage($from_id, $textbotlang['Admin']['managepanel']['nullPanel'], null, 'HTML');
+                sendmessage($from_id, $textbotlang['users']['sell']['nullPanel'], null, 'HTML');
                 return;
             }
         }
@@ -613,7 +613,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
         $countinovoice = $stmt->rowCount();
         if ($locationproduct['limit_panel'] != "unlimited") {
             if ($countinovoice >= $locationproduct['limit_panel']) {
-                sendmessage($from_id, $textbotlang['Admin']['managepanel']['limitedPanelFirst'], null, 'HTML');
+                sendmessage($from_id, $textbotlang['users']['sell']['capacityFull'], null, 'HTML');
                 return;
             }
         }
@@ -644,7 +644,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
             } else {
                 $nullproduct = select("product", "*", "agent", $userbot['agent'], "count");
                 if ($nullproduct == 0) {
-                    sendmessage($from_id, $textbotlang['Admin']['Product']['nullProduct'], null, 'HTML');
+                    sendmessage($from_id, $textbotlang['users']['sell']['nullProduct'], null, 'HTML');
                     return;
                 }
                 sendmessage($from_id, "📌 دسته بندی خود را انتخاب نمایید!", KeyboardCategory($marzban_list_get['name_panel'], $userbot['agent'], "backuser"), 'HTML');
@@ -696,7 +696,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     $countinovoice = $stmt->rowCount();
     if ($locationproduct['limit_panel'] != "unlimited") {
         if ($countinovoice >= $locationproduct['limit_panel']) {
-            sendmessage($from_id, $textbotlang['Admin']['managepanel']['limitedPanel'], null, 'HTML');
+            sendmessage($from_id, $textbotlang['users']['sell']['panelCapacityFull'], null, 'HTML');
             return;
         }
     }
@@ -722,7 +722,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
         } else {
             $nullproduct = select("product", "*", "agent", $userbot['agent'], "count");
             if ($nullproduct == 0) {
-                sendmessage($from_id, $textbotlang['Admin']['Product']['nullProduct'], null, 'HTML');
+                sendmessage($from_id, $textbotlang['users']['sell']['nullProduct'], null, 'HTML');
                 return;
             }
             Editmessagetext($from_id, $message_id, "📌 دسته بندی خود را انتخاب نمایید!", KeyboardCategory($locationproduct['name_panel'], $userbot['agent'], "backuser"));
@@ -778,7 +778,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
         return;
     }
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['Product']['invalidVolume'], $backuser, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidVolume'], $backuser, 'HTML');
         return;
     }
     $customtimevalueprice = $setting['pricetime'];
@@ -797,7 +797,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
     if ($user['step'] == "getvolumecustomusername") {
         if (!ctype_digit($text)) {
-            sendmessage($from_id, $textbotlang['Admin']['Product']['invalidTime'], $backuser, 'HTML');
+            sendmessage($from_id, $textbotlang['common']['invalidTime'], $backuser, 'HTML');
             return;
         }
         $maintime = json_decode($marzban_list_get['maintime'], true);
@@ -1266,7 +1266,7 @@ $textonebuy
     step("get_price", $from_id);
 } elseif ($user['step'] == "get_price") {
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['agent']['invalidValue'], $backuser, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backuser, 'HTML');
         return;
     }
     $dateacc = date('Y/m/d H:i:s');
@@ -1625,7 +1625,7 @@ $output
         return;
     }
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['Product']['invalidVolume'], $backuser, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidVolume'], $backuser, 'HTML');
         return;
     }
     $customtimevalueprice = $setting['pricetime'];
@@ -1637,7 +1637,7 @@ $output
 } elseif ($user['step'] == "gettimecustomextend" || preg_match('/^selectproductextends_(.*)/', $datain, $dataget)) {
     if ($user['step'] == "gettimecustomextend") {
         if (!ctype_digit($text)) {
-            sendmessage($from_id, $textbotlang['Admin']['customvolume']['invalidTime'], $backuser, 'HTML');
+            sendmessage($from_id, $textbotlang['users']['customSellVolume']['invalidTime'], $backuser, 'HTML');
             return;
         }
     }

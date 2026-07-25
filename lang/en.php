@@ -3,41 +3,221 @@
 
 return [
         'bottext' => [
-            'open_button'  => '📝 Edit bot texts',
-            'home_text'    => "📝 <b>Edit bot texts</b>\n\nPick the text you want to change.\n🟢 means it is already customized.\nCurrent language: <b>{lang}</b>",
-            'btn_close'    => '❌ Close',
-            'reset_hint'   => '♻️ To restore this text to its default, send <b>0</b>.',
-            'msg_reset_done' => '✅ This text has been restored to its default.',
-            'msg_session'  => '⛔️ Session expired. Please open it again.',
-            'msg_empty'    => '⛔️ The text is empty. Send it again or tap «Close».',
-            'msg_saved'    => '✅ Text saved.',
-            'msg_closed'   => 'Closed.',
-            'langs'        => ['fa' => '🇮🇷 فارسی', 'en' => '🇬🇧 English', 'ru' => '🇷🇺 Русский', 'zh' => '🇨🇳 中文'],
-            'items'        => [
-                ['label' => 'Welcome text', 'key' => 'users.text_start'],
-                ['label' => 'Button: Buy subscription', 'key' => 'textbot.sell'],
-                ['label' => 'Button: My services', 'key' => 'textbot.purchasedServices'],
-                ['label' => 'Button: Renew service', 'key' => 'textbot.extend'],
-                ['label' => 'Button: Test account', 'key' => 'textbot.userTest'],
-                ['label' => 'Button: Wallet & top-up', 'key' => 'textbot.accountWallet'],
-                ['label' => 'Button: Add balance', 'key' => 'textbot.addBalance'],
-                ['label' => 'Button: Tariffs', 'key' => 'textbot.tariffList'],
-                ['label' => 'Button: Support', 'key' => 'textbot.support'],
-                ['label' => 'Button: Education', 'key' => 'textbot.help'],
-                ['label' => 'Button: Referrals', 'key' => 'textbot.affiliates'],
-                ['label' => 'Button: Gift code', 'key' => 'textbot.discount'],
-                ['label' => 'Button: Lucky wheel', 'key' => 'textbot.wheelLuck'],
-                ['label' => 'Button: FAQ', 'key' => 'textbot.faq'],
-                ['label' => 'After-purchase message', 'key' => 'textbot.afterPay'],
-                ['label' => 'After test-account delivery message', 'key' => 'textbot.afterText'],
-                ['label' => 'Test account expired message', 'key' => 'textbot.testExpired'],
-                ['label' => 'FAQ text', 'key' => 'textbot.faqDesc'],
-                ['label' => 'Tariff list text', 'key' => 'textbot.tariffListDesc'],
-                ['label' => 'Rules text', 'key' => 'textbot.rules'],
-                ['label' => 'Pre-invoice text', 'key' => 'textbot.preInvoice'],
-            ],
+                'open_button' => '📝 Edit bot texts',
+                'home_text' => '📝 <b>Edit bot texts</b>
+
+Pick the text you want to change.
+🟢 means it is already customized.
+Current language: <b>{lang}</b>',
+                'btn_close' => '❌ Close',
+                'reset_hint' => '♻️ To restore this text to its default, send <b>0</b>.',
+                'msg_reset_done' => '✅ This text has been restored to its default.',
+                'msg_session' => '⛔️ Session expired. Please open it again.',
+                'msg_empty' => '⛔️ The text is empty. Send it again or tap «Close».',
+                'msg_saved' => '✅ Text saved.',
+                'msg_closed' => 'Closed.',
+                'langs' => [
+                        'fa' => '🇮🇷 فارسی',
+                        'en' => '🇬🇧 English',
+                        'ru' => '🇷🇺 Русский',
+                        'zh' => '🇨🇳 中文',
+                ],
+                'items' => [
+                        [
+                                'label' => 'Welcome text',
+                                'key' => 'users.text_start',
+                        ],
+                        [
+                                'label' => 'Button: Buy subscription',
+                                'key' => 'textbot.sell',
+                        ],
+                        [
+                                'label' => 'Button: My services',
+                                'key' => 'textbot.purchasedServices',
+                        ],
+                        [
+                                'label' => 'Button: Renew service',
+                                'key' => 'textbot.extend',
+                        ],
+                        [
+                                'label' => 'Button: Test account',
+                                'key' => 'textbot.userTest',
+                        ],
+                        [
+                                'label' => 'Button: Wallet & top-up',
+                                'key' => 'textbot.accountWallet',
+                        ],
+                        [
+                                'label' => 'Button: Add balance',
+                                'key' => 'textbot.addBalance',
+                        ],
+                        [
+                                'label' => 'Button: Tariffs',
+                                'key' => 'textbot.tariffList',
+                        ],
+                        [
+                                'label' => 'Button: Support',
+                                'key' => 'textbot.support',
+                        ],
+                        [
+                                'label' => 'Button: Education',
+                                'key' => 'textbot.help',
+                        ],
+                        [
+                                'label' => 'Button: Referrals',
+                                'key' => 'textbot.affiliates',
+                        ],
+                        [
+                                'label' => 'Button: Gift code',
+                                'key' => 'textbot.discount',
+                        ],
+                        [
+                                'label' => 'Button: Lucky wheel',
+                                'key' => 'textbot.wheelLuck',
+                        ],
+                        [
+                                'label' => 'Button: FAQ',
+                                'key' => 'textbot.faq',
+                        ],
+                        [
+                                'label' => 'After-purchase message',
+                                'key' => 'textbot.afterPay',
+                        ],
+                        [
+                                'label' => 'After test-account delivery message',
+                                'key' => 'textbot.afterText',
+                        ],
+                        [
+                                'label' => 'Test account expired message',
+                                'key' => 'textbot.testExpired',
+                        ],
+                        [
+                                'label' => 'FAQ text',
+                                'key' => 'textbot.faqDesc',
+                        ],
+                        [
+                                'label' => 'Tariff list text',
+                                'key' => 'textbot.tariffListDesc',
+                        ],
+                        [
+                                'label' => 'Rules text',
+                                'key' => 'textbot.rules',
+                        ],
+                        [
+                                'label' => 'Pre-invoice text',
+                                'key' => 'textbot.preInvoice',
+                        ],
+                ],
+        ],
+        'language' => [
+                'selectPrompt' => '🌏 Please select your desired language.',
+                'changeButton' => '🌏 Change language',
+                'setSuccess' => '✅ Language set successfully',
+                'btnFa' => '🇮🇷 فارسی',
+                'btnEn' => '🇬🇧 English',
+                'btnRu' => '🇷🇺 Русский',
+                'btnZh' => '🇨🇳 中文',
+        ],
+        'common' => [
+                'units' => [
+                        'dayShort' => 'day',
+                        'byte' => 'Byte',
+                        'gb' => 'GB',
+                        'gigabyte' => 'gigabytes',
+                        'gigabyteAlt' => 'gigabytes',
+                        'kilobyte' => 'Kilobyte',
+                        'megabyte' => 'megabytes',
+                        'terabyte' => 'Terabyte',
+                ],
+                'duration' => [
+                        1 => '⏳ One month',
+                        '1day' => '⏳ One day',
+                        2 => '⏳ Two months',
+                        3 => '⏳ Three months',
+                        365 => '⏳ One year',
+                        4 => '⏳ Four months',
+                        6 => '⏳ Six months',
+                        '7day' => '⏳ Seven days',
+                        'byVolume' => '🔋 By volume',
+                ],
+                'connection' => [
+                        'onlineAlt' => 'Online',
+                        'offlineAlt' => 'Offline',
+                        'notConnectedAlt' => 'Not connected',
+                        'notConnected' => 'Not connected',
+                        'offline' => 'Offline',
+                        'online' => 'Online',
+                ],
+                'roles' => [
+                        'normalAlt' => 'Regular',
+                        'agentAlt' => 'Agent',
+                        'advancedAgentAlt' => 'Advanced agency',
+                        'advancedAgent' => 'Advanced agency',
+                        'agent' => 'Agent',
+                        'normal' => 'Regular',
+                ],
+                'gateways' => [
+                        'perfectMoney' => 'Perfect Money',
+                        'rial1' => 'Rial currency payment',
+                        'rial2' => 'Second Rial currency payment',
+                ],
+                'labels' => [
+                        'testServiceName' => 'Test service',
+                        'toman' => 'Toman',
+                        'unlimitedShort' => 'Unlimited',
+                        'remainingSuffix' => ' Other',
+                        'tomanUnit' => 'Toman',
+                        'notSent' => '❌<b> Not sent </b>❌',
+                        'confirmedByAdminAlt' => '✅ Approved by admin',
+                        'firstPurchaseAlt' => '📌 User\'s first purchase',
+                        'autoConfirmedByBot' => 'Approved by the bot without review',
+                        'confirmedByAdmin' => '✅ Approved by admin',
+                        'customService' => '⚙️ Custom service',
+                        'customUsername' => 'Custom username',
+                        'customUsernameRandom' => 'Custom username + random number',
+                        'firstPurchase' => '📌 User\'s first purchase',
+                        'receiptNotSent' => '🔴 Not sent 🔴',
+                        'test' => 'test',
+                        'testService1' => 'Test service',
+                        'testService2' => 'Test service',
+                        'testService3' => 'Test service',
+                        'testService4' => 'Test service',
+                        'testService5' => 'Test service',
+                        'testServiceFn' => 'Test service',
+                        'unknown' => 'Unknown',
+                        'unlimited' => 'Unlimited',
+                ],
+                'invalidInput' => '⭕️ Invalid input',
+                'invalidTime' => 'The number of days is invalid',
+                'invalidUsername' => '❌ The username is invalid.
+🔄 Please send your username again',
+                'invalidVolume' => 'The volume is invalid',
         ],
         'users' => [
+                'Rules' => '✅ The rules have been accepted. You can now use the bot\'s services.',
+                'SendMessage' => '📩 Send message to user',
+                'back' => 'You have returned to the main page!',
+                'backbtn' => '🏠 Back to main menu',
+                'backmenu' => '🏠 Back to previous menu',
+                'buttonDisabled' => '❌ This button is disabled',
+                'buttonDisabledForYou' => '❌ This button is disabled for you',
+                'customusername' => 'Custom username',
+                'erroroccurred' => '❌ An error occurred. Please start the steps again',
+                'featureUnavailable' => '❌ This feature is not available at the moment',
+                'featureUnavailable2' => '❌ This feature is not available at the moment.',
+                'genericRestart' => '❌ An error occurred. Please perform the steps again',
+                'genericRestart2' => '❌ An error occurred. Go through the steps from the beginning',
+                'infoFetchErrorRestart' => '❌ An error occurred while retrieving the information. Please perform the steps from the beginning',
+                'invalidusername' => '❌ The username is invalid
+🔄 Please send your username again',
+                'sectionDisabled' => '📛 This section is currently disabled',
+                'selectoption' => 'Choose an option',
+                'selectusername' => 'Send a custom username
+⚠️ The username must not contain extra characters such as @, space, or hyphen. 
+⚠️ The username must be in English.
+✅ Valid usernames: ali12 | mahdi | ws1_ksdf
+❌ Invalid usernames: ali_ | tele@ | _mahdi | محسن',
+                'text_start' => 'Hello, welcome',
                 'Balance' => [
                         'Failed' => '⭕️ Your payment has not been confirmed',
                         'addBalanceUser' => '⭕️ Manually add balance',
@@ -69,6 +249,195 @@ return [
                         'waiting' => 'Awaiting payment confirmation',
                         'zarinpal' => '❌ Error 
     The minimum amount for payment via this gateway is 5000 Toman.',
+                        'pendingPayment' => '❌ You have an unconfirmed payment. Please wait until the previous payment is reviewed, then send the new payment',
+                        'cardEnabledNotice' => '💳 Dear user, the card number has been activated for you; you can now make your purchase.',
+                        'cardInstructionAlt' => 'To pay, deposit the amount to the card number below',
+                        'giftDepositAlt' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
+                        'rejectedNotice' => '❌ Dear user, your payment was rejected for the following reason.
+✍️ %s
+🛒 Payment tracking code: %s
+                
+',
+                        'giftFromManagement' => '🎁 Dear user, an amount of %s Toman was credited to your wallet as a gift from management.',
+                        'deductedNotice' => '❌ Dear user, an amount of %s Toman was deducted from your wallet balance.',
+                        'addedNotice' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
+                        'deductedNotice2' => '❌ Dear user, an amount of %s Toman was deducted from your wallet balance.',
+                        'addedNotice2' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
+                        'addedNotice3' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
+                        'addedNotice4' => '💰Dear user, an amount of %s Toman was added to your balance.',
+                        'addedNotice5' => '💰Dear user, an amount of %s Toman was added to your balance.',
+                        'confirmError' => '❌ An error occurred during confirmation. Please perform the payment steps again',
+                        'depositRange' => '❌ The minimum deposit amount for this payment method must be {mainbalance} and the maximum {maxbalance} Toman',
+                        'depositRangePlisio' => '❌ The minimum deposit amount for this payment method must be {mainbalance} and the maximum {maxbalance} Toman',
+                        'cardRetrieveError' => '❌ An internal error occurred while retrieving the bank card. Please try again later.',
+                        'noActiveCard' => '❌ No active bank card was found for this payment method. Please try again later or contact support.',
+                        'receiptCooldown' => '❗ You sent a receipt in the last 2 minutes. Please send a new receipt in 2 minutes.',
+                        'alreadyConfirmed' => '❗️ Your transaction has been approved by the bot.',
+                        'transactionExpired' => '❗The time for this transaction has expired and payment for this transaction is not possible.',
+                        'askReceiptImage' => '🖼 Send your receipt image',
+                        'askReceiptOrTron' => '📌 Send your deposit image or Tron transaction link.',
+                        'restartPurchaseOrPay' => '❌ An error occurred. Please perform the purchase or payment steps again',
+                        'onlyOneImage' => '❌  You are only allowed to send one image',
+                        'receiptSentRenew' => '🚀 Your receipt was sent and your service will be renewed after review',
+                        'receiptSentExtraVolume' => '🚀 Your receipt was sent and volume will be added to your service after review.',
+                        'receiptSentExtraTime' => '🚀 Your receipt was sent and time will be added to your service after review',
+                        'amountRangeError' => '❌ Error 
+💬 The amount must be at least %s Toman and at most %s Toman',
+                        'added' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
+                        'chargedThanks' => '💎 Dear user, an amount of %s Toman was credited to your wallet. Thank you for your payment.
+                
+🛒 Your tracking code: %s',
+                        'deducted' => '❌ Dear user, an amount of %s Toman was deducted from your wallet balance.',
+                        'lessThanPrice' => 'The balance is less than the product price',
+                        'cardInstruction' => 'To pay, deposit the amount to the card number below',
+                        'cryptoInstruction' => '
+<b>💲 To top up your wallet balance via cryptocurrency, click the payment button at the end of the message</b>
+
+⚠️ Note:  the payment time is 30 minutes; after 30 minutes the transaction will be canceled
+
+🌐 Some domestic sites for buying cryptocurrency 👇
+🔸 nikpardakht.com
+🔹 webpurse.org
+🔸 bitpin.ir
+🔹 sarmayex.com
+🔸 ok-ex.io
+🔹 nobitex.ir
+🔸 bitbarg.com
+🔹 cafearz.com
+🔸 pay98.app
+🔢 Invoice number : %s
+💰 Invoice amount : %s Toman
+📊 Dollar price: %s Toman as of now
+
+Use the button below to pay👇🏻',
+                        'cryptoInstruction2' => '
+<b>💲 To top up your wallet balance via cryptocurrency, click the payment button at the end of the message</b>
+
+⚠️ Note:  the payment time is 30 minutes; after 30 minutes the transaction will be canceled
+
+🌐 Some domestic sites for buying cryptocurrency 👇
+🔸 nikpardakht.com
+🔹 webpurse.org
+🔸 bitpin.ir
+🔹 sarmayex.com
+🔸 ok-ex.io
+🔹 nobitex.ir
+🔸 bitbarg.com
+🔹 cafearz.com
+🔸 pay98.app
+🔢 Invoice number : %s
+💰 Invoice amount : %s Toman
+📊 Dollar price: %s Toman as of now
+
+
+<blockquote>⚠️ After payment, if the transaction amount was deposited correctly, your balance will be charged automatically within the next 15 minutes at most.</blockquote>
+
+
+Use the button below to pay👇🏻',
+                        'debtRequired' => '❌ You have a debt; you must pay at least %s Toman.
+         Send your amount again',
+                        'enterAmount' => '💸 Enter the amount in Toman:
+
+⚠️  The minimum amount is <b>%s</b> and the maximum is <b>%s</b> Toman',
+                        'giftDeposit' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
+                        'invoiceExpired' => '⭕️ Dear user, the invoice below expired due to non-payment within the specified time .
+❗️Please do not pay any amount for this invoice under any circumstances and create a new invoice .
+
+🛒 Your payment method : %s
+📌 Invoice code : <code>%s</code>
+🪙 Invoice amount :  %s Toman',
+                        'giftDepositIranpay' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
+                        'invoiceCreated' => '✅ Payment invoice was created.
+
+🔢 Invoice number : %s
+💰 Invoice amount : %s Toman
+
+❌ This transaction is valid for one hour; after that, payment for this transaction is not possible.        
+
+📌Please, after payment and a successful transaction, wait a bit until you receive the successful payment message on our site. Otherwise, your account will not be charged.
+
+Use the button below to pay👇🏻',
+                        'invoiceCreated2' => '
+✅ Payment invoice was created.
+            
+🔢 Invoice number : %s
+💰 Invoice amount : %s Toman
+
+❌ This transaction is valid for one day; after that, payment for this transaction is not possible.        
+
+📌Please, after payment and a successful transaction, wait a bit until you receive the successful payment message on our site. Otherwise, your account will not be charged.
+
+Use the button below to pay👇🏻',
+                        'queueBusy' => 'The number of people in the payment gateway queue is extremely high 📊
+
+‼️Please use another payment method for now',
+                        'giftDepositPlisio' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
+                        'plisioExpired' => '❌ The transaction below expired due to non-payment. Please do not pay any amount for this transaction
+
+🛒 Order code: %s
+💰 Amount:  %s Toman',
+                        'refundCreateFailed' => '💎  Dear user, because the service was not created, an amount of %s Toman was added to your wallet.',
+                        'refundRenewFailed' => '💎  Dear user, because the service was not renewed, an amount of %s Toman was added to your wallet.',
+                        'transactionCreated' => '✅ Your transaction was created
+        
+🛒 Tracking code:  <code>%s</code> 
+💲 Transaction amount in Toman  : <code>%s</code>
+
+
+💢 Please note these points before payment 👇
+        
+❌ This transaction is valid for 24 hours; after that, payment for this transaction is not possible.        
+
+
+✅ If you have a problem, you can contact support',
+                        'transactionCreated2' => '✅ Your transaction was created
+        
+🛒 Tracking code:  <code>%s</code> 
+💲 Transaction amount in Toman  : <code>%s</code>
+
+💢 Please note these points before payment 👇
+        
+🔹 The transaction is valid for one day and after that it will not be approved if paid .
+❌ After the transaction it takes 15 minutes to one hour for the transaction to be approved
+
+✅ If you have a problem, you can contact support',
+                        'transactionCreated3' => '✅ Your transaction was created
+        
+🛒 Tracking code:  <code>%s</code> 
+💲 Transaction amount in Toman  : <code>%s</code> Toman
+
+
+💢 Please note these points before payment 👇
+        
+❌ This transaction is valid for one day; after that, payment for this transaction is not possible.        
+
+✅ If you have a problem, you can contact support',
+                        'transactionCreatedStar' => '✅ Your transaction was created
+
+🛒 Tracking code: <code>%s</code>
+💲 Transaction amount: %s ⭐ (equivalent to %s Toman)
+
+📌 Please convert the amount of %s Toman to Telegram Stars and deposit it.
+
+💢 Important points before payment: 👇
+🔹 Each transaction is valid for 1 day; after expiry, refrain from depositing.
+
+✅ If you have a problem, contact support.',
+                        'transactionCreatedTron' => '✅ Your invoice has been created
+
+🛒 Tracking code: <code>%s</code>
+🌐 Network: TRX - Tron
+💳 Wallet address: <code>%s</code>
+
+📌 Please deposit <code>%s</code> TRX to the wallet address above, then click the button below and send the receipt.
+
+💢 Please note these points before payment 👇
+🔸 If you enter the wallet address incorrectly, the transaction will not be confirmed and no refund is possible.
+🔹 The sent amount must not be less or more than the declared amount.
+🔹 If you deposit more than the specified amount, it is not possible to add the difference.
+🔹 Each transaction is valid for one hour; do not send any amount after the expiration message.
+
+✅ If you have any issues, you can contact support.',
                 ],
                 'Discount' => [
                         'discountapplied' => 'Congratulations 🎉
@@ -83,27 +452,122 @@ return [
                         'giftcodesuccess' => 'The gift code was successfully registered and the amount of %s Toman was added to your balance. 🥳',
                         'giftcodeused' => '⭕️ A user with username @%s and numeric ID %s used the gift code %s.',
                         'notcode' => '❌ The code is invalid',
+                        'invalidCode' => '❌ The discount code is invalid',
+                        'expired' => '❌ The discount code time has expired.',
+                        'useLimit' => '⭕️ This code can only be used {useuser}  times',
+                        'appliedRenew' => '🤩 Your discount code was valid and {discount_price} percent discount was applied to your invoice.',
+                        'applied' => '🤩 Your discount code was valid and {discount_price} percent discount was applied to your invoice.',
+                        'notAllowed' => '❌ Purchase with this discount code is not possible',
                 ],
                 'Major' => [
                         'title' => '📌 Send the number of services you want to purchase 
 ⚠️ The minimum is 1 and the maximum is 15',
+                        'disabled' => '❌ This section is currently disabled',
+                        'minBalance' => '❌ For bulk purchase you must have at least {PaySetting} Toman balance.',
                 ],
-                'Rules' => '✅ The rules have been accepted. You can now use the bot\'s services.',
-                'SendMessage' => '📩 Send message to user',
+                'account' => [
+                        'verifiedByAdmin' => '💎 Dear user, your account has been successfully verified by the admin and you can now make your purchase',
+                        'info' => '
+🗂 Your account information :
+
+
+🪪 User ID: <code>%s</code>
+👤 Name: <code>%s</code>
+👨‍👩‍👦 Your referral code : <code>%s</code>
+📱 Contact number :%s
+⌚️Registration time : %s
+💰 Balance: %s Toman
+🛒 Number of purchased services : %s
+📑 Number of paid invoices :  : %s
+🤝 Number of your referrals : %s people
+🔖 User group : %s
+%s
+%s
+
+📆 %s → ⏰ %s
+                    
+',
+                        'notVerifiedNotice' => '⚠️ Your account is not verified. Your message has been sent to the admin.
+    For faster follow-up, you can message the ID below
+    @%s',
+                        'verifiedNotice' => '💎 Dear user, your account was verified successfully and you can now make your purchase',
+                        'verified' => 'Your account was verified successfully',
+                ],
                 'affiliates' => [
                         'affiliateedago' => '❌ You have previously been another user\'s referral, so you cannot become a referral again',
                         'affiliatesidyou' => '❌ It is not possible to become a referral with this user ID.',
-                        'banner' => '⭕️ Send your referral banner 
-
-❌ The banner must include an image',
-                        'changedPriceDiscount' => '✅ The referral amount was successfully registered',
-                        'changedpercentage' => '✅ The deposit percentage for the user was successfully set',
-                        'insertbanner' => '✅ Your banner was successfully registered.',
                         'invalidaffiliates' => '❌ You cannot be your own referral',
-                        'invalidbanner' => '❌ The banner you sent is invalid (the banner must be sent with an image)',
                         'offaffiliates' => '❌ The referral section is turned off',
-                        'priceDiscount' => '📌 Enter the amount you want the user to receive for each new referral',
-                        'setpercentage' => '📌 Send the percentage you want to be deposited to the user after a purchase',
+                        'balanceGift' => '🎁 An amount of {addbalancediscount} was added to your balance from your referral with user ID {from_id}.',
+                        'pointsEarned2Alt' => '📌You earned 2 new points.',
+                        'pointsEarned1Alt' => '📌You earned 1 new point.',
+                        'accountScore' => '🥅 Your account points : {score}',
+                        'notReferral' => '📛 You are not a referral of any user.',
+                        'joinedGift' => '🎉 Someone joined through your referral! The gift was credited to your account.',
+                        'joinGiftActivated' => '🎉 The membership gift was activated for you!',
+                        'commissionPaid' => '🎁  Commission payment 
+        
+        An amount of %s Toman was credited to your wallet from your referral',
+                        'commissionPaid2' => '🎁  Commission payment 
+        
+        An amount of %s Toman was credited to your wallet from your referral',
+                        'commissionPaidFn' => '🎁  Commission payment 
+        
+        An amount of %s Toman was credited to your wallet from your referral',
+                        'commissionPaidFn2' => '🎁  Commission payment 
+        
+        An amount of %s Toman was credited to your wallet from your referral',
+                        'commissionPaidMiniapp' => '🎁  Commission payment 
+            
+            An amount of %s Toman was credited to your wallet from your referral',
+                        'commissionPaidMiniapp2' => '🎁  Commission payment 
+        
+        An amount of %s Toman was credited to your wallet from your referral',
+                        'newReferralJoined' => '<b>🎉 A new referral!</b>
+User <b>@%s</b> joined the bot with your invite link ✅
+
+With this user\'s purchases, <b>your gift share</b> will be credited to your account 🔥',
+                        'welcomeGiftInfo' => '<b>💼 Referrals and welcome gift</b>
+
+By inviting friends through your <b>dedicated link</b>, your wallet is topped up without paying even 1 Rial, and you use the bot\'s services!
+
+%s
+%s
+
+<b>📊 Your stats:</b>
+• 👥 Referrals: %s people
+• 🛒 Purchases: %s
+• 💵 Total purchases: %s Toman
+
+<b>📢 Invite, get a gift, grow!</b>
+',
+                        'welcomeInvited' => '<b>🎉 Welcome!</b>
+
+You joined the bot through <b>@%s</b>\'s invitation and were registered as a referral ✅
+
+To receive the membership gift:
+🔘 Go to the <b>Referrals</b> menu  
+🔘 Press the <b>🎁 Receive membership gift</b> button
+
+This way, both you and your referrer get a gift! 💰
+',
+                        'membershipGiftClaimed' => '<b>⛔ You have already received the membership gift.</b>
+This gift can only be activated <b>once</b>.',
+                        'membershipGiftInfo' => '<b>🎁 Membership gift:</b>
+• 🎉 Total gift: %s Toman  
+• 🔻 50% for you (referrer)  
+• 🔻 50% for the referral (new user)
+
+',
+                        'pointsEarned1' => '📌You earned 1 new point.',
+                        'pointsEarned2' => '📌You earned 2 new points.',
+                        'pointsEarned2b' => '📌You earned 2 new points.',
+                        'purchaseCommissionInfo' => '<b>💸 Purchase commission:</b>  
+•  %s percent of your referral\'s purchase amount belongs to you',
+                        'referralLink' => '
+
+🔗 Referral link for verifying a referral :
+https://t.me/%s?start=%s',
                 ],
                 'agent' => [
                         'acceptrequest' => '✅ Approve request',
@@ -121,23 +585,54 @@ Description: %s',
                         'isagent' => '❌ You are currently an agent, so you cannot submit an agent request.',
                         'rejectrequest' => '❌ Reject request',
                         'requestreport' => '❌ You have a request already submitted, so a new request is not possible.',
+                        'welcome' => '👋 Welcome to the agent panel',
+                        'usernameSaved' => '✅ Your username was successfully saved.',
+                        'requestRejected' => '❌ Dear user, your agency request was rejected.',
+                        'requestApproved' => '✅ Dear user, your agency request was approved and you have become an agent.',
+                        'expiredNotice' => '📌 Dear agent, your agency period has ended and your account was removed from agency status. To reactivate your agency, you can contact support.',
                 ],
                 'app' => [
                         'appempty' => '❌ There is no app available for download.',
                         'selectapp' => '📌 Choose an option to download',
                 ],
-                'back' => 'You have returned to the main page!',
-                'backbtn' => '🏠 Back to main menu',
-                'backmenu' => '🏠 Back to previous menu',
                 'block' => [
                         'descriptions' => '🚫 You have been blocked by the administration.
 
 ✍️ Reason for block: %s',
+                        'unblockedNotice' => '✳️ Your account has been unblocked ✳️
+You can now use the bot ✔️',
+                        'unblocked' => '✳️ Your account has been unblocked ✳️
+You can now use the bot ✔️',
                 ],
                 'changeLink' => [
                         'btnTitle' => '⚙️ Change link',
                         'confirm' => 'Change connection link',
                         'warnchange' => '⚠️ If you update the subscription link, your previous configs and service will be disconnected. To confirm, click the button below',
+                        'serviceInactive' => '❌ The service is disabled and changing the link for the service is not possible.',
+                        'error' => '❌ An error occurred while changing the link.',
+                        'updated' => '✅ Your config was updated successfully.',
+                ],
+                'changeLocation' => [
+                        'confirm' => '✅ Confirm transfer',
+                        'title' => '🌐 Change location',
+                        'limitReached' => '❌ Your location change limit has been reached',
+                        'notPossible' => '❌ Transfer to the panel is not possible.',
+                        'configUnused' => '❌ Your config is in unused status and transferring the service location is not possible.',
+                        'confirmPrompt' => '📍 By confirming the service location transfer, your service will be deleted from this location and transferred to the new location.
+💰 The transfer cost is %s Toman
+📌 Your remaining limit : %s (remaining free limit :‌%s)
+
+✅ To confirm the transfer, click the button below',
+                        'success' => '✅ Your config was transferred to the server (%s) successfully.
+
+🖥 Service name : %s
+💠 Service volume : %s
+⏳ Expiry time :  %s | %s 
+
+
+🔗 Your subscription link: 
+
+<code>%s</code>',
                 ],
                 'channel' => [
                         'confirmed' => 'Your membership has been successfully confirmed. Thank you ❤️',
@@ -147,9 +642,13 @@ Description: %s',
                 ],
                 'customSellVolume' => [
                         'title' => '⚙️ Custom service',
+                        'invalidTime' => 'The number of days is invalid',
+                        'btnVolume' => '🛍 Custom volume',
+                        'btnService' => '⚙️ Custom service',
+                        'invalidVolume' => '❌ The volume is invalid.
+🔔 The minimum volume is {mainvolume} gigabytes and the maximum is {maxvolume} gigabytes',
+                        'invalidTimeRange' => '❌ The submitted time is invalid. The time must be between {maintime} days and {maxtime} days',
                 ],
-                'customusername' => 'Custom username',
-                'erroroccurred' => '❌ An error occurred. Please start the steps again',
                 'extend' => [
                         'confirm' => 'Confirm renewal',
                         'discount' => '🎁 Apply discount code',
@@ -172,13 +671,95 @@ Description: %s',
 ✅ Your renewal was completed successfully.
 ⬅️ To return to your service list or view the details, click the buttons below.',
                         'title' => '💊 Renew service',
+                        'invoiceCreatedByAdmin' => '📜 Your renewal invoice for username %s was created.
+        
+🛍 Product name :%s
+⏱ Renewal duration :%s days
+🔋 Renewal volume :%s GB
+✍️ Description : %s
+✅ To confirm and renew the service, click the button below',
+                        'error' => '❌ The renewal encountered an error; perform the renewal steps again.',
+                        'notSupportedPanel' => '❌ Renewal is not possible on this panel',
+                        'connectFirst' => '❌ You have not connected to the service yet. To renew the service, first connect to the service, then proceed to renew',
+                        'planNotAvailable' => '❌ Renewal with the current plan is not possible. Go through the steps from the beginning and select another plan.',
+                        'restartError' => '❌ An error occurred. Perform the renewal steps from the beginning.',
+                        'errorSupport' => '❌ An error occurred while renewing the service; contact support',
+                        'errorSupport2' => '❌ An error occurred while renewing the service; contact support',
+                        'genericError' => '❌ An error occurred during renewal. Contact support',
+                        'giftCharged' => 'Congratulations 🎉
+📌 As a renewal gift, an amount of %s Toman was credited to your account',
+                        'giftChargedFn' => 'Congratulations 🎉
+📌 As a renewal gift, an amount of %s Toman was credited to your account',
+                        'invoiceCreated' => '📜 Your renewal invoice for username %s was created.
+        
+🛍 Product name :%s
+💸 Renewal amount : %s Toman
+⏱ Renewal duration :%s days
+🔋 Renewal volume :%s GB
+✍️ Description : %s
+💸 Wallet balance : %s
+✅ To confirm and renew the service, click the button below',
+                        'invoiceCreated2' => '📜 Your renewal invoice for username %s was created.
+        
+🛍 Product name :%s
+💸 Renewal amount :%s
+⏱ Renewal duration :%s days
+🔋 Renewal volume :%s GB
+✍️ Description : %s
+💸 Wallet balance : %s
+
+✅ To confirm and renew the service, click the button below',
+                        'genericErrorApi' => '❌ An error occurred while renewing the service; contact support',
+                        'success' => '✅ Your service was renewed successfully
+ 
+▫️Service name : %s
+▫️Product name : %s
+▫️Renewal amount %s Toman
+
+',
+                        'success2' => '✅ Your service was renewed successfully
+ 
+▫️Service name : %s
+▫️Product name : %s
+▫️Renewal amount %s Toman
+
+',
+                        'successFn' => '✅ Your service was renewed successfully
+ 
+▫️Service name : %s
+▫️Product name : %s
+▫️Renewal amount %s Toman
+
+',
                 ],
                 'extraTime' => [
                         'extratimecheck' => 'Confirm and receive extra time',
                         'title' => '⏳ Purchase extra time',
+                        'notSupportedPanel' => '❌ Purchasing extra time is not possible on this panel',
+                        'invoiceCreated' => '📜 An extra time purchase invoice was created for you.
+        
+📌 Daily rate for extra time : %s Toman
+📆 Requested number of extra days : %s days
+💰 Your invoice amount : %s Toman
+        
+✅ To pay and add the time, click the button below',
+                        'prompt' => '📆 Enter the desired number of extra days ( in days ) :
+        
+📌 Daily rate:  %s',
+                        'success' => '✅ Time was added to your service successfully
+ 
+▫️Service name : %s
+▫️Added time : %s days
+
+▫️Time addition amount : %s Toman',
+                        'successFn' => '✅ Time was added to your service successfully
+ 
+▫️Service name : %s
+▫️Added time : %s days
+
+▫️Time addition amount : %s Toman',
                 ],
                 'extraVolume' => [
-                        'changedPrice' => '✅ The amount was saved successfully.',
                         'enterextravolume' => '🔋 Enter the desired amount of extra volume (in gigabytes):
 
 📌 Price per GB: %s Toman',
@@ -190,24 +771,105 @@ Description: %s',
 📥 Requested extra volume: %s gigabytes
 
 ✅ To pay and add the volume, click the button below.',
-                        'gettypeextra' => '📌 For which user type should the price be set?
-User types:
-f = regular user
-n = regular agent
-n2 = agent with more capabilities',
                         'invalidprice' => '🚫 The minimum volume is 1 gigabyte',
                         'sellextra' => '➕ Purchase extra volume',
+                        'notSupportedPanel' => '❌ Purchasing extra volume is not possible on this panel',
+                        'serviceError' => '❌An error occurred while purchasing extra volume for the service. Contact support',
+                        'invoiceCreated' => '📜 An extra volume purchase invoice was created for you.
+        
+📌 Rate per gigabyte of extra volume : %s Toman
+🔋 Requested extra volume : %s gigabytes
+💰 Your invoice amount : %s Toman
+        
+✅ To pay and add the volume, click the button below',
+                        'prompt' => ' ⭕️ Send the amount of volume you want to purchase.
+❌ Send the amount in English.
+        ⚠️ Each gigabyte of extra volume is %s Toman.',
+                        'success' => '✅ Volume was added to your service successfully
+ 
+▫️Service name  : %s
+▫️Added volume : %s GB
+
+▫️Volume addition amount : %s Toman',
+                        'successFn' => '✅ Volume was added to your service successfully
+ 
+▫️Service name  : %s
+▫️Added volume : %s GB
+
+▫️Volume addition amount : %s Toman',
                 ],
                 'help' => [
                         'btninlinebuy' => '📚 View usage tutorial ',
                         'disablehelp' => 'Dear user, the tutorial section is currently disabled. 😔',
                 ],
-                'invalidusername' => '❌ The username is invalid
-🔄 Please send your username again',
+                'lottery' => [
+                        'winnerNotice' => '🎁 Lottery result 
+
+😎 Dear user, congratulations! You are person %s and won %s Toman balance, and your account was charged.',
+                ],
                 'note' => [
                         'changednote' => '✅ The note was changed successfully.',
                         'errorLongNote' => '❌ The maximum length for a new note is 150 characters.',
                         'sendNote' => '📝 Send your new note (you can send up to 150 characters).',
+                ],
+                'notify' => [
+                        'deleteInfo' => '📌 Deletion cron notice
+
+Service username :‌ <code>%s</code>
+Service status : %s
+Number of remaining days ‌:‌%s
+Remaining volume : %s',
+                        'greeting' => 'Hello dear user 👋
+
+',
+                        'greeting2' => 'Hello dear user 👋
+
+',
+                        'remainingDays' => 'Number of remaining days ‌:‌%s',
+                        'remainingVolume' => 'Remaining volume : %s',
+                        'serviceDeleted' => '📌 Dear user, due to non-renewal, the service %s was deleted from your services list
+
+🌟 To get a new service, proceed from the Buy service section',
+                        'serviceDeleted2' => '📌 Dear user, due to non-renewal, the service %s was deleted from your services list
+
+🌟 To get a new service, proceed from the Buy service section',
+                        'serviceStatus' => 'Service status : %s
+
+',
+                        'serviceStatus2' => 'Service status : %s
+
+',
+                        'serviceUsername' => 'Service username :‌ <code>%s</code>
+
+',
+                        'serviceUsername2' => 'Service username :‌ <code>%s</code>
+
+',
+                        'thanks' => 'Thank you for being with us',
+                        'timeActionHint' => 'If you wish to renew this service, please proceed through the «%s» section. ',
+                        'timeTitle' => '📌 Time cron notice
+
+
+',
+                        'timeRemaining' => '📌 Only %s days remain for using the service %s. ',
+                        'volumeActionHint' => 'Please, if you wish, proceed to purchase extra volume or renew your service through the «%s» section',
+                        'volumeTitle' => '📌 Volume cron notice
+
+
+',
+                        'volumeDeleteInfo' => '📌  Volume deletion cron notice 
+Service username : %s 
+ Service status : %s 
+Number of remaining days :%s 
+ Remaining volume : %s
+User\'s last connection : %s',
+                        'volumeRemaining' => '🚨 Only %s remains of the service %s volume. ',
+                        'onHoldReminder' => 'Hello! 🌐
+
+We noticed that you have not yet connected to your config with username %s, and more than %s days have passed since its activation. If you have any problem setting up or using the service, please contact our support team via the ID below so we can help you.
+We are ready to resolve any question or problem! 📞
+
+Support account : @%s',
                 ],
                 'number' => [
                         'active' => '✅ Your mobile number has been successfully verified',
@@ -224,17 +886,12 @@ n2 = agent with more capabilities',
                 'priceArze' => [
                         'tetherPrice' => 'The current Tether price is: %s Toman',
                         'tronPrice' => 'The current TRON price is: %s Toman',
+                        'fetchError' => '❌ Retrieving the price is not possible at the moment. Please try again later.',
                 ],
                 'search' => [
                         'title' => '🔎 Quick search',
                         'usernamgeget' => '📌 Send your username',
                 ],
-                'selectoption' => 'Choose an option',
-                'selectusername' => 'Send a custom username
-⚠️ The username must not contain extra characters such as @, space, or hyphen. 
-⚠️ The username must be in English.
-✅ Valid usernames: ali12 | mahdi | ws1_ksdf
-❌ Invalid usernames: ali_ | tele@ | _mahdi | محسن',
                 'sell' => [
                         'errorConfig' => '❌ An error occurred while creating the subscription. Please contact support to resolve the issue.',
                         'errorProduct' => '❌ The selected product does not exist',
@@ -250,6 +907,95 @@ n2 = agent with more capabilities',
 ⚠️ To view details and manage, click on the username
 
 ⭕️ You can also use the "🔎 Quick search" button to quickly find and manage your service',
+                        'nullProduct' => '⭕️ No product was found. Please contact support to resolve the issue',
+                        'panelCapacityFull' => '❌ Unfortunately, the account creation capacity on this panel has been reached. Use another panel',
+                        'capacityFull' => '❌ Unfortunately, the account creation capacity has been reached. Try again in a few hours.',
+                        'nullPanel' => '⭕️ No position was found. Please contact support to resolve the issue',
+                        'selectDuration' => '📌 Select the service duration',
+                        'purchaseError' => '❌ The purchase failed. Perform the steps again.',
+                        'stockFinished' => '❌ This service\'s volume has run out.',
+                        'stockFinishedBuyAnother' => '❌ This service\'s volume has run out. Please purchase another service.',
+                        'selectCategoryShort' => '📌 Select a category',
+                        'selectCategory' => '📌 Select your category!',
+                        'panelUnavailable' => '❌ This panel is not available. Please make your purchase from another panel.',
+                        'restartProcess' => '❌ Please perform the purchase steps again',
+                        'creating' => '♻️ Creating your service...',
+                        'restartFromStart' => '❌ Perform the purchase steps from the beginning again',
+                        'noPurchaseUsersOnly' => '❌ Unfortunately, this option is only active for users who have not made any purchase from the bot.',
+                        'customTimePrompt' => '⌛️ Select your service time 
+📌 Daily rate  : %s  Toman
+⚠️ You can purchase a minimum of %s days and a maximum of %s days',
+                        'customTimePrompt2' => '⌛️ Select your service time 
+📌 Daily rate  : %s  Toman
+⚠️ You can purchase a minimum of %s days and a maximum of %s days',
+                        'customVolumePrompt' => '📌 Send your requested volume.
+🔔The price per gigabyte of volume is %s Toman.
+🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
+                        'customVolumePrompt2' => '📌 Send your requested volume.
+🔔The price per gigabyte of volume is %s Toman.
+🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
+                        'customVolumePrompt3' => '📌 Send your requested volume.
+🔔The price per gigabyte of volume is %s Toman.
+🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
+                        'customVolumePrompt4' => '📌 Send your requested volume.
+🔔The price per gigabyte of volume is %s Toman.
+🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
+                        'customVolumePrompt5' => '📌 Send your requested volume.
+🔔The price per gigabyte of volume is %s Toman.
+🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
+                        'invalidTimeRestart' => 'The time is invalid. Perform the purchase from the beginning',
+                        'invalidVolumeRestart' => 'The volume is invalid. Perform the purchase from the beginning',
+                        'preInvoice' => '
+📇 Your pro forma invoice:
+👤 Username: <code>%s</code>
+🔐 Service name: %s
+📆 Validity period: %s days
+💶 Original price : <del>%s Toman</del>
+💶 Discounted price: %s  Toman
+👥 Account volume: %s GB
+💵 Your wallet balance : %s
+                  
+        💰 Your order is ready for payment.  ',
+                        'preInvoice2' => '
+📇 Your pro forma invoice:
+👤 Username: <code>%s</code>
+🔐 Service name: %s
+📆 Validity period: %s days
+💶 Price: %s  Toman
+👥 Account volume: %s GB
+💵 Your wallet balance : %s
+⭕️Number of configs : %s
+                  
+💰 Your order is ready for payment.  ',
+                        'panelInactive' => 'The selected panel is currently not active',
+                        'panelMissing' => 'The selected panel does not exist.',
+                        'productNotFound' => 'The selected product was not found',
+                        'created' => '✅ Service was created successfully
+
+👤 Service username : {username}
+🌿 Service name:  {name_service}
+‏🇺🇳 Location: {location}
+⏳ Duration: {day}  hours
+🗜 Service volume:  {volume} megabytes
+
+🧑‍🦯 You can get the connection method by pressing the button below and selecting your operating system',
+                        'created2' => '✅ Service was created successfully
+
+👤 Service username : {username}
+🌿 Service name:  {name_service}
+‏🇺🇳 Location: {location}
+⏳ Duration: {day}  days
+🗜 Service volume:  {volume} gigabytes
+
+🧑‍🦯 You can get the connection method by pressing the button below and selecting your operating system',
+                        'timePrompt' => '⌛️ Select your service time 
+📌 Daily rate  : %s  Toman
+⚠️ You can purchase a minimum of %s days and a maximum of %s days',
+                        'volumePrompt' => '🔋 Please enter the desired service volume ( in gigabytes ) :
+📌 Rate per gigabyte :  %s 
+🔔 The minimum volume is 1 gigabyte and the maximum is 1000 gigabytes.',
+                        'subscriptionError' => 'An error occurred while creating the subscription. Contact support',
+                        'usernameExists' => 'The username exists. Perform the steps from the beginning',
                 ],
                 'spam' => [
                         'spamed' => 'Sending too many messages in the bot',
@@ -257,7 +1003,6 @@ n2 = agent with more capabilities',
                         'spamedReport' => 'The user with numeric ID %s was blocked due to spam in the bot',
                 ],
                 'status' => [
-                        'acceptRequests' => '✅ Successfully registered',
                         'active' => '✅ Active',
                         'activedconfig' => '✅ Your service has been successfully activated',
                         'backinfo' => '↪️ Back',
@@ -281,8 +1026,6 @@ Thank you for using our services.',
                         'expired' => '🔚 End of service time',
                         'hour' => ' hours ',
                         'info' => '📊 Service information:',
-                        'invalidUsername' => '❌ The username is invalid.
-🔄 Please send your username again',
                         'lastTraffic' => 'Total service volume:',
                         'limited' => '🚫 Volume exhausted',
                         'linksub' => '🔗 Subscription link',
@@ -295,7 +1038,6 @@ Thank you for using our services.',
                         'panelNotConnected' => '❌ The query system for the requested service is currently unavailable. Try again in an hour',
                         'remainingVolume' => 'Remaining service volume:',
                         'removeservice' => '❌ Refund',
-                        'requestadmin' => '📌 The deletion-rejection request was successfully registered. Send the reason for non-approval',
                         'sendUsername' => '📌 Send your username',
                         'sendrequestsremove' => '✅ Your request has been sent. After review by the administration, the result will be reported to you',
                         'stateus' => 'Status:',
@@ -304,16 +1046,156 @@ Thank you for using our services.',
                         'usedTrafficGb' => 'Service volume used:',
                         'userNotFound' => '❌ The requested service was not found on the server!',
                         'username' => 'Username: ',
+                        'notConnectedCannotChange' => '❌ It has not connected to the config yet, and the service status cannot be changed. After connecting to the config, you can use this feature.',
+                        'btnConfirmDisable' => '✅ Confirm and disable config',
+                        'confirmDisableDesc' => '📌 By confirming the option below, your config will be turned off and you will no longer be able to connect to it.
+⚠️ If you want the config to be activated again, you must click the <u>💡 Turn on account</u> button from the service management section',
+                        'btnConfirmEnable' => '✅ Confirm and enable config',
+                        'confirmEnableDesc' => '📌 By confirming the option below, your config will be turned on and you will be able to connect to it.
+⚠️ If you want the config to be deactivated again, you must click the <u>❌ Turn off account</u> button from the service management section',
+                        'deleteRequestRejected' => '❌ Dear user, your deletion request with username %s was not approved.
+        
+        Reason for non-approval: %s',
+                        'deleteRequestApproved' => '✅ Dear user, your deletion request with username %s was approved.',
+                        'deleteRequestApproved2' => '✅ Dear user, your deletion request with username %s was approved.',
+                        'servicesFound' => '🛍 {countservice} services found. To view and manage a service, click on one of the services',
+                        'infoUnavailable' => '❌ Viewing account information is not possible at the moment',
+                        'servicePassword' => '🔑 Your service password : <code>{subscription_url}</code>',
+                        'configNote' => '✍️ Config note : {note}',
+                        'lastOnline' => '📶 Your last connection time : {lastonline}',
+                        'subscriptionFile' => 'Your subscription file',
+                        'btnTurnOff' => '❌ Disable account',
+                        'btnTurnOn' => '💡 Turn on account',
+                        'btnEditNote' => '📝 Change note',
+                        'btnRefresh' => '♻️ Update information',
+                        'deletedSuccess' => '📌 The service was deleted successfully',
+                        'askDeleteReason' => '📌 Send the reason for deleting your service.',
+                        'configReadError' => '❌  Error reading config information. Contact support.',
+                        'selectConfig' => '📌 Select and use a config from the list below.',
+                        'notConnectedCannotChangeStatus' => '❌ You have not connected to the config yet, and changing the service status is not possible. After connecting to the config, you can use this feature.',
+                        'btnConfirmDisableAlt' => '✅ Confirm and disable config',
+                        'btnConfirmEnableAlt' => '✅ Confirm and enable config',
+                        'subscriptionLine' => 'Your subscription : <code>{output_config_link}</code>',
+                        'confirmDisableConfig' => '📌 By confirming the option below, your config will be turned off and you will no longer be able to connect to it.
+⚠️ If you want the config to be activated again, you must click the <u>💡 Turn on account</u> button from the service management section',
+                        'confirmEnableConfig' => '📌 By confirming the option below, your config will be turned on and you will be able to connect to it.
+⚠️ If you want the config to be deactivated again, you must click the <u>❌ Turn off account</u> button from the service management section',
+                        'getConfigHint' => '📌 To get the config, click the Get config button',
+                        'connectionInfo' => '
+📶 Last connection time  : %s
+🔄 Last subscription link update time  : %s
+#️⃣ Connected client :<code>%s</code>',
+                        'infoBasic' => 'Service status : <b>%s</b>
+Service username : %s
+📎 Service tracking code : %s
+
+📌 Service information : 
+%s',
+                        'infoDetailed' => 'Service status : <b>%s</b>
+👤 Service username : <code>%s</code>
+🌍 Service location :%s
+Product name :%s
+
+📶 Your last connection time : %s
+
+🔋 Traffic : %s
+📥 Consumed volume : %s
+💢 Remaining volume : %s (%s%%)
+
+📅 Expiry date :  %s (%s)
+
+%s',
+                        'infoFull' => '📊Service status : %s
+👤 Service name : <code>%s</code>
+%s
+%s
+🌍 Service location :%s
+🗂 Product name :%s
+
+🔋 Traffic : %s
+📥 Consumed volume : %s
+💢 Remaining volume : %s (%s%%)
+
+📅 Expiry date : %s (%s)
+
+%s
+
+💡 To cut off others\' access, just click the "Change link" option.',
+                        'summary' => '
+  
+ Service status: %s
+        
+🔋 Service volume: %s
+📥 Consumed volume: %s
+💢 Remaining volume: %s (%s%%)
+
+📅 Active until: %s (%s)
+
+User subscription link: 
+<code>%s</code>
+
+📶 Last connection time: %s
+🔄 Last subscription link update time: %s
+#️⃣ Connected client:<code>%s</code>',
                 ],
                 'support' => [
                         'answermessage' => 'Reply to message',
                         'btnsupport' => '☎️ In the button below (FAQ), your frequently asked questions are listed. Click the button below; if you do not find your question, click the support button',
                         'sendmessageadmin' => '🚀 Your message has been sent. Please wait for the administration\'s reply',
+                        'messageFromAdminAlt' => '
+👤 A message has been sent from the admin  
+Message text:
+
+%s',
+                        'messageFromManagement' => '
+📩 A message was sent to you from management.
+                    
+Message text: 
+%s',
+                        'messageFromManagement2' => '
+📩 A message was sent to you from management.
+                    
+Message text: 
+%s',
+                        'requestSubmitted' => '✅ Thank you for submitting the request. Your request has been sent and is being reviewed by support.',
+                        'selectDepartment' => '📌 Select the support section you want to message.',
+                        'sendMessage' => '📌 Send your message',
+                        'sentForReview' => '✅ Your message was sent successfully and you will be answered after review.',
+                        'sendMessageText' => '📌 Send the text of your message',
+                        'sentSuccess' => 'The message was sent successfully',
+                        'sentForRequestReview' => '✅  Your message for this request was sent successfully. It will be answered after review.',
+                        'disruptionConfirm' => '❓ Are you sure about sending the outage report
+
+🔹 Before sending a report, view the connection tutorials. ( /help )',
+                        'disruptionPrompt' => '❓ Write the reason for your outage
+
+🔹 Before sending a report, view the connection tutorials. ( /help )',
+                        'messageFromAdmin' => '
+📩 A message was sent to you from management.
+                    
+Message text: 
+%s',
                 ],
-                'text_start' => 'Hello, welcome',
+                'transfer' => [
+                        'confirm' => '✅ If you confirm, click the button below so that your transfer is completed successfully.',
+                        'confirmed' => '✅ The service transfer was completed successfully.',
+                        'description' => '🛂 To transfer this subscription to other users, you must have the destination account\'s user ID.
+
+‼️ Transfer notes:
+1 - To get the user ID, go to the wallet button 
+2 - After transferring the subscription to the destination user, the subscription will be removed from your panel.
+
+🆕 Enter the destination account\'s user ID:',
+                        'notSendServiceYou' => '❌ It is not possible to transfer the service to yourself.',
+                        'notUserTrans' => '❌ No user was found with this ID.',
+                        'title' => '🚚 Transfer service to another user',
+                        'transferNotValid' => '❌ It is not possible to transfer a test service to another user.',
+                        'receivedNotice' => '✅ Dear user, the service with username {service_username} was transferred to your account by the user with user ID {from_id}.',
+                ],
                 'usertest' => [
                         'errorcreat' => '❌ An error occurred while creating the subscription. Please contact support to resolve the issue.',
                         'limitwarning' => '⚠️ Your test subscription creation limit has been reached.',
+                        'unavailable' => '📌 The test service is not available at the moment.',
                 ],
                 'wheelLuck' => [
                         'alreadyParticipated' => '❌ You already participated today. Try your luck again tomorrow',
@@ -322,9 +1204,51 @@ Thank you for using our services.',
                         'notWinner' => '🥲 Unfortunately you did not win. Try again another day',
                         'wheelWinner' => '⭕️ A user with username @%s and numeric ID %s won the wheel of fortune',
                         'winnerCongratulations' => '🤩 Congratulations, you won! The amount of %s Toman has been added to your account.',
+                        'resultError' => '❌ An error occurred while getting the game result. Please try again later.',
                 ],
         ],
         'Admin' => [
+                'activeBotText' => 'To use the admin panel features:
+
+Go to a page that has a keyboard at the bottom.
+In the keyboard, find a button called Bot Reports and click on it.
+After clicking the Bot Reports button, a page will open.
+On this page, you can select and configure the group you want.
+This step is mandatory',
+                'askNewText' => '📌 Send your new text',
+                'backAdmin' => 'You have returned to the admin panel!',
+                'backAdminBtn' => '🏠 Back to management menu',
+                'backMenu' => 'You have returned to the previous menu!',
+                'backMenuBtn' => '▶️ Back to previous menu',
+                'changesSaved' => 'Changes applied successfully',
+                'changesSaved2' => '✅ Changes saved successfully',
+                'confirmByButton' => 'To confirm, click the confirm button',
+                'confirmByWord' => 'To confirm, send the word below.
+<code>confirm</code>',
+                'errorCode' => '❌  An error occurred. Error code:  %s',
+                'errorCode2' => '❌  An error occurred. Error code:  %s',
+                'errorCode3' => '❌  An error occurred. Error code:  %s',
+                'errorCode4' => '❌  An error occurred. Error code:  %s',
+                'errorCode5' => '❌  An error occurred. Error code:  %s',
+                'errorCode6' => '❌  An error occurred. Error code:  %s',
+                'errorOccurred' => 'An error occurred',
+                'errorReason' => 'Error reason: 
+%s',
+                'errorReason2' => 'Error reason %s',
+                'errorRestart' => '❌ An error occurred; go through the steps from the beginning.',
+                'getStats' => 'If you want to view the statistics for a different date range, first send the start date.
+Example: 
+<code>%s</code>',
+                'invalidValue' => '❌ Invalid value',
+                'mainAdminOnly' => '❌ This section is only available to the main admin',
+                'notUser' => 'No user was found with this ID',
+                'panelAdmin' => '👨‍💼 Management panel',
+                'saved' => '✅ Saved.',
+                'selectOption' => '📌 Select an option',
+                'selectOption2' => 'Select an option',
+                'selectOption3' => '📌 Select an option from the list below',
+                'selectOption4' => 'Select one of the options below ',
+                'selectOption5' => '📌 Select an option.',
                 'Balance' => [
                         'addAllBalance' => '📌 Send the amount for a public top-up',
                         'addBalanceUser' => '✅ The amount was added to the user\'s balance',
@@ -334,10 +1258,50 @@ Thank you for using our services.',
 Description: To deduct the user\'s balance, first send the user\'s numeric ID',
                         'negativeBalanceUser' => '✅ The amount was deducted from the user\'s balance',
                         'priceBalance' => 'The numeric ID was received. Send the amount you want to deduct from the user; the amount should be in Toman',
+                        'askUserGroup' => '📌 Which of the following user groups should the top-up be deposited to?',
+                        'askTargetUsers' => '📌 Which user should the public top-up be sent to?',
+                        'askNotify' => '📌 Should a top-up notification message be sent to the users or not?
+Yes: 1
+No: 0',
+                        'operationStarted' => '✅ The message-sending operation has begun. You will be notified when it finishes.',
+                        'btnDecrease' => '⬇️ Decrease balance',
+                        'maxAmountRial' => '📌 The maximum amount is 100 million Rials.',
+                        'maxAmountToman' => '❌ The maximum amount is 100 million Toman',
+                        'askMinCharge' => '📌 Set the minimum amount you want the user to top up their account with',
+                        'askMinChargeGroup' => '📌 For which user group should the minimum balance apply?
+f
+n
+n2',
+                        'askMaxCharge' => '📌 Set the maximum amount you want the user to top up their account with',
+                        'askMaxNegative' => '📌 Send the maximum amount the user\'s balance can go negative when purchasing
+Note: the number should be without a dash or minus sign
+If you want the user to purchase unlimited, send the number 0',
+                        'addedToUser' => '✅ The amount was successfully added to the user\'s account.',
+                        'askMinDeposit' => '📌 Send the minimum deposit amount',
+                        'minDepositSaved' => '✅ The minimum deposit amount was set.',
+                        'askMaxDeposit' => '📌 Send the maximum deposit amount',
+                        'maxDepositSaved' => '✅ The maximum deposit amount was set.',
+                        'askChargeAmount' => '📌 Send the amount you want to charge the user\'s account.',
+                        'addedToUserNotice' => '❌ An amount of %s Toman was added to the user\'s balance.',
+                        'resetToZero' => 'The user\'s balance of %s was reset to zero',
                 ],
                 'Channel' => [
                         'setChannelReport' => '🔰 The channel was successfully configured',
                         'testChannel' => 'Test group connection',
+                        'notForumGroup' => '❌ The selected group is not in forum mode. First enable the group\'s topic feature, then set the group\'s numeric ID again',
+                        'botNotGroupAdmin' => '❌ The bot is not an admin of the group',
+                        'askReportGroupId' => '📣 In this section you can send the group\'s numeric ID for sending notifications
+Group setup tutorial:
+1 - First create a group 
+2 - Add the bot @myidbot to the group and send the command /getgroupid@myidbot inside the group 
+3 - Turn on topic or forum mode from the group settings4
+4 - Make your own bot an admin of the group 
+5 - Send the sent numeric ID to the bot.
+
+Your current numeric ID: %s',
+                        'connectionFailed' => '❌ The connection to the group was not successful  
+
+Received error:  %s',
                 ],
                 'Discount' => [
                         'agentCode' => 'For which user do you want to define the code?
@@ -347,7 +1311,6 @@ Description: To deduct the user\'s balance, first send the user\'s numeric ID',
                         'firstDiscount' => '📌 Should the discount code be for the first purchase or all purchases?',
                         'getCode' => 'Send a code for the gift code',
                         'invalidAgentCode' => '❌ The user type is invalid',
-                        'invalidCode' => '❌ The discount code is invalid',
                         'notCode' => '❌ Error 
 📝 The selected gift code does not exist',
                         'priceCode' => 'The code was received. Now send the code\'s amount',
@@ -357,6 +1320,23 @@ Description: To deduct the user\'s balance, first send the user\'s numeric ID',
                         'saveCode' => '✅ The code was successfully registered',
                         'setLimitUse' => '📌 Send the usage limit.
 ⚠️ The limit is for all users',
+                        'askActiveHours' => '📌 For how many hours should the discount code be active? If you want it to be unlimited, send the number 0',
+                        'askUserLimit' => '📌 Send the usage limit per user.',
+                        'askSection' => '📌 Which section should the discount code apply to?',
+                        'userLimitTooHigh' => '📌 The usage count per user must be smaller than the total limit',
+                        'askProductLocation' => '📌 To set a discount code for a specific product, first select the product position.
+Note: To select all panels, send the word <code>/all</code>',
+                        'askProduct' => '📌 Which product should the discount code apply to? Note that if you want the discount code to apply to all products, send the word all',
+                        'invalidPercent' => 'Invalid percentage',
+                        'created' => '
+🎁 Your discount code was created successfully.
+
+📩 Discount code name: <code>%s</code>
+🧮 Discount code percentage: %s
+🎛 Panel:  %s
+📌  Product: %s
+♻️ User type: %s
+🔴 Usage limit: %s',
                 ],
                 'Discountsell' => [
                         'getCode' => 'Send a code for the discount code',
@@ -371,11 +1351,71 @@ Description: To deduct the user\'s balance, first send the user\'s numeric ID',
                         'removeHelp' => '✅ The tutorial was deleted.',
                         'saveHelp' => '✅ The tutorial was successfully saved',
                         'selectName' => 'Select the tutorial name',
+                        'nameTooLong' => '❌ The tutorial name must be less than 150 characters',
+                        'nameExists' => '❌ The tutorial name already exists. Use a different name.',
+                        'askCategoryName' => '📌 Send the category name for the tutorial',
+                        'nameUpdated' => '✅ Tutorial name updated',
+                        'askNewCategory' => 'Send your new category',
+                        'categoryUpdated' => '✅ Tutorial category name updated',
+                        'askNewDesc' => 'Send the new description',
+                        'descUpdated' => '✅ Tutorial description updated',
+                        'askNewMedia' => 'Send the new image or video',
+                        'askTutorialMedia' => '📌 Send your tutorial.
+1 - If you don\'t want a tutorial to be shown, send the number 2
+2 - You can send the tutorial as video, text, or image',
+                        'invalidContent' => '❌ The submitted content is invalid.',
+                        'tutorialSaved' => '✅ The tutorial was saved successfully.',
                 ],
                 'Payment' => [
                         'reasonRejecting' => 'Send the reason for rejecting the payment',
                         'rejected' => '⭕️ The payment was successfully rejected and a message was sent to the user',
                         'reviewedPayment' => '❌ This payment has already been reviewed by another admin',
+                        'reviewReceiptsFirst' => '⚠️ To approve user requests, first review and approve the purchase or subscription renewal receipts. Then approve the wallet top-up receipt. ',
+                        'disableAutoConfirmFirst' => '❌ First turn off automatic approval without review.',
+                        'disableAutoConfirmFirst2' => '❌ First turn off automatic approval.',
+                        'autoConfirmDesc' => '📌 By activating this feature, during the times when you are not online, the bot automatically approves all card-to-card transactions; then after you come online, you review the receipts, and if a fake receipt was sent, you cancel the transaction',
+                        'noPending' => '❌ You have no unapproved payments.',
+                        'pendingIntro' => '📌 Unapproved card-to-card payments 
+In this section you can view unapproved payments and approve or reject them.
+❌ : Reject payment 
+✅ : Approve payment
+📝 Payment details
+🗑 : Delete receipt without notifying the user',
+                        'allReceiptsDeleted' => '✅ All receipts were deleted successfully ',
+                        'receiptDeleted' => '✅ The receipt was deleted successfully.',
+                        'autoConfirmSelect' => '📌 Select an option
+⚠️ This section is for automatic approval without review',
+                        'askExcludeUserId' => '📌 Send the user\'s numeric ID',
+                        'userNotFound' => '❌ The user does not exist.',
+                        'userAlreadyExcluded' => '❌ The user is already in the exception list',
+                        'userExcluded' => '✅ The user was successfully added to the list.',
+                        'askRemoveExcludeId' => '📌 Send the user\'s numeric ID to remove from the list',
+                        'userNotExcluded' => '❌ The user is not in the exception list',
+                        'userExcludeRemoved' => '✅ The user was successfully removed from the list.',
+                        'excludeListEmpty' => '❌ There is no user in the list',
+                        'excludeListTitle' => 'List of people👇',
+                        'approvedByOther' => '✅. The payment was approved by another admin
+👤 User ID: <code>%s</code>
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💎 Balance after approval: %s
+💸 Paid amount: %s Toman
+',
+                        'detailRow' => '🛒 Payment number:  <code>%s</code>
+🙍‍♂️ User ID: <code>%s</code>
+💰 Paid amount: %s Toman
+⚜️ Payment status: %s
+⭕️ Payment method: %s 
+📆 Purchase date:  %s',
+                        'detailRow2' => '🛒 Payment number:  <code>%s</code>
+🙍‍♂️ User ID: <code>%s</code>
+💰 Paid amount: %s Toman
+⚜️ Payment status: %s
+⭕️ Payment method: %s 
+📆 Purchase date:  %s',
+                        'askAutoConfirmMinutes' => '📌 In this section you can set after how many minutes the automatic approval without review approves the receipt.
+Send your time in minutes
+Current time: %s',
                 ],
                 'Product' => [
                         'addProductStepOne' => ' First send your subscription name
@@ -394,10 +1434,7 @@ Enter the subscription duration. Note: the time unit for the subscription is day
 If you want the time to be unlimited, send the number 0',
                         'getTimeReset' => '📌 Send the periodic reset time for the service volume. If you do not want a reset, send the button no_reset',
                         'invalidPrice' => 'The price is invalid',
-                        'invalidTime' => 'The number of days is invalid',
-                        'invalidVolume' => 'The volume is invalid',
                         'newTime' => 'Send the new time',
-                        'nullProduct' => '⭕️ No product was found. Please contact support to resolve the issue',
                         'removeLocation' => '📌 Choose the position of your product',
                         'removedProduct' => '✅ The product was successfully deleted.',
                         'saveProduct' => 'The product was successfully saved 🥳🎉',
@@ -408,16 +1445,54 @@ If you want the time to be unlimited, send the number 0',
  ⭕️ To define the product in all positions, send the command /all',
                         'timeUpdated' => '✅ The product time was updated',
                         'volumeUpdated' => '✅ The product volume was updated',
+                        'nameTooLong' => '❌ The product name must be less than 150 characters',
+                        'askNote' => ' 🗒 Send the note for the product. This note is shown in the user\'s proforma invoice.',
+                        'askNote2' => ' 🗒 Send the note for the product. This note is shown in the user\'s proforma invoice.',
+                        'askNewPrice' => 'Send the new price',
+                        'priceUpdated' => '✅ The product price was updated',
+                        'askNewNote' => 'Send the new note',
+                        'noteUpdated' => '✅ The product note was updated',
+                        'selectNewCategory' => 'Select the new category name',
+                        'categoryUpdated' => '✅ The product category was updated',
+                        'askNewName' => 'Send the new name',
+                        'nameUpdated' => '✅ The product name was updated',
+                        'askNewUserType' => 'Send the new user type:
+User types: f, n, n2',
+                        'invalidUserGroup' => '❌ The user group is invalid',
+                        'askVolumeResetType' => 'Send the volume reset type',
+                        'selectNewLocation' => '📌 Select the new product position',
+                        'cannotChangeToAll' => '❌ You cannot change a defined product to the position name /all.',
+                        'locationUpdated' => '✅ The product position was updated',
+                        'askNewVolume' => 'Send the new volume',
+                        'updated' => '✅ Product updated',
+                        'firstPurchaseDesc' => '📌 Through this feature you can set whether this product is for the first purchase or not',
+                        'nameExists' => '❌ A product named %s already exists',
+                        'editSummary' => '
+📌 Information of the product being edited:
+Product name: %s
+Product price: %s
+Product volume: %s
+Product location: %s
+Product time: %s
+Product user type: %s
+Periodic volume reset of product: %s
+Product note: %s
+Product category: %s
+Number of products sold: %s
+    
+',
+                        'nameExists2' => '❌ A product named %s already exists',
                 ],
                 'Protocol' => [
                         'invalidProtocol' => '❌ Invalid protocol',
                         'removeProtocol' => 'Select the protocol you want to delete.',
                         'removedProtocol' => 'The protocol was successfully deleted.',
+                        'btnDelete' => '🗑 Delete protocol',
+                        'btnSettings' => '⚙️ Protocol settings',
                 ],
                 'SettingPayment' => [
                         'cartDirect' => '✅ Your username was successfully registered.',
                         'getNameCard' => '📌 Send the cardholder\'s name.',
-                        'isSetPay' => '❌ You have an unconfirmed payment. Please wait until the previous payment is reviewed, then send the new payment',
                         'saveCard' => '✅ Your card number was successfully registered.',
                 ],
                 'SettingnowPayment' => [
@@ -457,56 +1532,210 @@ If you want the time to be unlimited, send the number 0',
                         'statusoff' => '❌ Off',
                         'statuson' => '✅ On',
                         'subject' => 'Title',
+                        'botOn' => '✅ The bot is on',
+                        'botOff' => '❌ The bot is off',
+                        'rulesOn' => '✅ Rule confirmation is on',
+                        'rulesOff' => '❌ Rules confirmation is off',
+                        'phoneVerifyOn' => '✅ Mobile number verification is on',
+                        'phoneVerifyOff' => '❌ Phone number verification is disabled',
+                        'iranPhoneOn' => '✅ Iranian number verification is on',
+                        'iranPhoneOff' => '❌ Iranian number check is disabled',
+                        'applyScope' => 'Disable for all users or only new users?
+    New users 0 
+    All users 1
+    2 Users except agents',
+                        'off' => 'Off',
+                        'on' => 'On',
                 ],
-                'activeBotText' => 'To use the admin panel features:
-
-Go to a page that has a keyboard at the bottom.
-In the keyboard, find a button called Bot Reports and click on it.
-After clicking the Bot Reports button, a page will open.
-On this page, you can select and configure the group you want.
-This step is mandatory',
                 'addorder' => [
                         'stepFive' => '📌 The service was successfully added to the user\'s account.',
                         'stepFour' => '📌 Send the product name.',
                         'stepThree' => '📌 Select the config location.',
                         'stepTwo' => '📌 Send the user\'s config username.',
+                        'usernameExists' => '❌ This username already exists in the bot.',
+                        'manualIntro' => '📌 In this section you can manually create and receive an order 
+⚠️ If you want the config to be added to the user\'s account and managed by the user, you must use the add order option.
+- To add a config, first send the username.',
+                        'askConfigCount' => '📌 Send the number of configs you want to create; you can send up to 10',
+                        'invalidCount' => '❌ You can send a minimum of 1 and a maximum of 10.',
+                        'askVolume' => '📌 Send the account\'s data volume. The volume is in gigabytes.',
+                        'askTime' => '📌 Send the service duration; the time is in days.',
+                        'customPlan' => 'Custom plan',
+                        'selectPanel' => '📌 Select from the list below which panel the order should be created on',
+                        'panelSelected' => '✅ Panel selected successfully',
                 ],
                 'affiliates' => [
+                        'askBanner' => '⭕️ Send your referral banner 
+
+❌ The banner must include an image',
+                        'joinGiftSaved' => '✅ The referral amount was successfully registered',
+                        'percentSaved' => '✅ The deposit percentage for the user was successfully set',
+                        'bannerSaved' => '✅ Your banner was successfully registered.',
+                        'invalidBanner' => '❌ The banner you sent is invalid (the banner must be sent with an image)',
+                        'askJoinGift' => '📌 Enter the amount you want the user to receive for each new referral',
+                        'askPercent' => '📌 Send the percentage you want to be deposited to the user after a purchase',
                         'titleTopic' => '🎁 Commission reports',
+                        'noReferrals' => '❌ The user has no referrals.',
+                        'idsSent' => '📌 The ID related to the user\'s referrals has been sent.',
+                        'userRemoved' => '📌 The user was removed from the referral.',
+                        'referralsDeleted' => '📌 The user\'s referrals were deleted.',
+                        'commissionScope' => 'You can decide whether the commission is given to the user only for their referral\'s first purchase or for all of their purchases.',
                 ],
                 'agent' => [
-                        'agentWelcome' => '👋 Welcome to the agent panel',
                         'getTypeAgent' => '📌 To add an agent, send the agent type
 1- Agent type one (n): this agent has normal capabilities 
 2- Agent type two (n2): this type of agent can purchase services without a credit limit.',
                         'invalidTypeAgent' => '❌ The agent type is invalid',
-                        'invalidValue' => '⭕️ Invalid input',
                         'setAgentProduct' => 'For which user should the product be shown?
 Type one f: a regular user
 Type two n: a type-two agent with limited capabilities
 Type three n2: a type-three agent with more capabilities',
-                        'submitUsername' => '✅ Your username was successfully saved.',
                         'userAgentRemoved' => '❌ The user was successfully removed from agent status',
                         'userAgented' => '✅ The user successfully became an agent',
+                        'selectUserType' => '📌 Select the user type',
+                        'expiryDateLabel' => '⭕️ Agency expiry date: ',
+                        'selectGroup' => '📌 Which group of agents do you want to view?',
+                        'requestRejected' => '✅ The request was successfully rejected.',
+                        'changeTypeHint' => '
+Use the buttons below to change the agent type.',
+                        'askMembershipFee' => '📌 Send the price of the membership request for agency.',
+                        'askExpiry' => '🕘 Send the agency expiry time. After the specified number of days ends, the user will exit agency status and become user group f.
+Note that this feature has nothing to do with the bot-builder or agent\'s sales bot feature and only relates to your main bot
+
+📌 Send the number of days',
+                        'expirySaved' => '✅ The expiry date was set.
+📌 After the time ends, the user\'s user group will be changed to f and the user will be notified.',
+                        'requestNotice' => '📣 A user has submitted an agency request; please review the information and determine the status.
+
+Numeric ID: %s
+Username: %s 
+Description:  %s ',
+                        'requestNotice2' => '📣 A user has submitted an agency request; please review the information and determine the status.
+
+Numeric ID: %s
+Username: %s
+Description:  %s ',
+                        'statusApproved' => '
+Status: approved (%s)',
+                        'requestNotice3' => '📣 A user has submitted an agency request; please review the information and determine the status.
+
+Numeric ID: %s
+Username: %s
+Description:  %s ',
+                        'statusApproved2' => '
+Status: approved (%s)',
+                ],
+                'agentbot' => [
+                        'askToken' => '📌 Send the token',
+                        'limitReached' => '❌ Currently you are limited to creating only 15 bots for your agents.',
+                        'alreadyInstalled' => '❌ This bot is already installed; it cannot be reinstalled.',
+                        'intro' => '📌 Through this section you can create a sales bot for your agent so that the agent can sell with their own dedicated bot
+
+- To create a bot, send the bot token.',
+                        'invalidToken' => '❌ The token is invalid',
+                        'tokenExists' => '📌 This token is already registered',
+                        'deleted' => '❌ The agent\'s sales bot was deleted successfully.',
+                        'noneFound' => '❌ There is no bot',
+                        'webhookRunning' => '📌 Performing webhook ...',
+                        'webhookDone' => '✅ The webhook was performed successfully.',
+                        'activatedUrlAlt' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ Dear user, your bot was installed successfully.',
+                        'created' => '✅ The agent bot was created successfully.
+⚙️ Bot username  : @%s
+🤠 Bot token : <code>%s</code>',
+                        'activatedUrl' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ Dear user, your bot was installed successfully.',
                 ],
                 'algorithmExtend' => [
                         'saveData' => '✅ The service renewal method was successfully updated',
+                        'invalidMethod' => '❌ The renewal method is invalid; select the correct renewal method from the list below',
                 ],
                 'algorithmUsername' => [
                         'saveData' => '✅ The username creation method was successfully updated',
+                        'selectMethod' => '⭕️ Select the username generation method for accounts from the button below.
+        
+⚠️ If a user has no username, the word you choose will be registered and used in place of the username.
+        
+⚠️ If a username already exists, a random number will be added to the username',
+                        'askFallbackName' => '📌 What name should be registered if the user has no username?',
                 ],
-                'backAdmin' => 'You have returned to the admin panel!',
-                'backAdminBtn' => '🏠 Back to management menu',
-                'backMenu' => 'You have returned to the previous menu!',
-                'backMenuBtn' => '▶️ Back to previous menu',
+                'api' => [
+                        'askAddress' => '📌 Send the API address.
+
+Current address: %s',
+                        'token' => 'Your api token: <code>%s</code>',
+                        'docsLink' => '📘 Full API reference:
+%s
+
+Send the token above in the <code>Token</code> header of every request.',
+                ],
+                'apps' => [
+                        'askName' => '📌 To add an app download link, send the app name or the button name.',
+                        'nameTooLong' => '📌 The name must be fewer than 200 characters.',
+                        'askLink' => '📌 Send the app download link',
+                        'added' => '✅ Your app link was added successfully.',
+                        'selectDelete' => '📌 To delete an app, select the app name from the list below',
+                        'deleted' => '✅ The app was deleted successfully.',
+                        'selectEdit' => '📌 To edit an app, select the app name from the list below',
+                        'askNewLink' => '📌 Send the new app link',
+                        'updated' => '✅ The app link was updated successfully.',
+                ],
                 'btnKeyboard' => [
                         'addPanel' => '🖥 Add panel',
                         'manageUser' => '👤 User management',
                         'managementPanel' => '✏️ Panel management',
                 ],
+                'card' => [
+                        'askNumber' => '💳 Send your card number
+
+⚠️ Note that you can define several card numbers; if you define multiple card numbers, the bot will show the user a random one from among them',
+                        'mustBeNumeric' => '❌ The card number must be numeric.',
+                        'exists' => '❌ The card number already exists in the database.',
+                        'saveFailed' => '❌ Failed to register the card number. Please try again or contact support.',
+                        'enabled' => '✅ Card number activated',
+                        'disabled' => '✅ Card number deactivated',
+                        'askDelete' => '📌 Send the card number you want to delete.',
+                        'deleted' => '✅ The card number was deleted successfully.',
+                        'afterFirstPayDesc' => '📌 By turning on this feature, the card-to-card gateway will be activated for the user after their first payment',
+                        'afterFirstPayOff' => 'Turned off',
+                        'afterFirstPayOn' => 'Turned on',
+                        'askUserIds' => '📌 Send the list of IDs for which you want the card number to be shown 
+Example: 
+1234435423
+23423131',
+                        'enabledForUsers' => '✅ The card number was activated for the sent users.',
+                        'noUsersEnabled' => '📌 No card number has been activated for any user',
+                        'enabledUserList' => '🪪 List of users for whom the card number is active',
+                        'askUsername' => '📌 Send your username without @ to receive the card number
+
+%s',
+                        'askSupportUsername' => '📌 Send your username without @ for support
+
+%s',
+                ],
+                'category' => [
+                        'askName' => '📌 Send your category name.',
+                        'notFoundAddFirst' => '❌ The selected category does not exist. Add your category from Plans > Add Category, then add the product.',
+                        'notFoundAddFirst2' => '❌ The selected category does not exist. Add your category from Plans > Add Category, then add the product.',
+                        'askAddName' => '📌 To add a category, send the category name.',
+                        'added' => '✅ The category was added successfully.',
+                        'selectDelete' => '📌 Select your category to delete',
+                        'deleted' => '✅ The category was deleted successfully.',
+                        'selectEdit' => '📌 Select your category to edit',
+                        'askNewName' => '📌 Send the new category name',
+                        'renamed' => '✅ The category name was changed successfully.',
+                ],
                 'changeLocation' => [
-                        'confirm' => '✅ Confirm transfer',
-                        'title' => '🌐 Change location',
+                        'askLimitType' => '📌 Select an option.
+1 - The overall limit on how many times the user can change location in total.
+2 - The free limit on how many times the user can change location for free out of the overall limit.',
+                        'limitSaved' => '✅ The limit was set successfully.',
+                        'resetConfirm' => '📌 By confirming the option below, all location changes made by the user will be reset to zero. If you agree, click the option below.',
+                        'limitsReset' => '✅ All users\' limits were reset to zero.',
+                        'askUserLimit' => '📌 Send the new limit you want to set for the user. Note that this feature changes the number of location changes already made',
+                        'userLimitSaved' => '✅ The user\'s usage count was saved successfully.',
+                        'askTotalLimit' => '📌  Send the overall limit on how many times the user can change location. Note that this limit applies to all configs
+Current limit: %s',
+                        'askFreeLimit' => '📌  Send the free limit on how many times the user can change location. Note that this limit applies to all configs
+Current limit: %s',
                 ],
                 'channel' => [
                         'changeChannel' => 'To set the mandatory membership channel, please enter your channel username with @, or the channel\'s numeric ID that starts with -100',
@@ -518,6 +1747,36 @@ Notes for this feature:
                         'removeChannelBtn' => 'Delete channel',
                         'removedChannel' => '❌ The channel was successfully deleted.',
                         'title' => 'Add channel',
+                        'askButtonName' => '📌 Choose a name for the channel membership button.',
+                        'askJoinLink' => '📌 Send the membership link',
+                        'invalidJoinLink' => 'The membership address is not correct',
+                        'joinChannelSaved' => '✅ The mandatory join channel was successfully registered.',
+                        'joinExempt' => '📌 From now on, the user can use the bot without joining the channel',
+                ],
+                'config' => [
+                        'askProductName' => '📌 Send your product name. If you want to set it for the test account, send the text test.',
+                        'testKeyword' => 'test',
+                        'productNotFound' => 'No product found with this name. Please send the exact product name, or send the text test to set up a test config.',
+                        'askConfigs' => '📌 Send your configs like the example below.
+
+# config name ( on one line only, with # before the name )
+config ( on multiple lines 
+
+# config name ( on one line only, with # before the name )
+
+trojan://xyz',
+                        'saved' => '✅ Number of saved configs: ',
+                        'saveError' => '❌ An error occurred while saving the config. Please try again.',
+                        'btnDelete' => '❌ Delete config',
+                        'askDeleteName' => '📌 Send the name of the config you want to delete ',
+                        'deleted' => '✅ The config was deleted successfully.',
+                        'askEditName' => '📌 Send the name of the config you want to edit ',
+                        'askNewContent' => 'Send the new config content',
+                ],
+                'connection' => [
+                        'online' => 'Online',
+                        'offline' => 'Offline',
+                        'notConnected' => 'Not connected',
                 ],
                 'cronjob' => [
                         'changedData' => '✅ The changes were successfully saved',
@@ -525,19 +1784,97 @@ Notes for this feature:
 Current time: ',
                         'setVolumeRemove' => '📌 Send the number of days after which accounts whose volume has run out should be deleted. The account time is calculated based on the user\'s last connection. This feature is for the Marzban panel
 Current time: ',
+                        'btnSettings' => '🕚 Cron job settings',
+                        'cannotDeleteUnlimited' => '❌ The service cannot be deleted because its volume and time are unlimited. ',
+                        'askOnHoldDays' => 'In this section you must set, if the user has not connected to their config after a certain number of days and is in on_hold status, to send the user a message',
+                        'askVolumeAlert' => '📌 In this section you can set that if the user\'s volume reaches x, a warning message is sent. Send the volume in GB.',
+                        'askNotifyDays' => '📌 In this section you can set how many days before the subscription ends the user is notified. The time is in days',
+                        'userNotifyEnabled' => '✅ Cron notifications were enabled for the user.',
+                        'userNotifyDisabled' => '✅ Cron notifications were disabled for the user.',
+                        'timeSaved' => '✅ The time was registered successfully.',
                 ],
-                'customvolume' => [
-                        'invalidTime' => 'The number of days is invalid',
+                'department' => [
+                        'askName' => '📌 Send the department name',
+                        'added' => '📌 The department was added successfully.',
+                        'noneToDelete' => '❌ There is no department to delete.',
+                        'askDelete' => '📌 Send the type of department to delete.',
+                        'deleted' => '📌 The selected section was deleted.',
                 ],
-                'getStats' => 'If you want to view the statistics for a different date range, first send the start date.
-Example: 
+                'gateway' => [
+                        'tronadoStatus' => 'Tornado gateway status',
+                        'tronadoDesc' => 'In this section you can turn the Tornado gateway off or on',
+                        'off' => 'Turned off',
+                        'on' => 'Turned on',
+                        'intro' => '📌 From the list below you can manage the gateways.
+
+⚠️ The Mirza team gives no guarantee for the gateways, and all use and responsibility is on you',
+                        'btnPerfectMoneyHelp' => '📚 Set up Perfect Money tutorial',
+                        'askPlisioApi' => '⚙️ Please send your Plisio API Key.
+
+🔑 To get your API key, visit the following site:
+plisio.net
+
+📌 Your current key:
 <code>%s</code>',
+                        'askNowPaymentsApi' => '⚙️ Please send your NowPayments API Key.
+
+🔑 To get your API key, visit the following site:
+nowpayments.io
+
+📌 Your current key:
+<code>%s</code>',
+                        'askAqayePardakhtMerchant' => '💳 Obtain your merchant code from Aghaye Pardakht and enter it in this section
+        
+Your current merchant code: %s',
+                        'askZarinpalMerchant' => '💳 Obtain your merchant code from ZarinPal and enter it in this section
+        
+Your current merchant code: %s',
+                        'askMerchant' => '💳 Obtain your merchant code and enter it in this section
+        
+Your current merchant code: %s',
+                        'askTronWallet' => '💳 Send your Tron trc20 wallet address
+        
+        Your current wallet: %s',
+                        'askApiCode' => '📌 Send your API code.
+        
+        Your current merchant: %s',
+                        'askApiCode2' => 'Send the received api in this section
+        
+Your current merchant code: %s',
+                ],
                 'getlimitusertest' => [
                         'getId' => 'Send the test account creation limit',
                         'limitAll' => 'Enter the test account creation limit.',
                         'setLimit' => 'The limit was set for the user.',
                         'setLimitAll' => 'The account creation limit was set for all users',
                         'setLimitBtn' => '➕ Test account creation limit for everyone',
+                        'askTime' => '🕰 Send the duration of the test service.
+⚠️ The time is in hours.',
+                        'askVolume' => 'Send the volume of the test service.
+⚠️ The volume is in megabytes.',
+                ],
+                'gift' => [
+                        'askUserGroup' => '📌 Which user group should the service be applied to?',
+                        'askUserCategory' => '📌 Which category of users should the service be applied to?',
+                        'busy' => '❌ The gift sending system is performing an operation; after it finishes and notifies you, you can send a new message.',
+                        'askPanel' => '📌 For which panel\'s services do you want to gift volume or time?',
+                        'panelNotFound' => '❌ The panel does not exist',
+                        'selectType' => '📌 Select one of the gifts below.',
+                        'askVolume' => '📌 How many gigabytes of volume do you want added to the user\'s services?',
+                        'askDays' => '📌 How many days do you want added to the users\' services?',
+                        'askMessage' => '📌 Send the text you want to be sent to the user',
+                        'confirmStart' => '📌 Dear admin, by confirming the option below, the process of applying the gifts will begin. Note that due to the limits, applying the gifts will take time.',
+                        'started' => '✅ The gift sending operation started successfully; you will be notified after it is added and completed.',
+                        'canceled' => '📌 Gift sending was canceled.',
+                        'done' => '📌 The operation was performed for all requested services.',
+                        'volumeAddError' => 'Error adding gift volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'volumeAddError2' => 'Error adding gift volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
                 ],
                 'manageUser' => [
                         'acceptedPhone' => 'Confirmed',
@@ -563,10 +1900,6 @@ Example:
                         'manageUserBtnDesc' => '⭕️ In this section you can view all users 
 ⚠️ To manage a user, click the User Management button in front of each user',
                         'messageSent' => '✅ The message was sent',
-                        'newUser' => '🎉 A new user started the bot
- Name: %s
-Username: @%s
-Numeric ID: %s',
                         'removeService' => '❌ Delete order',
                         'removeServiceAndBack' => '❌ Delete order and refund',
                         'removeagent' => '🤖 Remove agent',
@@ -578,6 +1911,58 @@ Numeric ID: %s',
                         'userUnblocked' => 'The user was unblocked. 🤩',
                         'viewOrderUser' => '🛍 View user\'s orders',
                         'viewPaymentUser' => '💰 View user\'s payments',
+                        'unknownName' => 'Unknown',
+                        'notVerified' => 'Not verified',
+                        'verified' => 'Verified',
+                        'verifiedSuccess' => '✅ The user was verified successfully.',
+                        'unverifiedSuccess' => '✅ The user was successfully removed from verified status.',
+                        'btnDisableAccount' => '❌ Disable account',
+                        'askTransferTargetId' => 'Send the numeric ID of the user you want all the information transferred to
+    Note that if the destination user has a balance, it will be deleted',
+                        'transferSameUser' => '❌ You cannot transfer information to the current user',
+                        'transferDone' => 'The information was successfully transferred to the new user account',
+                        'alreadyVerified' => '✍️ The user is already verified',
+                        'accountToggleBusy' => '❌ The bot is currently turning an account off or on; wait until the previous operation is done, then send a new request',
+                        'configsQueuedEnable' => '✅ The user\'s configs have been queued for activation. Note that this may take more than 2 hours; the time depends on the number of configs.',
+                        'configsQueuedDisable' => '✅ The user\'s configs have been queued for deactivation. Note that this may take more than 2 hours; the time depends on the number of configs.',
+                        'notFound' => '❌ The user does not exist.',
+                        'infoSummary' => '👀 User information:
+
+🔗 User account information
+
+⭕️ User status: %s
+⭕️ User username: @%s
+⭕️ User numeric ID:  <a href = "tg://user?id=%s">%s</a>
+⭕️ User referral code: %s
+⭕️ User join time: %s
+⭕️ User\'s last bot usage time: %s
+⭕️ Test account limit:  %s 
+⭕️ Rule acceptance status: %s
+⭕️ Mobile number: <code>%s</code>
+⭕️ User type: %s
+⭕️ Number of user referrals: %s
+⭕  User\'s referrer: %s
+⭕  Identity verification status: %s   
+⭕  Card number display: %s
+⭕ User points: %s
+⭕️  Total active purchased volume ( for accurate volume statistics, cron must be on ): %s
+%s
+
+💎 Financial reports
+
+🔰 User balance: %s
+🔰 User\'s total purchase count: %s
+🔰️ Total paid amount:  %s
+🔰 Total purchases: %s
+🔰 User discount percentage: %s
+🔰 Sales count in the last hour: %s
+🔰 Total sales in the last hour: %s Toman
+🔰 Sales count in the last month: %s
+🔰 Total sales in the last month: %s Toman
+
+
+',
+                        'notFoundById' => '📌 The user with numeric ID %s does not exist in the database',
                 ],
                 'manageadmin' => [
                         'addAdminSet' => '🥳 The admin was successfully added',
@@ -588,6 +1973,12 @@ Numeric ID: %s',
 The administrator access level has access to all sections
 The Seller access level only has access to receipt confirmation, user services, and bot statistics sections
 The support access level has access to user services and support message reply sections',
+                        'listAndDelete' => '📌 In the section below you can view the list of admins. You can also delete an admin by clicking the X button',
+                        'askMessageAdminId' => '📌 Send the numeric ID of the admin you want messages to be sent to',
+                        'cannotDeleteMain' => '❌ The main admin cannot be deleted',
+                        'notFound' => '⚠️ No admin was found with this ID.',
+                        'deleted' => '✅ The admin was deleted successfully',
+                        'askId' => '📌 Send the admin\'s numeric ID',
                 ],
                 'managepanel' => [
                         'Inbound' => [
@@ -626,9 +2017,6 @@ If you want it to be unlimited, send the text unlimited',
                         'getUsernameNew' => ' Send the new panel username',
                         'invalidDomain' => '🔗 The domain address is invalid',
                         'invalidName' => 'The name is invalid',
-                        'limitedPanel' => '❌ Unfortunately, the account creation capacity on this panel has been reached. Use another panel',
-                        'limitedPanelFirst' => '❌ Unfortunately, the account creation capacity has been reached. Try again in a few hours.',
-                        'nullPanel' => '⭕️ No position was found. Please contact support to resolve the issue',
                         'nullPanelAdmin' => 'No panel is defined. First define a panel, then add a product',
                         'removedPanel' => 'The panel was successfully deleted',
                         'repeatPanel' => '❌ The panel name is already registered. You cannot register it again',
@@ -637,6 +2025,91 @@ If you want it to be unlimited, send the text unlimited',
                         'setLimit' => 'Send the new account creation limit. If you want it to be unlimited, send the text unlimited',
                         'setProtocol' => '✅ The protocol was successfully set',
                         'usernameSet' => '👤 The panel address was saved. Now send the username',
+                        'noteSetInboundAndDomain' => '❌ Note:
+To activate the panel, you must go to the panel management menu and be sure to configure the Set Inbound ID and Subscription Link Domain options; otherwise, the config will not be created',
+                        'noteSetProtocolInbound' => '❌ Note:
+To activate the panel, you must go to the panel management menu and configure the protocol and inbound options so that the bot provides the config; otherwise, no config will be given to the user',
+                        'noteSetInboundId' => '❌ Note:
+To activate the panel, you must go to the panel management menu, enter the Set Inbound ID menu, and configure the config name; otherwise, the bot will not create any config',
+                        'noteSetGroupNameIbsng' => '❌ Note:
+To activate, you must go to Panel Management > Set Group Name and send the default group name you defined in ibsng to the bot.',
+                        'noteMikrotikAccounting' => '❌ Note:
+1 - The accounting plugin must be installed on your MikroTik
+2 - In the ip » services » http or https section, it must be enabled (if you have obtained an SSL, enable https; otherwise http)',
+                        'noteSetAdminUuid' => '❌ Note:
+1 - Configure the following options from panel management
+
+1 - uuid admin: get and register the admin uuid from the panel
+2 - Subscription link domain: send the subscription link domain of the Hiddify panel',
+                        'noteSendConfigUsername' => '❌ Note:
+1 - From Panel Management > Set ⚙️ Protocol and Inbound, send a config username.',
+                        'invalidSelection' => '❌ The selected panel is wrong',
+                        'hidden' => 'Hidden',
+                        'shown' => 'Shown',
+                        'invalidCredentials' => '❌ The panel username or password is incorrect',
+                        'fetchErrorCode' => '❌ An error occurred while retrieving data. Error code: ',
+                        'fetchError' => '❌ An error occurred while retrieving data. Error: ',
+                        'invalidUrl' => '❌ The panel link was sent incorrectly',
+                        'notConnected' => 'Panel is not connected',
+                        'askUserGroup' => '📌 Send the user type
+User groups: f,n,n2
+❌ If you want the panel to be shown for all user groups, send the text all',
+                        'userGroupChanged' => '📌 User group changed successfully',
+                        'btnSubLinkDomain' => '🔗 Subscription link domain',
+                        'askSubLinkSample' => '📌 If you use a Sanaei panel, copy a user\'s subscription link from the panel and send it in this section. For other panels, you must send it according to their structure.',
+                        'subLinkInactive' => 'The subscription link is not active',
+                        'subLinkInvalid' => 'The subscription link is invalid',
+                        'askAdminUuid' => '📌 Send the admin UUID',
+                        'adminUuidSaved' => '✅ Admin UUID saved',
+                        'askInboundId' => '📌 Send the inbound ID from which you want the config to be created. The inbound ID is a multi-digit number written in the id column on the inbounds page of the panel.
+
+⚠️ If you use a wgdashboard panel, you must send the config name',
+                        'inboundIdSaved' => '✅ Inbound ID saved successfully',
+                        'userNotInPanel' => 'The user does not exist in the panel',
+                        'inboundNameSaved' => 'Inbound name saved successfully',
+                        'selectPanel' => '🪚 To use this feature, select one of the panels below',
+                        'askServiceSetup' => '📌 To set up the service, create a config in your panel, activate the services you want to be active inside the panel, and send the config\'s username',
+                        'setupSaved' => '✅ The information was set up successfully',
+                        'askQrBackground' => 'Send your image for the background',
+                        'invalidImage' => 'The image is invalid',
+                        'qrBackgroundSaved' => '🖼 The background was set successfully',
+                        'btnSetGroupName' => '🎛 Set group name',
+                        'askGroupName' => '📌 Send the group name you want to be used by default.',
+                        'askProtocolSetup' => '📌 To set up the inbound and protocol, you must create a config in your panel, activate the protocols and inbounds you want to be active inside the panel, and send the config\'s username',
+                        'userNotInPanel2' => '❌ The user does not exist in the panel.',
+                        'groupNameSaved' => '✅ The group name was set successfully.',
+                        'protocolSaved' => '✅ Your inbounds and protocols were set up successfully.',
+                        'askHideUserId' => '📌 Send the numeric ID of the user for this panel.',
+                        'hiddenForUser' => '✅ The panel was successfully hidden for the user',
+                        'hiddenListEmpty' => '❌ There is no user in the hidden list',
+                        'userNotInList' => '❌ The user is not in the list',
+                        'userNotInList2' => '❌ The user is not in the list.',
+                        'userRemovedFromList' => '✅ The user was successfully removed from the list.',
+                        'askConfigUsername' => '📌 If you use a Marzban or Marzneshin panel, copy a config\'s username from the panel and send it; otherwise, for Sanaei and Alireza panels, send the inbound ID',
+                        'inboundUnsupported' => '❌ This panel does not support defining an inbound',
+                        'askHidePanelsAgent' => '❌ Select the panels you don\'t want to be shown to this agent from the button below; after selecting, send the /finish command to save.',
+                        'panelsHidden' => '✅ The panels were saved successfully and the panels were hidden for the user.',
+                        'alreadyAdded' => '❌ The panel has already been added',
+                        'panelSelectedFinish' => '✅ The panel was selected; when finished, send the /finish command to save it finally.',
+                        'askShowPanelsAgent' => '❌ From the list below, select the panels you want to be shown again in the agent\'s bot; after selecting all panels, send the /remove command to save.',
+                        'panelsShown' => '✅ The panels were shown successfully and the panels were activated for the user.',
+                        'panelNotInList' => '❌ The panel is not in the list',
+                        'panelSelectedRemove' => '✅ The panel was selected; when finished, send the /remove command to save it finally.',
+                        'hidePanelAllOnly' => '📌 This feature only works when you have defined the product location as /all.',
+                        'askHidePanelProduct' => '📌 If you have selected the panel location as /all but need to not show a panel, you can use this feature
+
+To hide a panel, select your panels from the list below, then send the /end_hide command.',
+                        'panelsHiddenProduct' => '✅ The panels were saved successfully and the panels were hidden for the selected product.',
+                        'panelSelectedEndHide' => '✅ The panel was selected; when finished, send the /end_hide command to save it finally.',
+                        'hiddenPanelsCleared' => '✅ All hidden panels were removed',
+                        'invalidToken' => '❌ Panel token is invalid',
+                        'notFound' => '❌ The requested panel was not found.',
+                        'errorCode' => '❌ An error occurred. Error code: %s',
+                        'xuiErrorCode' => '❌ An error occurred. Error code:  ',
+                        'xuiErrorReason' => '❌ An error occurred. Reason:  ',
+                        'eylanErrorCode' => '❌  An error occurred. Error code:  %s',
+                        'eylanUserNotExist' => '❌ User does not exist in the panel.',
+                        'eylanPanelOutput' => 'Panel output: ',
                 ],
                 'messageBulk' => [
                         'userMessage' => '📥 A reply to a message was received from the user. To reply, click the button below and send your message.
@@ -649,33 +2122,319 @@ User\'s username: @%s
 Numeric ID: %s
 User\'s username: %s
 📝 Message text: %s',
+                        'busy' => '❌ The message-sending system is currently performing an operation. After it finishes and notifies you, you can send a new message.',
+                        'btnCancelPin' => 'Cancel pinned message',
+                        'confirmStart' => 'By confirming the option above, the sending process will begin',
+                        'errorRestart' => '❌ An error occurred. Please perform the message-sending steps again from the beginning',
+                        'askPanelUsers' => '📌 Which users in the panels below should the message be sent to?',
+                        'askPin' => '📌 Do you want the sent message to be pinned or not?',
+                        'askInactiveDays' => '📌 In this feature, the message is sent to users who, as you specify, have not used the bot for a certain number of days
+Send your number of days.',
+                        'askText' => '📌 Send your message text.',
+                        'askButton' => '📌 If you want a button to be shown under the message, choose an option from the list below; otherwise, click the Send Without Button button',
+                        'textOnlyInactive' => '📌 In the section for users who have not used the bot for the specified number of days, only sending text is possible.',
+                        'textOnlyBroadcast' => '📌 In the broadcast section, only sending text is possible.',
+                        'targetInactiveUsers' => 'Users who have not used it for the specified number of days',
+                        'targetAllUsers' => 'Send to all users',
+                        'targetCustomers' => 'Customers',
+                        'targetNoPurchase' => 'Those who had no purchase',
+                        'started' => '✅ The operation has begun. You will be notified when it finishes.',
+                        'canceled' => '📌 Message sending was canceled.',
+                        'askTextOrImage' => '📌 Send your text or image',
+                        'askAllowReply' => '📌 Can the user reply or not?
+1 - Yes, they can reply 
+2 - No, they cannot reply
+Send the answer as a number',
+                        'btnForwardToUser' => '📤 Forward message to a user',
+                        'confirmSummary' => '📌 You are performing a message-sending operation; by reviewing the information below and confirming the button below, the sending operation will start.
+⚙️ Operation type: %s',
+                        'inactiveDaysLabel' => 'Number of days the user has not messaged: %s',
+                        'confirmSummary2' => '📌 You are performing a message-sending operation; by reviewing the information below and confirming the button below, the sending operation will start.
+⚙️ Operation type: %s
+🎛 Service type: %s
+🗂 User type: %s
+%s
+',
+                        'answeredByOther' => '❌ The message has been answered by another admin.',
+                        'done' => '📌 The operation was performed for all requested users.',
+                        'progress' => '✏️ The message-sending operation is in progress...
+
+Number of remaining people :  %s',
                 ],
-                'month' => [
-                        1 => '⏳ One month',
-                        '1day' => '⏳ One day',
-                        2 => '⏳ Two months',
-                        3 => '⏳ Three months',
-                        365 => '⏳ One year',
-                        4 => '⏳ Four months',
-                        6 => '⏳ Six months',
-                        '7day' => '⏳ Seven days',
-                        'title' => '📌 Select the service duration',
-                        'unlimited' => '🔋 By volume',
+                'node' => [
+                        'settingsUnavailable' => '❌ Node settings cannot be viewed',
+                        'intro' => '📌 In this section you can manage the Marzban panel nodes.',
+                        'askMultiplier' => '📌 Send your node\'s usage coefficient.',
+                        'multiplierSaved' => '✅ Node usage coefficient saved successfully.',
+                        'askName' => '📌 Send your node\'s name.',
+                        'nameSaved' => '✅ Node name saved successfully.',
+                        'askIp' => '📌 Send the node\'s IP.',
+                        'ipSaved' => '✅ Node address saved successfully.',
+                        'reconnected' => '✅ Node reconnection completed.',
+                        'deleted' => '✅ Node deleted successfully',
+                        'btnSettings' => '⚙️ Node settings',
+                        'askSetup' => '📌 To set up a node, create a user in your panel, activate the nodes you want to be active inside the panel, and send the user\'s username',
+                        'info' => '📌 Node information 
+
+🖥 Node name:  %s
+🌍 Node IP: %s
+🔻 Node port: %s
+🔺 Node api port: %s
+🔋Total node consumption: %s
+🔄 Node consumption coefficient: %s
+🔵 Node xray version: %s
+🟢 Node status: %s
+    
+',
                 ],
-                'notUser' => 'No user was found with this ID',
                 'order' => [
+                        'requestRegistered' => '✅ Successfully registered',
+                        'askRejectReason' => '📌 The deletion-rejection request was successfully registered. Send the reason for non-approval',
                         'notFound' => '❌ No order was found',
                         'viewOrderUsername' => '👁 To view the user\'s orders, send the user\'s config username',
+                        'alreadyDeleted' => '❌ The service has already been deleted',
+                        'selectService' => '⚠️ More than one service found; select the correct service from the list below',
+                        'typeAdminRenew' => 'Renewed by admin',
+                        'typeExtraVolume' => 'Extra volume',
+                        'typeExtraTime' => 'Extra time',
+                        'typeTransfer' => 'Transfer to another account',
+                        'typeRenewNotInList' => 'Renewal due to user not being in the list',
+                        'typeChangeLocation' => 'Change location',
+                        'typeGiftTime' => 'Universal time gift',
+                        'typeGiftVolume' => 'Universal volume gift',
+                        'askRefundAmount' => '📌 Send the amount for the refund',
+                        'renewError' => '❌ The renewal encountered an error; perform the renewal steps again.',
+                        'askVolume' => '📌 Send your requested volume.',
+                        'askTime' => '⌛️ Select your service duration ',
+                        'renewErrorSupport' => '❌ An error occurred while renewing the service; contact support',
+                        'confirmDeleteFromDb' => '📌 By confirming the option below, this service will be completely deleted from the bot\'s database and will no longer count in account statistics ( this section does not delete the service from the panel and only deletes it from the bot\'s database )',
+                        'deleted' => '✅ The service was deleted successfully.',
+                        'detailRow' => '
+🛒 Order number:  <code>%s</code>
+🛒  Order status in bot: <code>%s</code>
+🙍‍♂️ User ID: <code>%s</code>
+👤 Subscription username:  <code>%s</code> 
+📍 Service location:  %s
+🛍 Product name:  %s
+💰 Service paid price: %s Toman
+⚜️ Purchased service volume: %s
+⏳ Purchased service time: %s 
+📆 Purchase date: %s  
+
+',
+                        'serviceSummary' => '
+  
+ Service status: %s
+        
+🔋 Service volume: %s
+📥 Consumed volume: %s
+💢 Remaining volume: %s (%s%%)
+
+📅 Active until: %s (%s)
+
+User subscription link: 
+<code>%s</code>
+
+📶 Last connection time: %s
+🔄 Last subscription link update time: %s
+#️⃣ Connected client:<code>%s</code>',
+                        'serviceReport' => '
+📌 Service report 
+🔗  Service type: %s
+🕰 Service execution time: %s 
+
+(%s)
+💰Service execution amount: %s
+👤 User numeric ID: %s
+👤 Config username: %s',
+                        'detailRow3' => '
+🛒 Order number:  %s
+🛒  Order status in bot: %s
+🙍‍♂️ User ID: %s
+👤 Subscription username:  %s
+📍 Service location:  %s
+🛍 Product name:  %s
+💰 Service paid price: %s Toman
+⚜️ Purchased service volume: %s
+⏳ Purchased service time: %s 
+📆 Purchase date: %s  
+
+',
                 ],
-                'panelAdmin' => '👨‍💼 Management panel',
                 'phone' => [
                         'active' => 'The user\'s mobile number has been confirmed ✅🎉',
+                ],
+                'price' => [
+                        'priceSaved' => '✅ The amount was saved successfully.',
+                        'selectUserGroup' => '📌 For which user type should the price be set?
+User types:
+f = regular user
+n = regular agent
+n2 = agent with more capabilities',
+                        'askRenewCashback' => '📌 Send the percentage you want to be credited to the user\'s account as a gift after renewal.
+⚠️ If you want it disabled, send the number 0',
+                        'askUserGroup' => '📌 Select the user type
+f
+n
+n2',
+                        'invalidUserGroup' => '❌ The user group is invalid',
+                        'amountSaved' => '✅ The amount was set successfully',
+                        'askPaymentCashback' => '📌 In this section you can set what percentage is credited to the user\'s account as a gift after payment. (To disable this feature, send zero)',
+                        'askChangeLocation' => '📌 Send the price for changing location from other panels to this panel',
+                        'changeLocationSaved' => '📌 The location change price was changed successfully',
+                        'askExtraVolume' => '📌 Send the price of extra volume for this panel.',
+                        'allGroupsHint' => '⚠️ If you want the price to be set for all user groups, send the text <code>all</code>',
+                        'askCustomVolume' => '📌 Send the custom extra volume price for this panel.',
+                        'askExtraTime' => '📌 Send the extra time price for this panel.',
+                        'askCustomTime' => '📌 Send the custom time price for this panel.',
+                        'askIncreasePanel' => '📌 Which panel\'s products do you want to increase the price for?
+If you used /all when defining the product, you must send /all if you want this category to have a price change',
+                        'askPriceGroup' => '📌 For which user group should the price apply
+f,n.n2',
+                        'askPercentOrFixed' => '📌 Should the amount be added as a percentage or a fixed amount?',
+                        'askAmount' => '📌 Send the amount you want to apply',
+                        'askPercent' => '📌 Send the percentage you want to apply',
+                        'noProductFound' => '❌ No product found for price change',
+                        'appliedToAll' => '✅ The amount was successfully applied to all products',
+                        'askDecreasePanel' => '📌 Which panel\'s products do you want to decrease the price for?
+If you used /all when defining the product, you must send /all if you want this category to have a price change',
+                        'askMinVolume' => '📌 Send the minimum volume the user can purchase for this panel.',
+                        'askMaxVolume' => '📌 Send the maximum volume the user can purchase for this panel.',
+                        'askMinTime' => '📌 Send the minimum custom time the user can purchase for this panel.',
+                        'askMaxTime' => '📌 Send the maximum custom time the user can purchase for this panel.',
+                        'rewardSaved' => '✅ The reward amount was set successfully',
+                        'askAgentVolume' => '📌 Set the minimum price you want the agent to pay per gigabyte of volume',
+                        'saved' => '✅ The price was saved successfully.',
+                        'askAgentTime' => '📌 Set the minimum price you want the agent to pay per day of time',
+                        'askPaymentCashback2' => '📌 In this section you can set what percentage is credited to the user\'s account as a gift after payment. ( To disable this feature, send zero )',
+                        'customServiceIntro' => '📌 Before submitting the information, read the text below. 
+1 - This feature is for the custom service.
+2 - If all your panels have the same price, instead of setting each price individually you can use this feature to set the prices all at once.
+3 - Setting the price in this section is irreversible.
+
+
+To set the price, first send the price for group f.',
+                        'askGroupN' => '📌 Send the price for group n.',
+                        'askGroupN2' => '📌 Send the price for group n2.',
+                        'savedGroup' => '✅ The price was set successfully',
+                        'askBulkMin' => '📌 Send the minimum amount you want the user to make a bulk purchase.
+        
+Current amount: %s',
                 ],
                 'report' => [
                         'reportCron' => '📝 Notification reports',
                         'reportNight' => '🌙 Nightly report',
+                        'btnDontShowAgain' => 'Don\'t show again ⛓️‍💥',
+                        'msgHidden' => '
+
+✅ This message will no longer be shown to you.',
+                        'btnPurchaseReports' => '🛍 Purchase reports',
+                        'btnServicePurchase' => '📌 Service purchase report',
+                        'btnTestAccount' => '🔑 Test account report',
+                        'btnOther' => '⚙️ Other reports',
+                        'btnErrors' => '❌ Error reports',
+                        'btnFinancial' => '💰 Financial report',
+                        'btnBackup' => '🤖 Bot backup ',
+                        'btnExport' => '🪪 Export data',
+                        'noDataToExport' => '❌ There is no data to export',
+                        'btnExportUsers' => '🪪 Export user data',
+                        'btnExportOrders' => '🪪 Export user orders',
+                        'btnExportPayments' => '🪪 Export user payments',
+                        'btnOptimize' => '🗑 Optimize bot',
+                        'optimizeWarning' => '❌❌❌❌❌❌❌ Read the text below carefully
+
+📌 By confirming the option below, the following operations will be performed and they are irreversible
+
+1 - Inactive orders will be deleted
+2 - Unpaid orders will be deleted.
+3 - Orders deleted by the admin 
+4- Deletion of inactive test services
+5 - Orders deleted by the user 
+6 - Orders whose time or volume has expired',
+                        'botReportIntro' => '💬 | Bot report
+
+🔹 | If you encounter a <b>bug or problem</b> in the bot\'s operation, please report it to us for review.
+➖➖➖➖➖➖➖➖➖➖➖
+🔹 | If you encounter a <b>serious bug</b> or abnormal behavior, report it faster so it can be fixed.
+➖➖➖➖➖➖➖➖➖➖➖
+🔹 | If you have a suggestion for <b>adding a new feature</b> or an idea to improve the bot\'s performance, we\'d be happy to hear it.
+➖➖➖➖➖➖➖➖➖➖➖
+🔹 | Also, if you need <b>guidance</b> or help, you can contact the support team via direct message.
+
+📩 | To send a report, suggestion, or request for guidance, leave a message in the <b>Mirza group</b>:
+<a href="https://t.me/mirzapanelgroup" rel="nofollow" target="_blank">Mirza Group</a>',
+                        'aboutBot' => '💎 | Version Bot: %s
+📌 | Version Mini App: 0.1.1
+
+<blockquote>🔹 | This bot is completely free and is developed by the Mirza team</blockquote>
+
+<blockquote>🔹 | Any sale or charging of money for this bot is considered a violation.</blockquote>
+
+<blockquote>🔹 | If you see any sale or charging of money, please track and reclaim your money.</blockquote>
+
+<blockquote>🐞 | If you encounter a bug or problem in the bot\'s operation, contact us via the **📬 Bot report** button in the admin panel.</blockquote>',
+                        'gatewayRow' => '
+📌 Gateway name: <code>%s</code>
+ - Number of successful payments: <code>%s</code>
+ - Total payments: <code>%s</code>
+',
+                        'optimizeResult' => '
+✅ %s unpaid orders were deleted
+✅ %s inactive orders were deleted.
+✅ %s admin-deleted orders were deleted
+✅ %s test orders were deleted.',
+                        'backupCaption' => '📌 Main bot database export ',
+                        'dailyBot' => '📌 Daily bot performance report :
+
+🧲 Number of renewals today : %s
+💰 Total renewals today : %s Toman
+🛍 Number of orders today : %s
+🛍 Total order amount today : %s Toman
+🔑 Test accounts today : %s
+🔋 Total volume sold : %s gigabytes
+Number of users who joined the bot today : %s people
+
+',
+                        'dailyPanelRow' => '
+Panel name : %s
+🛍 Number of orders today : %s
+🛍 Total order amount today : %s Toman
+🔋 Total volume sold : %s gigabytes
+---------------
+
+',
+                        'dailyPanelsTitle' => 'Panels report :
+
+',
+                        'dailyTopAgentRow' => '
+User numeric ID : %s
+User username : %s
+Total purchases today : %s
+---------------
+
+',
+                        'dailyTopAgentsTitle' => 'List of agents who made the most purchases today :
+
+',
+                        'lotteryTitle' => '📌 Dear admin, the users below won the lottery and their accounts were charged.
+
+',
+                        'lotteryWinnerRow' => '
+Username : @%s
+Numeric ID : %s
+Amount : %s
+Person : %s
+--------------',
+                        'nodeDown' => '🚨 Dear admin, the node named %s is not connected.
+Node status : %s
+✍️ Error reason : <code> %s</code>',
+                        'panelDown' => '🚨 Dear admin, the panel named <code>%s</code> is not connected.',
                 ],
                 'reportgroup' => [
+                        'newUser' => '🎉 A new user started the bot
+ Name: %s
+Username: @%s
+Numeric ID: %s',
                         'adminAdded' => '👨‍💼 A user with the following details added an admin.
 
 Username %s
@@ -710,579 +2469,760 @@ User information:
 💰 Amount paid: %s Toman
 User\'s balance before purchase: %s
 👤 Config username: %s',
-                ],
-                'transfer' => [
-                        'confirm' => '✅ If you confirm, click the button below so that your transfer is completed successfully.',
-                        'confirmed' => '✅ The service transfer was completed successfully.',
-                        'description' => '🛂 To transfer this subscription to other users, you must have the destination account\'s user ID.
-
-‼️ Transfer notes:
-1 - To get the user ID, go to the wallet button 
-2 - After transferring the subscription to the destination user, the subscription will be removed from your panel.
-
-🆕 Enter the destination account\'s user ID:',
-                        'notSendServiceYou' => '❌ It is not possible to transfer the service to yourself.',
-                        'notUserTrans' => '❌ No user was found with this ID.',
-                        'title' => '🚚 Transfer service to another user',
-                        'transferNotValid' => '❌ It is not possible to transfer a test service to another user.',
-                ],
-                'adminphp' => [
-                        'btn_show_1' => 'Don\'t show again ⛓️‍💥',
-                        'ok_message_show' => '
-
-✅ This message will no longer be shown to you.',
-                        'ask_select_channel_join_name' => '📌 Choose a name for the channel membership button.',
-                        'ask_send_join_link' => '📌 Send the membership link',
-                        'err_invalid_join_address' => 'The membership address is not correct',
-                        'ok_success_channel' => '✅ The mandatory join channel was successfully registered.',
-                        'db_test_service_name' => 'Test service',
-                        'btn_date_must' => 'The date must be valid',
-                        'ask_send_date' => 'Send the end date, for example:
-<code>2025/09/08</code>',
-                        'ask_send_token' => '📌 Send the token',
-                        'err_panel_manage_link_domain' => '❌ Note:
-To activate the panel, you must go to the panel management menu and be sure to configure the Set Inbound ID and Subscription Link Domain options; otherwise, the config will not be created',
-                        'err_panel_user_manage_bot' => '❌ Note:
-To activate the panel, you must go to the panel management menu and configure the protocol and inbound options so that the bot provides the config; otherwise, no config will be given to the user',
-                        'err_panel_manage_bot_set_1' => '❌ Note:
-To activate the panel, you must go to the panel management menu, enter the Set Inbound ID menu, and configure the config name; otherwise, the bot will not create any config',
-                        'err_panel_manage_bot_set_2' => '❌ Note:
-To activate, you must go to Panel Management > Set Group Name and send the default group name you defined in ibsng to the bot.',
-                        'err_account_enable_must_note' => '❌ Note:
-1 - The accounting plugin must be installed on your MikroTik
-2 - In the ip » services » http or https section, it must be enabled (if you have obtained an SSL, enable https; otherwise http)',
-                        'err_send_panel_admin_manage' => '❌ Note:
-1 - Configure the following options from panel management
-
-1 - uuid admin: get and register the admin uuid from the panel
-2 - Subscription link domain: send the subscription link domain of the Hiddify panel',
-                        'err_send_panel_user_1' => '❌ Note:
-1 - From Panel Management > Set ⚙️ Protocol and Inbound, send a config username.',
-                        'err_send_message_1' => '❌ The message-sending system is currently performing an operation. After it finishes and notifies you, you can send a new message.',
-                        'btn_message_1' => 'Cancel pinned message',
-                        'msg_confirm' => 'By confirming the option above, the sending process will begin',
-                        'ask_service_user_group' => '📌 Which user group should the service be applied to?',
-                        'err_error_message_please' => '❌ An error occurred. Please perform the message-sending steps again from the beginning',
-                        'ask_service_user' => '📌 Which category of users should the service be applied to?',
-                        'msg_panel_user_message' => '📌 Which users in the panels below should the message be sent to?',
-                        'msg_message' => '📌 Do you want the sent message to be pinned or not?',
-                        'ask_send_user_bot_day' => '📌 In this feature, the message is sent to users who, as you specify, have not used the bot for a certain number of days
-Send your number of days.',
-                        'ask_send_message' => '📌 Send your message text.',
-                        'msg_select_message_button_show' => '📌 If you want a button to be shown under the message, choose an option from the list below; otherwise, click the Send Without Button button',
-                        'msg_user_day_1' => '📌 In the section for users who have not used the bot for the specified number of days, only sending text is possible.',
-                        'msg' => '📌 In the broadcast section, only sending text is possible.',
-                        'msg_user_day_2' => 'Users who have not used it for the specified number of days',
-                        'btn_user_1' => 'Send to all users',
-                        'btn_1' => 'Customers',
-                        'btn_buy' => 'Those who had no purchase',
-                        'ok_1' => '✅ The operation has begun. You will be notified when it finishes.',
-                        'btn_message_2' => '📌 Message sending was canceled.',
-                        'ask_send_1' => '📌 Send your text or image',
-                        'ask_send_user_number_1' => '📌 Can the user reply or not?
-1 - Yes, they can reply 
-2 - No, they cannot reply
-Send the answer as a number',
-                        'btn_user_message' => '📤 Forward message to a user',
-                        'err_tutorial_name_must' => '❌ The tutorial name must be less than 150 characters',
-                        'err_tutorial_name' => '❌ The tutorial name already exists. Use a different name.',
-                        'ask_send_tutorial_name' => '📌 Send the category name for the tutorial',
-                        'ok_bot' => '✅ The bot is on',
-                        'err_bot' => '❌ The bot is off',
-                        'ok_confirm_1' => '✅ Rule confirmation is on',
-                        'err_confirm_1' => '❌ Rules confirmation is off',
-                        'ok_confirm_2' => '✅ Mobile number verification is on',
-                        'err_enable_disable_1' => '❌ Phone number verification is disabled',
-                        'ok_2' => '✅ Iranian number verification is on',
-                        'err_enable_disable_2' => '❌ Iranian number check is disabled',
-                        'err_select_set_group_number' => '❌ The selected group is not in forum mode. First enable the group\'s topic feature, then set the group\'s numeric ID again',
-                        'btn_report_buy_1' => '🛍 Purchase reports',
-                        'err_admin_bot_group' => '❌ The bot is not an admin of the group',
-                        'btn_report_buy_2' => '📌 Service purchase report',
-                        'btn_account_report' => '🔑 Test account report',
-                        'btn_report_1' => '⚙️ Other reports',
-                        'err_error_report' => '❌ Error reports',
-                        'btn_report_2' => '💰 Financial report',
-                        'btn_bot_backup' => '🤖 Bot backup ',
-                        'err_name_must' => '❌ The product name must be less than 150 characters',
-                        'err_invalid_select_panel' => '❌ The selected panel is wrong',
-                        'ask_send_name_1' => '📌 Send your category name.',
-                        'err_notfound_select_add_1' => '❌ The selected category does not exist. Add your category from Plans > Add Category, then add the product.',
-                        'ask_send_user_1' => ' 🗒 Send the note for the product. This note is shown in the user\'s proforma invoice.',
-                        'ask_send_user_2' => ' 🗒 Send the note for the product. This note is shown in the user\'s proforma invoice.',
-                        'ask_admin_delete_button' => '📌 In the section below you can view the list of admins. You can also delete an admin by clicking the X button',
-                        'msg_user_renew_buy' => '⚠️ To approve user requests, first review and approve the purchase or subscription renewal receipts. Then approve the wallet top-up receipt. ',
-                        'ask_select_user_1' => '📌 Select the user type',
-                        'ask_send_price' => 'Send the new price',
-                        'ok_price_day' => '✅ The product price was updated',
-                        'ask_send_2' => 'Send the new note',
-                        'ok_day_1' => '✅ The product note was updated',
-                        'ask_select_name_1' => 'Select the new category name',
-                        'err_notfound_select_add_2' => '❌ The selected category does not exist. Add your category from Plans > Add Category, then add the product.',
-                        'ok_day_2' => '✅ The product category was updated',
-                        'ask_send_name_2' => 'Send the new name',
-                        'ok_day_name' => '✅ The product name was updated',
-                        'ask_send_user_3' => 'Send the new user type:
-User types: f, n, n2',
-                        'err_invalid_user_group_1' => '❌ The user group is invalid',
-                        'ask_send_volume_1' => 'Send the volume reset type',
-                        'ask_select_1' => '📌 Select the new product position',
-                        'err_change_name' => '❌ You cannot change a defined product to the position name /all.',
-                        'ok_day_3' => '✅ The product position was updated',
-                        'ask_send_volume_2' => 'Send the new volume',
-                        'msg_user_group' => '📌 Which of the following user groups should the top-up be deposited to?',
-                        'btn_user_2' => '📌 Which user should the public top-up be sent to?',
-                        'ask_user_message' => '📌 Should a top-up notification message be sent to the users or not?
-Yes: 1
-No: 0',
-                        'ok_message' => '✅ The message-sending operation has begun. You will be notified when it finishes.',
-                        'btn_balance' => '⬇️ Decrease balance',
-                        'btn_3' => '📌 The maximum amount is 100 million Rials.',
-                        'btn_name_1' => 'Unknown',
-                        'btn_5' => 'Not verified',
-                        'btn_6' => 'Verified',
-                        'btn_7' => 'Hidden',
-                        'btn_show_2' => 'Shown',
-                        'btn_date' => '⭕️ Agency expiry date: ',
-                        'btn_delete_1' => '🗑 Delete protocol',
-                        'ask_select_account_user' => '⭕️ Select the username generation method for accounts from the button below.
+                        'checkReportGroup' => '❌ An error occurred while creating the subscription; to fix the issue, check the cause of the error in your report group',
+                        'paymentApproved' => '📣 An admin approved the payment receipt.
         
-⚠️ If a user has no username, the word you choose will be registered and used in place of the username.
+Information:
+💸 Payment method: %s
+👤 Numeric ID of approving admin: %s
+💰 Payment amount: %s
+👤 User numeric ID: <code>%s</code>
+👤 User username: @%s 
+        Payment tracking code: %s',
+                        'paymentRejected' => '❌ An admin rejected the payment receipt.
         
-⚠️ If a username already exists, a random number will be added to the username',
-                        'ask_user_name_register' => '📌 What name should be registered if the user has no username?',
-                        'ask_send_user_card_1' => '💳 Send your card number
+Information:
+💸 Payment method: %s
+👤 Numeric ID of approving admin: %s
+Username of approving admin: @%s
+💰 Payment amount: %s
+Rejection reason: %s
+👤 User numeric ID: %s',
+                        'balanceDecreased' => '📌 An admin has reduced a user\'s balance:
+        
+🪪 Information of the admin who reduced the balance: 
+Username:@%s
+Numeric ID: %s
+👤 User information:
+User numeric ID: %s
+Balance amount: %s
+User balance after reduction: %s',
+                        'balanceIncreased' => '📌 An admin has increased a user\'s balance:
+        
+🪪 Information of the admin who increased the balance: 
+Username:@%s
+Numeric ID: %s
+👤 Information of the user receiving the balance:
+User numeric ID: %s
+Balance amount: %s
+User balance after increase: %s',
+                        'balanceDecreased2' => '📌 An admin has reduced a user\'s balance:
+        
+🪪 Information of the admin who reduced the balance: 
+Username:@%s
+Numeric ID: %s
+👤 User information:
+User numeric ID: %s
+Balance amount: %s
+User balance after reduction: %s',
+                        'userBlocked' => 'User with numeric ID
+%s  was blocked in the bot 
+Blocking admin: %s',
+                        'userUnblocked' => 'User with numeric ID
+%s  was unblocked in the bot 
+Blocking admin: %s',
+                        'balanceManualAdd' => 'Confirming a card-to-card receipt and manually increasing the balance by an admin
+        
+User numeric ID: %s
+User username: %s
+Transaction amount in invoice:  %s
+Transaction amount deposited by admin: %s',
+                        'deleteRequestApproved' => '⭕️ An admin approved the user\'s service that had a deletion request
+        
+Information of the approving user: 
 
-⚠️ Note that you can define several card numbers; if you define multiple card numbers, the bot will show the user a random one from among them',
-                        'err_card_number_must' => '❌ The card number must be numeric.',
-                        'err_card' => '❌ The card number already exists in the database.',
-                        'err_card_name_register_please' => '❌ Failed to register the card number. Please try again or contact support.',
-                        'ask_select_2' => '📌 Select an option',
-                        'err_invalid_panel_user' => '❌ The panel username or password is incorrect',
-                        'err_error_1' => '❌ An error occurred while retrieving data. Error code: ',
-                        'err_error_2' => '❌ An error occurred while retrieving data. Error: ',
-                        'err_invalid_panel_link' => '❌ The panel link was sent incorrectly',
-                        'btn_panel' => 'Panel is not connected',
-                        'ask_select_3' => 'Select an option',
-                        'err_send_panel_user_2' => '📌 Send the user type
-User groups: f,n,n2
-❌ If you want the panel to be shown for all user groups, send the text all',
-                        'ok_success_user_1' => '📌 User group changed successfully',
-                        'btn_link_domain_sub' => '🔗 Subscription link domain',
-                        'ask_send_panel_user_1' => '📌 If you use a Sanaei panel, copy a user\'s subscription link from the panel and send it in this section. For other panels, you must send it according to their structure.',
-                        'btn_link_sub_enable' => 'The subscription link is not active',
-                        'err_invalid_link_sub_name' => 'The subscription link is invalid',
-                        'ask_send_admin' => '📌 Send the admin UUID',
-                        'ok_admin_save' => '✅ Admin UUID saved',
-                        'ask_send_testservice_service_time' => '🕰 Send the duration of the test service.
-⚠️ The time is in hours.',
-                        'ask_send_testservice_service_volume' => 'Send the volume of the test service.
-⚠️ The volume is in megabytes.',
-                        'ask_send_panel_name_id' => '📌 Send the inbound ID from which you want the config to be created. The inbound ID is a multi-digit number written in the id column on the inbounds page of the panel.
+🪪 Numeric ID: <code>%s</code>
+💰 Refunded amount: %s Toman
+👤 Username: %s
+        Numeric ID of the cancellation requester: %s',
+                        'deleteRequestApproved2' => '⭕️ An admin approved the user\'s service that had a deletion request
+        
+Information of the approving user: 
 
-⚠️ If you use a wgdashboard panel, you must send the config name',
-                        'ok_success_save_1' => '✅ Inbound ID saved successfully',
-                        'btn_set_1' => '⚙️ Protocol settings',
-                        'ask_send_confirm' => 'To confirm, send the word below.
-<code>confirm</code>',
-                        'ask_select_4' => '📌 Select an option from the list below',
-                        'ask_group' => '📌 Which group of agents do you want to view?',
-                        'err_amount' => '❌ The maximum amount is 100 million Toman',
-                        'ask_button_confirm' => 'To confirm, click the confirm button',
-                        'ok_success_user_2' => '✅ The user was verified successfully.',
-                        'ok_success_user_3' => '💎 Dear user, your account has been successfully verified by the admin and you can now make your purchase',
-                        'ok_success_user_4' => '✅ The user was successfully removed from verified status.',
-                        'msg_user_sub_bot' => '✳️ Your account has been unblocked ✳️
-You can now use the bot ✔️',
-                        'err_user_1' => '❌ The user has no referrals.',
-                        'msg_user_id' => '📌 The ID related to the user\'s referrals has been sent.',
-                        'btn_user_3' => '📌 The user was removed from the referral.',
-                        'btn_user_delete' => '📌 The user\'s referrals were deleted.',
-                        'err_service_delete' => '❌ The service has already been deleted',
-                        'err_error_3' => 'An error occurred',
-                        'ask_send_discount_hour_enable' => '📌 For how many hours should the discount code be active? If you want it to be unlimited, send the number 0',
-                        'ask_send_user_limit' => '📌 Send the usage limit per user.',
-                        'btn_discount' => '📌 Which section should the discount code apply to?',
-                        'msg_user_limit_must' => '📌 The usage count per user must be smaller than the total limit',
-                        'ask_send_select_panel_discount' => '📌 To set a discount code for a specific product, first select the product position.
-Note: To select all panels, send the word <code>/all</code>',
-                        'ask_send_discount' => '📌 Which product should the discount code apply to? Note that if you want the discount code to apply to all products, send the word all',
-                        'err_invalid_name_1' => 'Invalid percentage',
-                        'ask_user_amount_sub_1' => '📌 Set the minimum amount you want the user to top up their account with',
-                        'msg_user_balance_group' => '📌 For which user group should the minimum balance apply?
-f
-n
-n2',
-                        'ask_user_amount_sub_2' => '📌 Set the maximum amount you want the user to top up their account with',
-                        'ok_success_change_1' => 'Changes applied successfully',
-                        'ask_send_user_balance_1' => '📌 Send the maximum amount the user\'s balance can go negative when purchasing
-Note: the number should be without a dash or minus sign
-If you want the user to purchase unlimited, send the number 0',
-                        'ask_select_service' => '⚠️ More than one service found; select the correct service from the list below',
-                        'btn_hour' => 'hours',
-                        'btn_8' => 'megabytes',
-                        'btn_day_1' => 'days',
-                        'btn_9' => 'gigabytes',
-                        'err_notfound_panel_user' => 'The user does not exist in the panel',
-                        'btn_10' => 'Online',
-                        'btn_11' => 'Offline',
-                        'btn_12' => 'Not connected',
-                        'err_account' => '❌ Disable account',
-                        'btn_admin_renew' => 'Renewed by admin',
-                        'btn_volume_add' => 'Extra volume',
-                        'btn_time_add' => 'Extra time',
-                        'btn_sub' => 'Transfer to another account',
-                        'btn_renew' => 'Renewal due to user not being in the list',
-                        'btn_change' => 'Change location',
-                        'btn_time' => 'Universal time gift',
-                        'btn_volume' => 'Universal volume gift',
-                        'btn_13' => '🪪 Export data',
-                        'btn_set_settings' => '🕚 Cron job settings',
-                        'err_notfound' => '❌ There is no data to export',
-                        'btn_user_4' => '🪪 Export user data',
-                        'btn_user_order' => '🪪 Export user orders',
-                        'btn_user_payment' => '🪪 Export user payments',
-                        'err_notfound_service_volume_time' => '❌ The service cannot be deleted because its volume and time are unlimited. ',
-                        'ask_send_amount_1' => '📌 Send the amount for the refund',
-                        'ok_success_user_5' => '✅ The amount was successfully added to the user\'s account.',
-                        'btn_day_2' => 'day',
-                        'msg_user_day_message_config' => 'In this section you must set, if the user has not connected to their config after a certain number of days and is in on_hold status, to send the user a message',
-                        'ok_tutorial_day_name_1' => '✅ Tutorial name updated',
-                        'ask_send_3' => 'Send your new category',
-                        'ok_tutorial_day_name_2' => '✅ Tutorial category name updated',
-                        'ask_send_4' => 'Send the new description',
-                        'ok_tutorial_day' => '✅ Tutorial description updated',
-                        'ask_send_5' => 'Send the new image or video',
-                        'ask_user_enable_disable' => 'Disable for all users or only new users?
-    New users 0 
-    All users 1
-    2 Users except agents',
-                        'err_invalid_select_name_renew' => '❌ The renewal method is invalid; select the correct renewal method from the list below',
-                        'err_confirm_2' => '❌ First turn off automatic approval without review.',
-                        'err_user_bot_name' => '❌ This username already exists in the bot.',
-                        'err_error_group_report' => '❌ An error occurred while creating the subscription; to fix the issue, check the cause of the error in your report group',
-                        'msg_user_card_enable_buy' => '💳 Dear user, the card number has been activated for you; you can now make your purchase.',
-                        'ok_card_enable' => '✅ Card number activated',
-                        'ok_card_enable_disable' => '✅ Card number deactivated',
-                        'ask_send_card_delete' => '📌 Send the card number you want to delete.',
-                        'ok_success_card' => '✅ The card number was deleted successfully.',
-                        'ok_success_1' => '✅ The request was successfully rejected.',
-                        'err_user_2' => '❌ Dear user, your agency request was rejected.',
-                        'ok_user_agent' => '✅ Dear user, your agency request was approved and you have become an agent.',
-                        'msg_agent_change_button' => '
-Use the buttons below to change the agent type.',
-                        'btn_gateway' => 'Tornado gateway status',
-                        'ask_gateway' => 'In this section you can turn the Tornado gateway off or on',
-                        'btn_15' => 'Turned off',
-                        'btn_16' => 'Turned on',
-                        'ok_success_save_2' => 'Inbound name saved successfully',
-                        'btn_bot' => '🗑 Optimize bot',
-                        'err_service_user_admin_payment' => '❌❌❌❌❌❌❌ Read the text below carefully
+🪪 Numeric ID: <code>%s</code>
+💰 Refunded amount: %s Toman
+👤 Username: %s
+Numeric ID of the cancellation requester: %s',
+                        'errorConfigCreateAdmin' => '
+Error creating config from the admin panel
+✍️ Error reason: 
+%s
+Admin ID: %s
+Panel name: %s',
+                        'errorAccountCreate' => '
+⭕️ A user attempted to receive an account, but config creation encountered an error and the config was not given to the user
+✍️ Error reason: 
+%s
+User ID: %s
+User username: @%s
+Panel name: %s',
+                        'configCreatedByAdmin' => ' 🛍 Config creation by admin 
 
-📌 By confirming the option below, the following operations will be performed and they are irreversible
+Config username: %s
+Config volume: %s GB
+Config time: %s days
+Admin numeric ID: %s
+Admin username: %s
+Number created: %s',
+                        'errorRenewServiceAdmin' => '
+        Service renewal error
+Panel name: %s
+Service username: %s
+Error reason: %s',
+                        'renewedByAdmin' => '⭕️ The admin renewed the user\'s service.
+        
+User information: 
+        
+🪪 Admin numeric ID: <code>%s</code>
+🪪 Numeric ID: <code>%s</code>
+🛍 Product name:  %s
+👤 Customer username in panel  : %s
+User service location: %s',
+                        'discountUsedRenew' => '⭕️ A user with username @{username}  and numeric ID {from_id} used discount code {discount_code}. And renewed their service.',
+                        'discountUsed' => '⭕️ A user with username @{username}  and numeric ID {from_id} used discount code {discount_code}.',
+                        'accountCreated' => '📣 Account creation details were registered in your bot .
 
-1 - Inactive orders will be deleted
-2 - Unpaid orders will be deleted.
-3 - Orders deleted by the admin 
-4- Deletion of inactive test services
-5 - Orders deleted by the user 
-6 - Orders whose time or volume has expired',
-                        'err_error_send_user_volume' => '📌 In this section you can set that if the user\'s volume reaches x, a warning message is sent. Send the volume in GB.',
-                        'err_invalid_name_2' => '❌ Invalid value',
-                        'ok_success_save_3' => '✅ Changes saved successfully',
-                        'ask_send_user_manage' => '📌 In this section you can manually create and receive an order 
-⚠️ If you want the config to be added to the user\'s account and managed by the user, you must use the add order option.
-- To add a config, first send the username.',
-                        'ask_send_config_1' => '📌 Send the number of configs you want to create; you can send up to 10',
-                        'err_send_number' => '❌ You can send a minimum of 1 and a maximum of 10.',
-                        'ask_send_account_volume' => '📌 Send the account\'s data volume. The volume is in gigabytes.',
-                        'ask_send_service_time_day' => '📌 Send the service duration; the time is in days.',
-                        'btn_17' => 'Custom plan',
-                        'msg_help_bot_group_message' => '💬 | Bot report
+%s
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s
+▫️User name : %s
+▫️Service location : %s
+▫️Product name :%s
+▫️Purchased time :%s days
+▫️Purchased volume : %s GB
+▫️Balance before purchase : %s Toman
+▫️Balance after purchase : %s Toman
+▫️Tracking code: %s
+▫️User type : %s
+▫️User phone number : %s
+▫️Product category : %s
+▫️Product price : %s Toman
+▫️Final price : %s Toman
+▫️Purchase time : %s',
+                        'accountCreatedAfterPay' => '📣 Account creation details were registered in the bot after payment .
 
-🔹 | If you encounter a <b>bug or problem</b> in the bot\'s operation, please report it to us for review.
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | If you encounter a <b>serious bug</b> or abnormal behavior, report it faster so it can be fixed.
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | If you have a suggestion for <b>adding a new feature</b> or an idea to improve the bot\'s performance, we\'d be happy to hear it.
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | Also, if you need <b>guidance</b> or help, you can contact the support team via direct message.
+%s
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s
+▫️Service location : %s
+▫️Purchased time :%s days
+▫️Purchased product name :%s
+▫️Purchased volume : %s GB
+▫️Balance before purchase : %s Toman
+▫️Balance after purchase : %s Toman
+▫️Tracking code: %s
+▫️User type : %s
+▫️User phone number : %s
+▫️Product price : %s Toman
+▫️Final price : %s Toman
+▫️Purchase time : %s',
+                        'accountCreatedMiniapp' => '📣 Account creation details were registered in the mini app .
+        
+%s
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s
+▫️Service location : %s
+▫️Product name :%s
+▫️Purchased time :%s days
+▫️Purchased volume : %s GB
+▫️Balance before purchase : %s Toman
+▫️Balance after purchase : %s Toman
+▫️Tracking code: %s
+▫️User type : %s
+▫️User phone number : %s
+▫️Product category : %s
+▫️Product price : %s Toman
+▫️Purchase time : %s',
+                        'userDeletedService' => 'Dear admin, a user has deleted their service after its volume or time ended
+Config username : %s',
+                        'commissionPaid' => '
+An amount of %s was credited to user %s as commission from user %s 
+Time : %s',
+                        'commissionPaid2' => '
+An amount of %s was credited to user %s as commission from user %s 
+Time : %s',
+                        'commissionPaidFn' => '
+An amount of %s was credited to user %s as commission from user %s 
+Time : %s',
+                        'commissionPaidFn2' => '
+An amount of %s was credited to user %s as commission from user %s 
+Time : %s',
+                        'commissionPaidMiniapp' => '
+    An amount of %s was credited to user %s as commission from user %s 
+    Time : %s',
+                        'commissionPaidMiniapp2' => '
+An amount of %s was credited to user %s as commission from user %s 
+Time : %s',
+                        'agentExpiredGroupChanged' => '📌 The user\'s user group was changed to f due to agency expiry
 
-📩 | To send a report, suggestion, or request for guidance, leave a message in the <b>Mirza group</b>:
-<a href="https://t.me/mirzapanelgroup" rel="nofollow" target="_blank">Mirza Group</a>',
-                        'ask_select_panel' => '🪚 To use this feature, select one of the panels below',
-                        'err_admin' => '❌ This section is only available to the main admin',
-                        'err_notfound_set_settings' => '❌ Node settings cannot be viewed',
-                        'msg_panel_manage' => '📌 In this section you can manage the Marzban panel nodes.',
-                        'ask_send_6' => '📌 Send your node\'s usage coefficient.',
-                        'ok_success_save_4' => '✅ Node usage coefficient saved successfully.',
-                        'btn_name_2' => '📌 Send your node\'s name.',
-                        'ok_success_save_5' => '✅ Node name saved successfully.',
-                        'btn_18' => '📌 Send the node\'s IP.',
-                        'ok_success_address' => '✅ Node address saved successfully.',
-                        'ok_3' => '✅ Node reconnection completed.',
-                        'ok_success_delete_1' => '✅ Node deleted successfully',
-                        'msg_manage_gateway' => '📌 From the list below you can manage the gateways.
+User numeric ID :  %s
+User username :‌ %s',
+                        'errorAqayePardakhtLink' => '⭕️ Error creating Aghaye Pardakht link
+✍️ Error reason : %s
+            
+User ID : %s
+User username : @%s',
+                        'errorBulkAccountCreate' => '
+⭕️ Error creating account in the bulk section
+✍️ Error reason : 
+%s
+User ID : %s
+User username : @%s
+Panel name : %s',
+                        'bulkAccountCreated' => '📣 Bulk account creation details were registered in your bot .
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s_0-%s
+▫️User name : %s
+▫️Service location : %s
+▫️Product name :%s
+▫️Purchased time :%s days
+▫️Purchased volume : %s GB
+▫️Balance before purchase : %s Toman
+▫️Balance after purchase : %s Toman
+▫️Tracking code: %s
+▫️User type : %s
+▫️User phone number : %s
+▫️Product price : %s Toman
+▫️Final price : %s Toman
+▫️Number of configs : %s
+▫️Purchase time : %s',
+                        'linkChanged' => '📣 Link change details were registered in your bot .
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s
+▫️User name : %s
+▫️Service location : %s
+▫️User type : %s
+▫️Link change time : %s',
+                        'errorChangeLocation' => 'Error while changing the service location
+Error reason : 
+%s
+User ID : %s
+User username : @%s
+Panel name : %s
+Destination panel name : %s',
+                        'locationChanged' => '  
+Service location change 
 
-⚠️ The Mirza team gives no guarantee for the gateways, and all use and responsibility is on you',
-                        'ask_send_user_sub_enable' => '📌 Send the percentage you want to be credited to the user\'s account as a gift after renewal.
-⚠️ If you want it disabled, send the number 0',
-                        'ask_select_user_2' => '📌 Select the user type
-f
-n
-n2',
-                        'err_invalid_user_group_2' => '❌ The user group is invalid',
-                        'ok_success_amount_1' => '✅ The amount was set successfully',
-                        'ask_send_user_payment_sub_1' => '📌 In this section you can set what percentage is credited to the user\'s account as a gift after payment. (To disable this feature, send zero)',
-                        'ask_send_account_set' => '📌 Send your product name. If you want to set it for the test account, send the text test.',
-                        'btn_19' => 'test',
-                        'ask_notfound_send_set_name' => 'No product found with this name. Please send the exact product name, or send the text test to set up a test config.',
-                        'ask_send_name_config_1' => '📌 Send your configs like the example below.
+🔻Numeric ID : <code>%s</code>
+🔻Username : @%s
+🔻Old panel name : %s
+🔻New panel name : %s
+🔻 Customer username in panel  :%s
+🔻Final service volume : %s
+🔻User balance : %s Toman',
+                        'errorConfigCreate' => '
+⭕️ Error creating config
+✍️ Error reason : 
+%s
+User ID : %s
+User username : @%s
+Panel name : %s',
+                        'errorConfigCreatePanel' => '
+Error creating config from the admin panel
+✍️ Error reason: 
+%s
+Admin ID: %s
+Panel name: %s',
+                        'errorCryptoLink' => '
+                        ⭕️ A user intended to pay with the currency gateway, but creating the payment link encountered an error and no link was given to the user
+✍️ Error reason : %s
+            
+User ID : %s
+User username : @%s',
+                        'errorCryptoLink2' => '
+                        ⭕️ A user intended to pay with the currency gateway, but creating the payment link encountered an error and no link was given to the user
+✍️ Error reason : %s
+            
+User ID : %s
+User username : @%s',
+                        'deleteServiceRequest' => 'Hello admin 👋
+        
+📌 A service deletion request was sent to you by a user. Please review it and, if correct and you agree, approve it. 
+        
+        
+📊 User service information :
+User numeric ID : %s
+User username : @%s
+Config username : %s
+Service status : %s
+Service location : %s
+Service code:%s
 
-# config name ( on one line only, with # before the name )
-config ( on multiple lines 
+🟢 Your last connection time : %s
 
-# config name ( on one line only, with # before the name )
-
-trojan://xyz',
-                        'ok_save_config' => '✅ Number of saved configs: ',
-                        'err_error_save_config_please' => '❌ An error occurred while saving the config. Please try again.',
-                        'err_delete_config' => '❌ Delete config',
-                        'ask_send_delete_name_config' => '📌 Send the name of the config you want to delete ',
-                        'ok_success_delete_2' => '✅ The config was deleted successfully.',
-                        'ask_send_panel_price_change' => '📌 Send the price for changing location from other panels to this panel',
-                        'ok_success_price_1' => '📌 The location change price was changed successfully',
-                        'ask_send_panel_price_volume_1' => '📌 Send the price of extra volume for this panel.',
-                        'ask_send_user_price' => '⚠️ If you want the price to be set for all user groups, send the text <code>all</code>',
-                        'ask_send_panel_price_volume_2' => '📌 Send the custom extra volume price for this panel.',
-                        'ask_send_panel_price_time_1' => '📌 Send the extra time price for this panel.',
-                        'ask_send_panel_price_time_2' => '📌 Send the custom time price for this panel.',
-                        'msg_user_payment_gateway_card' => '📌 By turning on this feature, the card-to-card gateway will be activated for the user after their first payment',
-                        'btn_20' => 'Turned off',
-                        'btn_21' => 'Turned on',
-                        'ask_send_name_config_2' => '📌 Send the name of the config you want to edit ',
-                        'ask_select_5' => 'Select one of the options below ',
-                        'ask_send_config_2' => 'Send the new config content',
-                        'ok_save' => '✅ Saved.',
-                        'ask_panel_price_change_must_1' => '📌 Which panel\'s products do you want to increase the price for?
-If you used /all when defining the product, you must send /all if you want this category to have a price change',
-                        'msg_user_price_group' => '📌 For which user group should the price apply
-f,n.n2',
-                        'msg_amount_add' => '📌 Should the amount be added as a percentage or a fixed amount?',
-                        'ask_send_amount_2' => '📌 Send the amount you want to apply',
-                        'ask_send_7' => '📌 Send the percentage you want to apply',
-                        'err_notfound_price_change' => '❌ No product found for price change',
-                        'ok_success_amount_2' => '✅ The amount was successfully applied to all products',
-                        'ask_panel_price_change_must_2' => '📌 Which panel\'s products do you want to decrease the price for?
-If you used /all when defining the product, you must send /all if you want this category to have a price change',
-                        'ask_send_amount_3' => '📌 Send the minimum deposit amount',
-                        'ok_amount_set_1' => '✅ The minimum deposit amount was set.',
-                        'ask_send_amount_4' => '📌 Send the maximum deposit amount',
-                        'ok_amount_set_2' => '✅ The maximum deposit amount was set.',
-                        'ask_send_panel_user_volume_1' => '📌 Send the minimum volume the user can purchase for this panel.',
-                        'ask_send_panel_user_volume_2' => '📌 Send the maximum volume the user can purchase for this panel.',
-                        'ask_send_panel_user_time_1' => '📌 Send the minimum custom time the user can purchase for this panel.',
-                        'ask_send_panel_user_time_2' => '📌 Send the maximum custom time the user can purchase for this panel.',
-                        'msg_admin_message_number' => '📌 Send the numeric ID of the admin you want messages to be sent to',
-                        'ask_send_name_3' => '📌 Send the department name',
-                        'ok_success_add_1' => '📌 The department was added successfully.',
-                        'err_notfound_delete' => '❌ There is no department to delete.',
-                        'ask_send_delete' => '📌 Send the type of department to delete.',
-                        'btn_delete_2' => '📌 The selected section was deleted.',
-                        'ask_send_panel_service_user' => '📌 To set up the service, create a config in your panel, activate the services you want to be active inside the panel, and send the config\'s username',
-                        'ok_success_set_1' => '✅ The information was set up successfully',
-                        'ask_send_tutorial' => '📌 Send your tutorial.
-1 - If you don\'t want a tutorial to be shown, send the number 2
-2 - You can send the tutorial as video, text, or image',
-                        'err_invalid_name_3' => '❌ The submitted content is invalid.',
-                        'ok_success_tutorial' => '✅ The tutorial was saved successfully.',
-                        'btn_perfectmoney_tutorial_set' => '📚 Set up Perfect Money tutorial',
-                        'ask_send_join_price' => '📌 Send the price of the membership request for agency.',
-                        'err_confirm_3' => '❌ First turn off automatic approval.',
-                        'ask_card_bot_time_enable' => '📌 By activating this feature, during the times when you are not online, the bot automatically approves all card-to-card transactions; then after you come online, you review the receipts, and if a fake receipt was sent, you cancel the transaction',
-                        'ask_send_user_balance_2' => 'Send the numeric ID of the user you want all the information transferred to
-    Note that if the destination user has a balance, it will be deleted',
-                        'err_user_3' => '❌ You cannot transfer information to the current user',
-                        'ok_success_user_6' => 'The information was successfully transferred to the new user account',
-                        'ask_send_8' => 'Send your image for the background',
-                        'err_invalid_name_4' => 'The image is invalid',
-                        'ok_success_set_2' => '🖼 The background was set successfully',
-                        'btn_set_group_name' => '🎛 Set group name',
-                        'btn_set_2' => '⚙️ Node settings',
-                        'ask_send_group_name' => '📌 Send the group name you want to be used by default.',
-                        'ask_send_panel_user_2' => '📌 To set up a node, create a user in your panel, activate the nodes you want to be active inside the panel, and send the user\'s username',
-                        'ask_send_panel_user_3' => '📌 To set up the inbound and protocol, you must create a config in your panel, activate the protocols and inbounds you want to be active inside the panel, and send the config\'s username',
-                        'err_notfound_panel_1' => '❌ The user does not exist in the panel.',
-                        'ok_success_set_3' => '✅ The group name was set successfully.',
-                        'ok_success_set_4' => '✅ Your inbounds and protocols were set up successfully.',
-                        'btn_user_confirm' => '✍️ The user is already verified',
-                        'msg_channel_join_user_bot' => '📌 From now on, the user can use the bot without joining the channel',
-                        'err_notfound_admin_delete' => '❌ The main admin cannot be deleted',
-                        'btn_notfound_admin_id' => '⚠️ No admin was found with this ID.',
-                        'ok_success_admin' => '✅ The admin was deleted successfully',
-                        'err_send_account_bot' => '❌ The bot is currently turning an account off or on; wait until the previous operation is done, then send a new request',
-                        'ok_user_time_hour_enable_1' => '✅ The user\'s configs have been queued for activation. Note that this may take more than 2 hours; the time depends on the number of configs.',
-                        'ok_user_time_hour_enable_2' => '✅ The user\'s configs have been queued for deactivation. Note that this may take more than 2 hours; the time depends on the number of configs.',
-                        'ask_send_panel_user_number' => '📌 Send the numeric ID of the user for this panel.',
-                        'ok_success_panel_1' => '✅ The panel was successfully hidden for the user',
-                        'err_notfound_user_1' => '❌ There is no user in the hidden list',
-                        'err_notfound_user_2' => '❌ The user is not in the list',
-                        'err_notfound_user_3' => '❌ The user is not in the list.',
-                        'ok_success_user_7' => '✅ The user was successfully removed from the list.',
-                        'ask_send_user_amount_sub' => '📌 Send the amount you want to charge the user\'s account.',
-                        'ok_success_amount_3' => '✅ The reward amount was set successfully',
-                        'err_payment_confirm' => '❌ You have no unapproved payments.',
-                        'err_user_payment_card_delete' => '📌 Unapproved card-to-card payments 
-In this section you can view unapproved payments and approve or reject them.
-❌ : Reject payment 
-✅ : Approve payment
-📝 Payment details
-🗑 : Delete receipt without notifying the user',
-                        'ok_success_delete_3' => '✅ All receipts were deleted successfully ',
-                        'ask_send_panel_user_4' => '📌 If you use a Marzban or Marzneshin panel, copy a config\'s username from the panel and send it; otherwise, for Sanaei and Alireza panels, send the inbound ID',
-                        'err_notfound_panel_2' => '❌ This panel does not support defining an inbound',
-                        'ok_day_4' => '✅ Product updated',
-                        'err_user_4' => '❌ The user does not exist.',
-                        'err_error_renew' => '❌ The renewal encountered an error; perform the renewal steps again.',
-                        'ask_send_volume_3' => '📌 Send your requested volume.',
-                        'ask_select_service_time' => '⌛️ Select your service duration ',
-                        'err_error_service_renew' => '❌ An error occurred while renewing the service; contact support',
-                        'ok_success_delete_4' => '✅ The receipt was deleted successfully.',
-                        'err_agent_bot' => '❌ Currently you are limited to creating only 15 bots for your agents.',
-                        'err_notfound_bot_1' => '❌ This bot is already installed; it cannot be reinstalled.',
-                        'ask_send_token_agent_bot' => '📌 Through this section you can create a sales bot for your agent so that the agent can sell with their own dedicated bot
-
-- To create a bot, send the bot token.',
-                        'err_invalid_token_name' => '❌ The token is invalid',
-                        'btn_token_register' => '📌 This token is already registered',
-                        'ask_send_admin_number' => '📌 Send the admin\'s numeric ID',
-                        'ask_payment_amount_card' => 'To pay, deposit the amount to the card number below',
-                        'err_success_agent' => '❌ The agent\'s sales bot was deleted successfully.',
-                        'ask_price_agent_volume' => '📌 Set the minimum price you want the agent to pay per gigabyte of volume',
-                        'ok_success_price_2' => '✅ The price was saved successfully.',
-                        'ask_price_agent_time_day' => '📌 Set the minimum price you want the agent to pay per day of time',
-                        'msg_user_time_day' => '📌 In this section you can set how many days before the subscription ends the user is notified. The time is in days',
-                        'ask_select_6' => '📌 Select an option.',
-                        'ask_send_link_add_name' => '📌 To add an app download link, send the app name or the button name.',
-                        'btn_name_must' => '📌 The name must be fewer than 200 characters.',
-                        'ask_send_link_1' => '📌 Send the app download link',
-                        'ok_success_link_1' => '✅ Your app link was added successfully.',
-                        'ask_select_delete_name' => '📌 To delete an app, select the app name from the list below',
-                        'ok_success_delete_5' => '✅ The app was deleted successfully.',
-                        'ask_send_user_payment_sub_2' => '📌 In this section you can set what percentage is credited to the user\'s account as a gift after payment. ( To disable this feature, send zero )',
-                        'ask_send_panel_service_price' => '📌 Before submitting the information, read the text below. 
-1 - This feature is for the custom service.
-2 - If all your panels have the same price, instead of setting each price individually you can use this feature to set the prices all at once.
-3 - Setting the price in this section is irreversible.
+📥 Consumed volume : %s
+♾ Service volume : %s
+🪫 Remaining volume : %s
+📅 Active until date : %s (%s)
 
 
-To set the price, first send the price for group f.',
-                        'ask_send_price_group_1' => '📌 Send the price for group n.',
-                        'ask_send_price_group_2' => '📌 Send the price for group n2.',
-                        'ok_success_price_3' => '✅ The price was set successfully',
-                        'ask_select_user_change_limit' => '📌 Select an option.
-1 - The overall limit on how many times the user can change location in total.
-2 - The free limit on how many times the user can change location for free out of the overall limit.',
-                        'ok_success_set_5' => '✅ The limit was set successfully.',
-                        'msg_user_change' => '📌 By confirming the option below, all location changes made by the user will be reset to zero. If you agree, click the option below.',
-                        'ok_user_limit' => '✅ All users\' limits were reset to zero.',
-                        'ask_send_user_set_change' => '📌 Send the new limit you want to set for the user. Note that this feature changes the number of location changes already made',
-                        'ok_success_user_8' => '✅ The user\'s usage count was saved successfully.',
-                        'err_send_select_panel_agent_1' => '❌ Select the panels you don\'t want to be shown to this agent from the button below; after selecting, send the /finish command to save.',
-                        'ok_success_panel_2' => '✅ The panels were saved successfully and the panels were hidden for the user.',
-                        'err_panel_add' => '❌ The panel has already been added',
-                        'ok_send_select_panel_save_1' => '✅ The panel was selected; when finished, send the /finish command to save it finally.',
-                        'err_send_select_panel_agent_2' => '❌ From the list below, select the panels you want to be shown again in the agent\'s bot; after selecting all panels, send the /remove command to save.',
-                        'ok_success_panel_3' => '✅ The panels were shown successfully and the panels were activated for the user.',
-                        'err_notfound_panel_3' => '❌ The panel is not in the list',
-                        'ok_send_select_panel_save_2' => '✅ The panel was selected; when finished, send the /remove command to save it finally.',
-                        'err_send_message_2' => '❌ The gift sending system is performing an operation; after it finishes and notifies you, you can send a new message.',
-                        'ask_panel_service_volume_time' => '📌 For which panel\'s services do you want to gift volume or time?',
-                        'err_notfound_panel_4' => '❌ The panel does not exist',
-                        'ask_select_7' => '📌 Select one of the gifts below.',
-                        'msg_service_user_volume_add' => '📌 How many gigabytes of volume do you want added to the user\'s services?',
-                        'msg_service_user_day_add' => '📌 How many days do you want added to the users\' services?',
-                        'ask_send_user_4' => '📌 Send the text you want to be sent to the user',
-                        'msg_admin_time_limit_confirm' => '📌 Dear admin, by confirming the option below, the process of applying the gifts will begin. Note that due to the limits, applying the gifts will take time.',
-                        'err_error_4' => '❌ An error occurred; go through the steps from the beginning.',
-                        'ok_success_add_2' => '✅ The gift sending operation started successfully; you will be notified after it is added and completed.',
-                        'btn_23' => '📌 Gift sending was canceled.',
-                        'ask_send_user_agent_bot' => '🕘 Send the agency expiry time. After the specified number of days ends, the user will exit agency status and become user group f.
-Note that this feature has nothing to do with the bot-builder or agent\'s sales bot feature and only relates to your main bot
+<b>❌ Dear admin, note that the delete service button you press is calculated automatically by the bot and there is a chance of error; it is recommended to use manual deletion</b>
 
-📌 Send the number of days',
-                        'ok_user_time_date' => '✅ The expiry date was set.
-📌 After the time ends, the user\'s user group will be changed to f and the user will be notified.',
-                        'msg_card' => '📌 Send the list of IDs for which you want the card number to be shown 
-Example: 
-1234435423
-23423131',
-                        'ok_user_card_enable' => '✅ The card number was activated for the sent users.',
-                        'btn_user_card_enable' => '📌 No card number has been activated for any user',
-                        'msg_user_card_enable' => '🪪 List of users for whom the card number is active',
-                        'msg_user_buy' => 'You can decide whether the commission is given to the user only for their referral\'s first purchase or for all of their purchases.',
-                        'err_notfound_service_change_config' => '❌ It has not connected to the config yet, and the service status cannot be changed. After connecting to the config, you can use this feature.',
-                        'ok_enable_disable_confirm_config' => '✅ Confirm and disable config',
-                        'err_notfound_service_account_manage' => '📌 By confirming the option below, your config will be turned off and you will no longer be able to connect to it.
-⚠️ If you want the config to be activated again, you must click the <u>💡 Turn on account</u> button from the service management section',
-                        'ok_enable_confirm_config' => '✅ Confirm and enable config',
-                        'err_service_account_manage_enable' => '📌 By confirming the option below, your config will be turned on and you will be able to connect to it.
-⚠️ If you want the config to be deactivated again, you must click the <u>❌ Turn off account</u> button from the service management section',
-                        'msg_panel_service_sub_bot' => '📌 By confirming the option below, this service will be completely deleted from the bot\'s database and will no longer count in account statistics ( this section does not delete the service from the panel and only deletes it from the bot\'s database )',
-                        'ok_success_service' => '✅ The service was deleted successfully.',
-                        'ask_send_add_name' => '📌 To add a category, send the category name.',
-                        'ok_success_add_3' => '✅ The category was added successfully.',
-                        'ask_select_delete' => '📌 Select your category to delete',
-                        'ok_success_delete_6' => '✅ The category was deleted successfully.',
-                        'msg_user_time' => '📌 This feature only works when you have defined the product location as /all.',
-                        'ask_send_select_panel' => '📌 If you have selected the panel location as /all but need to not show a panel, you can use this feature
+Service deletion reason : %s',
+                        'discountCodeUsed' => '⭕️ A user with username @%s  and numeric ID %s used discount code %s.',
+                        'discountCodeUsedFn' => '⭕️ A user with username @%s  and numeric ID %s used discount code %s.',
+                        'disruption' => '
+    ⚠️ A user with the following information has submitted a service outage report .
 
-To hide a panel, select your panels from the list below, then send the /end_hide command.',
-                        'ok_success_select' => '✅ The panels were saved successfully and the panels were hidden for the selected product.',
-                        'ok_send_select_panel_save_3' => '✅ The panel was selected; when finished, send the /end_hide command to save it finally.',
-                        'ok_panel_delete' => '✅ All hidden panels were removed',
-                        'err_notfound_bot_2' => '❌ There is no bot',
-                        'btn_24' => '📌 Performing webhook ...',
-                        'ok_success_2' => '✅ The webhook was performed successfully.',
-                        'ok_user_enable' => '✅ Cron notifications were enabled for the user.',
-                        'ok_user_enable_disable' => '✅ Cron notifications were disabled for the user.',
-                        'ask_select_8' => '📌 Select your category to edit',
-                        'ask_send_name_4' => '📌 Send the new category name',
-                        'ok_success_change_2' => '✅ The category name was changed successfully.',
-                        'ask_select_name_2' => '📌 To edit an app, select the app name from the list below',
-                        'ask_send_link_2' => '📌 Send the new app link',
-                        'ok_success_link_2' => '✅ The app link was updated successfully.',
-                        'ok_success_time' => '✅ The time was registered successfully.',
-                        'btn_25' => 'Off',
-                        'btn_26' => 'On',
-                        'msg_buy' => '📌 Through this feature you can set whether this product is for the first purchase or not',
-                        'msg_select_confirm' => '📌 Select an option
-⚠️ This section is for automatic approval without review',
-                        'ask_send_user_number_2' => '📌 Send the user\'s numeric ID',
-                        'err_notfound_user_4' => '❌ The user does not exist.',
-                        'err_user_5' => '❌ The user is already in the exception list',
-                        'ok_success_user_9' => '✅ The user was successfully added to the list.',
-                        'ask_send_user_delete_number' => '📌 Send the user\'s numeric ID to remove from the list',
-                        'err_notfound_user_5' => '❌ The user is not in the exception list',
-                        'ok_success_user_10' => '✅ The user was successfully removed from the list.',
-                        'err_notfound_user_6' => '❌ There is no user in the list',
-                        'btn_27' => 'List of people👇',
-                        'msg_panel_admin_bot_report' => '💎 | Version Bot: %s
-📌 | Version Mini App: 0.1.1
+- Username : @%s
+- Numeric ID : %s
+- Config username : %s
+- Purchased plan name : %s
+- Service location : %s
+- Outage description : %s',
+                        'errorExtraTime' => 'Error purchasing extra volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'errorExtraTimeFn' => 'Error purchasing extra volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'extraTime' => '⭕️ A user purchased extra time
+        
+User information : 
+🪪 Numeric ID : %s
+🛍 Purchased time  : %s days
+💰 Paid amount : %s Toman
+👤 Config username : %s',
+                        'extraTimeFn' => '⭕️ A user purchased extra time
+        
+User information : 
+🪪 Numeric ID : %s
+🛍 Purchased time  : %s days
+💰 Paid amount : %s Toman
+👤 Config username %s',
+                        'errorExtraVolume' => 'Error purchasing extra volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'errorExtraVolume2' => 'Error purchasing extra volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'errorExtraVolumeFn' => 'Error purchasing extra volume
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'extraVolume' => '⭕️ A user purchased extra volume
+        
+User information : 
+🪪 Numeric ID : %s
+🛍 Purchased volume  : %s GB
+💰 Paid amount : %s Toman
+👤 Config username : %s
+User balance before purchase : %s
 
-<blockquote>🔹 | This bot is completely free and is developed by the Mirza team</blockquote>
-
-<blockquote>🔹 | Any sale or charging of money for this bot is considered a violation.</blockquote>
-
-<blockquote>🔹 | If you see any sale or charging of money, please track and reclaim your money.</blockquote>
-
-<blockquote>🐞 | If you encounter a bug or problem in the bot\'s operation, contact us via the **📬 Bot report** button in the admin panel.</blockquote>',
-                        'ok_payment_gateway_name' => '
-📌 Gateway name: <code>%s</code>
- - Number of successful payments: <code>%s</code>
- - Total payments: <code>%s</code>
 ',
-                        'msg_panel_service_account_user' => '📊 <b>Overall bot statistics</b>
+                        'extraVolumeFn' => '⭕️ A user purchased extra volume
+        
+User information : 
+🪪 Numeric ID : %s
+🛍 Purchased volume  : %s GB
+💰 Paid amount : %s Toman
+👤 Config username %s
+User balance before purchase : %s
+
+',
+                        'newPaymentIranpay' => '💵 New payment
+- 👤 User username : @%s
+- 🆔User numeric ID : %s
+- 💸 Transaction amount %s
+- 💳 Payment method :  Third Rial currency',
+                        'membershipGiftPaid' => '🎁 Membership gift payment
+ -Numeric ID : %s
+ - Username : @%s
+ - Referrer numeric ID : %s
+ - Referral balance before gift : %s
+ - Referral balance after gift : %s
+  - Referrer balance before gift : %s
+ - Referrer balance after gift : %s
+ ',
+                        'newPayment' => '💵 New payment
+                
+User numeric ID : %s
+Transaction amount : %s 
+Payment method : First Rial currency gateway',
+                        'newPaymentAutoConfirm' => '💵 New payment
+        
+User numeric ID : %s
+Transaction amount %s
+Payment method :  Automatic approval without review
+%s',
+                        'newPaymentBalance' => '
+⭕️ A new payment has been made .
+Balance increase            
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💵 User\'s total payments : %s
+💸 Paid amount: %s Toman
+                
+Description: %s %s
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentBalance2' => '
+⭕️ A new payment has been made .
+Balance increase            
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💸 Paid amount: %s Toman
+                
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentBalanceFn' => '⭕️ A new payment has been made
+        Balance increase.
+👤 User ID: <code>%s</code>
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💸 Paid amount: %s Toman
+💎 Balance before increase : %s
+✍️ Description : %s',
+                        'newPaymentExtraTime' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+Extra time purchase
+Service username : %s
+Number of days purchased  : %s
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💵 User\'s total payments : %s
+💸 Paid amount: %s Toman
+                
+Description: %s %s
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentExtraTime2' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+Extra time purchase
+Service username : %s
+Number of days purchased  : %s
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💸 Paid amount: %s Toman
+                
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentExtraVolume' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+Extra volume purchase
+Service username : %s
+Purchased volume  : %s
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💵 User\'s total payments : %s
+💸 Paid amount: %s Toman
+                
+Description: %s %s
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentExtraVolume2' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+Extra volume purchase
+Service username : %s
+Purchased volume  : %s
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💸 Paid amount: %s Toman
+                
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentService' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+New service purchase
+
+Service username : %s
+Product name : %s
+Product volume : %s GB 
+Product time : %s days
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💵 User\'s total payments : %s
+💸 Paid amount: %s Toman
+                
+Description: %s %s
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentService2' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+New service purchase
+
+Service username : %s
+Product name : %s
+Product volume : %s GB 
+Product time : %s days
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💸 Paid amount: %s Toman
+                
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentRenew' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+Renewal
+Service username : %s
+Product name : %s
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💵 User\'s total payments : %s
+💸 Paid amount: %s Toman
+                
+Description: %s %s
+✍️ If the receipt is correct, approve the payment.',
+                        'newPaymentRenew2' => '
+⭕️ A new payment has been made .
+
+⭕️⭕️⭕️⭕️⭕️
+Renewal
+Service username : %s
+Product name : %s
+👤 User account name : %s
+👤 User ID:  <a href = "tg://user?id=%s">%s</a>
+💸 User current balance : %s Toman
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💸 Paid amount: %s Toman
+                
+✍️ If the receipt is correct, approve the payment.',
+                        'paymentConfirmedExtraTime' => '✅ Payment approved
+🔋 Extra time purchase
+🛍 Purchased time  : %s days
+👤 Config username %s
+👤 User ID: <code>%s</code>
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💎 Balance before increase : %s
+💸 Paid amount: %s Toman
+
+',
+                        'paymentConfirmedExtraVolume' => '✅ Payment approved
+🔋 Extra volume purchase
+🛍 Purchased volume  : %s GB
+👤 Config username %s
+👤 User ID: <code>%s</code>
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💎 Balance before increase : %s
+💸 Paid amount: %s Toman
+
+',
+                        'paymentConfirmedService' => '✅ Payment approved
+ 🛍Service purchase 
+ ▫️Config username :%s
+▫️Service location : %s
+👤 User ID: <code>%s</code>
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💎 Balance before purchase  : %s
+💸 Paid amount: %s Toman
+✍️ Description : %s
+
+
+',
+                        'paymentConfirmedRenew' => '✅ Payment approved
+🔋 Service renewal
+🪪 Config username : %s
+🛍 Product name : %s
+🌏 Location name : %s
+👤 User ID: <code>%s</code>
+🛒 Payment tracking code: %s
+⚜️ Username: @%s
+💎 Balance before renewal  : %s
+💸 Paid amount: %s Toman
+✍️ Description : %s
+
+
+',
+                        'errorPaymentLink' => '
+⭕️ A user intended to pay, but creating the payment link encountered an error and no link was given to the user
+✍️ Error reason : %s
+
+User ID : %s
+Payment method : %s
+User username : @%s',
+                        'errorPaymentLink2' => '
+                        ⭕️ A user intended to pay, but creating the payment link encountered an error and no link was given to the user
+✍️ Error reason : %s
+            
+User ID : %s
+Payment method : %s
+User username : @%s',
+                        'errorPaymentLink3' => '
+⭕️ A user intended to pay, but creating the payment link encountered an error and no link was given to the user
+✍️ Error reason : %s
+            
+User ID : %s
+Payment method : %s
+User username : @%s',
+                        'newPaymentPlisio' => '💵 New payment
+- 👤 User username : @%s
+- 🆔User numeric ID : %s
+- 💸 Transaction amount %s
+- 🔗 <a href = "%s">Payment link </a>
+- 🔗 <a href = "%s">plisio payment link </a>
+- 📥 Deposited Tron amount. : %s
+- 💳 Payment method :  plisio',
+                        'renewed' => '📣 Account renewal details were registered in your bot .
+    
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s
+▫️User name : %s
+▫️Service location : %s
+▫️Product name : %s
+▫️Product volume : %s
+▫️Product time : %s
+▫️Renewal amount : %s Toman
+▫️Balance before purchase : %s Toman
+▫️Balance after purchase : %s Toman
+▫️Purchase time : %s',
+                        'renewedFn' => '📣 Account renewal details were registered in your bot .
+    
+▫️User numeric ID : <code>%s</code>
+▫️User username : @%s
+▫️Config username :%s
+▫️Service location : %s
+▫️Product name : %s
+▫️Product volume : %s
+▫️Product time : %s
+▫️Renewal amount : %s Toman
+▫️Balance before purchase : %s Toman
+▫️Purchase time : %s',
+                        'errorRenewService' => 'Service renewal error
+Panel name : %s
+Service username : %s
+Error reason : %s',
+                        'errorRenewService2' => 'Service renewal error
+        Panel name : %s
+        Service username : %s
+        Error reason : %s',
+                        'errorRenewServiceApi' => '
+        Service renewal error
+Panel name: %s
+Service username: %s
+Error reason: %s',
+                        'errorRenewServiceFn' => '
+        Service renewal error
+Panel name: %s
+Service username: %s
+Error reason: %s',
+                        'noteChanged' => '📌  A user changed their service note.
+
+▫️ Service username : %s
+▫️ Previous note :‌ %s
+▫️ New note :‌  %s
+
+Note change time : %s ',
+                        'errorStarInvoice' => '
+Error while creating the Star invoice
+✍️ Error reason : %s
+            
+User ID : %s
+Payment method : %s
+User username : @%s',
+                        'errorSubscriptionCreate' => '⭕️ Subscription creation error
+✍️ Error reason :
+%s
+User ID : %s
+User username : @%s
+Panel name : %s',
+                        'errorSubscriptionCreateAdmin' => '⭕️ Subscription creation error 
+✍️ Error reason : 
+%s
+User ID : %s
+User username : @%s
+Panel name : %s',
+                        'errorSubscriptionCreateApi' => '❌ An error occurred while creating the subscription; to fix the issue, check the cause of the error in your report group',
+                        'supportMessage' => '
+    📣 Dear support, a message was sent to you from a user.
+
+User numeric ID : <a href = "tg://user?id=%s">%s</a>
+Send time : %s
+Message status : Not answered
+User username : @%s    
+Department name : %s
+
+Message text : %s %s',
+                        'supportMessage2' => '
+    📣 Dear support, a message was sent to you from a user.
+
+User numeric ID : <a href = "tg://user?id=%s">%s</a>
+Send time : %s
+Message status : Customer reply
+User username : @%s    
+Department name : %s
+
+Message text : %s',
+                        'errorTestAccountCreate' => '
+⭕️ A user intended to get a test account, but creating the config encountered an error and no config was given to the user
+✍️ Error reason : 
+%s
+User ID : %s
+User username : @%s
+Panel name : %s',
+                        'testAccountCreated' => '📣 Test account creation details were registered in your bot .
+▫️User numeric ID : <code>%s</code>
+▫️User username :@%s
+▫️Config username :%s
+▫️User name : %s
+▫️Service location : %s
+▫️Purchased time : %s hours
+▫️Purchased volume : %s MB
+▫️Tracking code: %s
+▫️User type : %s
+▫️User phone number : %s
+▫️Purchase time : %s',
+                        'userBlockedByApi' => 'User with numeric ID %s was blocked in the bot 
+Performing admin : api site',
+                        'userUnblockedByApi' => 'User with numeric ID %s was unblocked in the bot 
+Performing admin : api site',
+                        'errorZarinpalLink' => '⭕️ Error creating ZarinPal link
+✍️ Error reason : %s
+            
+User ID : %s
+User username : @%s',
+                ],
+                'stats' => [
+                        'invalidDate' => 'The date must be valid',
+                        'askDate' => 'Send the end date, for example:
+<code>2025/09/08</code>',
+                        'overall' => '📊 <b>Overall bot statistics</b>
 ━━━━━━━━━━━━━━━━━━
 👥 <b>Total users:</b> <code>%s</code> people  
 💳 <b>Users with purchases:</b> <code>%s</code> people  
@@ -1306,7 +3246,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🧩 <b>Number of panels:</b> <code>%s</code>  
 %s
 ',
-                        'msg_account_user_amount_volume_1' => '
+                        'lastHour' => '
 🕐 <b>Statistics of the last 1 hour</b>
 
 
@@ -1328,7 +3268,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🔑 Test accounts: %s
 👤 Number of users: %s people
 ',
-                        'msg_account_user_amount_volume_2' => '
+                        'yesterday' => '
 🕐 <b>Statistics of the previous day</b>
 
 ⏳ Time range: %s to%s
@@ -1351,7 +3291,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🔑 Test accounts: %s
 👤 Number of users: %s people
 ',
-                        'msg_account_user_amount_volume_3' => '
+                        'today' => '
 🕐 <b>Statistics of the current day</b>
 
 ⏳ Time range: %s to%s
@@ -1374,7 +3314,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🔑 Test accounts: %s
 👤 Number of users: %s people
 ',
-                        'msg_account_user_amount_volume_4' => '
+                        'lastMonth' => '
 🕐 <b>Statistics of the previous month</b>
 
 ⏳ Time range: %s to%s
@@ -1397,7 +3337,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🔑 Test accounts: %s
 👤 Number of users: %s people
 ',
-                        'msg_account_user_amount_volume_5' => '
+                        'thisMonth' => '
 🕐 <b>Statistics of the current month</b>
 
 ⏳ Time range: %s to%s
@@ -1420,7 +3360,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🔑 Test accounts: %s
 👤 Number of users: %s people
 ',
-                        'msg_select_account_user_amount' => '
+                        'selectedRange' => '
 🕐 <b>Statistics of the selected date</b>
 
 ⏳ Time range: %s to %s
@@ -1443,157 +3383,7 @@ To hide a panel, select your panels from the list below, then send the /end_hide
 🔑 Test accounts: %s
 👤 Number of users: %s people
 ',
-                        'msg_message_button_confirm' => '📌 You are performing a message-sending operation; by reviewing the information below and confirming the button below, the sending operation will start.
-⚙️ Operation type: %s',
-                        'btn_user_day_message' => 'Number of days the user has not messaged: %s',
-                        'msg_service_user_message' => '📌 You are performing a message-sending operation; by reviewing the information below and confirming the button below, the sending operation will start.
-⚙️ Operation type: %s
-🎛 Service type: %s
-🗂 User type: %s
-%s
-',
-                        'msg_admin_message' => '
-👤 A message has been sent from the admin  
-Message text:
-
-%s',
-                        'msg_manage_message_1' => '
-📩 A message was sent to you from management.
-                    
-Message text: 
-%s',
-                        'msg_manage_message_2' => '
-📩 A message was sent to you from management.
-                    
-Message text: 
-%s',
-                        'ask_send_admin_tutorial' => '📣 In this section you can send the group\'s numeric ID for sending notifications
-Group setup tutorial:
-1 - First create a group 
-2 - Add the bot @myidbot to the group and send the command /getgroupid@myidbot inside the group 
-3 - Turn on topic or forum mode from the group settings4
-4 - Make your own bot an admin of the group 
-5 - Send the sent numeric ID to the bot.
-
-Your current numeric ID: %s',
-                        'err_success_error' => '❌ The connection to the group was not successful  
-
-Received error:  %s',
-                        'err_name_1' => '❌ A product named %s already exists',
-                        'ok_user_admin_payment' => '✅. The payment was approved by another admin
-👤 User ID: <code>%s</code>
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💎 Balance after approval: %s
-💸 Paid amount: %s Toman
-',
-                        'msg_user_amount_sub' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
-                        'msg_user_admin_payment' => '📣 An admin approved the payment receipt.
-        
-Information:
-💸 Payment method: %s
-👤 Numeric ID of approving admin: %s
-💰 Payment amount: %s
-👤 User numeric ID: <code>%s</code>
-👤 User username: @%s 
-        Payment tracking code: %s',
-                        'err_user_payment' => '❌ Dear user, your payment was rejected for the following reason.
-✍️ %s
-🛒 Payment tracking code: %s
-                
-',
-                        'err_user_admin_payment' => '❌ An admin rejected the payment receipt.
-        
-Information:
-💸 Payment method: %s
-👤 Numeric ID of approving admin: %s
-Username of approving admin: @%s
-💰 Payment amount: %s
-Rejection reason: %s
-👤 User numeric ID: %s',
-                        'msg_user_price_volume' => '
-📌 Information of the product being edited:
-Product name: %s
-Product price: %s
-Product volume: %s
-Product location: %s
-Product time: %s
-Product user type: %s
-Periodic volume reset of product: %s
-Product note: %s
-Product category: %s
-Number of products sold: %s
-    
-',
-                        'err_name_2' => '❌ A product named %s already exists',
-                        'msg_user_manage_amount' => '🎁 Dear user, an amount of %s Toman was credited to your wallet as a gift from management.',
-                        'err_user_balance_amount_1' => '❌ Dear user, an amount of %s Toman was deducted from your wallet balance.',
-                        'msg_user_admin_balance_1' => '📌 An admin has reduced a user\'s balance:
-        
-🪪 Information of the admin who reduced the balance: 
-Username:@%s
-Numeric ID: %s
-👤 User information:
-User numeric ID: %s
-Balance amount: %s
-User balance after reduction: %s',
-                        'msg_join_account_user' => '👀 User information:
-
-🔗 User account information
-
-⭕️ User status: %s
-⭕️ User username: @%s
-⭕️ User numeric ID:  <a href = "tg://user?id=%s">%s</a>
-⭕️ User referral code: %s
-⭕️ User join time: %s
-⭕️ User\'s last bot usage time: %s
-⭕️ Test account limit:  %s 
-⭕️ Rule acceptance status: %s
-⭕️ Mobile number: <code>%s</code>
-⭕️ User type: %s
-⭕️ Number of user referrals: %s
-⭕  User\'s referrer: %s
-⭕  Identity verification status: %s   
-⭕  Card number display: %s
-⭕ User points: %s
-⭕️  Total active purchased volume ( for accurate volume statistics, cron must be on ): %s
-%s
-
-💎 Financial reports
-
-🔰 User balance: %s
-🔰 User\'s total purchase count: %s
-🔰️ Total paid amount:  %s
-🔰 Total purchases: %s
-🔰 User discount percentage: %s
-🔰 Sales count in the last hour: %s
-🔰 Total sales in the last hour: %s Toman
-🔰 Sales count in the last month: %s
-🔰 Total sales in the last month: %s Toman
-
-
-',
-                        'ask_send_api' => '⚙️ Please send your Plisio API Key.
-
-🔑 To get your API key, visit the following site:
-plisio.net
-
-📌 Your current key:
-<code>%s</code>',
-                        'ask_enter_api' => '⚙️ Please send your NowPayments API Key.
-
-🔑 To get your API key, visit the following site:
-nowpayments.io
-
-📌 Your current key:
-<code>%s</code>',
-                        'ask_enter_payment_merchant' => '💳 Obtain your merchant code from Aghaye Pardakht and enter it in this section
-        
-Your current merchant code: %s',
-                        'ask_enter_zarinpal_merchant' => '💳 Obtain your merchant code from ZarinPal and enter it in this section
-        
-Your current merchant code: %s',
-                        'ok_select_panel_user_1' => '
+                        'panelMarzban' => '
 Your panel statistics👇:
                              
 🖥 Marzban panel connection status: ✅ Panel is connected
@@ -1608,10 +3398,7 @@ Your panel statistics👇:
 User group:%s
         
 ⭕️ To manage the panel, select one of the options below',
-                        'err_error_5' => 'Error reason: 
-%s',
-                        'err_error_6' => 'Error reason %s',
-                        'ok_select_panel_user_2' => '
+                        'panelServer' => '
 Your panel statistics👇:
                              
 🖥 Panel connection status: ✅ Panel is connected
@@ -1619,7 +3406,7 @@ Your panel statistics👇:
 💻 Panel RAM usage: %s
 User group:%s
 ⭕️ To manage the panel, select one of the options below',
-                        'ok_select_panel_user_3' => '
+                        'panelMarzban2' => '
 Your panel statistics👇:
                              
 🖥 Marzban panel connection status: ✅ Panel is connected
@@ -1630,7 +3417,7 @@ Your panel statistics👇:
 User group:%s
         
 ⭕️ To manage the panel, select one of the options below',
-                        'ok_select_panel_user_4' => '
+                        'panelSales' => '
 Your panel statistics👇:
 
 🖥 Panel connection status: ✅ Panel is connected
@@ -1639,9 +3426,7 @@ Your panel statistics👇:
 User group:%s
 
 ⭕️ To manage the panel, select one of the options below',
-                        'err_invalid_panel_token' => '❌ Panel token is invalid',
-                        'ask_send_new_text' => '📌 Send your new text',
-                        'msg_time_name' => '<b>📡 Your MikroTik system information:</b>
+                        'mikrotik' => '<b>📡 Your MikroTik system information:</b>
 
 <blockquote>
 🖥 <b>Platform:</b> %s  
@@ -1674,129 +3459,56 @@ User group:%s
 🧮 <b>Total sectors written:</b> %s
 </blockquote>
 ',
-                        'msg_user_balance_amount_add_1' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
-                        'msg_user_admin_balance_2' => '📌 An admin has increased a user\'s balance:
-        
-🪪 Information of the admin who increased the balance: 
-Username:@%s
-Numeric ID: %s
-👤 Information of the user receiving the balance:
-User numeric ID: %s
-Balance amount: %s
-User balance after increase: %s',
-                        'err_user_balance_amount_2' => '❌ Dear user, an amount of %s Toman was deducted from your wallet balance.',
-                        'msg_user_admin_balance_3' => '📌 An admin has reduced a user\'s balance:
-        
-🪪 Information of the admin who reduced the balance: 
-Username:@%s
-Numeric ID: %s
-👤 User information:
-User numeric ID: %s
-Balance amount: %s
-User balance after reduction: %s',
-                        'msg_user_admin_bot_number_1' => 'User with numeric ID
-%s  was blocked in the bot 
-Blocking admin: %s',
-                        'msg_user_admin_bot_number_2' => 'User with numeric ID
-%s  was unblocked in the bot 
-Blocking admin: %s',
-                        'msg_user_payment_amount_date_1' => '🛒 Payment number:  <code>%s</code>
-🙍‍♂️ User ID: <code>%s</code>
-💰 Paid amount: %s Toman
-⚜️ Payment status: %s
-⭕️ Payment method: %s 
-📆 Purchase date:  %s',
-                        'msg_user_balance_amount_add_2' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
-                        'ok_success_panel_4' => '
-🎁 Your discount code was created successfully.
+                        'server' => '🖥 <b>Server status</b>
 
-📩 Discount code name: <code>%s</code>
-🧮 Discount code percentage: %s
-🎛 Panel:  %s
-📌  Product: %s
-♻️ User type: %s
-🔴 Usage limit: %s',
-                        'ask_send_user_card_2' => '📌 Send your username without @ to receive the card number
+⚙️ <b>CPU</b>
+├ Usage: <code>{cpu}%</code>
+├ Cores: <code>{cpuCores}</code> (logical: {logicalPro})
+└ Frequency: <code>{cpuSpeed} GHz</code>
 
-%s',
-                        'msg_user_balance_amount_add_3' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
-                        'msg_user_admin_balance_4' => 'Confirming a card-to-card receipt and manually increasing the balance by an admin
-        
-User numeric ID: %s
-User username: %s
-Transaction amount in invoice:  %s
-Transaction amount deposited by admin: %s',
-                        'msg_service_user_payment_1' => '
-🛒 Order number:  <code>%s</code>
-🛒  Order status in bot: <code>%s</code>
-🙍‍♂️ User ID: <code>%s</code>
-👤 Subscription username:  <code>%s</code> 
-📍 Service location:  %s
-🛍 Product name:  %s
-💰 Service paid price: %s Toman
-⚜️ Purchased service volume: %s
-⏳ Purchased service time: %s 
-📆 Purchase date: %s  
+📊 <b>Load average</b> (1/5/15 min)
+└ <code>{load1} | {load5} | {load15}</code>
 
-',
-                        'msg_service_user_link_volume' => '
-  
- Service status: %s
-        
-🔋 Service volume: %s
-📥 Consumed volume: %s
-💢 Remaining volume: %s (%s%%)
+🧠 <b>RAM</b>
+└ <code>{memUsed} / {memTotal}</code> ({memPercent}%)
 
-📅 Active until: %s (%s)
+💾 <b>Disk</b>
+└ <code>{diskUsed} / {diskTotal}</code> ({diskPercent}%)
 
-User subscription link: 
-<code>%s</code>
+🌐 <b>Network (live)</b>
+├ Upload: <code>{netUp}/s</code>
+└ Download: <code>{netDown}/s</code>
 
-📶 Last connection time: %s
-🔄 Last subscription link update time: %s
-#️⃣ Connected client:<code>%s</code>',
-                        'msg_service_user_amount' => '
-📌 Service report 
-🔗  Service type: %s
-🕰 Service execution time: %s 
+📡 <b>Total traffic</b>
+├ Sent: <code>{netSent}</code>
+└ Received: <code>{netRecv}</code>
 
-(%s)
-💰Service execution amount: %s
-👤 User numeric ID: %s
-👤 Config username: %s',
-                        'err_user_delete_name' => '❌ Dear user, your deletion request with username %s was not approved.
-        
-        Reason for non-approval: %s',
-                        'msg_user_balance_amount_add_4' => '💰Dear user, an amount of %s Toman was added to your balance.',
-                        'err_user_balance_amount_add' => '❌ An amount of %s Toman was added to the user\'s balance.',
-                        'ok_user_delete_name_1' => '✅ Dear user, your deletion request with username %s was approved.',
-                        'msg_service_user_admin_1' => '⭕️ An admin approved the user\'s service that had a deletion request
-        
-Information of the approving user: 
+🔌 <b>Connections</b>
+└ TCP: <code>{tcp}</code> | UDP: <code>{udp}</code>
 
-🪪 Numeric ID: <code>%s</code>
-💰 Refunded amount: %s Toman
-👤 Username: %s
-        Numeric ID of the cancellation requester: %s',
-                        'ok_user_delete_name_2' => '✅ Dear user, your deletion request with username %s was approved.',
-                        'msg_user_balance_amount_add_5' => '💰Dear user, an amount of %s Toman was added to your balance.',
-                        'msg_service_user_admin_2' => '⭕️ An admin approved the user\'s service that had a deletion request
-        
-Information of the approving user: 
+🛡 <b>Xray</b>
+├ State: <code>{xrayState}</code>
+└ Version: <code>{xrayVersion}</code>
 
-🪪 Numeric ID: <code>%s</code>
-💰 Refunded amount: %s Toman
-👤 Username: %s
-Numeric ID of the cancellation requester: %s',
-                        'ask_send_address_api' => '📌 Send the API address.
+🏷 <b>Panel version:</b> <code>{panelVersion}</code>
+⏱ <b>Uptime:</b> <code>{uptime}</code>
 
-Current address: %s',
-                        'btn_token_api' => 'Your api token: <code>%s</code>',
-                        'msg_api_docs_link' => '📘 Full API reference:
-%s
-
-Send the token above in the <code>Token</code> header of every request.',
-                        'ok_success_panel_5' => '✅  Your web panel was activated successfully.
+🔗 <b>Public IP</b>
+├ IPv4: <code>{ipv4}</code>
+└ IPv6: <code>{ipv6}</code>',
+                        'xrayRunning' => '🟢 Running',
+                        'xrayStopped' => '🔴 Stopped',
+                        'ipNone' => 'N/A',
+                ],
+                'unit' => [
+                        'hours' => 'hours',
+                        'megabytes' => 'megabytes',
+                        'days' => 'days',
+                        'gigabytes' => 'gigabytes',
+                        'day' => 'day',
+                ],
+                'webpanel' => [
+                        'activated' => '✅  Your web panel was activated successfully.
 
 
 🔗Login address: https://%s/panel
@@ -1804,141 +3516,7 @@ Send the token above in the <code>Token</code> header of every request.',
 🔑Password:  <code>%s</code>
 
 ⚠️ If you click the panel activation button again, you will receive a new password.',
-                        'err_error_panel_admin_name' => '
-Error creating config from the admin panel
-✍️ Error reason: 
-%s
-Admin ID: %s
-Panel name: %s',
-                        'ask_send_user_amount_buy' => '📌 Send the minimum amount you want the user to make a bulk purchase.
-        
-Current amount: %s',
-                        'msg_user_name_register_1' => '📣 A user has submitted an agency request; please review the information and determine the status.
-
-Numeric ID: %s
-Username: %s 
-Description:  %s ',
-                        'msg_user_name_register_2' => '📣 A user has submitted an agency request; please review the information and determine the status.
-
-Numeric ID: %s
-Username: %s
-Description:  %s ',
-                        'btn_confirm_1' => '
-Status: approved (%s)',
-                        'msg_user_name_register_3' => '📣 A user has submitted an agency request; please review the information and determine the status.
-
-Numeric ID: %s
-Username: %s
-Description:  %s ',
-                        'btn_confirm_2' => '
-Status: approved (%s)',
-                        'ask_enter_merchant' => '💳 Obtain your merchant code and enter it in this section
-        
-Your current merchant code: %s',
-                        'ok_admin_payment_delete_enable' => '
-✅ %s unpaid orders were deleted
-✅ %s inactive orders were deleted.
-✅ %s admin-deleted orders were deleted
-✅ %s test orders were deleted.',
-                        'err_error_panel_account_user' => '
-⭕️ A user attempted to receive an account, but config creation encountered an error and the config was not given to the user
-✍️ Error reason: 
-%s
-User ID: %s
-User username: @%s
-Panel name: %s',
-                        'msg_user_admin_volume' => ' 🛍 Config creation by admin 
-
-Config username: %s
-Config volume: %s GB
-Config time: %s days
-Admin numeric ID: %s
-Admin username: %s
-Number created: %s',
-                        'err_error_7' => '❌  An error occurred. Error code:  %s',
-                        'err_error_8' => '❌  An error occurred. Error code:  %s',
-                        'err_error_9' => '❌  An error occurred. Error code:  %s',
-                        'msg_api_name' => '📌 Node information 
-
-🖥 Node name:  %s
-🌍 Node IP: %s
-🔻 Node port: %s
-🔺 Node api port: %s
-🔋Total node consumption: %s
-🔄 Node consumption coefficient: %s
-🔵 Node xray version: %s
-🟢 Node status: %s
-    
-',
-                        'ask_send_wallet_address' => '💳 Send your Tron trc20 wallet address
-        
-        Your current wallet: %s',
-                        'ask_send_api_merchant_1' => '📌 Send your API code.
-        
-        Your current merchant: %s',
-                        'ask_send_user_name' => '📌 Send your username without @ for support
-
-%s',
-                        'err_error_10' => '❌  An error occurred. Error code:  %s',
-                        'err_error_11' => '❌  An error occurred. Error code:  %s',
-                        'btn_user_balance_amount' => 'The user\'s balance of %s was reset to zero',
-                        'msg_user_payment_amount_date_2' => '🛒 Payment number:  <code>%s</code>
-🙍‍♂️ User ID: <code>%s</code>
-💰 Paid amount: %s Toman
-⚜️ Payment status: %s
-⭕️ Payment method: %s 
-📆 Purchase date:  %s',
-                        'err_error_12' => '❌  An error occurred. Error code:  %s',
-                        'ok_service_user_volume' => '📜 Your renewal invoice for username %s was created.
-        
-🛍 Product name :%s
-⏱ Renewal duration :%s days
-🔋 Renewal volume :%s GB
-✍️ Description : %s
-✅ To confirm and renew the service, click the button below',
-                        'err_error_panel_service_user' => '
-        Service renewal error
-Panel name: %s
-Service username: %s
-Error reason: %s',
-                        'msg_panel_service_user' => '⭕️ The admin renewed the user\'s service.
-        
-User information: 
-        
-🪪 Admin numeric ID: <code>%s</code>
-🪪 Numeric ID: <code>%s</code>
-🛍 Product name:  %s
-👤 Customer username in panel  : %s
-User service location: %s',
-                        'msg_service_user_payment_2' => '
-🛒 Order number:  %s
-🛒  Order status in bot: %s
-🙍‍♂️ User ID: %s
-👤 Subscription username:  %s
-📍 Service location:  %s
-🛍 Product name:  %s
-💰 Service paid price: %s Toman
-⚜️ Purchased service volume: %s
-⏳ Purchased service time: %s 
-📆 Purchase date: %s  
-
-',
-                        'url_telegram_sendmessage' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ Dear user, your bot was installed successfully.',
-                        'ok_success_user_11' => '✅ The agent bot was created successfully.
-⚙️ Bot username  : @%s
-🤠 Bot token : <code>%s</code>',
-                        'ask_send_user_change_limit_1' => '📌  Send the overall limit on how many times the user can change location. Note that this limit applies to all configs
-Current limit: %s',
-                        'ask_send_user_change_limit_2' => '📌  Send the free limit on how many times the user can change location. Note that this limit applies to all configs
-Current limit: %s',
-                        'err_notfound_user_number' => '📌 The user with numeric ID %s does not exist in the database',
-                        'ask_send_time_confirm' => '📌 In this section you can set after how many minutes the automatic approval without review approves the receipt.
-Send your time in minutes
-Current time: %s',
-                        'ask_send_api_merchant_2' => 'Send the received api in this section
-        
-Your current merchant code: %s',
-                        'msg_mini_app_instruction' => '📌 Tutorial for activating the mini app in the BotFather bot
+                        'miniAppHelp' => '📌 Tutorial for activating the mini app in the BotFather bot
 
 /mybots > Select Bot > Bot Setting >  Configure Mini App > Enable Mini App  > Edit Mini App URL
 
@@ -2555,1488 +4133,14 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'zarinPalGateway' => '🟡 ZarinPal',
                 'zarinPalMerchant' => 'ZarinPal merchant',
                 'zeroBalance' => '0️⃣ Reset balance to zero',
-        ],
-        'language' => [
-                'changeButton' => '🌏 Change language',
-                'selectPrompt' => '🌏 Please select your desired language.',
-                'setSuccess' => '✅ Language set successfully',
-        ],
-        'extracted' => [
-                'admin_php' => [
-                        'panelNotFound' => '❌ The requested panel was not found.',
-                        'panelErrorCode' => '❌ An error occurred. Error code: %s',
-                        'selectPanelForOrder' => '📌 Select from the list below which panel the order should be created on',
-                        'panelSelectedSuccess' => '✅ Panel selected successfully',
-                        'serverStatus' => '🖥 <b>Server status</b>
-
-⚙️ <b>CPU</b>
-├ Usage: <code>{cpu}%</code>
-├ Cores: <code>{cpuCores}</code> (logical: {logicalPro})
-└ Frequency: <code>{cpuSpeed} GHz</code>
-
-📊 <b>Load average</b> (1/5/15 min)
-└ <code>{load1} | {load5} | {load15}</code>
-
-🧠 <b>RAM</b>
-└ <code>{memUsed} / {memTotal}</code> ({memPercent}%)
-
-💾 <b>Disk</b>
-└ <code>{diskUsed} / {diskTotal}</code> ({diskPercent}%)
-
-🌐 <b>Network (live)</b>
-├ Upload: <code>{netUp}/s</code>
-└ Download: <code>{netDown}/s</code>
-
-📡 <b>Total traffic</b>
-├ Sent: <code>{netSent}</code>
-└ Received: <code>{netRecv}</code>
-
-🔌 <b>Connections</b>
-└ TCP: <code>{tcp}</code> | UDP: <code>{udp}</code>
-
-🛡 <b>Xray</b>
-├ State: <code>{xrayState}</code>
-└ Version: <code>{xrayVersion}</code>
-
-🏷 <b>Panel version:</b> <code>{panelVersion}</code>
-⏱ <b>Uptime:</b> <code>{uptime}</code>
-
-🔗 <b>Public IP</b>
-├ IPv4: <code>{ipv4}</code>
-└ IPv6: <code>{ipv6}</code>',
-                        'xuiErrorCode' => '❌ An error occurred. Error code:  ',
-                        'xuiErrorReason' => '❌ An error occurred. Reason:  ',
-                        'xrayActive' => '🟢 Running',
-                        'xrayStopped' => '🔴 Stopped',
-                        'ipNone' => 'N/A',
-                        'eylanErrorCode' => '❌  An error occurred. Error code:  %s',
-                        'eylanUserNotExist' => '❌ User does not exist in the panel.',
-                        'eylanPanelOutput' => 'Panel output: ',
-                ],
-                'keyboard_php' => [
-                        'panelSetting' => '🎛 Panel Settings',
-                        'mirzaAgentPanel' => 'Mirza Agent',
-                        'setGroupName' => '🎛 Set group name',
-                        'subLinkDomain' => '🔗 Subscription link domain',
-                        'panelTypeSanaei' => 'Sanaei single port',
-                        'panelTypeAlireza' => 'Alireza single port',
-                        'usernameMethodAgentCustom' => 'Custom agent text + sequential number',
-                        'currencyToman' => 'Toman',
-                ],
-                'index_php' => [
-                        'langBtnFa' => '🇮🇷 فارسی',
-                        'langBtnEn' => '🇬🇧 English',
-                        'langBtnZh' => '🇨🇳 中文',
-                        'langBtnRu' => '🇷🇺 Русский',
-                        'acceptRulesButton' => '✅ I accept the rules',
-                        'affiliateBalanceGift' => '🎁 An amount of {addbalancediscount} was added to your balance from your referral with user ID {from_id}.',
-                        'unlimited' => 'Unlimited',
-                        'dayUnit' => 'day',
-                        'remainingSuffix' => ' Other',
-                        'statusOnline' => 'Online',
-                        'statusOffline' => 'Offline',
-                        'statusNotConnected' => 'Not connected',
-                        'servicesFound' => '🛍 {countservice} services found. To view and manage a service, click on one of the services',
-                        'accountInfoUnavailable' => '❌ Viewing account information is not possible at the moment',
-                        'servicePassword' => '🔑 Your service password : <code>{subscription_url}</code>',
-                        'configNote' => '✍️ Config note : {note}',
-                        'lastOnlineTime' => '📶 Your last connection time : {lastonline}',
-                        'subscriptionFile' => 'Your subscription file',
-                        'turnOffAccountButton' => '❌ Disable account',
-                        'turnOnAccountButton' => '💡 Turn on account',
-                        'editNoteButton' => '📝 Change note',
-                        'refreshInfoButton' => '♻️ Update information',
-                        'serviceDeletedSuccess' => '📌 The service was deleted successfully',
-                        'askDeleteReason' => '📌 Send the reason for deleting your service.',
-                        'configReadError' => '❌  Error reading config information. Contact support.',
-                        'selectConfigFromList' => '📌 Select and use a config from the list below.',
-                        'featureUnavailable' => '❌ This feature is not available at the moment',
-                        'featureUnavailableDot' => '❌ This feature is not available at the moment.',
-                        'notConnectedCannotChangeStatus' => '❌ You have not connected to the config yet, and changing the service status is not possible. After connecting to the config, you can use this feature.',
-                        'confirmDisableConfigButton' => '✅ Confirm and disable config',
-                        'confirmEnableConfigButton' => '✅ Confirm and enable config',
-                        'renewError' => '❌ The renewal encountered an error; perform the renewal steps again.',
-                        'renewNotSupportedPanel' => '❌ Renewal is not possible on this panel',
-                        'notConnectedConnectFirst' => '❌ You have not connected to the service yet. To renew the service, first connect to the service, then proceed to renew',
-                        'renewNotPossibleCurrentPlan' => '❌ Renewal with the current plan is not possible. Go through the steps from the beginning and select another plan.',
-                        'renewGenericError' => '❌ An error occurred. Perform the renewal steps from the beginning.',
-                        'renewServiceError' => '❌ An error occurred while renewing the service; contact support',
-                        'renewProcessRestartError' => '❌ An error occurred while renewing the service; contact support',
-                        'customVolumeButton' => '🛍 Custom volume',
-                        'customServiceButton' => '⚙️ Custom service',
-                        'currencyToman' => 'Toman',
-                        'invalidVolume' => '❌ The volume is invalid.
-🔔 The minimum volume is {mainvolume} gigabytes and the maximum is {maxvolume} gigabytes',
-                        'invalidTime' => '❌ The submitted time is invalid. The time must be between {maintime} days and {maxtime} days',
-                        'discountCodeExpired' => '❌ The discount code time has expired.',
-                        'discountCodeUseLimit' => '⭕️ This code can only be used {useuser}  times',
-                        'discountCodeAppliedRenew' => '🤩 Your discount code was valid and {discount_price} percent discount was applied to your invoice.',
-                        'discountCodeApplied' => '🤩 Your discount code was valid and {discount_price} percent discount was applied to your invoice.',
-                        'discountCodeUsedNoticeRenew' => '⭕️ A user with username @{username}  and numeric ID {from_id} used discount code {discount_code}. And renewed their service.',
-                        'discountCodeUsedNotice' => '⭕️ A user with username @{username}  and numeric ID {from_id} used discount code {discount_code}.',
-                        'discountCodeNotAllowed' => '❌ Purchase with this discount code is not possible',
-                        'earned2Points' => '📌You earned 2 new points.',
-                        'earned1Point' => '📌You earned 1 new point.',
-                        'serviceInactiveCannotChangeLink' => '❌ The service is disabled and changing the link for the service is not possible.',
-                        'changeLinkError' => '❌ An error occurred while changing the link.',
-                        'configUpdatedSuccess' => '✅ Your config was updated successfully.',
-                        'subscriptionLine' => 'Your subscription : <code>{output_config_link}</code>',
-                        'extraVolumeNotSupportedPanel' => '❌ Purchasing extra volume is not possible on this panel',
-                        'purchaseError' => '❌ The purchase failed. Perform the steps again.',
-                        'extraVolumeServiceError' => '❌An error occurred while purchasing extra volume for the service. Contact support',
-                        'locationChangeLimitReached' => '❌ Your location change limit has been reached',
-                        'genericProcessRestart' => '❌ An error occurred. Please perform the steps again',
-                        'transferToPanelNotPossible' => '❌ Transfer to the panel is not possible.',
-                        'configUnusedCannotTransfer' => '❌ Your config is in unused status and transferring the service location is not possible.',
-                        'requestSubmittedSuccess' => '✅ Thank you for submitting the request. Your request has been sent and is being reviewed by support.',
-                        'extraTimeNotSupportedPanel' => '❌ Purchasing extra time is not possible on this panel',
-                        'serviceTransferredNotice' => '✅ Dear user, the service with username {service_username} was transferred to your account by the user with user ID {from_id}.',
-                        'testServiceUnavailable' => '📌 The test service is not available at the moment.',
-                        'serviceStockFinished' => '❌ This service\'s volume has run out.',
-                        'serviceStockFinishedBuyAnother' => '❌ This service\'s volume has run out. Please purchase another service.',
-                        'selectCategoryShort' => '📌 Select a category',
-                        'selectCategory' => '📌 Select your category!',
-                        'buttonDisabled' => '❌ This button is disabled',
-                        'buttonDisabledForYou' => '❌ This button is disabled for you',
-                        'selectSupportDepartment' => '📌 Select the support section you want to message.',
-                        'sendYourMessage' => '📌 Send your message',
-                        'messageSentForReview' => '✅ Your message was sent successfully and you will be answered after review.',
-                        'messageAnsweredByOtherAdmin' => '❌ The message has been answered by another admin.',
-                        'sendMessageText' => '📌 Send the text of your message',
-                        'messageSentSuccess' => 'The message was sent successfully',
-                        'messageSentForRequestReview' => '✅  Your message for this request was sent successfully. It will be answered after review.',
-                        'notSentLabel' => '❌<b> Not sent </b>❌',
-                        'confirmedByAdmin' => '✅ Approved by admin',
-                        'roleNormal' => 'Regular',
-                        'roleAgent' => 'Agent',
-                        'roleAdvancedAgent' => 'Advanced agency',
-                        'accountScore' => '🥅 Your account points : {score}',
-                        'panelUnavailableUseAnother' => '❌ This panel is not available. Please make your purchase from another panel.',
-                        'confirmError' => '❌ An error occurred during confirmation. Please perform the payment steps again',
-                        'purchaseRestartProcess' => '❌ Please perform the purchase steps again',
-                        'creatingService' => '♻️ Creating your service...',
-                        'purchaseRestartFromStart' => '❌ Perform the purchase steps from the beginning again',
-                        'firstPurchaseLabel' => '📌 User\'s first purchase',
-                        'bulkPurchaseDisabled' => '❌ This section is currently disabled',
-                        'bulkPurchaseMinBalance' => '❌ For bulk purchase you must have at least {PaySetting} Toman balance.',
-                        'depositAmountRange' => '❌ The minimum deposit amount for this payment method must be {mainbalance} and the maximum {maxbalance} Toman',
-                        'depositAmountRangePlisio' => '❌ The minimum deposit amount for this payment method must be {mainbalance} and the maximum {maxbalance} Toman',
-                        'bankCardRetrieveError' => '❌ An internal error occurred while retrieving the bank card. Please try again later.',
-                        'noActiveBankCard' => '❌ No active bank card was found for this payment method. Please try again later or contact support.',
-                        'receiptCooldown' => '❗ You sent a receipt in the last 2 minutes. Please send a new receipt in 2 minutes.',
-                        'transactionAlreadyConfirmed' => '❗️ Your transaction has been approved by the bot.',
-                        'transactionExpired' => '❗The time for this transaction has expired and payment for this transaction is not possible.',
-                        'sendReceiptImage' => '🖼 Send your receipt image',
-                        'sendReceiptOrTronLink' => '📌 Send your deposit image or Tron transaction link.',
-                        'purchaseOrPaymentRestart' => '❌ An error occurred. Please perform the purchase or payment steps again',
-                        'infoFetchErrorRestart' => '❌ An error occurred while retrieving the information. Please perform the steps from the beginning',
-                        'onlyOneImageAllowed' => '❌  You are only allowed to send one image',
-                        'receiptSentRenewPending' => '🚀 Your receipt was sent and your service will be renewed after review',
-                        'receiptSentExtraVolumePending' => '🚀 Your receipt was sent and volume will be added to your service after review.',
-                        'receiptSentExtraTimePending' => '🚀 Your receipt was sent and time will be added to your service after review',
-                        'sectionDisabledNow' => '📛 This section is currently disabled',
-                        'notAffiliateOfAnyone' => '📛 You are not a referral of any user.',
-                        'affiliateJoinedGift' => '🎉 Someone joined through your referral! The gift was credited to your account.',
-                        'affiliateJoinGiftActivated' => '🎉 The membership gift was activated for you!',
-                        'noPurchaseUsersOnly' => '❌ Unfortunately, this option is only active for users who have not made any purchase from the bot.',
-                        'gameResultError' => '❌ An error occurred while getting the game result. Please try again later.',
-                        'priceFetchError' => '❌ Retrieving the price is not possible at the moment. Please try again later.',
-                        'genericErrorRestart' => '❌ An error occurred. Go through the steps from the beginning',
-                ],
-        ],
-        'hardcoded' => [
-                'accountCreateReportAdmin' => '📣 Account creation details were registered in your bot .
-
-%s
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s
-▫️User name : %s
-▫️Service location : %s
-▫️Product name :%s
-▫️Purchased time :%s days
-▫️Purchased volume : %s GB
-▫️Balance before purchase : %s Toman
-▫️Balance after purchase : %s Toman
-▫️Tracking code: %s
-▫️User type : %s
-▫️User phone number : %s
-▫️Product category : %s
-▫️Product price : %s Toman
-▫️Final price : %s Toman
-▫️Purchase time : %s',
-                'accountCreateReportAfterPay' => '📣 Account creation details were registered in the bot after payment .
-
-%s
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s
-▫️Service location : %s
-▫️Purchased time :%s days
-▫️Purchased product name :%s
-▫️Purchased volume : %s GB
-▫️Balance before purchase : %s Toman
-▫️Balance after purchase : %s Toman
-▫️Tracking code: %s
-▫️User type : %s
-▫️User phone number : %s
-▫️Product price : %s Toman
-▫️Final price : %s Toman
-▫️Purchase time : %s',
-                'accountCreateReportMiniapp' => '📣 Account creation details were registered in the mini app .
-        
-%s
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s
-▫️Service location : %s
-▫️Product name :%s
-▫️Purchased time :%s days
-▫️Purchased volume : %s GB
-▫️Balance before purchase : %s Toman
-▫️Balance after purchase : %s Toman
-▫️Tracking code: %s
-▫️User type : %s
-▫️User phone number : %s
-▫️Product category : %s
-▫️Product price : %s Toman
-▫️Purchase time : %s',
-                'accountInfoText' => '
-🗂 Your account information :
-
-
-🪪 User ID: <code>%s</code>
-👤 Name: <code>%s</code>
-👨‍👩‍👦 Your referral code : <code>%s</code>
-📱 Contact number :%s
-⌚️Registration time : %s
-💰 Balance: %s Toman
-🛒 Number of purchased services : %s
-📑 Number of paid invoices :  : %s
-🤝 Number of your referrals : %s people
-🔖 User group : %s
-%s
-%s
-
-📆 %s → ⏰ %s
-                    
-',
-                'accountNotVerifiedNotice' => '⚠️ Your account is not verified. Your message has been sent to the admin.
-    For faster follow-up, you can message the ID below
-    @%s',
-                'accountUnblockedNotice' => '✳️ Your account has been unblocked ✳️
-You can now use the bot ✔️',
-                'accountVerifiedNotice' => '💎 Dear user, your account was verified successfully and you can now make your purchase',
-                'accountVerifiedSuccess' => 'Your account was verified successfully',
-                'adminUserDeletedService' => 'Dear admin, a user has deleted their service after its volume or time ended
-Config username : %s',
-                'affiliateCommissionPaidLog' => '
-An amount of %s was credited to user %s as commission from user %s 
-Time : %s',
-                'affiliateCommissionPaidLog2' => '
-An amount of %s was credited to user %s as commission from user %s 
-Time : %s',
-                'affiliateCommissionPaidLogFn' => '
-An amount of %s was credited to user %s as commission from user %s 
-Time : %s',
-                'affiliateCommissionPaidLogFn2' => '
-An amount of %s was credited to user %s as commission from user %s 
-Time : %s',
-                'affiliateCommissionPaidLogMiniapp' => '
-    An amount of %s was credited to user %s as commission from user %s 
-    Time : %s',
-                'affiliateCommissionPaidLogMiniapp2' => '
-An amount of %s was credited to user %s as commission from user %s 
-Time : %s',
-                'affiliateCommissionPaidUser' => '🎁  Commission payment 
-        
-        An amount of %s Toman was credited to your wallet from your referral',
-                'affiliateCommissionPaidUser2' => '🎁  Commission payment 
-        
-        An amount of %s Toman was credited to your wallet from your referral',
-                'affiliateCommissionPaidUserFn' => '🎁  Commission payment 
-        
-        An amount of %s Toman was credited to your wallet from your referral',
-                'affiliateCommissionPaidUserFn2' => '🎁  Commission payment 
-        
-        An amount of %s Toman was credited to your wallet from your referral',
-                'affiliateCommissionPaidUserMiniapp' => '🎁  Commission payment 
-            
-            An amount of %s Toman was credited to your wallet from your referral',
-                'affiliateCommissionPaidUserMiniapp2' => '🎁  Commission payment 
-        
-        An amount of %s Toman was credited to your wallet from your referral',
-                'affiliateNewReferralJoined' => '<b>🎉 A new referral!</b>
-User <b>@%s</b> joined the bot with your invite link ✅
-
-With this user\'s purchases, <b>your gift share</b> will be credited to your account 🔥',
-                'affiliateWelcomeGiftInfo' => '<b>💼 Referrals and welcome gift</b>
-
-By inviting friends through your <b>dedicated link</b>, your wallet is topped up without paying even 1 Rial, and you use the bot\'s services!
-
-%s
-%s
-
-<b>📊 Your stats:</b>
-• 👥 Referrals: %s people
-• 🛒 Purchases: %s
-• 💵 Total purchases: %s Toman
-
-<b>📢 Invite, get a gift, grow!</b>
-',
-                'affiliateWelcomeInvited' => '<b>🎉 Welcome!</b>
-
-You joined the bot through <b>@%s</b>\'s invitation and were registered as a referral ✅
-
-To receive the membership gift:
-🔘 Go to the <b>Referrals</b> menu  
-🔘 Press the <b>🎁 Receive membership gift</b> button
-
-This way, both you and your referrer get a gift! 💰
-',
-                'agentExpiredGroupChangedLog' => '📌 The user\'s user group was changed to f due to agency expiry
-
-User numeric ID :  %s
-User username :‌ %s',
-                'agentExpiredNotice' => '📌 Dear agent, your agency period has ended and your account was removed from agency status. To reactivate your agency, you can contact support.',
-                'amountRangeError' => '❌ Error 
-💬 The amount must be at least %s Toman and at most %s Toman',
-                'aqayePardakhtLinkError' => '⭕️ Error creating Aghaye Pardakht link
-✍️ Error reason : %s
-            
-User ID : %s
-User username : @%s',
-                'autoConfirmedByBot' => 'Approved by the bot without review',
-                'backupDatabaseCaption' => '📌 Main bot database export ',
-                'balanceAddedNotice' => '💎 Dear user, an amount of %s Toman was added to your wallet balance.',
-                'balanceChargedThanks' => '💎 Dear user, an amount of %s Toman was credited to your wallet. Thank you for your payment.
-                
-🛒 Your tracking code: %s',
-                'balanceDeductedNotice' => '❌ Dear user, an amount of %s Toman was deducted from your wallet balance.',
-                'balanceLessThanPrice' => 'The balance is less than the product price',
-                'botActivatedTelegramUrl' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ Dear user, your bot was installed successfully.',
-                'bulkAccountCreateError' => '
-⭕️ Error creating account in the bulk section
-✍️ Error reason : 
-%s
-User ID : %s
-User username : @%s
-Panel name : %s',
-                'bulkAccountReportAdmin' => '📣 Bulk account creation details were registered in your bot .
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s_0-%s
-▫️User name : %s
-▫️Service location : %s
-▫️Product name :%s
-▫️Purchased time :%s days
-▫️Purchased volume : %s GB
-▫️Balance before purchase : %s Toman
-▫️Balance after purchase : %s Toman
-▫️Tracking code: %s
-▫️User type : %s
-▫️User phone number : %s
-▫️Product price : %s Toman
-▫️Final price : %s Toman
-▫️Number of configs : %s
-▫️Purchase time : %s',
-                'bulkMessageDone' => '📌 The operation was performed for all requested users.',
-                'bulkMessageProgress' => '✏️ The message-sending operation is in progress...
-
-Number of remaining people :  %s',
-                'cardPaymentInstruction' => 'To pay, deposit the amount to the card number below',
-                'changeLinkReportAdmin' => '📣 Link change details were registered in your bot .
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s
-▫️User name : %s
-▫️Service location : %s
-▫️User type : %s
-▫️Link change time : %s',
-                'changeLocationConfirmPrompt' => '📍 By confirming the service location transfer, your service will be deleted from this location and transferred to the new location.
-💰 The transfer cost is %s Toman
-📌 Your remaining limit : %s (remaining free limit :‌%s)
-
-✅ To confirm the transfer, click the button below',
-                'changeLocationError' => 'Error while changing the service location
-Error reason : 
-%s
-User ID : %s
-User username : @%s
-Panel name : %s
-Destination panel name : %s',
-                'changeLocationReportAdmin' => '  
-Service location change 
-
-🔻Numeric ID : <code>%s</code>
-🔻Username : @%s
-🔻Old panel name : %s
-🔻New panel name : %s
-🔻 Customer username in panel  :%s
-🔻Final service volume : %s
-🔻User balance : %s Toman',
-                'changeLocationSuccess' => '✅ Your config was transferred to the server (%s) successfully.
-
-🖥 Service name : %s
-💠 Service volume : %s
-⏳ Expiry time :  %s | %s 
-
-
-🔗 Your subscription link: 
-
-<code>%s</code>',
-                'configCreateError' => '
-⭕️ Error creating config
-✍️ Error reason : 
-%s
-User ID : %s
-User username : @%s
-Panel name : %s',
-                'configCreateErrorAdminPanel' => '
-Error creating config from the admin panel
-✍️ Error reason: 
-%s
-Admin ID: %s
-Panel name: %s',
-                'confirmDisableConfigPrompt' => '📌 By confirming the option below, your config will be turned off and you will no longer be able to connect to it.
-⚠️ If you want the config to be activated again, you must click the <u>💡 Turn on account</u> button from the service management section',
-                'confirmEnableConfigPrompt' => '📌 By confirming the option below, your config will be turned on and you will be able to connect to it.
-⚠️ If you want the config to be deactivated again, you must click the <u>❌ Turn off account</u> button from the service management section',
-                'confirmedByAdmin' => '✅ Approved by admin',
-                'cryptoPaymentInstruction' => '
-<b>💲 To top up your wallet balance via cryptocurrency, click the payment button at the end of the message</b>
-
-⚠️ Note:  the payment time is 30 minutes; after 30 minutes the transaction will be canceled
-
-🌐 Some domestic sites for buying cryptocurrency 👇
-🔸 nikpardakht.com
-🔹 webpurse.org
-🔸 bitpin.ir
-🔹 sarmayex.com
-🔸 ok-ex.io
-🔹 nobitex.ir
-🔸 bitbarg.com
-🔹 cafearz.com
-🔸 pay98.app
-🔢 Invoice number : %s
-💰 Invoice amount : %s Toman
-📊 Dollar price: %s Toman as of now
-
-Use the button below to pay👇🏻',
-                'cryptoPaymentInstruction2' => '
-<b>💲 To top up your wallet balance via cryptocurrency, click the payment button at the end of the message</b>
-
-⚠️ Note:  the payment time is 30 minutes; after 30 minutes the transaction will be canceled
-
-🌐 Some domestic sites for buying cryptocurrency 👇
-🔸 nikpardakht.com
-🔹 webpurse.org
-🔸 bitpin.ir
-🔹 sarmayex.com
-🔸 ok-ex.io
-🔹 nobitex.ir
-🔸 bitbarg.com
-🔹 cafearz.com
-🔸 pay98.app
-🔢 Invoice number : %s
-💰 Invoice amount : %s Toman
-📊 Dollar price: %s Toman as of now
-
-
-<blockquote>⚠️ After payment, if the transaction amount was deposited correctly, your balance will be charged automatically within the next 15 minutes at most.</blockquote>
-
-
-Use the button below to pay👇🏻',
-                'cryptoPaymentLinkErrorAdmin' => '
-                        ⭕️ A user intended to pay with the currency gateway, but creating the payment link encountered an error and no link was given to the user
-✍️ Error reason : %s
-            
-User ID : %s
-User username : @%s',
-                'cryptoPaymentLinkErrorAdmin2' => '
-                        ⭕️ A user intended to pay with the currency gateway, but creating the payment link encountered an error and no link was given to the user
-✍️ Error reason : %s
-            
-User ID : %s
-User username : @%s',
-                'customServiceLabel' => '⚙️ Custom service',
-                'customTimePrompt' => '⌛️ Select your service time 
-📌 Daily rate  : %s  Toman
-⚠️ You can purchase a minimum of %s days and a maximum of %s days',
-                'customTimePrompt2' => '⌛️ Select your service time 
-📌 Daily rate  : %s  Toman
-⚠️ You can purchase a minimum of %s days and a maximum of %s days',
-                'customUsernameLabel' => 'Custom username',
-                'customUsernameRandomLabel' => 'Custom username + random number',
-                'customVolumePrompt' => '📌 Send your requested volume.
-🔔The price per gigabyte of volume is %s Toman.
-🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
-                'customVolumePrompt2' => '📌 Send your requested volume.
-🔔The price per gigabyte of volume is %s Toman.
-🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
-                'customVolumePrompt3' => '📌 Send your requested volume.
-🔔The price per gigabyte of volume is %s Toman.
-🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
-                'customVolumePrompt4' => '📌 Send your requested volume.
-🔔The price per gigabyte of volume is %s Toman.
-🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
-                'customVolumePrompt5' => '📌 Send your requested volume.
-🔔The price per gigabyte of volume is %s Toman.
-🔔 The minimum volume is %s gigabytes and the maximum is %s gigabytes.',
-                'dailyBotReport' => '📌 Daily bot performance report :
-
-🧲 Number of renewals today : %s
-💰 Total renewals today : %s Toman
-🛍 Number of orders today : %s
-🛍 Total order amount today : %s Toman
-🔑 Test accounts today : %s
-🔋 Total volume sold : %s gigabytes
-Number of users who joined the bot today : %s people
-
-',
-                'dailyPanelReportRow' => '
-Panel name : %s
-🛍 Number of orders today : %s
-🛍 Total order amount today : %s Toman
-🔋 Total volume sold : %s gigabytes
----------------
-
-',
-                'dailyPanelsReportTitle' => 'Panels report :
-
-',
-                'dailyTopAgentRow' => '
-User numeric ID : %s
-User username : %s
-Total purchases today : %s
----------------
-
-',
-                'dailyTopAgentsTitle' => 'List of agents who made the most purchases today :
-
-',
-                'debtPaymentRequired' => '❌ You have a debt; you must pay at least %s Toman.
-         Send your amount again',
-                'deleteServiceRequestAdmin' => 'Hello admin 👋
-        
-📌 A service deletion request was sent to you by a user. Please review it and, if correct and you agree, approve it. 
-        
-        
-📊 User service information :
-User numeric ID : %s
-User username : @%s
-Config username : %s
-Service status : %s
-Service location : %s
-Service code:%s
-
-🟢 Your last connection time : %s
-
-📥 Consumed volume : %s
-♾ Service volume : %s
-🪫 Remaining volume : %s
-📅 Active until date : %s (%s)
-
-
-<b>❌ Dear admin, note that the delete service button you press is calculated automatically by the bot and there is a chance of error; it is recommended to use manual deletion</b>
-
-Service deletion reason : %s',
-                'discountCodeUsedAdmin' => '⭕️ A user with username @%s  and numeric ID %s used discount code %s.',
-                'discountCodeUsedAdminFn' => '⭕️ A user with username @%s  and numeric ID %s used discount code %s.',
-                'disruptionReportAdmin' => '
-    ⚠️ A user with the following information has submitted a service outage report .
-
-- Username : @%s
-- Numeric ID : %s
-- Config username : %s
-- Purchased plan name : %s
-- Service location : %s
-- Outage description : %s',
-                'disruptionReportConfirmPrompt' => '❓ Are you sure about sending the outage report
-
-🔹 Before sending a report, view the connection tutorials. ( /help )',
-                'disruptionReportPrompt' => '❓ Write the reason for your outage
-
-🔹 Before sending a report, view the connection tutorials. ( /help )',
-                'enterAmountToman' => '💸 Enter the amount in Toman:
-
-⚠️  The minimum amount is <b>%s</b> and the maximum is <b>%s</b> Toman',
-                'extraTimeError' => 'Error purchasing extra volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'extraTimeErrorFn' => 'Error purchasing extra volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'extraTimeInvoiceCreated' => '📜 An extra time purchase invoice was created for you.
-        
-📌 Daily rate for extra time : %s Toman
-📆 Requested number of extra days : %s days
-💰 Your invoice amount : %s Toman
-        
-✅ To pay and add the time, click the button below',
-                'extraTimePrompt' => '📆 Enter the desired number of extra days ( in days ) :
-        
-📌 Daily rate:  %s',
-                'extraTimeReportAdmin' => '⭕️ A user purchased extra time
-        
-User information : 
-🪪 Numeric ID : %s
-🛍 Purchased time  : %s days
-💰 Paid amount : %s Toman
-👤 Config username : %s',
-                'extraTimeReportAdminFn' => '⭕️ A user purchased extra time
-        
-User information : 
-🪪 Numeric ID : %s
-🛍 Purchased time  : %s days
-💰 Paid amount : %s Toman
-👤 Config username %s',
-                'extraTimeSuccess' => '✅ Time was added to your service successfully
- 
-▫️Service name : %s
-▫️Added time : %s days
-
-▫️Time addition amount : %s Toman',
-                'extraTimeSuccessFn' => '✅ Time was added to your service successfully
- 
-▫️Service name : %s
-▫️Added time : %s days
-
-▫️Time addition amount : %s Toman',
-                'extraVolumeError' => 'Error purchasing extra volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'extraVolumeError2' => 'Error purchasing extra volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'extraVolumeErrorFn' => 'Error purchasing extra volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'extraVolumeInvoiceCreated' => '📜 An extra volume purchase invoice was created for you.
-        
-📌 Rate per gigabyte of extra volume : %s Toman
-🔋 Requested extra volume : %s gigabytes
-💰 Your invoice amount : %s Toman
-        
-✅ To pay and add the volume, click the button below',
-                'extraVolumePrompt' => ' ⭕️ Send the amount of volume you want to purchase.
-❌ Send the amount in English.
-        ⚠️ Each gigabyte of extra volume is %s Toman.',
-                'extraVolumeReportAdmin' => '⭕️ A user purchased extra volume
-        
-User information : 
-🪪 Numeric ID : %s
-🛍 Purchased volume  : %s GB
-💰 Paid amount : %s Toman
-👤 Config username : %s
-User balance before purchase : %s
-
-',
-                'extraVolumeReportAdminFn' => '⭕️ A user purchased extra volume
-        
-User information : 
-🪪 Numeric ID : %s
-🛍 Purchased volume  : %s GB
-💰 Paid amount : %s Toman
-👤 Config username %s
-User balance before purchase : %s
-
-',
-                'extraVolumeSuccess' => '✅ Volume was added to your service successfully
- 
-▫️Service name  : %s
-▫️Added volume : %s GB
-
-▫️Volume addition amount : %s Toman',
-                'extraVolumeSuccessFn' => '✅ Volume was added to your service successfully
- 
-▫️Service name  : %s
-▫️Added volume : %s GB
-
-▫️Volume addition amount : %s Toman',
-                'firstPurchaseLabel' => '📌 User\'s first purchase',
-                'gatewayPerfectMoney' => 'Perfect Money',
-                'gatewayRialName1' => 'Rial currency payment',
-                'gatewayRialName2' => 'Second Rial currency payment',
-                'getConfigHint' => '📌 To get the config, click the Get config button',
-                'giftDepositNotice' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
-                'giftOperationDone' => '📌 The operation was performed for all requested services.',
-                'giftVolumeAddError' => 'Error adding gift volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'giftVolumeAddError2' => 'Error adding gift volume
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'invalidTimeRestart' => 'The time is invalid. Perform the purchase from the beginning',
-                'invalidVolumeRestart' => 'The volume is invalid. Perform the purchase from the beginning',
-                'invoiceExpiredNotice' => '⭕️ Dear user, the invoice below expired due to non-payment within the specified time .
-❗️Please do not pay any amount for this invoice under any circumstances and create a new invoice .
-
-🛒 Your payment method : %s
-📌 Invoice code : <code>%s</code>
-🪙 Invoice amount :  %s Toman',
-                'iranpayGiftDepositNotice' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
-                'iranpayNewPaymentLog' => '💵 New payment
-- 👤 User username : @%s
-- 🆔User numeric ID : %s
-- 💸 Transaction amount %s
-- 💳 Payment method :  Third Rial currency',
-                'lotteryAdminReport' => '📌 Dear admin, the users below won the lottery and their accounts were charged.
-
-',
-                'lotteryWinnerNotice' => '🎁 Lottery result 
-
-😎 Dear user, congratulations! You are person %s and won %s Toman balance, and your account was charged.',
-                'lotteryWinnerRow' => '
-Username : @%s
-Numeric ID : %s
-Amount : %s
-Person : %s
---------------',
-                'membershipGiftAlreadyClaimed' => '<b>⛔ You have already received the membership gift.</b>
-This gift can only be activated <b>once</b>.',
-                'membershipGiftInfo' => '<b>🎁 Membership gift:</b>
-• 🎉 Total gift: %s Toman  
-• 🔻 50% for you (referrer)  
-• 🔻 50% for the referral (new user)
-
-',
-                'membershipGiftPaidLog' => '🎁 Membership gift payment
- -Numeric ID : %s
- - Username : @%s
- - Referrer numeric ID : %s
- - Referral balance before gift : %s
- - Referral balance after gift : %s
-  - Referrer balance before gift : %s
- - Referrer balance after gift : %s
- ',
-                'messageFromAdmin' => '
-📩 A message was sent to you from management.
-                    
-Message text: 
-%s',
-                'newPaymentAdmin' => '💵 New payment
-                
-User numeric ID : %s
-Transaction amount : %s 
-Payment method : First Rial currency gateway',
-                'newPaymentAutoConfirm' => '💵 New payment
-        
-User numeric ID : %s
-Transaction amount %s
-Payment method :  Automatic approval without review
-%s',
-                'newPaymentBalanceCharge' => '
-⭕️ A new payment has been made .
-Balance increase            
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💵 User\'s total payments : %s
-💸 Paid amount: %s Toman
-                
-Description: %s %s
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentBalanceCharge2' => '
-⭕️ A new payment has been made .
-Balance increase            
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💸 Paid amount: %s Toman
-                
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentBalanceChargeFn' => '⭕️ A new payment has been made
-        Balance increase.
-👤 User ID: <code>%s</code>
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💸 Paid amount: %s Toman
-💎 Balance before increase : %s
-✍️ Description : %s',
-                'newPaymentExtraTime' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-Extra time purchase
-Service username : %s
-Number of days purchased  : %s
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💵 User\'s total payments : %s
-💸 Paid amount: %s Toman
-                
-Description: %s %s
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentExtraTime2' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-Extra time purchase
-Service username : %s
-Number of days purchased  : %s
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💸 Paid amount: %s Toman
-                
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentExtraVolume' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-Extra volume purchase
-Service username : %s
-Purchased volume  : %s
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💵 User\'s total payments : %s
-💸 Paid amount: %s Toman
-                
-Description: %s %s
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentExtraVolume2' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-Extra volume purchase
-Service username : %s
-Purchased volume  : %s
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💸 Paid amount: %s Toman
-                
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentNewService' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-New service purchase
-
-Service username : %s
-Product name : %s
-Product volume : %s GB 
-Product time : %s days
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💵 User\'s total payments : %s
-💸 Paid amount: %s Toman
-                
-Description: %s %s
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentNewService2' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-New service purchase
-
-Service username : %s
-Product name : %s
-Product volume : %s GB 
-Product time : %s days
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💸 Paid amount: %s Toman
-                
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentRenew' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-Renewal
-Service username : %s
-Product name : %s
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💵 User\'s total payments : %s
-💸 Paid amount: %s Toman
-                
-Description: %s %s
-✍️ If the receipt is correct, approve the payment.',
-                'newPaymentRenew2' => '
-⭕️ A new payment has been made .
-
-⭕️⭕️⭕️⭕️⭕️
-Renewal
-Service username : %s
-Product name : %s
-👤 User account name : %s
-👤 User ID:  <a href = "tg://user?id=%s">%s</a>
-💸 User current balance : %s Toman
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💸 Paid amount: %s Toman
-                
-✍️ If the receipt is correct, approve the payment.',
-                'nodeDownNotice' => '🚨 Dear admin, the node named %s is not connected.
-Node status : %s
-✍️ Error reason : <code> %s</code>',
-                'notConnectedLabel' => 'Not connected',
-                'notifDeleteCronInfo' => '📌 Deletion cron notice
-
-Service username :‌ <code>%s</code>
-Service status : %s
-Number of remaining days ‌:‌%s
-Remaining volume : %s',
-                'notifGreeting' => 'Hello dear user 👋
-
-',
-                'notifGreeting2' => 'Hello dear user 👋
-
-',
-                'notifRemainingDays' => 'Number of remaining days ‌:‌%s',
-                'notifRemainingVolume' => 'Remaining volume : %s',
-                'notifServiceDeleted' => '📌 Dear user, due to non-renewal, the service %s was deleted from your services list
-
-🌟 To get a new service, proceed from the Buy service section',
-                'notifServiceDeleted2' => '📌 Dear user, due to non-renewal, the service %s was deleted from your services list
-
-🌟 To get a new service, proceed from the Buy service section',
-                'notifServiceStatus' => 'Service status : %s
-
-',
-                'notifServiceStatus2' => 'Service status : %s
-
-',
-                'notifServiceUsername' => 'Service username :‌ <code>%s</code>
-
-',
-                'notifServiceUsername2' => 'Service username :‌ <code>%s</code>
-
-',
-                'notifThanks' => 'Thank you for being with us',
-                'notifTimeActionHint' => 'If you wish to renew this service, please proceed through the «%s» section. ',
-                'notifTimeCronTitle' => '📌 Time cron notice
-
-
-',
-                'notifTimeRemaining' => '📌 Only %s days remain for using the service %s. ',
-                'notifVolumeActionHint' => 'Please, if you wish, proceed to purchase extra volume or renew your service through the «%s» section',
-                'notifVolumeCronTitle' => '📌 Volume cron notice
-
-
-',
-                'notifVolumeDeleteCronInfo' => '📌  Volume deletion cron notice 
-Service username : %s 
- Service status : %s 
-Number of remaining days :%s 
- Remaining volume : %s
-User\'s last connection : %s',
-                'notifVolumeRemaining' => '🚨 Only %s remains of the service %s volume. ',
-                'offlineLabel' => 'Offline',
-                'onHoldReminderNotice' => 'Hello! 🌐
-
-We noticed that you have not yet connected to your config with username %s, and more than %s days have passed since its activation. If you have any problem setting up or using the service, please contact our support team via the ID below so we can help you.
-We are ready to resolve any question or problem! 📞
-
-Support account : @%s',
-                'onlineLabel' => 'Online',
-                'panelDownNotice' => '🚨 Dear admin, the panel named <code>%s</code> is not connected.',
-                'paymentConfirmedExtraTime' => '✅ Payment approved
-🔋 Extra time purchase
-🛍 Purchased time  : %s days
-👤 Config username %s
-👤 User ID: <code>%s</code>
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💎 Balance before increase : %s
-💸 Paid amount: %s Toman
-
-',
-                'paymentConfirmedExtraVolume' => '✅ Payment approved
-🔋 Extra volume purchase
-🛍 Purchased volume  : %s GB
-👤 Config username %s
-👤 User ID: <code>%s</code>
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💎 Balance before increase : %s
-💸 Paid amount: %s Toman
-
-',
-                'paymentConfirmedNewService' => '✅ Payment approved
- 🛍Service purchase 
- ▫️Config username :%s
-▫️Service location : %s
-👤 User ID: <code>%s</code>
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💎 Balance before purchase  : %s
-💸 Paid amount: %s Toman
-✍️ Description : %s
-
-
-',
-                'paymentConfirmedRenew' => '✅ Payment approved
-🔋 Service renewal
-🪪 Config username : %s
-🛍 Product name : %s
-🌏 Location name : %s
-👤 User ID: <code>%s</code>
-🛒 Payment tracking code: %s
-⚜️ Username: @%s
-💎 Balance before renewal  : %s
-💸 Paid amount: %s Toman
-✍️ Description : %s
-
-
-',
-                'paymentInvoiceCreated' => '✅ Payment invoice was created.
-
-🔢 Invoice number : %s
-💰 Invoice amount : %s Toman
-
-❌ This transaction is valid for one hour; after that, payment for this transaction is not possible.        
-
-📌Please, after payment and a successful transaction, wait a bit until you receive the successful payment message on our site. Otherwise, your account will not be charged.
-
-Use the button below to pay👇🏻',
-                'paymentInvoiceCreated2' => '
-✅ Payment invoice was created.
-            
-🔢 Invoice number : %s
-💰 Invoice amount : %s Toman
-
-❌ This transaction is valid for one day; after that, payment for this transaction is not possible.        
-
-📌Please, after payment and a successful transaction, wait a bit until you receive the successful payment message on our site. Otherwise, your account will not be charged.
-
-Use the button below to pay👇🏻',
-                'paymentLinkErrorAdmin' => '
-⭕️ A user intended to pay, but creating the payment link encountered an error and no link was given to the user
-✍️ Error reason : %s
-
-User ID : %s
-Payment method : %s
-User username : @%s',
-                'paymentLinkErrorAdmin2' => '
-                        ⭕️ A user intended to pay, but creating the payment link encountered an error and no link was given to the user
-✍️ Error reason : %s
-            
-User ID : %s
-Payment method : %s
-User username : @%s',
-                'paymentLinkErrorAdmin3' => '
-⭕️ A user intended to pay, but creating the payment link encountered an error and no link was given to the user
-✍️ Error reason : %s
-            
-User ID : %s
-Payment method : %s
-User username : @%s',
-                'paymentQueueBusyNotice' => 'The number of people in the payment gateway queue is extremely high 📊
-
-‼️Please use another payment method for now',
-                'plisioGiftDepositNotice' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
-                'plisioNewPaymentLog' => '💵 New payment
-- 👤 User username : @%s
-- 🆔User numeric ID : %s
-- 💸 Transaction amount %s
-- 🔗 <a href = "%s">Payment link </a>
-- 🔗 <a href = "%s">plisio payment link </a>
-- 📥 Deposited Tron amount. : %s
-- 💳 Payment method :  plisio',
-                'plisioTransactionExpired' => '❌ The transaction below expired due to non-payment. Please do not pay any amount for this transaction
-
-🛒 Order code: %s
-💰 Amount:  %s Toman',
-                'pointsEarned1' => '📌You earned 1 new point.',
-                'pointsEarned2' => '📌You earned 2 new points.',
-                'pointsEarned2b' => '📌You earned 2 new points.',
-                'preInvoiceText' => '
-📇 Your pro forma invoice:
-👤 Username: <code>%s</code>
-🔐 Service name: %s
-📆 Validity period: %s days
-💶 Original price : <del>%s Toman</del>
-💶 Discounted price: %s  Toman
-👥 Account volume: %s GB
-💵 Your wallet balance : %s
-                  
-        💰 Your order is ready for payment.  ',
-                'preInvoiceText2' => '
-📇 Your pro forma invoice:
-👤 Username: <code>%s</code>
-🔐 Service name: %s
-📆 Validity period: %s days
-💶 Price: %s  Toman
-👥 Account volume: %s GB
-💵 Your wallet balance : %s
-⭕️Number of configs : %s
-                  
-💰 Your order is ready for payment.  ',
-                'purchaseCommissionInfo' => '<b>💸 Purchase commission:</b>  
-•  %s percent of your referral\'s purchase amount belongs to you',
-                'receiptNotSent' => '🔴 Not sent 🔴',
-                'referralLinkText' => '
-
-🔗 Referral link for verifying a referral :
-https://t.me/%s?start=%s',
-                'renewGenericError' => '❌ An error occurred during renewal. Contact support',
-                'renewGiftCharged' => 'Congratulations 🎉
-📌 As a renewal gift, an amount of %s Toman was credited to your account',
-                'renewGiftChargedFn' => 'Congratulations 🎉
-📌 As a renewal gift, an amount of %s Toman was credited to your account',
-                'renewInvoiceCreated' => '📜 Your renewal invoice for username %s was created.
-        
-🛍 Product name :%s
-💸 Renewal amount : %s Toman
-⏱ Renewal duration :%s days
-🔋 Renewal volume :%s GB
-✍️ Description : %s
-💸 Wallet balance : %s
-✅ To confirm and renew the service, click the button below',
-                'renewInvoiceCreated2' => '📜 Your renewal invoice for username %s was created.
-        
-🛍 Product name :%s
-💸 Renewal amount :%s
-⏱ Renewal duration :%s days
-🔋 Renewal volume :%s GB
-✍️ Description : %s
-💸 Wallet balance : %s
-
-✅ To confirm and renew the service, click the button below',
-                'renewReportAdmin' => '📣 Account renewal details were registered in your bot .
-    
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s
-▫️User name : %s
-▫️Service location : %s
-▫️Product name : %s
-▫️Product volume : %s
-▫️Product time : %s
-▫️Renewal amount : %s Toman
-▫️Balance before purchase : %s Toman
-▫️Balance after purchase : %s Toman
-▫️Purchase time : %s',
-                'renewReportAdminFn' => '📣 Account renewal details were registered in your bot .
-    
-▫️User numeric ID : <code>%s</code>
-▫️User username : @%s
-▫️Config username :%s
-▫️Service location : %s
-▫️Product name : %s
-▫️Product volume : %s
-▫️Product time : %s
-▫️Renewal amount : %s Toman
-▫️Balance before purchase : %s Toman
-▫️Purchase time : %s',
-                'renewServiceError' => 'Service renewal error
-Panel name : %s
-Service username : %s
-Error reason : %s',
-                'renewServiceError2' => 'Service renewal error
-        Panel name : %s
-        Service username : %s
-        Error reason : %s',
-                'renewServiceErrorApi' => '
-        Service renewal error
-Panel name: %s
-Service username: %s
-Error reason: %s',
-                'renewServiceErrorFn' => '
-        Service renewal error
-Panel name: %s
-Service username: %s
-Error reason: %s',
-                'renewServiceGenericErrorApi' => '❌ An error occurred while renewing the service; contact support',
-                'renewServiceSuccess' => '✅ Your service was renewed successfully
- 
-▫️Service name : %s
-▫️Product name : %s
-▫️Renewal amount %s Toman
-
-',
-                'renewServiceSuccess2' => '✅ Your service was renewed successfully
- 
-▫️Service name : %s
-▫️Product name : %s
-▫️Renewal amount %s Toman
-
-',
-                'renewServiceSuccessFn' => '✅ Your service was renewed successfully
- 
-▫️Service name : %s
-▫️Product name : %s
-▫️Renewal amount %s Toman
-
-',
-                'roleAdvancedAgent' => 'Advanced agency',
-                'roleAgent' => 'Agent',
-                'roleNormal' => 'Regular',
-                'selectedPanelInactive' => 'The selected panel is currently not active',
-                'selectedPanelMissing' => 'The selected panel does not exist.',
-                'selectedProductNotFound' => 'The selected product was not found',
-                'serviceConnectionInfo' => '
-📶 Last connection time  : %s
-🔄 Last subscription link update time  : %s
-#️⃣ Connected client :<code>%s</code>',
-                'serviceCreateFailedRefund' => '💎  Dear user, because the service was not created, an amount of %s Toman was added to your wallet.',
-                'serviceCreatedSuccess' => '✅ Service was created successfully
-
-👤 Service username : {username}
-🌿 Service name:  {name_service}
-‏🇺🇳 Location: {location}
-⏳ Duration: {day}  hours
-🗜 Service volume:  {volume} megabytes
-
-🧑‍🦯 You can get the connection method by pressing the button below and selecting your operating system',
-                'serviceCreatedSuccess2' => '✅ Service was created successfully
-
-👤 Service username : {username}
-🌿 Service name:  {name_service}
-‏🇺🇳 Location: {location}
-⏳ Duration: {day}  days
-🗜 Service volume:  {volume} gigabytes
-
-🧑‍🦯 You can get the connection method by pressing the button below and selecting your operating system',
-                'serviceInfoBasic' => 'Service status : <b>%s</b>
-Service username : %s
-📎 Service tracking code : %s
-
-📌 Service information : 
-%s',
-                'serviceInfoDetailed' => 'Service status : <b>%s</b>
-👤 Service username : <code>%s</code>
-🌍 Service location :%s
-Product name :%s
-
-📶 Your last connection time : %s
-
-🔋 Traffic : %s
-📥 Consumed volume : %s
-💢 Remaining volume : %s (%s%%)
-
-📅 Expiry date :  %s (%s)
-
-%s',
-                'serviceInfoFull' => '📊Service status : %s
-👤 Service name : <code>%s</code>
-%s
-%s
-🌍 Service location :%s
-🗂 Product name :%s
-
-🔋 Traffic : %s
-📥 Consumed volume : %s
-💢 Remaining volume : %s (%s%%)
-
-📅 Expiry date : %s (%s)
-
-%s
-
-💡 To cut off others\' access, just click the "Change link" option.',
-                'serviceNoteChangedAdmin' => '📌  A user changed their service note.
-
-▫️ Service username : %s
-▫️ Previous note :‌ %s
-▫️ New note :‌  %s
-
-Note change time : %s ',
-                'serviceRenewFailedRefund' => '💎  Dear user, because the service was not renewed, an amount of %s Toman was added to your wallet.',
-                'serviceStatusSummary' => '
-  
- Service status: %s
-        
-🔋 Service volume: %s
-📥 Consumed volume: %s
-💢 Remaining volume: %s (%s%%)
-
-📅 Active until: %s (%s)
-
-User subscription link: 
-<code>%s</code>
-
-📶 Last connection time: %s
-🔄 Last subscription link update time: %s
-#️⃣ Connected client:<code>%s</code>',
-                'serviceTimePrompt' => '⌛️ Select your service time 
-📌 Daily rate  : %s  Toman
-⚠️ You can purchase a minimum of %s days and a maximum of %s days',
-                'serviceVolumePrompt' => '🔋 Please enter the desired service volume ( in gigabytes ) :
-📌 Rate per gigabyte :  %s 
-🔔 The minimum volume is 1 gigabyte and the maximum is 1000 gigabytes.',
-                'starInvoiceError' => '
-Error while creating the Star invoice
-✍️ Error reason : %s
-            
-User ID : %s
-Payment method : %s
-User username : @%s',
-                'subscriptionCreateError' => '⭕️ Subscription creation error
-✍️ Error reason :
-%s
-User ID : %s
-User username : @%s
-Panel name : %s',
-                'subscriptionCreateErrorAdmin' => '⭕️ Subscription creation error 
-✍️ Error reason : 
-%s
-User ID : %s
-User username : @%s
-Panel name : %s',
-                'subscriptionCreateErrorApi' => '❌ An error occurred while creating the subscription; to fix the issue, check the cause of the error in your report group',
-                'subscriptionCreateGenericError' => 'An error occurred while creating the subscription. Contact support',
-                'supportMessageFromUser' => '
-    📣 Dear support, a message was sent to you from a user.
-
-User numeric ID : <a href = "tg://user?id=%s">%s</a>
-Send time : %s
-Message status : Not answered
-User username : @%s    
-Department name : %s
-
-Message text : %s %s',
-                'supportMessageFromUser2' => '
-    📣 Dear support, a message was sent to you from a user.
-
-User numeric ID : <a href = "tg://user?id=%s">%s</a>
-Send time : %s
-Message status : Customer reply
-User username : @%s    
-Department name : %s
-
-Message text : %s',
-                'testAccountCreateError' => '
-⭕️ A user intended to get a test account, but creating the config encountered an error and no config was given to the user
-✍️ Error reason : 
-%s
-User ID : %s
-User username : @%s
-Panel name : %s',
-                'testAccountReportAdmin' => '📣 Test account creation details were registered in your bot .
-▫️User numeric ID : <code>%s</code>
-▫️User username :@%s
-▫️Config username :%s
-▫️User name : %s
-▫️Service location : %s
-▫️Purchased time : %s hours
-▫️Purchased volume : %s MB
-▫️Tracking code: %s
-▫️User type : %s
-▫️User phone number : %s
-▫️Purchase time : %s',
-                'testLabel' => 'test',
-                'testServiceName' => 'Test service',
-                'testServiceName2' => 'Test service',
-                'testServiceName3' => 'Test service',
-                'testServiceName4' => 'Test service',
-                'testServiceName5' => 'Test service',
-                'testServiceNameFn' => 'Test service',
-                'transactionCreated' => '✅ Your transaction was created
-        
-🛒 Tracking code:  <code>%s</code> 
-💲 Transaction amount in Toman  : <code>%s</code>
-
-
-💢 Please note these points before payment 👇
-        
-❌ This transaction is valid for 24 hours; after that, payment for this transaction is not possible.        
-
-
-✅ If you have a problem, you can contact support',
-                'transactionCreated2' => '✅ Your transaction was created
-        
-🛒 Tracking code:  <code>%s</code> 
-💲 Transaction amount in Toman  : <code>%s</code>
-
-💢 Please note these points before payment 👇
-        
-🔹 The transaction is valid for one day and after that it will not be approved if paid .
-❌ After the transaction it takes 15 minutes to one hour for the transaction to be approved
-
-✅ If you have a problem, you can contact support',
-                'transactionCreated3' => '✅ Your transaction was created
-        
-🛒 Tracking code:  <code>%s</code> 
-💲 Transaction amount in Toman  : <code>%s</code> Toman
-
-
-💢 Please note these points before payment 👇
-        
-❌ This transaction is valid for one day; after that, payment for this transaction is not possible.        
-
-✅ If you have a problem, you can contact support',
-                'transactionCreatedStar' => '✅ Your transaction was created
-
-🛒 Tracking code: <code>%s</code>
-💲 Transaction amount: %s ⭐ (equivalent to %s Toman)
-
-📌 Please convert the amount of %s Toman to Telegram Stars and deposit it.
-
-💢 Important points before payment: 👇
-🔹 Each transaction is valid for 1 day; after expiry, refrain from depositing.
-
-✅ If you have a problem, contact support.',
-                'transactionCreatedTron' => '✅ Your invoice has been created
-
-🛒 Tracking code: <code>%s</code>
-🌐 Network: TRX - Tron
-💳 Wallet address: <code>%s</code>
-
-📌 Please deposit <code>%s</code> TRX to the wallet address above, then click the button below and send the receipt.
-
-💢 Please note these points before payment 👇
-🔸 If you enter the wallet address incorrectly, the transaction will not be confirmed and no refund is possible.
-🔹 The sent amount must not be less or more than the declared amount.
-🔹 If you deposit more than the specified amount, it is not possible to add the difference.
-🔹 Each transaction is valid for one hour; do not send any amount after the expiration message.
-
-✅ If you have any issues, you can contact support.',
-                'unitByte' => 'Byte',
-                'unitGig' => 'GB',
-                'unitGigabyte' => 'gigabytes',
-                'unitGigabyteFn' => 'gigabytes',
-                'unitKilobyte' => 'Kilobyte',
-                'unitMegabyte' => 'megabytes',
-                'unitTerabyte' => 'Terabyte',
-                'unknownLabel' => 'Unknown',
-                'unlimitedLabel' => 'Unlimited',
-                'userBlockedByApiLog' => 'User with numeric ID %s was blocked in the bot 
-Performing admin : api site',
-                'userUnblockedByApiLog' => 'User with numeric ID %s was unblocked in the bot 
-Performing admin : api site',
-                'usernameExistsRestart' => 'The username exists. Perform the steps from the beginning',
-                'zarinpalLinkError' => '⭕️ Error creating ZarinPal link
-✍️ Error reason : %s
-            
-User ID : %s
-User username : @%s',
-        ],
-        'db_defaults' => [
-                'namecardNotSet' => 'Not set',
-                'departmanGeneral' => '☎️ General section',
+                'panelSetting' => '🎛 Panel Settings',
+                'mirzaAgentPanel' => 'Mirza Agent',
+                'setGroupName' => '🎛 Set group name',
+                'subLinkDomain' => '🔗 Subscription link domain',
+                'panelTypeSanaei' => 'Sanaei single port',
+                'panelTypeAlireza' => 'Alireza single port',
+                'usernameMethodAgentCustom' => 'Custom agent text + sequential number',
+                'acceptRulesButton' => '✅ I accept the rules',
         ],
         'panel' => [
                 'configInvalidRequest' => 'Invalid request.',
@@ -4592,5 +4696,9 @@ Payment tracking code : %s',
                 'invoiceAmount' => 'Paid amount:',
                 'invoiceAmountUnit' => 'Toman',
                 'invoiceDate' => 'Date:',
+        ],
+        'db_defaults' => [
+                'namecardNotSet' => 'Not set',
+                'departmanGeneral' => '☎️ General section',
         ],
 ];

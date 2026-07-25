@@ -130,9 +130,9 @@ function mini_invoices(array $data, string $method): void
         foreach ($invoices as $invoice) {
             $DataUserOut = $ManagePanel->DataUser($invoice['Service_location'], $invoice['username']);
             if ($DataUserOut['status'] == "Unsuccessful") {
-                $expire = $textbotlang['hardcoded']['unknownLabel'];
+                $expire = $textbotlang['common']['labels']['unknown'];
             } else {
-                $expire = $DataUserOut['expire'] ? jdate('Y/m/d', $DataUserOut['expire']) : $textbotlang['hardcoded']['unlimitedLabel'];
+                $expire = $DataUserOut['expire'] ? jdate('Y/m/d', $DataUserOut['expire']) : $textbotlang['common']['labels']['unlimited'];
             }
             $datauser[] = [
                 'username' => $invoice['username'],
@@ -235,9 +235,9 @@ function mini_service(array $data, string $method): void
             $lastupdate = null;
         }
         if (($DataUserOut['online_at'] ?? null) == "online") {
-            $lastonline = $textbotlang['hardcoded']['onlineLabel'];
+            $lastonline = $textbotlang['common']['connection']['online'];
         } elseif (($DataUserOut['online_at'] ?? null) == "offline") {
-            $lastonline = $textbotlang['hardcoded']['offlineLabel'];
+            $lastonline = $textbotlang['common']['connection']['offline'];
         } else {
             if (isset($DataUserOut['online_at']) && $DataUserOut['online_at'] !== null) {
                 $dateString = $DataUserOut['online_at'];
@@ -245,11 +245,11 @@ function mini_service(array $data, string $method): void
                 $date->setTimezone(new DateTimeZone('Asia/Tehran'));
                 $lastonline = jdate('Y/m/d H:i:s', $date->getTimestamp());
             } else {
-                $lastonline = $textbotlang['hardcoded']['notConnectedLabel'];
+                $lastonline = $textbotlang['common']['connection']['notConnected'];
             }
         }
         $expireTimestamp = isset($DataUserOut['expire']) && is_numeric($DataUserOut['expire']) ? (int) $DataUserOut['expire'] : 0;
-        $expirationDate = $expireTimestamp ? jdate('Y/m/d', $expireTimestamp) : $textbotlang['hardcoded']['unlimitedLabel'];
+        $expirationDate = $expireTimestamp ? jdate('Y/m/d', $expireTimestamp) : $textbotlang['common']['labels']['unlimited'];
         $usernameOutput = $DataUserOut['username'] ?? $invoice['username'];
         echo json_encode([
             'status' => true,
@@ -296,15 +296,15 @@ function mini_user_info(array $data, string $method): void
             $user_info['codeInvitation'] = $randomString;
         }
         if ($user_info['number'] == "none") {
-            $numberphone = $textbotlang['hardcoded']['receiptNotSent'];
+            $numberphone = $textbotlang['common']['labels']['receiptNotSent'];
         } else {
             $numberphone = $user_info['number'];
         }
         if ($user_info['number'] == "confrim number by admin") {
-            $numberphone = $textbotlang['hardcoded']['confirmedByAdmin'];
+            $numberphone = $textbotlang['common']['labels']['confirmedByAdmin'];
         }
         $stmt = $pdo->prepare("SELECT * FROM invoice WHERE id_user = :id_user AND name_product != :name_product AND (status = 'active' OR status = 'end_of_time'  OR status = 'end_of_volume' OR status = 'sendedwarn' OR Status = 'send_on_hold')");
-        $stmt->bindValue(':name_product', $textbotlang['Admin']['adminphp']['db_test_service_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':name_product', $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
         $stmt->bindValue(':id_user', $user_info['id'], PDO::PARAM_INT);
         $stmt->execute();
         $countorder = $stmt->rowCount();
@@ -314,9 +314,9 @@ function mini_user_info(array $data, string $method): void
         ]);
         $countpayment = $stmt->rowCount();
         $groupuser = [
-            'f' => $textbotlang['hardcoded']['roleNormal'],
-            'n' => $textbotlang['hardcoded']['roleAgent'],
-            'n2' => $textbotlang['hardcoded']['roleAdvancedAgent'],
+            'f' => $textbotlang['common']['roles']['normal'],
+            'n' => $textbotlang['common']['roles']['agent'],
+            'n2' => $textbotlang['common']['roles']['advancedAgent'],
         ][$user_info['agent']];
         $userjoin = jdate('Y/m/d', $user_info['register']);
         echo json_encode([
@@ -503,98 +503,98 @@ function mini_time_ranges(array $data, string $method): void
         if (in_array("1", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['1day'],
+                'name' => $textbotlang['common']['duration']['1day'],
                 'day' => 1
             );
         }
         if (in_array("7", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['7day'],
+                'name' => $textbotlang['common']['duration']['7day'],
                 'day' => 7
             );
         }
         if (in_array("31", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['1'],
+                'name' => $textbotlang['common']['duration']['1'],
                 'day' => 31
             );
         }
         if (in_array("30", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['1'],
+                'name' => $textbotlang['common']['duration']['1'],
                 'day' => 30
             );
         }
         if (in_array("61", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['2'],
+                'name' => $textbotlang['common']['duration']['2'],
                 'day' => 61
             );
         }
         if (in_array("60", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['2'],
+                'name' => $textbotlang['common']['duration']['2'],
                 'day' => 60
             );
         }
         if (in_array("91", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['3'],
+                'name' => $textbotlang['common']['duration']['3'],
                 'day' => 91
             );
         }
         if (in_array("90", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['3'],
+                'name' => $textbotlang['common']['duration']['3'],
                 'day' => 90
             );
         }
         if (in_array("121", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['4'],
+                'name' => $textbotlang['common']['duration']['4'],
                 'day' => 121
             );
         }
         if (in_array("120", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['4'],
+                'name' => $textbotlang['common']['duration']['4'],
                 'day' => 120
             );
         }
         if (in_array("181", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['6'],
+                'name' => $textbotlang['common']['duration']['6'],
                 'day' => 181
             );
         }
         if (in_array("180", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['6'],
+                'name' => $textbotlang['common']['duration']['6'],
                 'day' => 180
             );
         }
         if (in_array("365", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['365'],
+                'name' => $textbotlang['common']['duration']['365'],
                 'day' => 365
             );
         }
         if (in_array("0", $montheproduct)) {
             $category_time_list[] = array(
                 'id' => 0,
-                'name' => $textbotlang['Admin']['month']['unlimited'],
+                'name' => $textbotlang['common']['duration']['byVolume'],
                 'day' => 0
             );
         }
@@ -772,7 +772,7 @@ function mini_purchase(array $data, string $method): void
         http_response_code(500);
         echo json_encode(array(
             'status' => false,
-            'msg' => $textbotlang['hardcoded']['selectedPanelMissing']
+            'msg' => $textbotlang['users']['sell']['panelMissing']
         ));
         return;
     }
@@ -780,7 +780,7 @@ function mini_purchase(array $data, string $method): void
         http_response_code(500);
         echo json_encode(array(
             'status' => false,
-            'msg' => $textbotlang['hardcoded']['selectedPanelInactive']
+            'msg' => $textbotlang['users']['sell']['panelInactive']
         ));
         return;
     }
@@ -805,7 +805,7 @@ function mini_purchase(array $data, string $method): void
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['hardcoded']['invalidVolumeRestart']
+                'msg' => $textbotlang['users']['sell']['invalidVolumeRestart']
             ));
             return;
         }
@@ -822,7 +822,7 @@ function mini_purchase(array $data, string $method): void
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['hardcoded']['invalidVolumeRestart']
+                'msg' => $textbotlang['users']['sell']['invalidVolumeRestart']
             ));
             return;
         }
@@ -830,7 +830,7 @@ function mini_purchase(array $data, string $method): void
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['hardcoded']['invalidTimeRestart']
+                'msg' => $textbotlang['users']['sell']['invalidTimeRestart']
             ));
             return;
         }
@@ -839,7 +839,7 @@ function mini_purchase(array $data, string $method): void
         http_response_code(500);
         echo json_encode(array(
             'status' => false,
-            'msg' => $textbotlang['hardcoded']['selectedProductNotFound']
+            'msg' => $textbotlang['users']['sell']['productNotFound']
         ));
         return;
     }
@@ -858,7 +858,7 @@ function mini_purchase(array $data, string $method): void
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['hardcoded']['balanceLessThanPrice']
+                'msg' => $textbotlang['users']['Balance']['lessThanPrice']
             ));
             return;
         }
@@ -903,7 +903,7 @@ function mini_purchase(array $data, string $method): void
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['hardcoded']['usernameExistsRestart']
+                'msg' => $textbotlang['users']['sell']['usernameExists']
             ));
             return;
         }
@@ -936,11 +936,11 @@ function mini_purchase(array $data, string $method): void
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['hardcoded']['subscriptionCreateGenericError']
+                'msg' => $textbotlang['users']['sell']['subscriptionError']
             ));
 
             $errorDetail = json_encode(is_array($dataoutput) ? ($dataoutput['msg'] ?? null) : null);
-            $texterros = sprintf($textbotlang['hardcoded']['subscriptionCreateErrorAdmin'], $errorDetail, $user_info['id'], $user_info['username'], $panel['name_panel']);
+            $texterros = sprintf($textbotlang['Admin']['reportgroup']['errorSubscriptionCreateAdmin'], $errorDetail, $user_info['id'], $user_info['username'], $panel['name_panel']);
             sendReport($texterros, $setting['Channel_Report'], $errorreport);
             return;
         }
@@ -951,7 +951,7 @@ function mini_purchase(array $data, string $method): void
         http_response_code(500);
         echo json_encode(array(
             'status' => false,
-            'msg' => $textbotlang['hardcoded']['subscriptionCreateGenericError']
+            'msg' => $textbotlang['users']['sell']['subscriptionError']
         ));
         return;
     }
@@ -991,7 +991,7 @@ function mini_purchase(array $data, string $method): void
     $marzbanporsant_one_buy = select("affiliates", "*", null, null, "select");
     $stmt = $pdo->prepare("SELECT * FROM invoice WHERE name_product != :name_product AND id_user = :id_user");
     $stmt->bindParam(':id_user', $user_info['id']);
-    $stmt->bindParam(':name_product', $textbotlang['Admin']['adminphp']['db_test_service_name']);
+    $stmt->bindParam(':name_product', $textbotlang['common']['labels']['testServiceName']);
     $stmt->execute();
     $countinvoice = $stmt->rowCount();
     if ($affiliatescommission['status_commission'] == "oncommission" && ($user_info['affiliates'] != null && intval($user_info['affiliates']) != 0)) {
@@ -1001,15 +1001,15 @@ function mini_purchase(array $data, string $method): void
                 $user_Balance = select("user", "*", "id", $user_info['affiliates'], "select");
                 $Balance_prim = $user_Balance['Balance'] + $result;
                 if (intval($setting['scorestatus']) == 1) {
-                    sendmessage($user_info['affiliates'], $textbotlang['hardcoded']['pointsEarned2'], null, 'html');
+                    sendmessage($user_info['affiliates'], $textbotlang['users']['affiliates']['pointsEarned2'], null, 'html');
                     $scorenew = $user_Balance['score'] + 2;
                     update("user", "score", $scorenew, "id", $user_info['affiliates']);
                 }
                 update("user", "Balance", $Balance_prim, "id", $user_info['affiliates']);
                 $result = number_format($result);
                 $dateacc = date('Y/m/d H:i:s');
-                $textadd = sprintf($textbotlang['hardcoded']['affiliateCommissionPaidUserMiniapp'], $result);
-                $textreportport = sprintf($textbotlang['hardcoded']['affiliateCommissionPaidLogMiniapp'], $result, $user_info['affiliates'], $user_info['id'], $dateacc);
+                $textadd = sprintf($textbotlang['users']['affiliates']['commissionPaidMiniapp'], $result);
+                $textreportport = sprintf($textbotlang['Admin']['reportgroup']['commissionPaidMiniapp'], $result, $user_info['affiliates'], $user_info['id'], $dateacc);
                 if (strlen($setting['Channel_Report']) > 0) {
                     telegram('sendmessage', [
                         'chat_id' => $setting['Channel_Report'],
@@ -1025,15 +1025,15 @@ function mini_purchase(array $data, string $method): void
                 $user_Balance = select("user", "*", "id", $user_info['affiliates'], "select");
                 $Balance_prim = $user_Balance['Balance'] + $result;
                 if (intval($setting['scorestatus']) == 1) {
-                    sendmessage($user_info['affiliates'], $textbotlang['hardcoded']['pointsEarned2b'], null, 'html');
+                    sendmessage($user_info['affiliates'], $textbotlang['users']['affiliates']['pointsEarned2b'], null, 'html');
                     $scorenew = $user_Balance['score'] + 2;
                     update("user", "score", $scorenew, "id", $user_info['affiliates']);
                 }
                 update("user", "Balance", $Balance_prim, "id", $user_info['affiliates']);
                 $result = number_format($result);
                 $dateacc = date('Y/m/d H:i:s');
-                $textadd = sprintf($textbotlang['hardcoded']['affiliateCommissionPaidUserMiniapp2'], $result);
-                $textreportport = sprintf($textbotlang['hardcoded']['affiliateCommissionPaidLogMiniapp2'], $result, $user_info['affiliates'], $user_info['id'], $dateacc);
+                $textadd = sprintf($textbotlang['users']['affiliates']['commissionPaidMiniapp2'], $result);
+                $textreportport = sprintf($textbotlang['Admin']['reportgroup']['commissionPaidMiniapp2'], $result, $user_info['affiliates'], $user_info['id'], $dateacc);
                 if (strlen($setting['Channel_Report']) > 0) {
                     telegram('sendmessage', [
                         'chat_id' => $setting['Channel_Report'],
@@ -1047,14 +1047,14 @@ function mini_purchase(array $data, string $method): void
         }
     }
     if (intval($setting['scorestatus']) == 1) {
-        sendmessage($user_info['id'], $textbotlang['hardcoded']['pointsEarned1'], null, 'html');
+        sendmessage($user_info['id'], $textbotlang['users']['affiliates']['pointsEarned1'], null, 'html');
         $scorenew = $user_info['score'] + 1;
         update("user", "score", $scorenew, "id", $user_info['id']);
     }
     $balanceformatsell = number_format(select("user", "Balance", "id", $user_info['id'], "select")['Balance'], 0);
     $textonebuy = "";
     if ($countinvoice == 1) {
-        $textonebuy = $textbotlang['hardcoded']['firstPurchaseLabel'];
+        $textonebuy = $textbotlang['common']['labels']['firstPurchase'];
     }
     $balanceformatsellbefore = number_format($user_info['Balance'], 0);
     $Response = json_encode([
@@ -1065,7 +1065,7 @@ function mini_purchase(array $data, string $method): void
         ]
     ]);
     $timejalali = jdate('Y/m/d H:i:s');
-    $text_report = sprintf($textbotlang['hardcoded']['accountCreateReportMiniapp'], $textonebuy, $user_info['id'], $user_info['username'], $username_ac, $panel['name_panel'], $product['name_product'], $product['Service_time'], $product['Volume_constraint'], $balanceformatsellbefore, $balanceformatsell, $randomString, $user_info['agent'], $user_info['number'], $product['category'], $product['price_product'], $timejalali);
+    $text_report = sprintf($textbotlang['Admin']['reportgroup']['accountCreatedMiniapp'], $textonebuy, $user_info['id'], $user_info['username'], $username_ac, $panel['name_panel'], $product['name_product'], $product['Service_time'], $product['Volume_constraint'], $balanceformatsellbefore, $balanceformatsell, $randomString, $user_info['agent'], $user_info['number'], $product['category'], $product['price_product'], $timejalali);
     if (strlen($setting['Channel_Report']) > 0) {
         telegram('sendmessage', [
             'chat_id' => $setting['Channel_Report'],

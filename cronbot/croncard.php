@@ -38,7 +38,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         continue;
     }
     update("Payment_report", "payment_Status", "paid", "id_order", $Payment_report['id_order']);
-    update("Payment_report", "dec_not_confirmed", $textbotlang['hardcoded']['autoConfirmedByBot'], "id_order", $Payment_report['id_order']);
+    update("Payment_report", "dec_not_confirmed", $textbotlang['common']['labels']['autoConfirmedByBot'], "id_order", $Payment_report['id_order']);
     DirectPayment($Payment_report['id_order'], "../images.jpg");
     $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackcart", "select")['ValuePay'];
     $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
@@ -47,10 +47,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $Balance_confrim = intval($Balance_id['Balance']) + $result;
         update("user", "Balance", $Balance_confrim, "id", $Balance_id['id']);
         $pricecashback = number_format($pricecashback);
-        $text_report = sprintf($textbotlang['hardcoded']['giftDepositNotice'], $result);
+        $text_report = sprintf($textbotlang['users']['Balance']['giftDeposit'], $result);
         sendmessage($Balance_id['id'], $text_report, null, 'HTML');
     }
-    $text_reportpayment = sprintf($textbotlang['hardcoded']['newPaymentAutoConfirm'], $Balance_id['id'], $Payment_report['price'], $Payment_report['Payment_Method']);
+    $text_reportpayment = sprintf($textbotlang['Admin']['reportgroup']['newPaymentAutoConfirm'], $Balance_id['id'], $Payment_report['price'], $Payment_report['Payment_Method']);
     if (strlen($setting['Channel_Report']) > 0) {
         telegram('sendmessage', [
             'chat_id' => $setting['Channel_Report'],

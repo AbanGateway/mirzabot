@@ -125,7 +125,7 @@ function inv_invoice(array $data, string $method): void
         }
         $stmt = $pdo->prepare("SELECT SUM(price_product) as total_order,COUNT(username) as count_order FROM invoice WHERE name_product != :name_product AND  id_user = :user_id AND Status != 'Unpaid'");
         $stmt->bindValue(':user_id', intval($invoice['id_user']), PDO::PARAM_INT);
-        $stmt->bindValue(':name_product', $textbotlang['Admin']['adminphp']['db_test_service_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':name_product', $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
         $stmt->execute();
         $order_fince = $stmt->fetch(PDO::FETCH_ASSOC);
         $data_user = $ManagePanel->DataUser($invoice['Service_location'], $invoice['username']);
@@ -182,7 +182,7 @@ function inv_invoice_add(array $data, string $method): void
         if (!isset($data['time_service'], $data['volume_service']) || !is_numeric($data['time_service']) || !is_numeric($data['volume_service']))
             sendJsonResponse(false, "invalid value service time or volume", []);
         $product = [
-            'name_product' => $textbotlang['hardcoded']['customServiceLabel'],
+            'name_product' => $textbotlang['common']['labels']['customService'],
             'code_product' => "customvolume",
             'Service_time' => (int) $data['time_service'],
             'price_product' => 1,
@@ -215,9 +215,9 @@ function inv_invoice_add(array $data, string $method): void
         );
         $DataUserOut = $ManagePanel->createUser($panel['name_panel'], $product['code_product'], $data['username'], $datac);
         if (!is_array($DataUserOut) || ($DataUserOut['username'] ?? null) == null) {
-            sendmessage($data['chat_id'], $textbotlang['hardcoded']['subscriptionCreateErrorApi'], null, 'HTML');
+            sendmessage($data['chat_id'], $textbotlang['Admin']['reportgroup']['errorSubscriptionCreateApi'], null, 'HTML');
             $errorDetail = json_encode(is_array($DataUserOut) ? ($DataUserOut['msg'] ?? null) : null);
-            $texterros = sprintf($textbotlang['hardcoded']['configCreateErrorAdminPanel'], $errorDetail, $data['chat_id'], $panel['name_panel']);
+            $texterros = sprintf($textbotlang['Admin']['reportgroup']['errorConfigCreatePanel'], $errorDetail, $data['chat_id'], $panel['name_panel']);
             sendReport($texterros, $setting['Channel_Report'], $errorreport);
             sendJsonResponse(false, "error in create Account", [], 200);
 
@@ -298,8 +298,8 @@ function inv_extend_service_admin(array $data, string $method): void
     $extend = $ManagePanel->extend($panel['Methodextend'], $volume_service, $time_service, $invoice['username'], "custom_volume", $panel['code_panel']);
     if (!is_array($extend) || ($extend['status'] ?? false) == false) {
         $extendError = json_encode(is_array($extend) ? ($extend['msg'] ?? null) : null);
-        $textreports = sprintf($textbotlang['hardcoded']['renewServiceErrorApi'], $panel['name_panel'], $invoice['username'], $extendError);
-        sendmessage($invoice['id_user'], $textbotlang['hardcoded']['renewServiceGenericErrorApi'], null, 'HTML');
+        $textreports = sprintf($textbotlang['Admin']['reportgroup']['errorRenewServiceApi'], $panel['name_panel'], $invoice['username'], $extendError);
+        sendmessage($invoice['id_user'], $textbotlang['users']['extend']['genericErrorApi'], null, 'HTML');
         sendReport($textreports, $setting['Channel_Report'], $errorreport);
         sendJsonResponse(false, "Error in extend service", [[json_decode($extendError, true)]], 200);
     }

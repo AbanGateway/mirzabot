@@ -25,7 +25,7 @@ $count = 0;
 if(count($userid) == 0){
     if(isset($info['id_admin'])){
     deletemessage($info['id_admin'], $info['id_message']);
-    sendmessage($info['id_admin'], $textbotlang['hardcoded']['giftOperationDone'], null, 'HTML');
+    sendmessage($info['id_admin'], $textbotlang['Admin']['gift']['done'], null, 'HTML');
     unlink('gift');
     unlink('username.json');
     }
@@ -51,7 +51,7 @@ foreach ($userid as $iduser){
     $extra_volume = $ManagePanel->extra_volume($invoce['username'],$marzban_list_get['code_panel'],$info['value']);
      if($extra_volume['status'] == false){
             $extra_volume['msg'] = json_encode($extra_volume['msg']);
-            $textreports = sprintf($textbotlang['hardcoded']['giftVolumeAddError'], $marzban_list_get['name_panel'], $nameloc['username'], $extra_volume['msg']);
+            $textreports = sprintf($textbotlang['Admin']['gift']['volumeAddError'], $marzban_list_get['name_panel'], $nameloc['username'], $extra_volume['msg']);
             if (strlen($setting['Channel_Report']) > 0) {
                 telegram('sendmessage',[
                     'chat_id' => $setting['Channel_Report'],
@@ -100,7 +100,7 @@ foreach ($userid as $iduser){
     $extra_time = $ManagePanel->extra_time($get_username_info['username'],$marzban_list_get['code_panel'],intval($info['value']));
      if($extra_time['status'] == false){
             $extra_time['msg'] = json_encode($extra_time['msg']);
-            $textreports = sprintf($textbotlang['hardcoded']['giftVolumeAddError2'], $marzban_list_get['name_panel'], $nameloc['username'], $extra_time['msg']);
+            $textreports = sprintf($textbotlang['Admin']['gift']['volumeAddError2'], $marzban_list_get['name_panel'], $nameloc['username'], $extra_time['msg']);
             if (strlen($setting['Channel_Report']) > 0) {
                 telegram('sendmessage',[
                     'chat_id' => $setting['Channel_Report'],

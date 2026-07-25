@@ -42,7 +42,7 @@ class ManagePanel
         } else {
             $invoice = false;
         }
-        if (!in_array($code_product, ["usertest", $textbotlang['extracted']['index_php']['customVolumeButton'], "customvolume"])) {
+        if (!in_array($code_product, ["usertest", $textbotlang['users']['customSellVolume']['btnVolume'], "customvolume"])) {
 
             $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :name_panel OR Location = '/all')  AND code_product = :code_product");
             $stmt->bindParam(':name_panel', $name_panel);

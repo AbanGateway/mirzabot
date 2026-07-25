@@ -16,7 +16,7 @@ $count = 0;
 if(count($userid) == 0){
     if(isset($info['id_admin'])){
     deletemessage($info['id_admin'], $info['id_message']);
-    sendmessage($info['id_admin'], $textbotlang['hardcoded']['bulkMessageDone'], null, 'HTML');
+    sendmessage($info['id_admin'], $textbotlang['Admin']['messageBulk']['done'], null, 'HTML');
     unlink('info');
     unlink('users.json');
     }
@@ -24,7 +24,7 @@ if(count($userid) == 0){
     
 }
 $count_remein = count($userid);
-$textprocces = sprintf($textbotlang['hardcoded']['bulkMessageProgress'], $count_remein);
+$textprocces = sprintf($textbotlang['Admin']['messageBulk']['progress'], $count_remein);
 $cancelmessage = json_encode([
         'inline_keyboard' => [
             [

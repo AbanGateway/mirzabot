@@ -40,7 +40,7 @@ if ($text == "📞 تنظیم نام کاربری پشتیبانی") {
     step("getpricvolumeadmin", $from_id);
 } elseif ($user['step'] == "getpricvolumeadmin") {
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['agent']['invalidValue'], $backadmin, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
         return;
     }
     if (intval($text) < intval($setting['minpricevolume'])) {
@@ -59,7 +59,7 @@ if ($text == "📞 تنظیم نام کاربری پشتیبانی") {
     step("getpricvtimeadmin", $from_id);
 } elseif ($user['step'] == "getpricvtimeadmin") {
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['agent']['invalidValue'], $backadmin, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
         return;
     }
     if (intval($text) < intval($setting['minpricetime'])) {
@@ -202,7 +202,7 @@ if ($text == "📞 تنظیم نام کاربری پشتیبانی") {
     step('addadmin', $from_id);
 } elseif ($user['step'] == "addadmin") {
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['agent']['invalidValue'], $backadmin, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
         return;
     }
     sendmessage($from_id, $textbotlang['Admin']['manageadmin']['addAdminSet'], $keyboardadmin, 'HTML');
@@ -487,7 +487,7 @@ if ($text == "📞 تنظیم نام کاربری پشتیبانی") {
     $userdata = json_decode($user['Processing_value'], true);
     $product = select("product", "*", "code_product", $userdata['code_product'], "select");
     if (!ctype_digit($text)) {
-        sendmessage($from_id, $textbotlang['Admin']['agent']['invalidValue'], null, 'HTML');
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], null, 'HTML');
         return;
     }
     if (intval($text) < intval($product['price_product'])) {

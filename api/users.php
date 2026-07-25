@@ -97,7 +97,7 @@ function usr_user(array $data, string $method): void
         }
         $stmt = $pdo->prepare("SELECT SUM(price_product) as sum_price,COUNT(username) as count_invoice FROM invoice WHERE name_product != :name_product AND  id_user = :user_id AND Status != 'Unpaid'");
         $stmt->bindValue(':user_id', intval($users[0]['user_id']), PDO::PARAM_INT);
-        $stmt->bindValue(':name_product', $textbotlang['Admin']['adminphp']['db_test_service_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':name_product', $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
         $stmt->execute();
         $invoice = $stmt->fetch(PDO::FETCH_ASSOC);
         $users[0]['count_invoice'] = $invoice['count_invoice'];
@@ -227,10 +227,10 @@ function usr_block_user(array $data, string $method): void
     }
     if (($data['type_block'] ?? '') == "block") {
         $typeblock = "block";
-        $text_report = sprintf($textbotlang['hardcoded']['userBlockedByApiLog'], $data['chat_id']);
+        $text_report = sprintf($textbotlang['Admin']['reportgroup']['userBlockedByApi'], $data['chat_id']);
     } else {
-        $text_report = sprintf($textbotlang['hardcoded']['userUnblockedByApiLog'], $data['chat_id']);
-        sendmessage($data['chat_id'], $textbotlang['hardcoded']['accountUnblockedNotice'], null, 'HTML');
+        $text_report = sprintf($textbotlang['Admin']['reportgroup']['userUnblockedByApi'], $data['chat_id']);
+        sendmessage($data['chat_id'], $textbotlang['users']['block']['unblocked'], null, 'HTML');
         $typeblock = "Active";
     }
     update("user", "description_blocking", $data['description'], "id", $data['chat_id']);
@@ -252,7 +252,7 @@ function usr_verify_user(array $data, string $method): void
         $type_verify = "0";
     } else {
         $type_verify = "1";
-        sendmessage($data['chat_id'], $textbotlang['hardcoded']['accountVerifiedNotice'], null, 'HTML');
+        sendmessage($data['chat_id'], $textbotlang['users']['account']['verifiedNotice'], null, 'HTML');
     }
     update("user", "verify", $type_verify, "id", $data['chat_id']);
     sendJsonResponse(true, "Successful");
@@ -294,7 +294,7 @@ function usr_add_balance(array $data, string $method): void
     $stmt->bindValue(':user_id', intval($data['chat_id']), PDO::PARAM_INT);
     $stmt->bindValue(':amount', $amount, PDO::PARAM_INT);
     $stmt->execute();
-    $text_balance = sprintf($textbotlang['hardcoded']['balanceAddedNotice'], $amount);
+    $text_balance = sprintf($textbotlang['users']['Balance']['added'], $amount);
     sendmessage($data['chat_id'], $text_balance, null, 'html');
     sendJsonResponse(true, "Successful");
 }
@@ -313,7 +313,7 @@ function usr_withdrawal(array $data, string $method): void
     $stmt->bindValue(':user_id', intval($data['chat_id']), PDO::PARAM_INT);
     $stmt->bindValue(':amount', $amount, PDO::PARAM_INT);
     $stmt->execute();
-    $text_balance = sprintf($textbotlang['hardcoded']['balanceDeductedNotice'], $amount);
+    $text_balance = sprintf($textbotlang['users']['Balance']['deducted'], $amount);
     sendmessage($data['chat_id'], $text_balance, null, 'html');
     sendJsonResponse(true, "Successful");
 }
@@ -631,7 +631,7 @@ function usr_active_bot_agent(array $data, string $method): void
     $new_code = str_replace('BotTokenNew', $data['token'], $contentconfig);
     file_put_contents($dirsource . "/config.php", $new_code);
     file_get_contents("https://api.telegram.org/bot{$data['token']}/setwebhook?url=https://$domainhosts/vpnbot/{$data['chat_id']}{$botUsername}/index.php");
-    file_get_contents(sprintf($textbotlang['hardcoded']['botActivatedTelegramUrl'], $data['token'], $data['chat_id']));
+    file_get_contents(sprintf($textbotlang['Admin']['agentbot']['activatedUrl'], $data['token'], $data['chat_id']));
     $datasetting = json_encode(array(
         "minpricetime" => 4000,
         "pricetime" => 4000,
@@ -639,7 +639,7 @@ function usr_active_bot_agent(array $data, string $method): void
         "pricevolume" => 4000,
         "support_username" => "@support",
         "Channel_Report" => 0,
-        "cart_info" => $textbotlang['hardcoded']['cardPaymentInstruction'],
+        "cart_info" => $textbotlang['users']['Balance']['cardInstruction'],
         'show_product' => true,
     ));
     $value = "{}";

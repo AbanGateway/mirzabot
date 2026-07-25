@@ -967,7 +967,7 @@ $optionibsng = json_encode([
         [['text' => $textbotlang['keyboard']['panelFeatureStatus']]],
         [['text' => $textbotlang['keyboard']['panelName']], ['text' => $textbotlang['keyboard']['deletePanel']]],
         [['text' => $textbotlang['keyboard']['editPassword']], ['text' => $textbotlang['keyboard']['editUsername']]],
-        [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['extracted']['keyboard_php']['setGroupName']]],
+        [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['keyboard']['setGroupName']]],
         [['text' => $textbotlang['keyboard']['renewalMethod']], ['text' => $textbotlang['keyboard']['usernameMethod']]],
         [['text' => $textbotlang['keyboard']['accountCreateLimit']], ['text' => $textbotlang['keyboard']['changeUserGroup']]],
         [['text' => $textbotlang['keyboard']['customVolumePrice']], ['text' => $textbotlang['keyboard']['extraVolumePrice']]],
@@ -985,7 +985,7 @@ $option_mikrotik = json_encode([
         [['text' => $textbotlang['keyboard']['panelFeatureStatus']]],
         [['text' => $textbotlang['keyboard']['panelName']], ['text' => $textbotlang['keyboard']['deletePanel']]],
         [['text' => $textbotlang['keyboard']['editPassword']], ['text' => $textbotlang['keyboard']['editUsername']]],
-        [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['extracted']['keyboard_php']['setGroupName']]],
+        [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['keyboard']['setGroupName']]],
         [['text' => $textbotlang['keyboard']['renewalMethod']], ['text' => $textbotlang['keyboard']['usernameMethod']]],
         [['text' => $textbotlang['keyboard']['accountCreateLimit']], ['text' => $textbotlang['keyboard']['changeUserGroup']]],
         [['text' => $textbotlang['keyboard']['customVolumePrice']], ['text' => $textbotlang['keyboard']['extraVolumePrice']]],
@@ -1082,7 +1082,7 @@ $optionX_ui_single = json_encode([
         [['text' => $textbotlang['keyboard']['editPassword']]],
         [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['keyboard']['renewalMethod']]],
         [['text' => $textbotlang['keyboard']['setProtocolInbound']]],
-        [['text' => $textbotlang['keyboard']['usernameMethod']], ['text' => $textbotlang['extracted']['keyboard_php']['subLinkDomain']]],
+        [['text' => $textbotlang['keyboard']['usernameMethod']], ['text' => $textbotlang['keyboard']['subLinkDomain']]],
         [['text' => $textbotlang['keyboard']['changeUserGroup']], ['text' => $textbotlang['keyboard']['accountCreateLimit']]],
         [['text' => $textbotlang['keyboard']['testServiceTime']], ['text' => $textbotlang['keyboard']['testAccountVolume']]],
         [['text' => $textbotlang['keyboard']['changeLocationPrice']], ['text' => $textbotlang['keyboard']['extraVolumePrice']]],
@@ -1104,7 +1104,7 @@ $optionalireza_single = json_encode([
         [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['keyboard']['renewalMethod']]],
         [['text' => $textbotlang['keyboard']['setInboundId']]],
         [['text' => $textbotlang['keyboard']['usernameMethod']]],
-        [['text' => $textbotlang['extracted']['keyboard_php']['subLinkDomain']]],
+        [['text' => $textbotlang['keyboard']['subLinkDomain']]],
         [['text' => $textbotlang['keyboard']['changeUserGroup']], ['text' => $textbotlang['keyboard']['accountCreateLimit']]],
         [['text' => $textbotlang['keyboard']['testServiceTime']], ['text' => $textbotlang['keyboard']['testAccountVolume']]],
         [['text' => $textbotlang['keyboard']['changeLocationPrice']], ['text' => $textbotlang['keyboard']['extraVolumePrice']]],
@@ -1125,7 +1125,7 @@ $optionhiddfy = json_encode([
         [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['keyboard']['renewalMethod']]],
         [['text' => $textbotlang['keyboard']['changeUserGroup']]],
         [['text' => $textbotlang['keyboard']['usernameMethod']]],
-        [['text' => $textbotlang['extracted']['keyboard_php']['subLinkDomain']]],
+        [['text' => $textbotlang['keyboard']['subLinkDomain']]],
         [['text' => $textbotlang['keyboard']['accountCreateLimit']], ['text' => "🔗 uuid admin"]],
         [['text' => $textbotlang['keyboard']['testServiceTime']], ['text' => $textbotlang['keyboard']['testAccountVolume']]],
         [['text' => $textbotlang['keyboard']['changeLocationPrice']], ['text' => $textbotlang['keyboard']['extraVolumePrice']]],
@@ -1227,11 +1227,11 @@ $keyboardtypepanel = json_encode([
         ],
         [
             ['text' => $textbotlang['keyboard']['passargadPanel'], 'callback_data' => "typepanel#pasarguard"],
-            ['text' => $textbotlang['extracted']['keyboard_php']['mirzaAgentPanel'], 'callback_data' => "typepanel#mirza_agent"]
+            ['text' => $textbotlang['keyboard']['mirzaAgentPanel'], 'callback_data' => "typepanel#mirza_agent"]
         ],
         [
-            ['text' => $textbotlang['extracted']['keyboard_php']['panelTypeSanaei'], 'callback_data' => 'typepanel#x-ui_single'],
-            ['text' => $textbotlang['extracted']['keyboard_php']['panelTypeAlireza'], 'callback_data' => 'typepanel#alireza_single']
+            ['text' => $textbotlang['keyboard']['panelTypeSanaei'], 'callback_data' => 'typepanel#x-ui_single'],
+            ['text' => $textbotlang['keyboard']['panelTypeAlireza'], 'callback_data' => 'typepanel#alireza_single']
         ],
         [
             ['text' => $textbotlang['keyboard']['manualSale'], 'callback_data' => 'typepanel#Manualsale'],
@@ -1254,7 +1254,7 @@ $keyboardtypepanel = json_encode([
     ],
 ]);
 
-$panelechekc = select("marzban_panel", "*", "MethodUsername", $textbotlang['extracted']['keyboard_php']['usernameMethodAgentCustom'], "count");
+$panelechekc = select("marzban_panel", "*", "MethodUsername", $textbotlang['keyboard']['usernameMethodAgentCustom'], "count");
 if ($setting['inlinebtnmain'] == "oninline") {
     $keyboardagent = [
         'inline_keyboard' => [
@@ -1436,7 +1436,7 @@ function KeyboardProduct($location, $query, $pricediscount, $datakeyboard, $stat
             $resultper = ($result['price_product'] * $pricediscount) / 100;
             $result['price_product'] = $result['price_product'] - $resultper;
         }
-        $namekeyboard = $result['name_product'] . " - " . number_format($result['price_product']) . $textbotlang['extracted']['keyboard_php']['currencyToman'];
+        $namekeyboard = $result['name_product'] . " - " . number_format($result['price_product']) . $textbotlang['common']['labels']['toman'];
         if ($statusshowprice == "onshowprice") {
             $result['name_product'] = $namekeyboard;
         }
@@ -1484,72 +1484,72 @@ function keyboardTimeCategory($name_panel, $agent, $callback_data = "producttime
     $monthkeyboard = ['inline_keyboard' => []];
     if (in_array("1", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['1day'], 'callback_data' => "{$callback_data}1"]
+            ['text' => $textbotlang['common']['duration']['1day'], 'callback_data' => "{$callback_data}1"]
         ];
     }
     if (in_array("7", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['7day'], 'callback_data' => "{$callback_data}7"]
+            ['text' => $textbotlang['common']['duration']['7day'], 'callback_data' => "{$callback_data}7"]
         ];
     }
     if (in_array("31", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['1'], 'callback_data' => "{$callback_data}31"]
+            ['text' => $textbotlang['common']['duration']['1'], 'callback_data' => "{$callback_data}31"]
         ];
     }
     if (in_array("30", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['1'], 'callback_data' => "{$callback_data}30"]
+            ['text' => $textbotlang['common']['duration']['1'], 'callback_data' => "{$callback_data}30"]
         ];
     }
     if (in_array("61", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['2'], 'callback_data' => "{$callback_data}61"]
+            ['text' => $textbotlang['common']['duration']['2'], 'callback_data' => "{$callback_data}61"]
         ];
     }
     if (in_array("60", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['2'], 'callback_data' => "{$callback_data}60"]
+            ['text' => $textbotlang['common']['duration']['2'], 'callback_data' => "{$callback_data}60"]
         ];
     }
     if (in_array("91", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['3'], 'callback_data' => "{$callback_data}91"]
+            ['text' => $textbotlang['common']['duration']['3'], 'callback_data' => "{$callback_data}91"]
         ];
     }
     if (in_array("90", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['3'], 'callback_data' => "{$callback_data}90"]
+            ['text' => $textbotlang['common']['duration']['3'], 'callback_data' => "{$callback_data}90"]
         ];
     }
     if (in_array("121", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['4'], 'callback_data' => "{$callback_data}121"]
+            ['text' => $textbotlang['common']['duration']['4'], 'callback_data' => "{$callback_data}121"]
         ];
     }
     if (in_array("120", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['4'], 'callback_data' => "{$callback_data}120"]
+            ['text' => $textbotlang['common']['duration']['4'], 'callback_data' => "{$callback_data}120"]
         ];
     }
     if (in_array("181", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['6'], 'callback_data' => "{$callback_data}181"]
+            ['text' => $textbotlang['common']['duration']['6'], 'callback_data' => "{$callback_data}181"]
         ];
     }
     if (in_array("180", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['6'], 'callback_data' => "{$callback_data}180"]
+            ['text' => $textbotlang['common']['duration']['6'], 'callback_data' => "{$callback_data}180"]
         ];
     }
     if (in_array("365", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['365'], 'callback_data' => "{$callback_data}365"]
+            ['text' => $textbotlang['common']['duration']['365'], 'callback_data' => "{$callback_data}365"]
         ];
     }
     if (in_array("0", $montheproduct)) {
         $monthkeyboard['inline_keyboard'][] = [
-            ['text' => $textbotlang['Admin']['month']['unlimited'], 'callback_data' => "{$callback_data}0"]
+            ['text' => $textbotlang['common']['duration']['byVolume'], 'callback_data' => "{$callback_data}0"]
         ];
     }
     if ($statusbtnextend)
@@ -1679,7 +1679,7 @@ $option_mirza = json_encode([
         [['text' => $textbotlang['keyboard']['panelFeatureStatus']]],
         [['text' => $textbotlang['keyboard']['panelName']], ['text' => $textbotlang['keyboard']['deletePanel']]],
         [['text' => $textbotlang['keyboard']['editPassword']]],
-        [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['extracted']['keyboard_php']['panelSetting']]],
+        [['text' => $textbotlang['keyboard']['editPanelUrl']], ['text' => $textbotlang['keyboard']['panelSetting']]],
         [['text' => $textbotlang['keyboard']['accountCreateLimit']], ['text' => $textbotlang['keyboard']['changeUserGroup']]],
         [['text' => $textbotlang['keyboard']['customVolumePrice']], ['text' => $textbotlang['keyboard']['extraVolumePrice']]],
         [['text' => $textbotlang['keyboard']['extraTimePrice']], ['text' => $textbotlang['keyboard']['customTimePrice']]],

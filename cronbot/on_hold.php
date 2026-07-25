@@ -32,7 +32,7 @@ $stmt->execute();
         $stmt->execute();
         $service_other = $stmt->rowCount();
         if($service_other != 0)continue;
-                $text = sprintf($textbotlang['hardcoded']['onHoldReminderNotice'], $line, $setting['on_hold_day'], $setting['id_support']);
+                $text = sprintf($textbotlang['users']['notify']['onHoldReminder'], $line, $setting['on_hold_day'], $setting['id_support']);
             sendmessage($resultss['id_user'], $text, null, 'HTML');
             update("invoice","Status","send_on_hold", "username",$line);
             }

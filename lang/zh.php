@@ -3,41 +3,221 @@
 
 return [
         'bottext' => [
-            'open_button'  => '📝 编辑机器人文本',
-            'home_text'    => "📝 <b>编辑机器人文本</b>\n\n选择你想修改的文本。\n🟢 表示已自定义。\n当前语言：<b>{lang}</b>",
-            'btn_close'    => '❌ 关闭',
-            'reset_hint'   => '♻️ 如需将此文本恢复为默认，请发送 <b>0</b>。',
-            'msg_reset_done' => '✅ 此文本已恢复为默认。',
-            'msg_session'  => '⛔️ 会话已过期，请重新打开。',
-            'msg_empty'    => '⛔️ 文本为空。请重新发送或点击「关闭」。',
-            'msg_saved'    => '✅ 文本已保存。',
-            'msg_closed'   => '已关闭。',
-            'langs'        => ['fa' => '🇮🇷 فارسی', 'en' => '🇬🇧 English', 'ru' => '🇷🇺 Русский', 'zh' => '🇨🇳 中文'],
-            'items'        => [
-                ['label' => '欢迎文本', 'key' => 'users.text_start'],
-                ['label' => '按钮：购买订阅', 'key' => 'textbot.sell'],
-                ['label' => '按钮：我的服务', 'key' => 'textbot.purchasedServices'],
-                ['label' => '按钮：续费服务', 'key' => 'textbot.extend'],
-                ['label' => '按钮：测试账号', 'key' => 'textbot.userTest'],
-                ['label' => '按钮：钱包与充值', 'key' => 'textbot.accountWallet'],
-                ['label' => '按钮：增加余额', 'key' => 'textbot.addBalance'],
-                ['label' => '按钮：资费', 'key' => 'textbot.tariffList'],
-                ['label' => '按钮：客服', 'key' => 'textbot.support'],
-                ['label' => '按钮：教程', 'key' => 'textbot.help'],
-                ['label' => '按钮：推荐返利', 'key' => 'textbot.affiliates'],
-                ['label' => '按钮：礼品码', 'key' => 'textbot.discount'],
-                ['label' => '按钮：幸运转盘', 'key' => 'textbot.wheelLuck'],
-                ['label' => '按钮：常见问题', 'key' => 'textbot.faq'],
-                ['label' => '购买后消息', 'key' => 'textbot.afterPay'],
-                ['label' => '测试账号发放后消息', 'key' => 'textbot.afterText'],
-                ['label' => '测试账号到期消息', 'key' => 'textbot.testExpired'],
-                ['label' => '常见问题文本', 'key' => 'textbot.faqDesc'],
-                ['label' => '资费说明文本', 'key' => 'textbot.tariffListDesc'],
-                ['label' => '规则文本', 'key' => 'textbot.rules'],
-                ['label' => '预开票文本', 'key' => 'textbot.preInvoice'],
-            ],
+                'open_button' => '📝 编辑机器人文本',
+                'home_text' => '📝 <b>编辑机器人文本</b>
+
+选择你想修改的文本。
+🟢 表示已自定义。
+当前语言：<b>{lang}</b>',
+                'btn_close' => '❌ 关闭',
+                'reset_hint' => '♻️ 如需将此文本恢复为默认，请发送 <b>0</b>。',
+                'msg_reset_done' => '✅ 此文本已恢复为默认。',
+                'msg_session' => '⛔️ 会话已过期，请重新打开。',
+                'msg_empty' => '⛔️ 文本为空。请重新发送或点击「关闭」。',
+                'msg_saved' => '✅ 文本已保存。',
+                'msg_closed' => '已关闭。',
+                'langs' => [
+                        'fa' => '🇮🇷 فارسی',
+                        'en' => '🇬🇧 English',
+                        'ru' => '🇷🇺 Русский',
+                        'zh' => '🇨🇳 中文',
+                ],
+                'items' => [
+                        [
+                                'label' => '欢迎文本',
+                                'key' => 'users.text_start',
+                        ],
+                        [
+                                'label' => '按钮：购买订阅',
+                                'key' => 'textbot.sell',
+                        ],
+                        [
+                                'label' => '按钮：我的服务',
+                                'key' => 'textbot.purchasedServices',
+                        ],
+                        [
+                                'label' => '按钮：续费服务',
+                                'key' => 'textbot.extend',
+                        ],
+                        [
+                                'label' => '按钮：测试账号',
+                                'key' => 'textbot.userTest',
+                        ],
+                        [
+                                'label' => '按钮：钱包与充值',
+                                'key' => 'textbot.accountWallet',
+                        ],
+                        [
+                                'label' => '按钮：增加余额',
+                                'key' => 'textbot.addBalance',
+                        ],
+                        [
+                                'label' => '按钮：资费',
+                                'key' => 'textbot.tariffList',
+                        ],
+                        [
+                                'label' => '按钮：客服',
+                                'key' => 'textbot.support',
+                        ],
+                        [
+                                'label' => '按钮：教程',
+                                'key' => 'textbot.help',
+                        ],
+                        [
+                                'label' => '按钮：推荐返利',
+                                'key' => 'textbot.affiliates',
+                        ],
+                        [
+                                'label' => '按钮：礼品码',
+                                'key' => 'textbot.discount',
+                        ],
+                        [
+                                'label' => '按钮：幸运转盘',
+                                'key' => 'textbot.wheelLuck',
+                        ],
+                        [
+                                'label' => '按钮：常见问题',
+                                'key' => 'textbot.faq',
+                        ],
+                        [
+                                'label' => '购买后消息',
+                                'key' => 'textbot.afterPay',
+                        ],
+                        [
+                                'label' => '测试账号发放后消息',
+                                'key' => 'textbot.afterText',
+                        ],
+                        [
+                                'label' => '测试账号到期消息',
+                                'key' => 'textbot.testExpired',
+                        ],
+                        [
+                                'label' => '常见问题文本',
+                                'key' => 'textbot.faqDesc',
+                        ],
+                        [
+                                'label' => '资费说明文本',
+                                'key' => 'textbot.tariffListDesc',
+                        ],
+                        [
+                                'label' => '规则文本',
+                                'key' => 'textbot.rules',
+                        ],
+                        [
+                                'label' => '预开票文本',
+                                'key' => 'textbot.preInvoice',
+                        ],
+                ],
+        ],
+        'language' => [
+                'selectPrompt' => '🌏 请选择您想要的语言。',
+                'changeButton' => '🌏 切换语言',
+                'setSuccess' => '✅ 语言设置成功',
+                'btnFa' => '🇮🇷 فارسی',
+                'btnEn' => '🇬🇧 English',
+                'btnRu' => '🇷🇺 Русский',
+                'btnZh' => '🇨🇳 中文',
+        ],
+        'common' => [
+                'units' => [
+                        'dayShort' => '天',
+                        'byte' => '字节',
+                        'gb' => 'GB',
+                        'gigabyte' => '千兆字节',
+                        'gigabyteAlt' => '千兆字节',
+                        'kilobyte' => '千字节',
+                        'megabyte' => '兆字节',
+                        'terabyte' => '太字节',
+                ],
+                'duration' => [
+                        1 => '⏳ 一个月',
+                        '1day' => '⏳ 一天',
+                        2 => '⏳ 两个月',
+                        3 => '⏳ 三个月',
+                        365 => '⏳ 一年',
+                        4 => '⏳ 四个月',
+                        6 => '⏳ 六个月',
+                        '7day' => '⏳ 七天',
+                        'byVolume' => '🔋 按流量',
+                ],
+                'connection' => [
+                        'onlineAlt' => '在线',
+                        'offlineAlt' => '离线',
+                        'notConnectedAlt' => '未连接',
+                        'notConnected' => '未连接',
+                        'offline' => '离线',
+                        'online' => '在线',
+                ],
+                'roles' => [
+                        'normalAlt' => '普通',
+                        'agentAlt' => '代理',
+                        'advancedAgentAlt' => '高级代理',
+                        'advancedAgent' => '高级代理',
+                        'agent' => '代理',
+                        'normal' => '普通',
+                ],
+                'gateways' => [
+                        'perfectMoney' => 'Perfect Money',
+                        'rial1' => '里亚尔货币支付',
+                        'rial2' => '第二里亚尔货币支付',
+                ],
+                'labels' => [
+                        'testServiceName' => '测试服务',
+                        'toman' => '托曼',
+                        'unlimitedShort' => '无限制',
+                        'remainingSuffix' => ' 其他',
+                        'tomanUnit' => '托曼',
+                        'notSent' => '❌<b> 未发送 </b>❌',
+                        'confirmedByAdminAlt' => '✅ 已由管理员批准',
+                        'firstPurchaseAlt' => '📌 用户首次购买',
+                        'autoConfirmedByBot' => '由机器人无需审核批准',
+                        'confirmedByAdmin' => '✅ 已由管理员批准',
+                        'customService' => '⚙️ 自定义服务',
+                        'customUsername' => '自定义用户名',
+                        'customUsernameRandom' => '自定义用户名 + 随机数',
+                        'firstPurchase' => '📌 用户首次购买',
+                        'receiptNotSent' => '🔴 未发送 🔴',
+                        'test' => '测试',
+                        'testService1' => '测试服务',
+                        'testService2' => '测试服务',
+                        'testService3' => '测试服务',
+                        'testService4' => '测试服务',
+                        'testService5' => '测试服务',
+                        'testServiceFn' => '测试服务',
+                        'unknown' => '未知',
+                        'unlimited' => '无限制',
+                ],
+                'invalidInput' => '⭕️ 输入无效',
+                'invalidTime' => '天数无效',
+                'invalidUsername' => '❌ 用户名无效。
+🔄 请重新发送您的用户名',
+                'invalidVolume' => '流量无效',
         ],
         'users' => [
+                'Rules' => '✅ 规则已接受。您现在可以使用机器人的服务了。',
+                'SendMessage' => '📩 向用户发送消息',
+                'back' => '您已返回主页！',
+                'backbtn' => '🏠 返回主菜单',
+                'backmenu' => '🏠 返回上一级菜单',
+                'buttonDisabled' => '❌ 此按钮已停用',
+                'buttonDisabledForYou' => '❌ 此按钮对您已停用',
+                'customusername' => '自定义用户名',
+                'erroroccurred' => '❌ 发生错误，请重新开始操作',
+                'featureUnavailable' => '❌ 此功能目前不可用',
+                'featureUnavailable2' => '❌ 此功能目前不可用。',
+                'genericRestart' => '❌ 发生了错误。请重新执行各步骤',
+                'genericRestart2' => '❌ 发生了错误。请从头执行各步骤',
+                'infoFetchErrorRestart' => '❌ 检索信息时发生错误。请从头执行各步骤',
+                'invalidusername' => '❌ 用户名无效
+🔄 请重新发送您的用户名',
+                'sectionDisabled' => '📛 此部分当前已停用',
+                'selectoption' => '请选择一个选项',
+                'selectusername' => '请发送一个自定义用户名
+⚠️ 用户名不得包含多余字符，如 @、空格或连字符。
+⚠️ 用户名必须为英文。
+✅ 正确的用户名：ali12 | mahdi | ws1_ksdf
+❌ 错误的用户名：ali_ | tele@ | _mahdi | محسن',
+                'text_start' => '你好，欢迎',
                 'Balance' => [
                         'Failed' => '⭕️ 您的支付未通过确认',
                         'addBalanceUser' => '⭕️ 手动增加余额',
@@ -69,6 +249,195 @@ return [
                         'waiting' => '等待支付确认',
                         'zarinpal' => '❌ 错误 
     通过此网关支付的最低金额为 5000 托曼。',
+                        'pendingPayment' => '❌ 您有一笔未确认的支付。请等待上一笔支付审核完毕，然后再发送新支付',
+                        'cardEnabledNotice' => '💳 尊敬的用户，卡号已为您激活；现在您可以进行购买。',
+                        'cardInstructionAlt' => '如需付款，请将金额存入下方卡号',
+                        'giftDepositAlt' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
+                        'rejectedNotice' => '❌ 尊敬的用户，您的付款因以下原因被拒绝。
+✍️ %s
+🛒 付款跟踪码：%s
+                
+',
+                        'giftFromManagement' => '🎁 尊敬的用户，管理层向您的钱包赠送了 %s 托曼。',
+                        'deductedNotice' => '❌ 尊敬的用户，已从您的钱包余额中扣除 %s 托曼。',
+                        'addedNotice' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
+                        'deductedNotice2' => '❌ 尊敬的用户，已从您的钱包余额中扣除 %s 托曼。',
+                        'addedNotice2' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
+                        'addedNotice3' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
+                        'addedNotice4' => '💰尊敬的用户，已向您的余额添加 %s 托曼。',
+                        'addedNotice5' => '💰尊敬的用户，已向您的余额添加 %s 托曼。',
+                        'confirmError' => '❌ 确认过程中发生错误。请重新执行付款步骤',
+                        'depositRange' => '❌ 此支付方式的最低存款金额必须为 {mainbalance}，最高为 {maxbalance} 托曼',
+                        'depositRangePlisio' => '❌ 此支付方式的最低存款金额必须为 {mainbalance}，最高为 {maxbalance} 托曼',
+                        'cardRetrieveError' => '❌ 检索银行卡时发生内部错误。请稍后再试。',
+                        'noActiveCard' => '❌ 未找到此支付方式的有效银行卡。请稍后再试或联系客服。',
+                        'receiptCooldown' => '❗ 您在过去 2 分钟内已发送收据。请 2 分钟后再发送新收据。',
+                        'alreadyConfirmed' => '❗️ 您的交易已由机器人批准。',
+                        'transactionExpired' => '❗此交易的时间已过期，无法对此交易进行付款。',
+                        'askReceiptImage' => '🖼 请发送您的收据图片',
+                        'askReceiptOrTron' => '📌 请发送您的存款图片或 Tron 交易链接。',
+                        'restartPurchaseOrPay' => '❌ 发生了错误。请重新执行购买或付款步骤',
+                        'onlyOneImage' => '❌  您只能发送一张图片',
+                        'receiptSentRenew' => '🚀 您的收据已发送，审核后将续费您的服务',
+                        'receiptSentExtraVolume' => '🚀 您的收据已发送，审核后将为您的服务添加流量。',
+                        'receiptSentExtraTime' => '🚀 您的收据已发送，审核后将为您的服务添加时间',
+                        'amountRangeError' => '❌ 错误 
+💬 金额必须至少 %s 托曼，最多 %s 托曼',
+                        'added' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
+                        'chargedThanks' => '💎 尊敬的用户，金额 %s 托曼已充值到您的钱包。感谢您的付款。
+                
+🛒 您的跟踪码：%s',
+                        'deducted' => '❌ 尊敬的用户，已从您的钱包余额中扣除 %s 托曼。',
+                        'lessThanPrice' => '余额少于产品价格',
+                        'cardInstruction' => '如需付款，请将金额存入下方卡号',
+                        'cryptoInstruction' => '
+<b>💲 要通过加密货币充值您的钱包余额，请点击消息末尾的付款按钮</b>
+
+⚠️ 注意：付款时间为 30 分钟；30 分钟后交易将被取消
+
+🌐 一些购买加密货币的国内网站 👇
+🔸 nikpardakht.com
+🔹 webpurse.org
+🔸 bitpin.ir
+🔹 sarmayex.com
+🔸 ok-ex.io
+🔹 nobitex.ir
+🔸 bitbarg.com
+🔹 cafearz.com
+🔸 pay98.app
+🔢 发票编号：%s
+💰 发票金额：%s 托曼
+📊 美元价格：截至此刻 %s 托曼
+
+请使用下方按钮付款👇🏻',
+                        'cryptoInstruction2' => '
+<b>💲 要通过加密货币充值您的钱包余额，请点击消息末尾的付款按钮</b>
+
+⚠️ 注意：付款时间为 30 分钟；30 分钟后交易将被取消
+
+🌐 一些购买加密货币的国内网站 👇
+🔸 nikpardakht.com
+🔹 webpurse.org
+🔸 bitpin.ir
+🔹 sarmayex.com
+🔸 ok-ex.io
+🔹 nobitex.ir
+🔸 bitbarg.com
+🔹 cafearz.com
+🔸 pay98.app
+🔢 发票编号：%s
+💰 发票金额：%s 托曼
+📊 美元价格：截至此刻 %s 托曼
+
+
+<blockquote>⚠️ 付款后，如果交易金额已正确存入，您的余额将在接下来最多 15 分钟内自动充值。</blockquote>
+
+
+请使用下方按钮付款👇🏻',
+                        'debtRequired' => '❌ 您有欠款；您必须至少支付 %s 托曼。
+         请重新发送您的金额',
+                        'enterAmount' => '💸 请输入金额（托曼）：
+
+⚠️  最低金额为 <b>%s</b>，最高为 <b>%s</b> 托曼',
+                        'giftDeposit' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
+                        'invoiceExpired' => '⭕️ 尊敬的用户，以下发票因未在指定时间内付款而过期。
+❗️请在任何情况下都不要为此发票支付任何金额，并重新创建发票。
+
+🛒 您的支付方式：%s
+📌 发票代码：<code>%s</code>
+🪙 发票金额：%s 托曼',
+                        'giftDepositIranpay' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
+                        'invoiceCreated' => '✅ 已创建付款发票。
+
+🔢 发票编号：%s
+💰 发票金额：%s 托曼
+
+❌ 此交易有效期为一小时；之后无法对此交易进行付款。        
+
+📌请在付款且交易成功后稍等片刻，直到您在我们的网站收到付款成功消息。否则，您的账户将不会被充值。
+
+请使用下方按钮付款👇🏻',
+                        'invoiceCreated2' => '
+✅ 已创建付款发票。
+            
+🔢 发票编号：%s
+💰 发票金额：%s 托曼
+
+❌ 此交易有效期为一天；之后无法对此交易进行付款。        
+
+📌请在付款且交易成功后稍等片刻，直到您在我们的网站收到付款成功消息。否则，您的账户将不会被充值。
+
+请使用下方按钮付款👇🏻',
+                        'queueBusy' => '支付网关队列中的人数极多 📊
+
+‼️目前请使用其他支付方式',
+                        'giftDepositPlisio' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
+                        'plisioExpired' => '❌ 以下交易因未付款而过期。请不要为此交易支付任何金额
+
+🛒 订单代码：%s
+💰 金额：%s 托曼',
+                        'refundCreateFailed' => '💎  尊敬的用户，由于服务未创建，金额 %s 托曼已添加到您的钱包。',
+                        'refundRenewFailed' => '💎  尊敬的用户，由于服务未续费，金额 %s 托曼已添加到您的钱包。',
+                        'transactionCreated' => '✅ 您的交易已创建
+        
+🛒 跟踪码：<code>%s</code> 
+💲 交易金额（托曼）：<code>%s</code>
+
+
+💢 付款前请注意以下事项 👇
+        
+❌ 此交易有效期为 24 小时；之后无法对此交易进行付款。        
+
+
+✅ 如有问题，您可以联系客服',
+                        'transactionCreated2' => '✅ 您的交易已创建
+        
+🛒 跟踪码：<code>%s</code> 
+💲 交易金额（托曼）：<code>%s</code>
+
+💢 付款前请注意以下事项 👇
+        
+🔹 交易有效期为一天，之后即使付款也不会被批准。
+❌ 交易后需要 15 分钟到一小时才能批准交易
+
+✅ 如有问题，您可以联系客服',
+                        'transactionCreated3' => '✅ 您的交易已创建
+        
+🛒 跟踪码：<code>%s</code> 
+💲 交易金额（托曼）：<code>%s</code> 托曼
+
+
+💢 付款前请注意以下事项 👇
+        
+❌ 此交易有效期为一天；之后无法对此交易进行付款。        
+
+✅ 如有问题，您可以联系客服',
+                        'transactionCreatedStar' => '✅ 您的交易已创建
+
+🛒 跟踪码：<code>%s</code>
+💲 交易金额：%s ⭐（相当于 %s 托曼）
+
+📌 请将 %s 托曼兑换为 Telegram Stars 并存入。
+
+💢 付款前的重要事项： 👇
+🔹 每笔交易有效期为 1 天；过期后请勿存入。
+
+✅ 如有问题，请联系客服。',
+                        'transactionCreatedTron' => '✅ 您的交易已创建
+
+🛒 跟踪码：<code>%s</code>
+🌐 网络：TRX - Tron
+💳 钱包地址：<code>%s</code>
+
+📌 请向上述钱包地址存入 <code>%s</code> TRX，然后点击下方按钮并发送收据。
+
+💢 付款前请注意以下事项 👇
+🔸 如果钱包地址输入错误，交易将不被批准，且无法退款。
+🔹 发送的金额不得少于或多于规定金额。
+🔹 如果存入超过规定金额，无法补加差额。
+🔹 每笔交易有效期为一小时，收到交易过期消息后，请在任何情况下都不要向钱包发送任何金额。
+
+✅ 如有问题，您可以联系客服。',
                 ],
                 'Discount' => [
                         'discountapplied' => '恭喜 🎉
@@ -83,27 +452,122 @@ return [
                         'giftcodesuccess' => '礼品码已成功登记，%s 托曼已添加到您的余额。🥳',
                         'giftcodeused' => '⭕️ 用户名为 @%s、数字ID 为 %s 的用户使用了礼品码 %s。',
                         'notcode' => '❌ 无效的代码',
+                        'invalidCode' => '❌ 优惠码无效',
+                        'expired' => '❌ 优惠码时间已过期。',
+                        'useLimit' => '⭕️ 此码仅可使用 {useuser}  次',
+                        'appliedRenew' => '🤩 您的优惠码有效，发票已应用 {discount_price}% 折扣。',
+                        'applied' => '🤩 您的优惠码有效，发票已应用 {discount_price}% 折扣。',
+                        'notAllowed' => '❌ 无法使用此优惠码购买',
                 ],
                 'Major' => [
                         'title' => '📌 请发送您想购买的服务数量 
 ⚠️ 最少 1 个，最多 15 个',
+                        'disabled' => '❌ 此部分当前已停用',
+                        'minBalance' => '❌ 批量购买您必须至少有 {PaySetting} 托曼余额。',
                 ],
-                'Rules' => '✅ 规则已接受。您现在可以使用机器人的服务了。',
-                'SendMessage' => '📩 向用户发送消息',
+                'account' => [
+                        'verifiedByAdmin' => '💎 尊敬的用户，您的账户已由管理员成功认证，现在您可以进行购买',
+                        'info' => '
+🗂 您的账户信息：
+
+
+🪪 用户 ID：<code>%s</code>
+👤 姓名：<code>%s</code>
+👨‍👩‍👦 您的推荐码：<code>%s</code>
+📱 联系号码：%s
+⌚️注册时间：%s
+💰 余额：%s 托曼
+🛒 已购买的服务数量：%s 个
+📑 已支付的发票数量：%s 个
+🤝 您的下线数量：%s 人
+🔖 用户组：%s
+%s
+%s
+
+📆 %s → ⏰ %s
+                    
+',
+                        'notVerifiedNotice' => '⚠️ 您的账户未认证。您的消息已发送给管理员。
+    为更快跟进，您可以向以下 ID 发送消息
+    @%s',
+                        'verifiedNotice' => '💎 尊敬的用户，您的账户认证成功，现在可以进行购买',
+                        'verified' => '您的账户认证成功',
+                ],
                 'affiliates' => [
                         'affiliateedago' => '❌ 您之前已是其他用户的下线，无法再次成为下线',
                         'affiliatesidyou' => '❌ 无法使用此用户ID成为下线。',
-                        'banner' => '⭕️ 请发送您的推荐横幅 
-
-❌ 横幅必须包含图片',
-                        'changedPriceDiscount' => '✅ 推荐金额已成功登记',
-                        'changedpercentage' => '✅ 用户的返现比例已成功设置',
-                        'insertbanner' => '✅ 您的横幅已成功登记。',
                         'invalidaffiliates' => '❌ 您不能成为自己的下线',
-                        'invalidbanner' => '❌ 您发送的横幅无效（横幅必须附带图片发送）',
                         'offaffiliates' => '❌ 推荐功能已关闭',
-                        'priceDiscount' => '📌 请输入您希望用户每次新增下线时获得的金额',
-                        'setpercentage' => '📌 请发送您希望在购买后返现给用户的比例',
+                        'balanceGift' => '🎁 来自用户 ID 为 {from_id} 的下线，金额 {addbalancediscount} 已添加到您的余额。',
+                        'pointsEarned2Alt' => '📌您获得了 2 个新积分。',
+                        'pointsEarned1Alt' => '📌您获得了 1 个新积分。',
+                        'accountScore' => '🥅 您的账户积分：{score}',
+                        'notReferral' => '📛 您不是任何用户的下线。',
+                        'joinedGift' => '🎉 有人通过您的推荐加入了！礼品已充值到您的账户。',
+                        'joinGiftActivated' => '🎉 会员礼品已为您激活！',
+                        'commissionPaid' => '🎁  佣金支付 
+        
+        来自您下线的金额 %s 托曼已充值到您的钱包',
+                        'commissionPaid2' => '🎁  佣金支付 
+        
+        来自您下线的金额 %s 托曼已充值到您的钱包',
+                        'commissionPaidFn' => '🎁  佣金支付 
+        
+        来自您下线的金额 %s 托曼已充值到您的钱包',
+                        'commissionPaidFn2' => '🎁  佣金支付 
+        
+        来自您下线的金额 %s 托曼已充值到您的钱包',
+                        'commissionPaidMiniapp' => '🎁  佣金支付 
+            
+            来自您下线的金额 %s 托曼已充值到您的钱包',
+                        'commissionPaidMiniapp2' => '🎁  佣金支付 
+        
+        来自您下线的金额 %s 托曼已充值到您的钱包',
+                        'newReferralJoined' => '<b>🎉 一个新下线！</b>
+用户 <b>@%s</b> 通过您的邀请链接加入了机器人 ✅
+
+通过此用户的购买，<b>您的礼品份额</b>将充值到您的账户 🔥',
+                        'welcomeGiftInfo' => '<b>💼 下线收集与欢迎礼品</b>
+
+通过您的<b>专属链接</b>邀请朋友，无需支付 1 里亚尔即可充值您的钱包，并使用机器人的服务！
+
+%s
+%s
+
+<b>📊 您的统计：</b>
+• 👥 下线：%s 人
+• 🛒 购买：%s 个
+• 💵 总购买额：%s 托曼
+
+<b>📢 邀请，获得礼品，成长！</b>
+',
+                        'welcomeInvited' => '<b>🎉 欢迎！</b>
+
+您通过 <b>@%s</b> 的邀请加入了机器人，并被登记为下线 ✅
+
+要领取会员礼品：
+🔘 进入<b>下线收集</b>菜单  
+🔘 点击 <b>🎁 领取会员礼品</b> 按钮
+
+这样，您和您的推荐人都能获得礼品！ 💰
+',
+                        'membershipGiftClaimed' => '<b>⛔ 您已领取过会员礼品。</b>
+此礼品仅可激活<b>一次</b>。',
+                        'membershipGiftInfo' => '<b>🎁 会员礼品：</b>
+• 🎉 礼品总额：%s 托曼  
+• 🔻 50% 给您（推荐人）  
+• 🔻 50% 给下线（新用户）
+
+',
+                        'pointsEarned1' => '📌您获得了 1 个新积分。',
+                        'pointsEarned2' => '📌您获得了 2 个新积分。',
+                        'pointsEarned2b' => '📌您获得了 2 个新积分。',
+                        'purchaseCommissionInfo' => '<b>💸 购买佣金：</b>  
+•  下线购买金额的 %s% 归您所有',
+                        'referralLink' => '
+
+🔗 用于验证下线的推荐链接：
+https://t.me/%s?start=%s',
                 ],
                 'agent' => [
                         'acceptrequest' => '✅ 批准请求',
@@ -121,23 +585,54 @@ return [
                         'isagent' => '❌ 您目前已是代理，无法提交代理申请。',
                         'rejectrequest' => '❌ 拒绝请求',
                         'requestreport' => '❌ 您已有一个提交的申请，无法再次申请。',
+                        'welcome' => '👋 欢迎使用代理面板',
+                        'usernameSaved' => '✅ 您的用户名已成功保存。',
+                        'requestRejected' => '❌ 尊敬的用户，您的代理申请已被拒绝。',
+                        'requestApproved' => '✅ 尊敬的用户，您的代理申请已获批准，您已成为代理。',
+                        'expiredNotice' => '📌 尊敬的代理，您的代理期限已结束，您的账户已退出代理状态。要重新激活代理，您可以联系客服。',
                 ],
                 'app' => [
                         'appempty' => '❌ 没有可供下载的应用程序。',
                         'selectapp' => '📌 请选择一个下载选项',
                 ],
-                'back' => '您已返回主页！',
-                'backbtn' => '🏠 返回主菜单',
-                'backmenu' => '🏠 返回上一级菜单',
                 'block' => [
                         'descriptions' => '🚫 您已被管理员封禁。
 
 ✍️ 封禁原因：%s',
+                        'unblockedNotice' => '✳️ 您的账户已解除封禁 ✳️
+现在您可以使用机器人了 ✔️',
+                        'unblocked' => '✳️ 您的账户已解除封禁 ✳️
+现在您可以使用机器人了 ✔️',
                 ],
                 'changeLink' => [
                         'btnTitle' => '⚙️ 更改链接',
                         'confirm' => '更改连接链接',
                         'warnchange' => '⚠️ 如果更新订阅链接，您之前的配置和服务将被断开。如需确认，请点击下方按钮',
+                        'serviceInactive' => '❌ 服务已停用，无法更改服务链接。',
+                        'error' => '❌ 更改链接时发生错误。',
+                        'updated' => '✅ 您的配置更新成功。',
+                ],
+                'changeLocation' => [
+                        'confirm' => '✅ 确认转移',
+                        'title' => '🌐 更改位置',
+                        'limitReached' => '❌ 您的位置更改限制已用完',
+                        'notPossible' => '❌ 无法转移到面板。',
+                        'configUnused' => '❌ 您的配置处于未使用状态，无法转移服务位置。',
+                        'confirmPrompt' => '📍 确认服务位置转移后，您的服务将从此位置删除并转移到新位置。
+💰 转移费用为 %s 托曼
+📌 您的剩余限制：%s（剩余免费限制：‌%s）
+
+✅ 要确认转移，请点击下方按钮',
+                        'success' => '✅ 您的配置已成功转移到服务器 (%s)。
+
+🖥 服务名称：%s
+💠 服务流量：%s
+⏳ 到期时间：%s | %s 
+
+
+🔗 您的订阅链接： 
+
+<code>%s</code>',
                 ],
                 'channel' => [
                         'confirmed' => '您的会员资格已成功确认。感谢您 ❤️',
@@ -147,9 +642,13 @@ return [
                 ],
                 'customSellVolume' => [
                         'title' => '⚙️ 自定义服务',
+                        'invalidTime' => '天数无效',
+                        'btnVolume' => '🛍 自定义流量',
+                        'btnService' => '⚙️ 自定义服务',
+                        'invalidVolume' => '❌ 流量无效。
+🔔 最小流量为 {mainvolume} GB，最大流量为 {maxvolume} GB',
+                        'invalidTimeRange' => '❌ 提交的时间无效。时间必须在 {maintime} 天到 {maxtime} 天之间',
                 ],
-                'customusername' => '自定义用户名',
-                'erroroccurred' => '❌ 发生错误，请重新开始操作',
                 'extend' => [
                         'confirm' => '确认续费',
                         'discount' => '🎁 使用优惠码',
@@ -172,13 +671,95 @@ return [
 ✅ 您的续费已成功完成。
 ⬅️ 如需返回服务列表或查看详情，请点击下方按钮。',
                         'title' => '💊 续费服务',
+                        'invoiceCreatedByAdmin' => '📜 您用户名为 %s 的续费发票已创建。
+        
+🛍 产品名称：%s
+⏱ 续费时长：%s 天
+🔋 续费流量：%s GB
+✍️ 说明：%s
+✅ 要确认并续费服务，请点击下方按钮',
+                        'error' => '❌ 续费遇到错误；请重新执行续费步骤。',
+                        'notSupportedPanel' => '❌ 此面板无法续费',
+                        'connectFirst' => '❌ 您尚未连接到服务。要续费服务，请先连接到服务，然后再续费',
+                        'planNotAvailable' => '❌ 无法使用当前套餐续费。请从头执行各步骤并选择其他套餐。',
+                        'restartError' => '❌ 发生了错误。请从头执行续费步骤。',
+                        'errorSupport' => '❌ 续费服务时发生错误；请联系客服',
+                        'errorSupport2' => '❌ 续费服务时发生错误；请联系客服',
+                        'genericError' => '❌ 续费过程中发生错误。请联系客服',
+                        'giftCharged' => '恭喜 🎉
+📌 作为续费礼品，金额 %s 托曼已充值到您的账户',
+                        'giftChargedFn' => '恭喜 🎉
+📌 作为续费礼品，金额 %s 托曼已充值到您的账户',
+                        'invoiceCreated' => '📜 您用户名为 %s 的续费发票已创建。
+        
+🛍 产品名称：%s
+💸 续费金额：%s 托曼
+⏱ 续费时长：%s 天
+🔋 续费流量：%s GB
+✍️ 说明：%s
+💸 钱包余额：%s
+✅ 要确认并续费服务，请点击下方按钮',
+                        'invoiceCreated2' => '📜 您用户名为 %s 的续费发票已创建。
+        
+🛍 产品名称：%s
+💸 续费金额：%s
+⏱ 续费时长：%s 天
+🔋 续费流量：%s GB
+✍️ 说明：%s
+💸 钱包余额：%s
+
+✅ 要确认并续费服务，请点击下方按钮',
+                        'genericErrorApi' => '❌ 续费服务时发生错误；请联系客服',
+                        'success' => '✅ 您的服务续费成功
+ 
+▫️服务名称：%s
+▫️产品名称：%s
+▫️续费金额 %s 托曼
+
+',
+                        'success2' => '✅ 您的服务续费成功
+ 
+▫️服务名称：%s
+▫️产品名称：%s
+▫️续费金额 %s 托曼
+
+',
+                        'successFn' => '✅ 您的服务续费成功
+ 
+▫️服务名称：%s
+▫️产品名称：%s
+▫️续费金额 %s 托曼
+
+',
                 ],
                 'extraTime' => [
                         'extratimecheck' => '确认并获取额外时间',
                         'title' => '⏳ 购买额外时间',
+                        'notSupportedPanel' => '❌ 此面板无法购买额外时间',
+                        'invoiceCreated' => '📜 已为您创建额外时间购买发票。
+        
+📌 额外时间每天费率：%s 托曼
+📆 请求的额外天数：%s 天
+💰 您的发票金额：%s 托曼
+        
+✅ 要付款并添加时间，请点击下方按钮',
+                        'prompt' => '📆 请输入所需的额外天数（以天为单位）：
+        
+📌 每天费率：%s',
+                        'success' => '✅ 已成功为您的服务添加时间
+ 
+▫️服务名称：%s
+▫️添加时间：%s 天
+
+▫️增加时间金额：%s 托曼',
+                        'successFn' => '✅ 已成功为您的服务添加时间
+ 
+▫️服务名称：%s
+▫️添加时间：%s 天
+
+▫️增加时间金额：%s 托曼',
                 ],
                 'extraVolume' => [
-                        'changedPrice' => '✅ 金额已成功保存。',
                         'enterextravolume' => '🔋 请输入您想要的额外流量（以 GB 为单位）：
 
 📌 每 GB 价格：%s 托曼',
@@ -190,24 +771,105 @@ return [
 📥 申请的额外流量：%s GB
 
 ✅ 如需付款并增加流量，请点击下方按钮。',
-                        'gettypeextra' => '📌 价格应为哪种用户类型设置？
-用户类型：
-f = 普通用户
-n = 普通代理
-n2 = 拥有更多权限的代理',
                         'invalidprice' => '🚫 最低流量为 1 GB',
                         'sellextra' => '➕ 购买额外流量',
+                        'notSupportedPanel' => '❌ 此面板无法购买额外流量',
+                        'serviceError' => '❌为服务购买额外流量时发生错误。请联系客服',
+                        'invoiceCreated' => '📜 已为您创建额外流量购买发票。
+        
+📌 额外流量每 GB 费率：%s 托曼
+🔋 请求的额外流量：%s GB
+💰 您的发票金额：%s 托曼
+        
+✅ 要付款并添加流量，请点击下方按钮',
+                        'prompt' => ' ⭕️ 请发送您要购买的流量。
+❌ 请用英文发送金额。
+        ⚠️ 每 GB 额外流量为 %s 托曼。',
+                        'success' => '✅ 已成功为您的服务添加流量
+ 
+▫️服务名称：%s
+▫️添加流量：%s GB
+
+▫️增加流量金额：%s 托曼',
+                        'successFn' => '✅ 已成功为您的服务添加流量
+ 
+▫️服务名称：%s
+▫️添加流量：%s GB
+
+▫️增加流量金额：%s 托曼',
                 ],
                 'help' => [
                         'btninlinebuy' => '📚 查看使用教程 ',
                         'disablehelp' => '尊敬的用户，教程部分目前已停用。😔',
                 ],
-                'invalidusername' => '❌ 用户名无效
-🔄 请重新发送您的用户名',
+                'lottery' => [
+                        'winnerNotice' => '🎁 抽奖结果 
+
+😎 尊敬的用户，恭喜！您是第 %s 名，赢得了 %s 托曼余额，您的账户已充值。',
+                ],
                 'note' => [
                         'changednote' => '✅ 备注已成功更改。',
                         'errorLongNote' => '❌ 新备注最多 150 个字符。',
                         'sendNote' => '📝 请发送您的新备注（最多可发送 150 个字符）。',
+                ],
+                'notify' => [
+                        'deleteInfo' => '📌 删除定时任务通知
+
+服务用户名：‌ <code>%s</code>
+服务状态：%s
+剩余天数‌:‌%s
+剩余流量：%s',
+                        'greeting' => '您好，尊敬的用户 👋
+
+',
+                        'greeting2' => '您好，尊敬的用户 👋
+
+',
+                        'remainingDays' => '剩余天数‌:‌%s',
+                        'remainingVolume' => '剩余流量：%s',
+                        'serviceDeleted' => '📌 尊敬的用户，由于未续费，服务 %s 已从您的服务列表中删除
+
+🌟 要获取新服务，请从购买服务部分进行操作',
+                        'serviceDeleted2' => '📌 尊敬的用户，由于未续费，服务 %s 已从您的服务列表中删除
+
+🌟 要获取新服务，请从购买服务部分进行操作',
+                        'serviceStatus' => '服务状态：%s
+
+',
+                        'serviceStatus2' => '服务状态：%s
+
+',
+                        'serviceUsername' => '服务用户名：‌ <code>%s</code>
+
+',
+                        'serviceUsername2' => '服务用户名：‌ <code>%s</code>
+
+',
+                        'thanks' => '感谢您的陪伴',
+                        'timeActionHint' => '如果您希望续费此服务，请通过«%s»部分进行操作。 ',
+                        'timeTitle' => '📌 时间定时任务通知
+
+
+',
+                        'timeRemaining' => '📌 使用服务 %s 的期限仅剩 %s 天。 ',
+                        'volumeActionHint' => '请，如有需要，通过«%s»部分购买额外流量或续费您的服务',
+                        'volumeTitle' => '📌 流量定时任务通知
+
+
+',
+                        'volumeDeleteInfo' => '📌  流量删除定时任务通知 
+服务用户名：%s 
+ 服务状态：%s 
+剩余天数：%s 
+ 剩余流量：%s
+用户最后连接：%s',
+                        'volumeRemaining' => '🚨 服务 %s 的流量仅剩 %s。 ',
+                        'onHoldReminder' => '您好！🌐
+
+我们注意到您尚未连接到用户名为 %s 的配置，距其激活已超过 %s 天。如果您在设置或使用服务时遇到任何问题，请通过以下 ID 联系我们的客服团队，以便我们为您提供帮助。
+我们随时准备解决任何问题！📞
+
+客服账户：@%s',
                 ],
                 'number' => [
                         'active' => '✅ 您的手机号码已成功验证',
@@ -224,17 +886,12 @@ n2 = 拥有更多权限的代理',
                 'priceArze' => [
                         'tetherPrice' => '当前 USDT 价格为：%s 托曼',
                         'tronPrice' => '当前 TRON 价格为：%s 托曼',
+                        'fetchError' => '❌ 目前无法获取价格。请稍后再试。',
                 ],
                 'search' => [
                         'title' => '🔎 快速搜索',
                         'usernamgeget' => '📌 请发送您的用户名',
                 ],
-                'selectoption' => '请选择一个选项',
-                'selectusername' => '请发送一个自定义用户名
-⚠️ 用户名不得包含多余字符，如 @、空格或连字符。
-⚠️ 用户名必须为英文。
-✅ 正确的用户名：ali12 | mahdi | ws1_ksdf
-❌ 错误的用户名：ali_ | tele@ | _mahdi | محسن',
                 'sell' => [
                         'errorConfig' => '❌ 创建订阅时出错，请联系客服解决问题。',
                         'errorProduct' => '❌ 所选产品不存在',
@@ -250,6 +907,95 @@ n2 = 拥有更多权限的代理',
 ⚠️ 如需查看详情并管理，请点击用户名
 
 ⭕️ 您也可以使用“🔎 快速搜索”按钮快速查找并管理您的服务',
+                        'nullProduct' => '⭕️ 未找到任何产品。请联系客服解决问题',
+                        'panelCapacityFull' => '❌ 很遗憾，此面板的账户创建容量已用尽。请使用其他面板',
+                        'capacityFull' => '❌ 很遗憾，账户创建容量已用尽。请几小时后再试。',
+                        'nullPanel' => '⭕️ 未找到任何位置。请联系客服解决问题',
+                        'selectDuration' => '📌 请选择服务时长',
+                        'purchaseError' => '❌ 购买失败。请重新执行各步骤。',
+                        'stockFinished' => '❌ 此服务的流量已用完。',
+                        'stockFinishedBuyAnother' => '❌ 此服务的流量已用完。请购买其他服务。',
+                        'selectCategoryShort' => '📌 请选择一个分类',
+                        'selectCategory' => '📌 请选择您的分类！',
+                        'panelUnavailable' => '❌ 此面板不可用。请从其他面板进行购买。',
+                        'restartProcess' => '❌ 请重新执行购买步骤',
+                        'creating' => '♻️ 正在创建您的服务...',
+                        'restartFromStart' => '❌ 请从头重新执行购买步骤',
+                        'noPurchaseUsersOnly' => '❌ 很遗憾，此选项仅对未从机器人购买过的用户有效。',
+                        'customTimePrompt' => '⌛️ 请选择您的服务时间 
+📌 每天费率：%s  托曼
+⚠️ 您最少可购买 %s 天，最多 %s 天',
+                        'customTimePrompt2' => '⌛️ 请选择您的服务时间 
+📌 每天费率：%s  托曼
+⚠️ 您最少可购买 %s 天，最多 %s 天',
+                        'customVolumePrompt' => '📌 请发送您请求的流量。
+🔔每 GB 流量价格为 %s 托曼。
+🔔 最小流量为 %s GB，最大流量为 %s GB。',
+                        'customVolumePrompt2' => '📌 请发送您请求的流量。
+🔔每 GB 流量价格为 %s 托曼。
+🔔 最小流量为 %s GB，最大流量为 %s GB。',
+                        'customVolumePrompt3' => '📌 请发送您请求的流量。
+🔔每 GB 流量价格为 %s 托曼。
+🔔 最小流量为 %s GB，最大流量为 %s GB。',
+                        'customVolumePrompt4' => '📌 请发送您请求的流量。
+🔔每 GB 流量价格为 %s 托曼。
+🔔 最小流量为 %s GB，最大流量为 %s GB。',
+                        'customVolumePrompt5' => '📌 请发送您请求的流量。
+🔔每 GB 流量价格为 %s 托曼。
+🔔 最小流量为 %s GB，最大流量为 %s GB。',
+                        'invalidTimeRestart' => '时间无效。请从头进行购买',
+                        'invalidVolumeRestart' => '流量无效。请从头进行购买',
+                        'preInvoice' => '
+📇 您的预开发票：
+👤 用户名：<code>%s</code>
+🔐 服务名称：%s
+📆 有效期：%s 天
+💶 原价：<del>%s 托曼</del>
+💶 折后价：%s  托曼
+👥 账户流量：%s GB
+💵 您的钱包余额：%s
+                  
+        💰 您的订单已准备好付款。  ',
+                        'preInvoice2' => '
+📇 您的预开发票：
+👤 用户名：<code>%s</code>
+🔐 服务名称：%s
+📆 有效期：%s 天
+💶 价格：%s  托曼
+👥 账户流量：%s GB
+💵 您的钱包余额：%s
+⭕️配置数量：%s
+                  
+💰 您的订单已准备好付款。  ',
+                        'panelInactive' => '所选面板当前未激活',
+                        'panelMissing' => '所选面板不存在。',
+                        'productNotFound' => '未找到所选产品',
+                        'created' => '✅ 服务创建成功
+
+👤 服务用户名：{username}
+🌿 服务名称：{name_service}
+‏🇺🇳 位置：{location}
+⏳ 时长：{day}  小时
+🗜 服务流量：{volume} 兆字节
+
+🧑‍🦯 您可以通过按下方按钮并选择您的操作系统来获取连接方法',
+                        'created2' => '✅ 服务创建成功
+
+👤 服务用户名：{username}
+🌿 服务名称：{name_service}
+‏🇺🇳 位置：{location}
+⏳ 时长：{day}  天
+🗜 服务流量：{volume} 千兆字节
+
+🧑‍🦯 您可以通过按下方按钮并选择您的操作系统来获取连接方法',
+                        'timePrompt' => '⌛️ 请选择您的服务时间 
+📌 每天费率：%s  托曼
+⚠️ 您最少可购买 %s 天，最多 %s 天',
+                        'volumePrompt' => '🔋 请输入所需的服务流量（以 GB 为单位）：
+📌 每 GB 费率：%s 
+🔔 最小流量为 1 GB，最大为 1000 GB。',
+                        'subscriptionError' => '创建订阅时发生错误。请联系客服',
+                        'usernameExists' => '用户名已存在。请从头执行各步骤',
                 ],
                 'spam' => [
                         'spamed' => '在机器人中发送过多消息',
@@ -257,7 +1003,6 @@ n2 = 拥有更多权限的代理',
                         'spamedReport' => '数字ID 为 %s 的用户因在机器人中发送垃圾信息而被封禁',
                 ],
                 'status' => [
-                        'acceptRequests' => '✅ 已成功登记',
                         'active' => '✅ 已激活',
                         'activedconfig' => '✅ 您的服务已成功激活',
                         'backinfo' => '↪️ 返回',
@@ -281,8 +1026,6 @@ n2 = 拥有更多权限的代理',
                         'expired' => '🔚 服务时间结束',
                         'hour' => ' 小时 ',
                         'info' => '📊 服务信息：',
-                        'invalidUsername' => '❌ 用户名无效。
-🔄 请重新发送您的用户名',
                         'lastTraffic' => '服务总流量：',
                         'limited' => '🚫 流量已用尽',
                         'linksub' => '🔗 订阅链接',
@@ -295,7 +1038,6 @@ n2 = 拥有更多权限的代理',
                         'panelNotConnected' => '❌ 所请求服务的查询系统目前不可用。请一小时后再试',
                         'remainingVolume' => '剩余服务流量：',
                         'removeservice' => '❌ 退款',
-                        'requestadmin' => '📌 删除拒绝请求已成功登记。请发送不批准的原因',
                         'sendUsername' => '📌 请发送您的用户名',
                         'sendrequestsremove' => '✅ 您的请求已发送。经管理员审核后，将向您通报结果',
                         'stateus' => '状态：',
@@ -304,16 +1046,156 @@ n2 = 拥有更多权限的代理',
                         'usedTrafficGb' => '已使用服务流量：',
                         'userNotFound' => '❌ 在服务器上未找到所请求的服务！',
                         'username' => '用户名： ',
+                        'notConnectedCannotChange' => '❌ 尚未连接到配置，无法更改服务状态。连接到配置后，您可以使用此功能。',
+                        'btnConfirmDisable' => '✅ 确认并停用配置',
+                        'confirmDisableDesc' => '📌 确认下方选项后，您的配置将被关闭，您将无法再连接到该配置。
+⚠️ 如果您希望重新激活配置，必须从服务管理部分点击 <u>💡 开启账户</u> 按钮',
+                        'btnConfirmEnable' => '✅ 确认并启用配置',
+                        'confirmEnableDesc' => '📌 确认下方选项后，您的配置将被开启，您将能够连接到该配置。
+⚠️ 如果您希望再次停用配置，必须从服务管理部分点击 <u>❌ 关闭账户</u> 按钮',
+                        'deleteRequestRejected' => '❌ 尊敬的用户，您使用用户名 %s 的删除请求未获批准。
+        
+        未批准原因：%s',
+                        'deleteRequestApproved' => '✅ 尊敬的用户，您使用用户名 %s 的删除请求已获批准。',
+                        'deleteRequestApproved2' => '✅ 尊敬的用户，您使用用户名 %s 的删除请求已获批准。',
+                        'servicesFound' => '🛍 找到 {countservice} 个服务。要查看和管理服务，请点击其中一个服务',
+                        'infoUnavailable' => '❌ 目前无法查看账户信息',
+                        'servicePassword' => '🔑 您的服务密码：<code>{subscription_url}</code>',
+                        'configNote' => '✍️ 配置备注：{note}',
+                        'lastOnline' => '📶 您的最后连接时间：{lastonline}',
+                        'subscriptionFile' => '您的订阅文件',
+                        'btnTurnOff' => '❌ 关闭账户',
+                        'btnTurnOn' => '💡 开启账户',
+                        'btnEditNote' => '📝 更改备注',
+                        'btnRefresh' => '♻️ 更新信息',
+                        'deletedSuccess' => '📌 服务删除成功',
+                        'askDeleteReason' => '📌 请发送删除您服务的原因。',
+                        'configReadError' => '❌  读取配置信息出错。请联系客服。',
+                        'selectConfig' => '📌 请从下方列表中选择并使用一个配置。',
+                        'notConnectedCannotChangeStatus' => '❌ 您尚未连接到配置，无法更改服务状态。连接到配置后，您可以使用此功能。',
+                        'btnConfirmDisableAlt' => '✅ 确认并停用配置',
+                        'btnConfirmEnableAlt' => '✅ 确认并启用配置',
+                        'subscriptionLine' => '您的订阅：<code>{output_config_link}</code>',
+                        'confirmDisableConfig' => '📌 确认下方选项后，您的配置将被关闭，您将无法再连接到该配置。
+⚠️ 如果您希望重新激活配置，必须从服务管理部分点击 <u>💡 开启账户</u> 按钮',
+                        'confirmEnableConfig' => '📌 确认下方选项后，您的配置将被开启，您将能够连接到该配置。
+⚠️ 如果您希望再次停用配置，必须从服务管理部分点击 <u>❌ 关闭账户</u> 按钮',
+                        'getConfigHint' => '📌 要获取配置，请点击获取配置按钮',
+                        'connectionInfo' => '
+📶 最后连接时间：%s
+🔄 订阅链接最后更新时间：%s
+#️⃣ 已连接的客户端：<code>%s</code>',
+                        'infoBasic' => '服务状态：<b>%s</b>
+服务用户名：%s
+📎 服务跟踪码：%s
+
+📌 服务信息： 
+%s',
+                        'infoDetailed' => '服务状态：<b>%s</b>
+👤 服务用户名：<code>%s</code>
+🌍 服务位置：%s
+产品名称：%s
+
+📶 您的最后连接时间：%s
+
+🔋 流量：%s
+📥 已用流量：%s
+💢 剩余流量：%s (%s%%)
+
+📅 到期日期：%s (%s)
+
+%s',
+                        'infoFull' => '📊服务状态：%s
+👤 服务名称：<code>%s</code>
+%s
+%s
+🌍 服务位置：%s
+🗂 产品名称：%s
+
+🔋 流量：%s
+📥 已用流量：%s
+💢 剩余流量：%s (%s%%)
+
+📅 到期日期：%s (%s)
+
+%s
+
+💡 要切断他人的访问，只需点击“更改链接”选项。',
+                        'summary' => '
+  
+ 服务状态：%s
+        
+🔋 服务流量：%s
+📥 已用流量：%s
+💢 剩余流量：%s (%s%%)
+
+📅 有效期至：%s (%s)
+
+用户订阅链接： 
+<code>%s</code>
+
+📶 最后连接时间：%s
+🔄 订阅链接最后更新时间：%s
+#️⃣ 已连接的客户端：<code>%s</code>',
                 ],
                 'support' => [
                         'answermessage' => '回复消息',
                         'btnsupport' => '☎️ 下方按钮（常见问题）中列出了您的常见问题。请点击下方按钮；若未找到您的问题，请点击客服按钮',
                         'sendmessageadmin' => '🚀 您的消息已发送。请等待管理员的回复',
+                        'messageFromAdminAlt' => '
+👤 管理员发送了一条消息  
+消息内容：
+
+%s',
+                        'messageFromManagement' => '
+📩 管理层向您发送了一条消息。
+                    
+消息内容： 
+%s',
+                        'messageFromManagement2' => '
+📩 管理层向您发送了一条消息。
+                    
+消息内容： 
+%s',
+                        'requestSubmitted' => '✅ 感谢您提交请求。您的请求已发送，正在由客服审核。',
+                        'selectDepartment' => '📌 请选择您要发送消息的客服部分。',
+                        'sendMessage' => '📌 请发送您的消息',
+                        'sentForReview' => '✅ 您的消息发送成功，审核后将给您回复。',
+                        'sendMessageText' => '📌 请发送您的消息文本',
+                        'sentSuccess' => '消息发送成功',
+                        'sentForRequestReview' => '✅  您针对此请求的消息发送成功。审核后将给您回复。',
+                        'disruptionConfirm' => '❓ 您确定要发送中断报告吗
+
+🔹 发送报告前，请查看连接教程。( /help )',
+                        'disruptionPrompt' => '❓ 请写下您中断的原因
+
+🔹 发送报告前，请查看连接教程。( /help )',
+                        'messageFromAdmin' => '
+📩 管理层向您发送了一条消息。
+                    
+消息内容： 
+%s',
                 ],
-                'text_start' => '你好，欢迎',
+                'transfer' => [
+                        'confirm' => '✅ 如确认，请点击下方按钮以成功完成您的转移。',
+                        'confirmed' => '✅ 服务转移已成功完成。',
+                        'description' => '🛂 如需将此订阅转移给其他用户，您必须拥有目标账户的用户ID。
+
+‼️ 转移注意事项：
+1 - 如需获取用户ID，请前往钱包按钮 
+2 - 将订阅转移给目标用户后，该订阅将从您的面板中移除。
+
+🆕 请输入目标账户的用户ID：',
+                        'notSendServiceYou' => '❌ 无法将服务转移给您自己。',
+                        'notUserTrans' => '❌ 未找到具有此ID的用户。',
+                        'title' => '🚚 将服务转移给其他用户',
+                        'transferNotValid' => '❌ 无法将测试服务转移给其他用户。',
+                        'receivedNotice' => '✅ 尊敬的用户，用户名为 {service_username} 的服务已由用户 ID 为 {from_id} 的用户转移到您的账户。',
+                ],
                 'usertest' => [
                         'errorcreat' => '❌ 创建订阅时出错，请联系客服解决问题。',
                         'limitwarning' => '⚠️ 您的测试订阅创建次数已用完。',
+                        'unavailable' => '📌 测试服务目前不可用。',
                 ],
                 'wheelLuck' => [
                         'alreadyParticipated' => '❌ 您今天已参与过。明天再试试运气吧',
@@ -322,9 +1204,51 @@ n2 = 拥有更多权限的代理',
                         'notWinner' => '🥲 很遗憾您没有中奖。改天再来试试吧',
                         'wheelWinner' => '⭕️ 用户名为 @%s、数字ID 为 %s 的用户赢得了幸运转盘',
                         'winnerCongratulations' => '🤩 恭喜您中奖了！%s 托曼已添加到您的账户。',
+                        'resultError' => '❌ 获取游戏结果时出错。请稍后再试。',
                 ],
         ],
         'Admin' => [
+                'activeBotText' => '使用管理面板功能：
+
+前往底部带有键盘的页面。
+在键盘中找到名为“机器人报告”的按钮并点击。
+点击“机器人报告”按钮后，会打开一个页面。
+在此页面，您可以选择并设置想要的群组。
+此步骤是必需的',
+                'askNewText' => '📌 发送您的新文本',
+                'backAdmin' => '您已返回管理面板！',
+                'backAdminBtn' => '🏠 返回管理菜单',
+                'backMenu' => '您已返回上一级菜单！',
+                'backMenuBtn' => '▶️ 返回上一级菜单',
+                'changesSaved' => '更改已成功应用',
+                'changesSaved2' => '✅ 更改保存成功',
+                'confirmByButton' => '如需确认，请点击确认按钮',
+                'confirmByWord' => '如需确认，请发送下方的词语。
+<code>تایید</code>',
+                'errorCode' => '❌  发生了错误。错误代码：%s',
+                'errorCode2' => '❌  发生了错误。错误代码：%s',
+                'errorCode3' => '❌  发生了错误。错误代码：%s',
+                'errorCode4' => '❌  发生了错误。错误代码：%s',
+                'errorCode5' => '❌  发生了错误。错误代码：%s',
+                'errorCode6' => '❌  发生了错误。错误代码：%s',
+                'errorOccurred' => '发生了错误',
+                'errorReason' => '错误原因： 
+%s',
+                'errorReason2' => '错误原因 %s',
+                'errorRestart' => '❌ 发生了错误；请从头执行各步骤。',
+                'getStats' => '如果您想查看其他日期范围的统计数据，请先发送开始日期。
+例如：
+<code>%s</code>',
+                'invalidValue' => '❌ 值无效',
+                'mainAdminOnly' => '❌ 此部分仅主管理员可用',
+                'notUser' => '未找到具有此ID的用户',
+                'panelAdmin' => '👨‍💼 管理面板',
+                'saved' => '✅ 已保存。',
+                'selectOption' => '📌 请选择一个选项',
+                'selectOption2' => '请选择一个选项',
+                'selectOption3' => '📌 请从下方列表中选择一个选项',
+                'selectOption4' => '请选择下方的一个选项 ',
+                'selectOption5' => '📌 请选择一个选项。',
                 'Balance' => [
                         'addAllBalance' => '📌 请发送用于全体充值的金额',
                         'addBalanceUser' => '✅ 金额已添加到该用户的余额',
@@ -334,10 +1258,50 @@ n2 = 拥有更多权限的代理',
 说明：如需扣除用户余额，请先发送用户的数字ID',
                         'negativeBalanceUser' => '✅ 金额已从该用户的余额中扣除',
                         'priceBalance' => '已收到数字ID。请发送您想从该用户扣除的金额，金额应以托曼为单位',
+                        'askUserGroup' => '📌 充值应存入以下哪个用户组？',
+                        'askTargetUsers' => '📌 全体充值应发送给哪位用户？',
+                        'askNotify' => '📌 是否应向用户发送充值通知消息？
+是：1
+否：0',
+                        'operationStarted' => '✅ 消息发送操作已开始。完成后将通知您。',
+                        'btnDecrease' => '⬇️ 减少余额',
+                        'maxAmountRial' => '📌 最大金额为 1 亿里亚尔。',
+                        'maxAmountToman' => '❌ 最大金额为 1 亿托曼',
+                        'askMinCharge' => '📌 请设置您希望用户为账户充值的最低金额',
+                        'askMinChargeGroup' => '📌 最低余额应适用于哪个用户组？
+f
+n
+n2',
+                        'askMaxCharge' => '📌 请设置您希望用户为账户充值的最高金额',
+                        'askMaxNegative' => '📌 请发送用户购买时余额可以为负的最大金额
+注意：数字不应带有横线或负号
+如果您希望用户无限购买，请发送数字 0',
+                        'addedToUser' => '✅ 金额已成功添加到用户账户。',
+                        'askMinDeposit' => '📌 请发送最低充值金额',
+                        'minDepositSaved' => '✅ 最低充值金额已设置。',
+                        'askMaxDeposit' => '📌 请发送最高充值金额',
+                        'maxDepositSaved' => '✅ 最高充值金额已设置。',
+                        'askChargeAmount' => '📌 请发送您要为用户账户充值的金额。',
+                        'addedToUserNotice' => '❌ 已向用户余额添加 %s 托曼。',
+                        'resetToZero' => '用户 %s 的余额已重置为零',
                 ],
                 'Channel' => [
                         'setChannelReport' => '🔰 频道已成功配置',
                         'testChannel' => '测试群组连接',
+                        'notForumGroup' => '❌ 所选群组未处于论坛模式。请先启用群组的话题功能，然后重新设置群组的数字ID',
+                        'botNotGroupAdmin' => '❌ 机器人不是该群组的管理员',
+                        'askReportGroupId' => '📣 在此部分，您可以发送群组的数字 ID 以发送通知
+群组设置教程：
+1 - 首先创建一个群组 
+2 - 将机器人 @myidbot 加入群组，并在群组内发送命令 /getgroupid@myidbot 
+3 - 在群组设置中开启话题或论坛模式4
+4 - 将您自己的机器人设为群组管理员 
+5 - 将发送的数字 ID 发送给机器人。
+
+您当前的数字 ID：%s',
+                        'connectionFailed' => '❌ 连接到群组未成功  
+
+收到的错误：  %s',
                 ],
                 'Discount' => [
                         'agentCode' => '您想为哪位用户定义此码？
@@ -347,7 +1311,6 @@ n2 = 拥有更多权限的代理',
                         'firstDiscount' => '📌 此优惠码应用于首次购买还是所有购买？',
                         'getCode' => '请发送一个礼品码代码',
                         'invalidAgentCode' => '❌ 用户类型无效',
-                        'invalidCode' => '❌ 优惠码无效',
                         'notCode' => '❌ 错误 
 📝 所选礼品码不存在',
                         'priceCode' => '已收到代码。现在请发送该代码的金额',
@@ -357,6 +1320,23 @@ n2 = 拥有更多权限的代理',
                         'saveCode' => '✅ 代码已成功登记',
                         'setLimitUse' => '📌 请发送使用次数限制。
 ⚠️ 该限制适用于所有用户',
+                        'askActiveHours' => '📌 优惠码应激活多少小时？如果您希望无限期有效，请发送数字 0',
+                        'askUserLimit' => '📌 请发送单个用户的使用次数限制。',
+                        'askSection' => '📌 优惠码应适用于哪个部分？',
+                        'userLimitTooHigh' => '📌 单个用户的使用次数必须小于总限制',
+                        'askProductLocation' => '📌 要为特定产品设置优惠码，请先选择产品位置。
+注意：要选择所有面板，请发送词语 <code>/all</code>',
+                        'askProduct' => '📌 优惠码应适用于哪个产品？请注意，如果您希望优惠码适用于所有产品，请发送词语 all',
+                        'invalidPercent' => '百分比无效',
+                        'created' => '
+🎁 您的优惠码创建成功。
+
+📩 优惠码名称：<code>%s</code>
+🧮 优惠码百分比：%s
+🎛 面板：%s
+📌  产品：%s
+♻️ 用户类型：%s
+🔴 使用限制：%s',
                 ],
                 'Discountsell' => [
                         'getCode' => '请发送一个优惠码代码',
@@ -371,11 +1351,71 @@ n2 = 拥有更多权限的代理',
                         'removeHelp' => '✅ 教程已删除。',
                         'saveHelp' => '✅ 教程已成功保存',
                         'selectName' => '请选择教程名称',
+                        'nameTooLong' => '❌ 教程名称必须少于 150 个字符',
+                        'nameExists' => '❌ 该教程名称已存在。请使用其他名称。',
+                        'askCategoryName' => '📌 请发送教程的分类名称',
+                        'nameUpdated' => '✅ 教程名称已更新',
+                        'askNewCategory' => '请发送您的新分类',
+                        'categoryUpdated' => '✅ 教程分类名称已更新',
+                        'askNewDesc' => '请发送新的说明',
+                        'descUpdated' => '✅ 教程说明已更新',
+                        'askNewMedia' => '请发送新的图片或视频',
+                        'askTutorialMedia' => '📌 请发送您的教程。
+1 - 如果您不希望显示教程，请发送数字 2
+2 - 您可以以视频、文本或图片形式发送教程',
+                        'invalidContent' => '❌ 提交的内容无效。',
+                        'tutorialSaved' => '✅ 教程保存成功。',
                 ],
                 'Payment' => [
                         'reasonRejecting' => '请发送拒绝该支付的原因',
                         'rejected' => '⭕️ 支付已成功拒绝，并已向用户发送消息',
                         'reviewedPayment' => '❌ 该支付已被其他管理员审核过',
+                        'reviewReceiptsFirst' => '⚠️ 如需批准用户请求，请先审核并批准购买或续费收据。然后批准钱包充值收据。 ',
+                        'disableAutoConfirmFirst' => '❌ 请先关闭无需审核的自动批准。',
+                        'disableAutoConfirmFirst2' => '❌ 请先关闭自动批准。',
+                        'autoConfirmDesc' => '📌 激活此功能后，在您不在线的时段，机器人会自动批准所有卡对卡交易；待您上线后，您再审核收据，如果发送的是虚假收据，则取消该交易',
+                        'noPending' => '❌ 您没有未批准的付款。',
+                        'pendingIntro' => '📌 未批准的卡对卡付款 
+在此部分，您可以查看未批准的付款并批准或拒绝它们。
+❌ ：拒绝付款 
+✅ ：批准付款
+📝 付款详情
+🗑 ：删除收据而不通知用户',
+                        'allReceiptsDeleted' => '✅ 所有收据已成功删除 ',
+                        'receiptDeleted' => '✅ 收据删除成功。',
+                        'autoConfirmSelect' => '📌 请选择一个选项
+⚠️ 此部分用于无需审核的自动批准',
+                        'askExcludeUserId' => '📌 请发送用户的数字 ID',
+                        'userNotFound' => '❌ 该用户不存在。',
+                        'userAlreadyExcluded' => '❌ 该用户已在例外列表中',
+                        'userExcluded' => '✅ 该用户已成功添加到列表。',
+                        'askRemoveExcludeId' => '📌 请发送要从列表中删除的用户的数字 ID',
+                        'userNotExcluded' => '❌ 该用户不在例外列表中',
+                        'userExcludeRemoved' => '✅ 该用户已成功从列表中移除。',
+                        'excludeListEmpty' => '❌ 列表中没有用户',
+                        'excludeListTitle' => '人员列表👇',
+                        'approvedByOther' => '✅. 该付款已由另一位管理员批准
+👤 用户 ID：<code>%s</code>
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💎 批准后余额：%s
+💸 支付金额：%s 托曼
+',
+                        'detailRow' => '🛒 付款编号：<code>%s</code>
+🙍‍♂️ 用户 ID：<code>%s</code>
+💰 支付金额：%s 托曼
+⚜️ 付款状态：%s
+⭕️ 支付方式：%s 
+📆 购买日期：%s',
+                        'detailRow2' => '🛒 付款编号：<code>%s</code>
+🙍‍♂️ 用户 ID：<code>%s</code>
+💰 支付金额：%s 托曼
+⚜️ 付款状态：%s
+⭕️ 支付方式：%s 
+📆 购买日期：%s',
+                        'askAutoConfirmMinutes' => '📌 在此部分，您可以设置无需审核的自动批准在多少分钟后批准收据。
+请以分钟为单位发送您的时间
+当前时间：%s',
                 ],
                 'Product' => [
                         'addProductStepOne' => ' 请先发送您的订阅名称
@@ -394,10 +1434,7 @@ n2 = 拥有更多权限的代理',
 如果您希望时间无限制，请发送数字 0',
                         'getTimeReset' => '📌 请发送服务流量的周期性重置时间。如果不希望重置，请发送按钮 no_reset',
                         'invalidPrice' => '价格无效',
-                        'invalidTime' => '天数无效',
-                        'invalidVolume' => '流量无效',
                         'newTime' => '请发送新的时间',
-                        'nullProduct' => '⭕️ 未找到任何产品。请联系客服解决问题',
                         'removeLocation' => '📌 请选择您产品的位置',
                         'removedProduct' => '✅ 产品已成功删除。',
                         'saveProduct' => '产品已成功保存 🥳🎉',
@@ -408,16 +1445,54 @@ n2 = 拥有更多权限的代理',
  ⭕️ 如需在所有位置定义该产品，请发送命令 /all',
                         'timeUpdated' => '✅ 产品时间已更新',
                         'volumeUpdated' => '✅ 产品流量已更新',
+                        'nameTooLong' => '❌ 产品名称必须少于 150 个字符',
+                        'askNote' => ' 🗒 请发送该产品的备注。此备注将显示在用户的预开账单中。',
+                        'askNote2' => ' 🗒 请发送该产品的备注。此备注将显示在用户的预开账单中。',
+                        'askNewPrice' => '请发送新价格',
+                        'priceUpdated' => '✅ 产品价格已更新',
+                        'askNewNote' => '请发送新的备注',
+                        'noteUpdated' => '✅ 产品备注已更新',
+                        'selectNewCategory' => '请选择新的分类名称',
+                        'categoryUpdated' => '✅ 产品分类已更新',
+                        'askNewName' => '请发送新名称',
+                        'nameUpdated' => '✅ 产品名称已更新',
+                        'askNewUserType' => '请发送新的用户类型：
+用户类型：f、n、n2',
+                        'invalidUserGroup' => '❌ 用户组无效',
+                        'askVolumeResetType' => '请发送流量重置类型',
+                        'selectNewLocation' => '📌 请选择新的产品位置',
+                        'cannotChangeToAll' => '❌ 您无法将已定义的产品更改为位置名称 /all。',
+                        'locationUpdated' => '✅ 产品位置已更新',
+                        'askNewVolume' => '请发送新的流量',
+                        'updated' => '✅ 产品已更新',
+                        'firstPurchaseDesc' => '📌 通过此功能，您可以设置此产品是否为首次购买专用',
+                        'nameExists' => '❌ 名为 %s 的产品已存在',
+                        'editSummary' => '
+📌 正在编辑的产品信息：
+产品名称：%s
+产品价格：%s
+产品流量：%s
+产品位置：%s
+产品时间：%s
+产品用户类型：%s
+产品流量周期性重置：%s
+产品备注：%s
+产品分类：%s
+已售产品数量：%s
+    
+',
+                        'nameExists2' => '❌ 名为 %s 的产品已存在',
                 ],
                 'Protocol' => [
                         'invalidProtocol' => '❌ 无效的协议',
                         'removeProtocol' => '请选择您想删除的协议。',
                         'removedProtocol' => '协议已成功删除。',
+                        'btnDelete' => '🗑 删除协议',
+                        'btnSettings' => '⚙️ 协议设置',
                 ],
                 'SettingPayment' => [
                         'cartDirect' => '✅ 您的用户名已成功登记。',
                         'getNameCard' => '📌 请发送持卡人姓名。',
-                        'isSetPay' => '❌ 您有一笔未确认的支付。请等待上一笔支付审核完毕，然后再发送新支付',
                         'saveCard' => '✅ 您的卡号已成功登记。',
                 ],
                 'SettingnowPayment' => [
@@ -457,56 +1532,210 @@ n2 = 拥有更多权限的代理',
                         'statusoff' => '❌ 关闭',
                         'statuson' => '✅ 开启',
                         'subject' => '标题',
+                        'botOn' => '✅ 机器人已开启',
+                        'botOff' => '❌ 机器人已关闭',
+                        'rulesOn' => '✅ 规则确认已开启',
+                        'rulesOff' => '❌ 规则确认已关闭',
+                        'phoneVerifyOn' => '✅ 手机号码验证已开启',
+                        'phoneVerifyOff' => '❌ 电话号码身份验证已停用',
+                        'iranPhoneOn' => '✅ 伊朗号码验证已开启',
+                        'iranPhoneOff' => '❌ 伊朗号码检查已停用',
+                        'applyScope' => '对所有用户还是仅对新用户禁用？
+    新用户 0 
+    所有用户 1
+    2 除代理外的用户',
+                        'off' => '关闭',
+                        'on' => '开启',
                 ],
-                'activeBotText' => '使用管理面板功能：
-
-前往底部带有键盘的页面。
-在键盘中找到名为“机器人报告”的按钮并点击。
-点击“机器人报告”按钮后，会打开一个页面。
-在此页面，您可以选择并设置想要的群组。
-此步骤是必需的',
                 'addorder' => [
                         'stepFive' => '📌 服务已成功添加到该用户的账户。',
                         'stepFour' => '📌 请发送产品名称。',
                         'stepThree' => '📌 请选择配置位置。',
                         'stepTwo' => '📌 请发送该用户的配置用户名。',
+                        'usernameExists' => '❌ 该用户名在机器人中已存在。',
+                        'manualIntro' => '📌 在此部分，您可以手动创建并接收订单 
+⚠️ 如果您希望将配置添加到用户账户并由用户管理，则必须使用添加订单选项。
+- 要添加配置，请先发送用户名。',
+                        'askConfigCount' => '📌 请发送您要创建的配置数量；最多可发送 10 个',
+                        'invalidCount' => '❌ 最少 1 个，最多可发送 10 个。',
+                        'askVolume' => '📌 请发送账户的使用流量。流量以 GB 为单位。',
+                        'askTime' => '📌 请发送服务时长；时间以天为单位。',
+                        'customPlan' => '自定义套餐',
+                        'selectPanel' => '📌 请从下方列表中选择该订单将在哪个面板上创建',
+                        'panelSelected' => '✅ 面板选择成功',
                 ],
                 'affiliates' => [
+                        'askBanner' => '⭕️ 请发送您的推荐横幅 
+
+❌ 横幅必须包含图片',
+                        'joinGiftSaved' => '✅ 推荐金额已成功登记',
+                        'percentSaved' => '✅ 用户的返现比例已成功设置',
+                        'bannerSaved' => '✅ 您的横幅已成功登记。',
+                        'invalidBanner' => '❌ 您发送的横幅无效（横幅必须附带图片发送）',
+                        'askJoinGift' => '📌 请输入您希望用户每次新增下线时获得的金额',
+                        'askPercent' => '📌 请发送您希望在购买后返现给用户的比例',
                         'titleTopic' => '🎁 佣金报告',
+                        'noReferrals' => '❌ 该用户没有下线。',
+                        'idsSent' => '📌 已发送与该用户下线相关的 ID。',
+                        'userRemoved' => '📌 该用户已从下线中移除。',
+                        'referralsDeleted' => '📌 该用户的下线已删除。',
+                        'commissionScope' => '您可以决定佣金是仅为下线的首次购买提供，还是为其所有购买提供。',
                 ],
                 'agent' => [
-                        'agentWelcome' => '👋 欢迎使用代理面板',
                         'getTypeAgent' => '📌 如需添加代理，请发送代理类型
 1- 第一种代理类型 n：此类代理具有普通权限 
 2- 第二种代理类型 n2：此类代理可在无信用额度限制的情况下购买服务。',
                         'invalidTypeAgent' => '❌ 代理类型无效',
-                        'invalidValue' => '⭕️ 输入无效',
                         'setAgentProduct' => '该产品应向哪种用户显示？
 第一种 f：普通用户
 第二种 n：第二种代理，权限有限
 第三种 n2：第三种代理，拥有更多权限',
-                        'submitUsername' => '✅ 您的用户名已成功保存。',
                         'userAgentRemoved' => '❌ 该用户已成功取消代理身份',
                         'userAgented' => '✅ 该用户已成功成为代理',
+                        'selectUserType' => '📌 请选择用户类型',
+                        'expiryDateLabel' => '⭕️ 代理到期日期：',
+                        'selectGroup' => '📌 您想查看哪一组代理？',
+                        'requestRejected' => '✅ 请求已成功被拒绝。',
+                        'changeTypeHint' => '
+请使用下方按钮更改代理类型。',
+                        'askMembershipFee' => '📌 请发送代理会员申请的价格。',
+                        'askExpiry' => '🕘 请发送代理到期时间。在指定天数结束后，用户将退出代理状态并成为用户组 f。
+请注意，此功能与机器人生成器或代理销售机器人功能无关，仅与您的主机器人相关
+
+📌 请发送天数',
+                        'expirySaved' => '✅ 到期日期已设置。
+📌 时间结束后，用户的用户组将更改为 f 并通知用户。',
+                        'requestNotice' => '📣 一位用户提交了代理申请；请审核信息并确定状态。
+
+数字 ID：%s
+用户名：%s 
+说明：%s ',
+                        'requestNotice2' => '📣 一位用户提交了代理申请；请审核信息并确定状态。
+
+数字 ID：%s
+用户名：%s
+说明：%s ',
+                        'statusApproved' => '
+状态：已批准 (%s)',
+                        'requestNotice3' => '📣 一位用户提交了代理申请；请审核信息并确定状态。
+
+数字 ID：%s
+用户名：%s
+说明：%s ',
+                        'statusApproved2' => '
+状态：已批准 (%s)',
+                ],
+                'agentbot' => [
+                        'askToken' => '📌 请发送令牌（token）',
+                        'limitReached' => '❌ 目前您仅限为您的代理创建 15 个机器人。',
+                        'alreadyInstalled' => '❌ 此机器人已安装；无法重新安装。',
+                        'intro' => '📌 通过此部分，您可以为您的代理创建一个销售机器人，使代理能够使用自己的专属机器人进行销售
+
+- 要创建机器人，请发送机器人令牌。',
+                        'invalidToken' => '❌ 令牌无效',
+                        'tokenExists' => '📌 此令牌已注册',
+                        'deleted' => '❌ 代理的销售机器人删除成功。',
+                        'noneFound' => '❌ 没有机器人',
+                        'webhookRunning' => '📌 正在执行 webhook ...',
+                        'webhookDone' => '✅ webhook 执行成功。',
+                        'activatedUrlAlt' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ 尊敬的用户，您的机器人已成功安装。',
+                        'created' => '✅ 代理机器人创建成功。
+⚙️ 机器人用户名：@%s
+🤠 机器人令牌：<code>%s</code>',
+                        'activatedUrl' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ 尊敬的用户，您的机器人已成功安装。',
                 ],
                 'algorithmExtend' => [
                         'saveData' => '✅ 服务续费方式已成功更新',
+                        'invalidMethod' => '❌ 续费方式无效；请从下方列表中选择正确的续费方式',
                 ],
                 'algorithmUsername' => [
                         'saveData' => '✅ 用户名创建方式已成功更新',
+                        'selectMethod' => '⭕️ 请通过下方按钮选择账户的用户名生成方式。
+        
+⚠️ 如果用户没有用户名，您选择的词语将被注册并用作用户名。
+        
+⚠️ 如果用户名已存在，将在用户名后添加一个随机数字',
+                        'askFallbackName' => '📌 如果用户没有用户名，应注册什么名称？',
                 ],
-                'backAdmin' => '您已返回管理面板！',
-                'backAdminBtn' => '🏠 返回管理菜单',
-                'backMenu' => '您已返回上一级菜单！',
-                'backMenuBtn' => '▶️ 返回上一级菜单',
+                'api' => [
+                        'askAddress' => '📌 请发送 API 地址。
+
+当前地址：%s',
+                        'token' => '您的 api 令牌：<code>%s</code>',
+                        'docsLink' => '📘 完整 API 文档：
+%s
+
+请在每个请求的 <code>Token</code> 头中携带上面的令牌。',
+                ],
+                'apps' => [
+                        'askName' => '📌 要添加应用下载链接，请发送应用名称或按钮名称。',
+                        'nameTooLong' => '📌 名称必须少于 200 个字符。',
+                        'askLink' => '📌 请发送应用下载链接',
+                        'added' => '✅ 您的应用链接添加成功。',
+                        'selectDelete' => '📌 要删除应用，请从下方列表中选择应用名称',
+                        'deleted' => '✅ 应用删除成功。',
+                        'selectEdit' => '📌 要编辑应用，请从下方列表中选择应用名称',
+                        'askNewLink' => '📌 请发送新的应用链接',
+                        'updated' => '✅ 应用链接更新成功。',
+                ],
                 'btnKeyboard' => [
                         'addPanel' => '🖥 添加面板',
                         'manageUser' => '👤 用户管理',
                         'managementPanel' => '✏️ 面板管理',
                 ],
+                'card' => [
+                        'askNumber' => '💳 请发送您的银行卡号
+
+⚠️ 请注意，您可以定义多个卡号；如果定义了多个卡号，将随机向用户显示其中一个卡号',
+                        'mustBeNumeric' => '❌ 卡号必须为数字。',
+                        'exists' => '❌ 该卡号已存在于数据库中。',
+                        'saveFailed' => '❌ 卡号注册失败。请重试或联系客服。',
+                        'enabled' => '✅ 卡号已激活',
+                        'disabled' => '✅ 卡号已停用',
+                        'askDelete' => '📌 请发送您要删除的卡号。',
+                        'deleted' => '✅ 卡号删除成功。',
+                        'afterFirstPayDesc' => '📌 开启此功能后，用户首次付款后将为其激活卡对卡网关',
+                        'afterFirstPayOff' => '已关闭',
+                        'afterFirstPayOn' => '已开启',
+                        'askUserIds' => '📌 请发送您希望显示卡号的 ID 列表 
+示例： 
+1234435423
+23423131',
+                        'enabledForUsers' => '✅ 卡号已为所发送的用户激活。',
+                        'noUsersEnabled' => '📌 尚未为任何用户激活卡号',
+                        'enabledUserList' => '🪪 卡号已激活的用户列表',
+                        'askUsername' => '📌 请发送您不带 @ 的用户名以接收卡号
+
+%s',
+                        'askSupportUsername' => '📌 请发送您不带 @ 的用户名以联系客服
+
+%s',
+                ],
+                'category' => [
+                        'askName' => '📌 请发送您的分类名称。',
+                        'notFoundAddFirst' => '❌ 所选分类不存在。请从“套餐” >“添加分类”添加您的分类，然后再添加产品。',
+                        'notFoundAddFirst2' => '❌ 所选分类不存在。请从“套餐” >“添加分类”添加您的分类，然后再添加产品。',
+                        'askAddName' => '📌 要添加分类，请发送分类名称。',
+                        'added' => '✅ 分类添加成功。',
+                        'selectDelete' => '📌 请选择您要删除的分类',
+                        'deleted' => '✅ 分类删除成功。',
+                        'selectEdit' => '📌 请选择您要编辑的分类',
+                        'askNewName' => '📌 请发送新的分类名称',
+                        'renamed' => '✅ 分类名称修改成功。',
+                ],
                 'changeLocation' => [
-                        'confirm' => '✅ 确认转移',
-                        'title' => '🌐 更改位置',
+                        'askLimitType' => '📌 请选择一个选项。
+1 - 用户总共可以更改位置的总限制次数。
+2 - 在总限制中，用户可以免费更改位置的免费限制次数。',
+                        'limitSaved' => '✅ 限制设置成功。',
+                        'resetConfirm' => '📌 确认下方选项后，用户所做的所有位置更改将被重置为零。如果您同意，请点击下方选项。',
+                        'limitsReset' => '✅ 所有用户的限制已重置为零。',
+                        'askUserLimit' => '📌 请发送您要为用户设置的新限制。请注意，此功能会更改已进行的位置更改次数',
+                        'userLimitSaved' => '✅ 用户的使用次数保存成功。',
+                        'askTotalLimit' => '📌  请发送用户可以更改位置的总限制次数。请注意，此限制适用于所有配置
+当前限制：%s',
+                        'askFreeLimit' => '📌  请发送用户可以免费更改位置的免费限制次数。请注意，此限制适用于所有配置
+当前限制：%s',
                 ],
                 'channel' => [
                         'changeChannel' => '如需设置强制加入频道，请输入带 @ 的频道用户名，或以 -100 开头的频道数字ID',
@@ -518,6 +1747,36 @@ n2 = 拥有更多权限的代理',
                         'removeChannelBtn' => '删除频道',
                         'removedChannel' => '❌ 频道已成功删除。',
                         'title' => '添加频道',
+                        'askButtonName' => '📌 请为频道加入按钮选择一个名称。',
+                        'askJoinLink' => '📌 请发送加入链接',
+                        'invalidJoinLink' => '加入地址不正确',
+                        'joinChannelSaved' => '✅ 强制加入频道已成功登记。',
+                        'joinExempt' => '📌 从现在起，用户无需加入频道即可在机器人中活动',
+                ],
+                'config' => [
+                        'askProductName' => '📌 请发送您的产品名称。如果您想为测试账户设置，请发送文本 test。',
+                        'testKeyword' => '测试',
+                        'productNotFound' => '未找到此名称的产品。请发送准确的产品名称，或发送文本 test 以设置测试配置。',
+                        'askConfigs' => '📌 请按以下示例发送您的配置。
+
+# 配置名称（仅一行，名称前加 #）
+配置（多行 
+
+# 配置名称（仅一行，名称前加 #）
+
+trojan://xyz',
+                        'saved' => '✅ 已保存的配置数量：',
+                        'saveError' => '❌ 保存配置时发生错误。请重试。',
+                        'btnDelete' => '❌ 删除配置',
+                        'askDeleteName' => '📌 请发送您要删除的配置名称 ',
+                        'deleted' => '✅ 配置删除成功。',
+                        'askEditName' => '📌 请发送您要编辑的配置名称 ',
+                        'askNewContent' => '请发送新的配置内容',
+                ],
+                'connection' => [
+                        'online' => '在线',
+                        'offline' => '离线',
+                        'notConnected' => '未连接',
                 ],
                 'cronjob' => [
                         'changedData' => '✅ 更改已成功保存',
@@ -525,19 +1784,97 @@ n2 = 拥有更多权限的代理',
 当前时间： ',
                         'setVolumeRemove' => '📌 请发送在流量用尽后多少天删除账户。账户时间根据用户最后一次连接计算。此功能适用于 Marzban 面板
 当前时间： ',
+                        'btnSettings' => '🕚 定时任务设置',
+                        'cannotDeleteUnlimited' => '❌ 由于流量和时间均为无限，无法删除该服务。',
+                        'askOnHoldDays' => '在此部分，您必须设置：如果用户在若干天后仍未连接到其配置且处于 on_hold 状态，则向用户发送消息',
+                        'askVolumeAlert' => '📌 在此部分，您可以设置：当用户的流量达到 x 时发送警告消息。请以 GB 为单位发送流量。',
+                        'askNotifyDays' => '📌 在此部分，您可以设置在订阅结束前多少天通知用户。时间以天为单位',
+                        'userNotifyEnabled' => '✅ 已为用户启用定时任务通知。',
+                        'userNotifyDisabled' => '✅ 已为用户停用定时任务通知。',
+                        'timeSaved' => '✅ 时间注册成功。',
                 ],
-                'customvolume' => [
-                        'invalidTime' => '天数无效',
+                'department' => [
+                        'askName' => '📌 请发送部门名称',
+                        'added' => '📌 部门添加成功。',
+                        'noneToDelete' => '❌ 没有可删除的部门。',
+                        'askDelete' => '📌 请发送要删除的部门类型。',
+                        'deleted' => '📌 所选部分已删除。',
                 ],
-                'getStats' => '如果您想查看其他日期范围的统计数据，请先发送开始日期。
-例如：
+                'gateway' => [
+                        'tronadoStatus' => 'Tornado 网关状态',
+                        'tronadoDesc' => '在此部分，您可以关闭或开启 Tornado 网关',
+                        'off' => '已关闭',
+                        'on' => '已开启',
+                        'intro' => '📌 在下方列表中，您可以管理网关。
+
+⚠️ Mirza 团队不对网关提供任何保证，所有使用和责任由您承担',
+                        'btnPerfectMoneyHelp' => '📚 设置 Perfect Money 教程',
+                        'askPlisioApi' => '⚙️ 请发送您的 Plisio API 密钥。
+
+🔑 要获取 API 密钥，请访问以下网站：
+plisio.net
+
+📌 您当前的密钥：
 <code>%s</code>',
+                        'askNowPaymentsApi' => '⚙️ 请发送您的 NowPayments API 密钥。
+
+🔑 要获取 API 密钥，请访问以下网站：
+nowpayments.io
+
+📌 您当前的密钥：
+<code>%s</code>',
+                        'askAqayePardakhtMerchant' => '💳 从 Aghaye Pardakht 获取您的商户代码并在此部分输入
+        
+您当前的商户代码：%s',
+                        'askZarinpalMerchant' => '💳 从 ZarinPal 获取您的商户代码并在此部分输入
+        
+您当前的商户代码：%s',
+                        'askMerchant' => '💳 获取您的商户代码并在此部分输入
+        
+您当前的商户代码：%s',
+                        'askTronWallet' => '💳 请发送您的 Tron trc20 钱包地址
+        
+        您当前的钱包：%s',
+                        'askApiCode' => '📌 请发送您的 API 代码。
+        
+        您当前的商户：%s',
+                        'askApiCode2' => '请在此部分发送收到的 api
+        
+您当前的商户代码：%s',
+                ],
                 'getlimitusertest' => [
                         'getId' => '请发送测试账户创建次数限制',
                         'limitAll' => '请输入测试账户创建次数限制。',
                         'setLimit' => '已为该用户设置限制。',
                         'setLimitAll' => '已为所有用户设置账户创建限制',
                         'setLimitBtn' => '➕ 所有人的测试账户创建限制',
+                        'askTime' => '🕰 请发送测试服务的时长。
+⚠️ 时间以小时为单位。',
+                        'askVolume' => '请发送测试服务的流量。
+⚠️ 流量以兆字节为单位。',
+                ],
+                'gift' => [
+                        'askUserGroup' => '📌 该服务应应用于哪个用户组？',
+                        'askUserCategory' => '📌 该服务应应用于哪类用户？',
+                        'busy' => '❌ 礼品发送系统正在执行操作；待其完成并通知您后，您可以发送新消息。',
+                        'askPanel' => '📌 您想为哪个面板的服务赠送流量或时间？',
+                        'panelNotFound' => '❌ 该面板不存在',
+                        'selectType' => '📌 请选择下方的一个礼品。',
+                        'askVolume' => '📌 您想为用户的服务添加多少 GB 流量？',
+                        'askDays' => '📌 您想为用户的服务添加多少天？',
+                        'askMessage' => '📌 请发送您希望发送给用户的文本',
+                        'confirmStart' => '📌 尊敬的管理员，确认下方选项后，将开始应用礼品的流程。请注意，由于限制，应用礼品将需要一些时间。',
+                        'started' => '✅ 礼品发送操作已成功开始；待添加并完成后将通知您。',
+                        'canceled' => '📌 礼品发送已取消。',
+                        'done' => '📌 操作已对所有请求的服务执行。',
+                        'volumeAddError' => '添加礼品流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'volumeAddError2' => '添加礼品流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
                 ],
                 'manageUser' => [
                         'acceptedPhone' => '已确认',
@@ -563,10 +1900,6 @@ n2 = 拥有更多权限的代理',
                         'manageUserBtnDesc' => '⭕️ 在此部分，您可以查看所有用户 
 ⚠️ 如需管理某用户，请点击每个用户前的“用户管理”按钮',
                         'messageSent' => '✅ 消息已发送',
-                        'newUser' => '🎉 一名新用户启动了机器人
- 姓名：%s
-用户名：@%s
-数字ID：%s',
                         'removeService' => '❌ 删除订单',
                         'removeServiceAndBack' => '❌ 删除订单并退款',
                         'removeagent' => '🤖 移除代理',
@@ -578,6 +1911,58 @@ n2 = 拥有更多权限的代理',
                         'userUnblocked' => '该用户已被解封。🤩',
                         'viewOrderUser' => '🛍 查看用户订单',
                         'viewPaymentUser' => '💰 查看用户支付',
+                        'unknownName' => '未知',
+                        'notVerified' => '未认证',
+                        'verified' => '已认证',
+                        'verifiedSuccess' => '✅ 用户认证成功。',
+                        'unverifiedSuccess' => '✅ 已成功取消该用户的认证状态。',
+                        'btnDisableAccount' => '❌ 关闭账户',
+                        'askTransferTargetId' => '请发送您希望将所有信息转移到的用户的数字 ID
+    请注意，如果目标用户有余额，余额将被删除',
+                        'transferSameUser' => '❌ 您无法将信息转移到当前用户',
+                        'transferDone' => '信息已成功转移到新用户账户',
+                        'alreadyVerified' => '✍️ 该用户已认证',
+                        'accountToggleBusy' => '❌ 机器人当前正在关闭或开启账户；请等待上一个操作完成后再发送新请求',
+                        'configsQueuedEnable' => '✅ 该用户的配置已加入激活队列。请注意，这可能需要超过 2 小时；时间取决于配置数量。',
+                        'configsQueuedDisable' => '✅ 该用户的配置已加入停用队列。请注意，这可能需要超过 2 小时；时间取决于配置数量。',
+                        'notFound' => '❌ 该用户不存在。',
+                        'infoSummary' => '👀 用户信息：
+
+🔗 用户账户信息
+
+⭕️ 用户状态：%s
+⭕️ 用户用户名：@%s
+⭕️ 用户数字 ID：<a href = "tg://user?id=%s">%s</a>
+⭕️ 用户推荐码：%s
+⭕️ 用户加入时间：%s
+⭕️ 用户最后使用机器人的时间：%s
+⭕️ 测试账户限制：%s 
+⭕️ 规则接受状态：%s
+⭕️ 手机号码：<code>%s</code>
+⭕️ 用户类型：%s
+⭕️ 用户下线数量：%s
+⭕  用户推荐人：%s
+⭕  身份认证状态：%s   
+⭕  卡号显示：%s
+⭕ 用户积分：%s
+⭕️  已购买的活跃总流量（要获得准确的流量统计，必须开启定时任务）：%s
+%s
+
+💎 财务报告
+
+🔰 用户余额：%s
+🔰 用户总购买次数：%s
+🔰️ 总支付金额：%s
+🔰 总购买额：%s
+🔰 用户折扣百分比：%s
+🔰 过去一小时销售数量：%s
+🔰 过去一小时销售总额：%s 托曼
+🔰 过去一个月销售数量：%s
+🔰 过去一个月销售总额：%s 托曼
+
+
+',
+                        'notFoundById' => '📌 数字 ID 为 %s 的用户在数据库中不存在',
                 ],
                 'manageadmin' => [
                         'addAdminSet' => '🥳 管理员已成功添加',
@@ -588,6 +1973,12 @@ n2 = 拥有更多权限的代理',
 administrator 权限级别可访问所有部分
 Seller 权限级别仅可访问收据确认、用户服务和机器人统计部分
 support 权限级别可访问用户服务和客服消息回复部分',
+                        'listAndDelete' => '📌 在下方部分，您可以查看管理员列表。您也可以点击 X 按钮删除某个管理员',
+                        'askMessageAdminId' => '📌 请发送您希望将消息发送到的管理员数字 ID',
+                        'cannotDeleteMain' => '❌ 无法删除主管理员',
+                        'notFound' => '⚠️ 未找到此 ID 的管理员。',
+                        'deleted' => '✅ 管理员删除成功',
+                        'askId' => '📌 请发送管理员的数字 ID',
                 ],
                 'managepanel' => [
                         'Inbound' => [
@@ -626,9 +2017,6 @@ support 权限级别可访问用户服务和客服消息回复部分',
                         'getUsernameNew' => ' 请发送新的面板用户名',
                         'invalidDomain' => '🔗 域名地址无效',
                         'invalidName' => '名称无效',
-                        'limitedPanel' => '❌ 很遗憾，此面板的账户创建容量已用尽。请使用其他面板',
-                        'limitedPanelFirst' => '❌ 很遗憾，账户创建容量已用尽。请几小时后再试。',
-                        'nullPanel' => '⭕️ 未找到任何位置。请联系客服解决问题',
                         'nullPanelAdmin' => '未定义面板。请先定义面板，然后再添加产品',
                         'removedPanel' => '面板已成功删除',
                         'repeatPanel' => '❌ 该面板名称已登记。您无法再次登记',
@@ -637,6 +2025,91 @@ support 权限级别可访问用户服务和客服消息回复部分',
                         'setLimit' => '请发送新的账户创建限制。如果您希望无限制，请发送文本 unlimited',
                         'setProtocol' => '✅ 协议已成功设置',
                         'usernameSet' => '👤 面板地址已保存。现在请发送用户名',
+                        'noteSetInboundAndDomain' => '❌ 注意：
+如需激活面板，您必须前往面板管理菜单，并务必设置“设置入站ID”和“订阅链接域名”选项；否则将无法创建配置',
+                        'noteSetProtocolInbound' => '❌ 注意：
+如需激活面板，您必须前往面板管理菜单并设置协议和入站选项，以便机器人提供配置；否则将不会向用户提供配置',
+                        'noteSetInboundId' => '❌ 注意：
+如需激活面板，您必须前往面板管理菜单，进入“设置入站ID”菜单并设置配置名称；否则机器人将不会创建任何配置',
+                        'noteSetGroupNameIbsng' => '❌ 注意：
+如需激活，您必须前往“面板管理” >“设置群组名称”，并将您在 ibsng 中定义的默认群组名称发送给机器人。',
+                        'noteMikrotikAccounting' => '❌ 注意：
+1 - 您的 MikroTik 上必须安装记账（accounting）插件
+2 - 在 ip » services » http 或 https 部分必须启用（如果您购买了 SSL，请启用 https；否则启用 http）',
+                        'noteSetAdminUuid' => '❌ 注意：
+1 - 在面板管理中设置以下选项
+
+1 - uuid admin：从面板获取并登记管理员 uuid
+2 - 订阅链接域名：请发送 Hiddify 面板的订阅链接域名',
+                        'noteSendConfigUsername' => '❌ 注意：
+1 - 从“面板管理” > 设置 ⚙️ 协议和入站，发送一个配置用户名。',
+                        'invalidSelection' => '❌ 所选面板错误',
+                        'hidden' => '隐藏',
+                        'shown' => '显示',
+                        'invalidCredentials' => '❌ 面板用户名或密码错误',
+                        'fetchErrorCode' => '❌ 获取数据时发生错误。错误代码：',
+                        'fetchError' => '❌ 获取数据时发生错误。错误：',
+                        'invalidUrl' => '❌ 发送的面板链接有误',
+                        'notConnected' => '面板未连接',
+                        'askUserGroup' => '📌 请发送用户类型
+用户组：f,n,n2
+❌ 如果您希望该面板对所有用户组显示，请发送文本 all',
+                        'userGroupChanged' => '📌 用户组修改成功',
+                        'btnSubLinkDomain' => '🔗 订阅链接域名',
+                        'askSubLinkSample' => '📌 如果您使用的是 Sanaei 面板，请从面板复制一个用户的订阅链接，然后在此部分发送。其他面板需按其结构发送。',
+                        'subLinkInactive' => '订阅链接未激活',
+                        'subLinkInvalid' => '订阅链接无效',
+                        'askAdminUuid' => '📌 请发送管理员 UUID',
+                        'adminUuidSaved' => '✅ 管理员 UUID 已保存',
+                        'askInboundId' => '📌 请发送您希望用于生成配置的入站 ID。入站 ID 是一个多位数字，写在面板入站页面的 id 列中。
+
+⚠️ 如果您使用的是 wgdashboard 面板，则必须发送配置名称',
+                        'inboundIdSaved' => '✅ 入站 ID 保存成功',
+                        'userNotInPanel' => '该用户在面板中不存在',
+                        'inboundNameSaved' => '入站名称保存成功',
+                        'selectPanel' => '🪚 要使用此功能，请选择下方的一个面板',
+                        'askServiceSetup' => '📌 要设置服务，请在您的面板中创建一个配置，在面板内激活您希望启用的服务，然后发送该配置的用户名',
+                        'setupSaved' => '✅ 信息设置成功',
+                        'askQrBackground' => '请发送您的背景图片',
+                        'invalidImage' => '图片无效',
+                        'qrBackgroundSaved' => '🖼 背景设置成功',
+                        'btnSetGroupName' => '🎛 设置群组名称',
+                        'askGroupName' => '📌 请发送您希望默认使用的群组名称。',
+                        'askProtocolSetup' => '📌 要设置入站和协议，您必须在面板中创建一个配置，在面板内激活您希望启用的协议和入站，然后发送该配置的用户名',
+                        'userNotInPanel2' => '❌ 该用户在面板中不存在。',
+                        'groupNameSaved' => '✅ 群组名称设置成功。',
+                        'protocolSaved' => '✅ 您的入站和协议设置成功。',
+                        'askHideUserId' => '📌 请发送此面板用户的数字 ID。',
+                        'hiddenForUser' => '✅ 该面板已成功对用户隐藏',
+                        'hiddenListEmpty' => '❌ 隐藏列表中没有用户',
+                        'userNotInList' => '❌ 该用户不在列表中',
+                        'userNotInList2' => '❌ 该用户不在列表中。',
+                        'userRemovedFromList' => '✅ 该用户已成功从列表中移除。',
+                        'askConfigUsername' => '📌 如果您使用的是 Marzban 或 Marzneshin 面板，请从面板复制一个配置的用户名并发送；否则，对于 Sanaei 和 Alireza 面板，请发送入站 ID',
+                        'inboundUnsupported' => '❌ 此面板不支持定义入站',
+                        'askHidePanelsAgent' => '❌ 请从下方按钮选择您不希望向此代理显示的面板；选择后，发送 /finish 命令以保存。',
+                        'panelsHidden' => '✅ 面板保存成功，并已对用户隐藏这些面板。',
+                        'alreadyAdded' => '❌ 该面板已被添加',
+                        'panelSelectedFinish' => '✅ 已选择该面板；完成后，发送 /finish 命令以最终保存。',
+                        'askShowPanelsAgent' => '❌ 请从下方列表中选择您希望在代理机器人中重新显示的面板；选择所有面板后，发送 /remove 命令以保存。',
+                        'panelsShown' => '✅ 面板显示成功，并已为用户激活这些面板。',
+                        'panelNotInList' => '❌ 该面板不在列表中',
+                        'panelSelectedRemove' => '✅ 已选择该面板；完成后，发送 /remove 命令以最终保存。',
+                        'hidePanelAllOnly' => '📌 此功能仅在您将产品位置定义为 /all 时有效。',
+                        'askHidePanelProduct' => '📌 如果您将面板位置选择为 /all，但需要不显示某个面板，可以使用此功能
+
+要隐藏面板，请从下方列表中选择您的面板，然后发送 /end_hide 命令。',
+                        'panelsHiddenProduct' => '✅ 面板保存成功，并已为所选产品隐藏这些面板。',
+                        'panelSelectedEndHide' => '✅ 已选择该面板；完成后，发送 /end_hide 命令以最终保存。',
+                        'hiddenPanelsCleared' => '✅ 所有隐藏的面板已被移除',
+                        'invalidToken' => '❌ 面板令牌无效',
+                        'notFound' => '❌ 未找到所需的面板。',
+                        'errorCode' => '❌ 发生错误，错误代码：%s',
+                        'xuiErrorCode' => '❌ 发生错误。错误代码：  ',
+                        'xuiErrorReason' => '❌ 发生错误。原因：  ',
+                        'eylanErrorCode' => '❌  发生错误。错误代码：  %s',
+                        'eylanUserNotExist' => '❌ 用户在面板中不存在。',
+                        'eylanPanelOutput' => '面板输出：',
                 ],
                 'messageBulk' => [
                         'userMessage' => '📥 收到来自用户的消息回复。如需回复，请点击下方按钮并发送您的消息。
@@ -649,33 +2122,319 @@ support 权限级别可访问用户服务和客服消息回复部分',
 数字ID：%s
 用户的用户名：%s
 📝 消息文本：%s',
+                        'busy' => '❌ 消息发送系统当前正在执行操作。待其完成并通知您后，您可以发送新消息。',
+                        'btnCancelPin' => '取消置顶消息',
+                        'confirmStart' => '确认上述选项后，发送过程将开始',
+                        'errorRestart' => '❌ 发生错误。请从头重新执行消息发送步骤',
+                        'askPanelUsers' => '📌 该消息应发送给下方面板中的哪些用户？',
+                        'askPin' => '📌 您是否希望将发送的消息置顶？',
+                        'askInactiveDays' => '📌 在此功能中，消息会发送给您指定的、在一定天数内未使用机器人的用户
+请发送您的天数。',
+                        'askText' => '📌 请发送您的消息文本。',
+                        'askButton' => '📌 如果您希望在消息下方显示一个按钮，请从下方列表中选择一个选项；否则，请点击“不带按钮发送”按钮',
+                        'textOnlyInactive' => '📌 在“在指定天数内未使用机器人的用户”部分，仅可发送文本。',
+                        'textOnlyBroadcast' => '📌 在群发部分，仅可发送文本。',
+                        'targetInactiveUsers' => '在指定天数内未使用的用户',
+                        'targetAllUsers' => '发送给所有用户',
+                        'targetCustomers' => '客户',
+                        'targetNoPurchase' => '没有购买记录的人',
+                        'started' => '✅ 操作已开始。完成后将通知您。',
+                        'canceled' => '📌 消息发送已取消。',
+                        'askTextOrImage' => '📌 请发送您的文本或图片',
+                        'askAllowReply' => '📌 用户是否可以回复？
+1 - 是，可以回复 
+2 - 否，不可回复
+请以数字发送答案',
+                        'btnForwardToUser' => '📤 将消息转发给某用户',
+                        'confirmSummary' => '📌 您正在执行发送消息操作；查看以下信息并确认下方按钮后，发送操作将开始。
+⚙️ 操作类型：%s',
+                        'inactiveDaysLabel' => '用户未发消息的天数：%s',
+                        'confirmSummary2' => '📌 您正在执行发送消息操作；查看以下信息并确认下方按钮后，发送操作将开始。
+⚙️ 操作类型：%s
+🎛 服务类型：%s
+🗂 用户类型：%s
+%s
+',
+                        'answeredByOther' => '❌ 该消息已由另一位管理员回复。',
+                        'done' => '📌 操作已对所有请求的用户执行。',
+                        'progress' => '✏️ 消息发送操作正在进行中...
+
+剩余人数：%s',
                 ],
-                'month' => [
-                        1 => '⏳ 一个月',
-                        '1day' => '⏳ 一天',
-                        2 => '⏳ 两个月',
-                        3 => '⏳ 三个月',
-                        365 => '⏳ 一年',
-                        4 => '⏳ 四个月',
-                        6 => '⏳ 六个月',
-                        '7day' => '⏳ 七天',
-                        'title' => '📌 请选择服务时长',
-                        'unlimited' => '🔋 按流量',
+                'node' => [
+                        'settingsUnavailable' => '❌ 无法查看节点设置',
+                        'intro' => '📌 在此部分，您可以管理 Marzban 面板节点。',
+                        'askMultiplier' => '📌 请发送您节点的使用系数。',
+                        'multiplierSaved' => '✅ 节点使用系数保存成功。',
+                        'askName' => '📌 请发送您节点的名称。',
+                        'nameSaved' => '✅ 节点名称保存成功。',
+                        'askIp' => '📌 请发送节点的 IP。',
+                        'ipSaved' => '✅ 节点地址保存成功。',
+                        'reconnected' => '✅ 节点重新连接完成。',
+                        'deleted' => '✅ 节点删除成功',
+                        'btnSettings' => '⚙️ 节点设置',
+                        'askSetup' => '📌 要设置节点，请在您的面板中创建一个用户，在面板内激活您希望启用的节点，然后发送该用户的用户名',
+                        'info' => '📌 节点信息 
+
+🖥 节点名称：%s
+🌍 节点 IP：%s
+🔻 节点端口：%s
+🔺 节点 api 端口：%s
+🔋节点总消耗：%s
+🔄 节点消耗系数：%s
+🔵 节点 xray 版本：%s
+🟢 节点状态：%s
+    
+',
                 ],
-                'notUser' => '未找到具有此ID的用户',
                 'order' => [
+                        'requestRegistered' => '✅ 已成功登记',
+                        'askRejectReason' => '📌 删除拒绝请求已成功登记。请发送不批准的原因',
                         'notFound' => '❌ 未找到任何订单',
                         'viewOrderUsername' => '👁 如需查看该用户的订单，请发送该用户的配置用户名',
+                        'alreadyDeleted' => '❌ 该服务已被删除',
+                        'selectService' => '⚠️ 找到多个服务；请从下方列表中选择正确的服务',
+                        'typeAdminRenew' => '由管理员续费',
+                        'typeExtraVolume' => '额外流量',
+                        'typeExtraTime' => '额外时间',
+                        'typeTransfer' => '转移至其他账户',
+                        'typeRenewNotInList' => '因用户不在列表中而续费',
+                        'typeChangeLocation' => '更改位置',
+                        'typeGiftTime' => '全员时间赠送',
+                        'typeGiftVolume' => '全员流量赠送',
+                        'askRefundAmount' => '📌 请发送退款金额',
+                        'renewError' => '❌ 续费遇到错误；请重新执行续费步骤。',
+                        'askVolume' => '📌 请发送您请求的流量。',
+                        'askTime' => '⌛️ 请选择您的服务时长 ',
+                        'renewErrorSupport' => '❌ 续费服务时发生错误；请联系客服',
+                        'confirmDeleteFromDb' => '📌 确认下方选项后，此服务将从机器人数据库中彻底删除，且不再计入账户统计（此部分不会从面板删除服务，仅从机器人数据库删除）',
+                        'deleted' => '✅ 服务删除成功。',
+                        'detailRow' => '
+🛒 订单编号：<code>%s</code>
+🛒  机器人中的订单状态：<code>%s</code>
+🙍‍♂️ 用户 ID：<code>%s</code>
+👤 订阅用户名：<code>%s</code> 
+📍 服务位置：%s
+🛍 产品名称：%s
+💰 服务支付价格：%s 托曼
+⚜️ 已购买的服务流量：%s
+⏳ 已购买的服务时间：%s 
+📆 购买日期：%s  
+
+',
+                        'serviceSummary' => '
+  
+ 服务状态：%s
+        
+🔋 服务流量：%s
+📥 已用流量：%s
+💢 剩余流量：%s (%s%%)
+
+📅 有效期至：%s (%s)
+
+用户订阅链接： 
+<code>%s</code>
+
+📶 最后连接时间：%s
+🔄 订阅链接最后更新时间：%s
+#️⃣ 已连接的客户端：<code>%s</code>',
+                        'serviceReport' => '
+📌 服务报告 
+🔗  服务类型：%s
+🕰 服务执行时间：%s 
+
+(%s)
+💰服务执行金额：%s
+👤 用户数字 ID：%s
+👤 配置用户名：%s',
+                        'detailRow3' => '
+🛒 订单编号：%s
+🛒  机器人中的订单状态：%s
+🙍‍♂️ 用户 ID：%s
+👤 订阅用户名：%s
+📍 服务位置：%s
+🛍 产品名称：%s
+💰 服务支付价格：%s 托曼
+⚜️ 已购买的服务流量：%s
+⏳ 已购买的服务时间：%s 
+📆 购买日期：%s  
+
+',
                 ],
-                'panelAdmin' => '👨‍💼 管理面板',
                 'phone' => [
                         'active' => '该用户的手机号码已确认 ✅🎉',
+                ],
+                'price' => [
+                        'priceSaved' => '✅ 金额已成功保存。',
+                        'selectUserGroup' => '📌 价格应为哪种用户类型设置？
+用户类型：
+f = 普通用户
+n = 普通代理
+n2 = 拥有更多权限的代理',
+                        'askRenewCashback' => '📌 请发送续费后您希望作为礼品充值到用户账户的百分比。
+⚠️ 如果您希望禁用，请发送数字 0',
+                        'askUserGroup' => '📌 请选择用户类型
+f
+n
+n2',
+                        'invalidUserGroup' => '❌ 用户组无效',
+                        'amountSaved' => '✅ 金额设置成功',
+                        'askPaymentCashback' => '📌 在此部分，您可以设置付款后作为礼品充值到用户账户的百分比。（要禁用此功能，请发送零）',
+                        'askChangeLocation' => '📌 请发送从其他面板更改到此面板的位置更改价格',
+                        'changeLocationSaved' => '📌 位置更改价格修改成功',
+                        'askExtraVolume' => '📌 请发送此面板额外流量的价格。',
+                        'allGroupsHint' => '⚠️ 如果您希望为所有用户组设置价格，请发送文本 <code>all</code>',
+                        'askCustomVolume' => '📌 请发送此面板自定义额外流量的价格。',
+                        'askExtraTime' => '📌 请发送此面板额外时间的价格。',
+                        'askCustomTime' => '📌 请发送此面板自定义时间的价格。',
+                        'askIncreasePanel' => '📌 您想为哪个面板的产品提价？
+如果您在定义产品时使用了 /all，若希望此分类有价格变动，则必须发送 /all',
+                        'askPriceGroup' => '📌 价格应适用于哪个用户组
+f,n.n2',
+                        'askPercentOrFixed' => '📌 金额应按百分比添加还是固定金额？',
+                        'askAmount' => '📌 请发送您要应用的金额',
+                        'askPercent' => '📌 请发送您要应用的百分比',
+                        'noProductFound' => '❌ 未找到可更改价格的产品',
+                        'appliedToAll' => '✅ 金额已成功应用于所有产品',
+                        'askDecreasePanel' => '📌 您想为哪个面板的产品降价？
+如果您在定义产品时使用了 /all，若希望此分类有价格变动，则必须发送 /all',
+                        'askMinVolume' => '📌 请发送用户可为此面板购买的最低流量。',
+                        'askMaxVolume' => '📌 请发送用户可为此面板购买的最高流量。',
+                        'askMinTime' => '📌 请发送用户可为此面板购买的最短自定义时间。',
+                        'askMaxTime' => '📌 请发送用户可为此面板购买的最长自定义时间。',
+                        'rewardSaved' => '✅ 奖励金额设置成功',
+                        'askAgentVolume' => '📌 请设置您希望代理为每 GB 流量支付的最低价格',
+                        'saved' => '✅ 价格保存成功。',
+                        'askAgentTime' => '📌 请设置您希望代理为每天时间支付的最低价格',
+                        'askPaymentCashback2' => '📌 在此部分，您可以设置付款后作为礼品充值到用户账户的百分比。（要禁用此功能，请发送零）',
+                        'customServiceIntro' => '📌 提交信息前，请阅读以下文本。 
+1 - 此功能用于自定义服务。
+2 - 如果您所有面板价格相同，则无需逐个设置价格，可以使用此功能一次性设置所有价格。
+3 - 在此部分设置价格后不可恢复。
+
+
+要设置价格，请先发送 f 组的价格。',
+                        'askGroupN' => '📌 请发送 n 组的价格。',
+                        'askGroupN2' => '📌 请发送 n2 组的价格。',
+                        'savedGroup' => '✅ 价格设置成功',
+                        'askBulkMin' => '📌 请发送您希望用户进行批量购买的最低金额。
+        
+当前金额：%s',
                 ],
                 'report' => [
                         'reportCron' => '📝 通知报告',
                         'reportNight' => '🌙 夜间报告',
+                        'btnDontShowAgain' => '不再显示 ⛓️‍💥',
+                        'msgHidden' => '
+
+✅ 此消息将不再向您显示。',
+                        'btnPurchaseReports' => '🛍 购买报告',
+                        'btnServicePurchase' => '📌 服务购买报告',
+                        'btnTestAccount' => '🔑 测试账户报告',
+                        'btnOther' => '⚙️ 其他报告',
+                        'btnErrors' => '❌ 错误报告',
+                        'btnFinancial' => '💰 财务报告',
+                        'btnBackup' => '🤖 机器人备份 ',
+                        'btnExport' => '🪪 导出数据',
+                        'noDataToExport' => '❌ 没有可导出的数据',
+                        'btnExportUsers' => '🪪 导出用户数据',
+                        'btnExportOrders' => '🪪 导出用户订单',
+                        'btnExportPayments' => '🪪 导出用户付款记录',
+                        'btnOptimize' => '🗑 优化机器人',
+                        'optimizeWarning' => '❌❌❌❌❌❌❌ 请仔细阅读以下文本
+
+📌 确认下方选项后，将执行以下操作，且不可恢复
+
+1 - 将删除未激活的订单
+2 - 将删除未付款的订单。
+3 - 由管理员删除的订单 
+4- 删除未激活的测试服务
+5 - 由用户删除的订单 
+6 - 时间或流量已用尽的订单',
+                        'botReportIntro' => '💬 | 机器人反馈
+
+🔹 | 如果您在机器人运行中遇到<b>错误或问题</b>，请将其报告给我们以便审核。
+➖➖➖➖➖➖➖➖➖➖➖
+🔹 | 如果您遇到<b>严重错误</b>或异常行为，请尽快报告以便修复。
+➖➖➖➖➖➖➖➖➖➖➖
+🔹 | 如果您有<b>添加新功能</b>的建议或改进机器人性能的想法，我们很乐意听取。
+➖➖➖➖➖➖➖➖➖➖➖
+🔹 | 此外，如果您需要<b>指导</b>或帮助，可以通过私信联系客服团队。
+
+📩 | 要发送报告、建议或请求指导，请在 <b>Mirza 群组</b>中留言：
+<a href="https://t.me/mirzapanelgroup" rel="nofollow" target="_blank">Mirza Group</a>',
+                        'aboutBot' => '💎 | Version Bot: %s
+📌 | Version Mini App: 0.1.1
+
+<blockquote>🔹 | 此机器人完全免费，由 Mirza 团队开发</blockquote>
+
+<blockquote>🔹 | 任何对此机器人的出售或收费均视为违规。</blockquote>
+
+<blockquote>🔹 | 如果您发现任何出售或收费行为，请追踪并追回您的款项。</blockquote>
+
+<blockquote>🐞 | 如果您在机器人运行中遇到错误或问题，请通过管理面板中的 **📬 机器人反馈** 按钮联系我们。</blockquote>',
+                        'gatewayRow' => '
+📌 网关名称：<code>%s</code>
+ - 成功支付次数：<code>%s</code>
+ - 支付总额：<code>%s</code>
+',
+                        'optimizeResult' => '
+✅ 已删除 %s 个未付款订单
+✅ 已删除 %s 个未激活订单。
+✅ 已删除 %s 个管理员删除的订单
+✅ 已删除 %s 个测试订单。',
+                        'backupCaption' => '📌 主机器人数据库导出 ',
+                        'dailyBot' => '📌 机器人每日运行报告：
+
+🧲 今日续费数量：%s 个
+💰 今日续费总额：%s 托曼
+🛍 今日订单数量：%s 个
+🛍 今日订单总金额：%s 托曼
+🔑 今日测试账户：%s 个
+🔋 已售流量总和：%s GB
+今日加入机器人的用户数量：%s 人
+
+',
+                        'dailyPanelRow' => '
+面板名称：%s
+🛍 今日订单数量：%s 个
+🛍 今日订单总金额：%s 托曼
+🔋 已售流量总和：%s GB
+---------------
+
+',
+                        'dailyPanelsTitle' => '面板报告：
+
+',
+                        'dailyTopAgentRow' => '
+用户数字 ID：%s
+用户用户名：%s
+今日总购买额：%s
+---------------
+
+',
+                        'dailyTopAgentsTitle' => '今日购买最多的代理列表：
+
+',
+                        'lotteryTitle' => '📌 尊敬的管理员，以下用户赢得了抽奖，其账户已充值。
+
+',
+                        'lotteryWinnerRow' => '
+用户名：@%s
+数字 ID：%s
+金额：%s
+第几名：%s
+--------------',
+                        'nodeDown' => '🚨 尊敬的管理员，名为 %s 的节点未连接。
+节点状态：%s
+✍️ 错误原因：<code> %s</code>',
+                        'panelDown' => '🚨 尊敬的管理员，名为 <code>%s</code> 的面板未连接。',
                 ],
                 'reportgroup' => [
+                        'newUser' => '🎉 一名新用户启动了机器人
+ 姓名：%s
+用户名：@%s
+数字ID：%s',
                         'adminAdded' => '👨‍💼 一名具有以下信息的用户添加了一名管理员。
 
 用户名 %s
@@ -710,579 +2469,760 @@ support 权限级别可访问用户服务和客服消息回复部分',
 💰 支付金额：%s 托曼
 购买前用户余额：%s
 👤 配置用户名：%s',
-                ],
-                'transfer' => [
-                        'confirm' => '✅ 如确认，请点击下方按钮以成功完成您的转移。',
-                        'confirmed' => '✅ 服务转移已成功完成。',
-                        'description' => '🛂 如需将此订阅转移给其他用户，您必须拥有目标账户的用户ID。
-
-‼️ 转移注意事项：
-1 - 如需获取用户ID，请前往钱包按钮 
-2 - 将订阅转移给目标用户后，该订阅将从您的面板中移除。
-
-🆕 请输入目标账户的用户ID：',
-                        'notSendServiceYou' => '❌ 无法将服务转移给您自己。',
-                        'notUserTrans' => '❌ 未找到具有此ID的用户。',
-                        'title' => '🚚 将服务转移给其他用户',
-                        'transferNotValid' => '❌ 无法将测试服务转移给其他用户。',
-                ],
-                'adminphp' => [
-                        'btn_show_1' => '不再显示 ⛓️‍💥',
-                        'ok_message_show' => '
-
-✅ 此消息将不再向您显示。',
-                        'ask_select_channel_join_name' => '📌 请为频道加入按钮选择一个名称。',
-                        'ask_send_join_link' => '📌 请发送加入链接',
-                        'err_invalid_join_address' => '加入地址不正确',
-                        'ok_success_channel' => '✅ 强制加入频道已成功登记。',
-                        'db_test_service_name' => '测试服务',
-                        'btn_date_must' => '日期必须有效',
-                        'ask_send_date' => '请发送结束日期，例如：
-<code>2025/09/08</code>',
-                        'ask_send_token' => '📌 请发送令牌（token）',
-                        'err_panel_manage_link_domain' => '❌ 注意：
-如需激活面板，您必须前往面板管理菜单，并务必设置“设置入站ID”和“订阅链接域名”选项；否则将无法创建配置',
-                        'err_panel_user_manage_bot' => '❌ 注意：
-如需激活面板，您必须前往面板管理菜单并设置协议和入站选项，以便机器人提供配置；否则将不会向用户提供配置',
-                        'err_panel_manage_bot_set_1' => '❌ 注意：
-如需激活面板，您必须前往面板管理菜单，进入“设置入站ID”菜单并设置配置名称；否则机器人将不会创建任何配置',
-                        'err_panel_manage_bot_set_2' => '❌ 注意：
-如需激活，您必须前往“面板管理” >“设置群组名称”，并将您在 ibsng 中定义的默认群组名称发送给机器人。',
-                        'err_account_enable_must_note' => '❌ 注意：
-1 - 您的 MikroTik 上必须安装记账（accounting）插件
-2 - 在 ip » services » http 或 https 部分必须启用（如果您购买了 SSL，请启用 https；否则启用 http）',
-                        'err_send_panel_admin_manage' => '❌ 注意：
-1 - 在面板管理中设置以下选项
-
-1 - uuid admin：从面板获取并登记管理员 uuid
-2 - 订阅链接域名：请发送 Hiddify 面板的订阅链接域名',
-                        'err_send_panel_user_1' => '❌ 注意：
-1 - 从“面板管理” > 设置 ⚙️ 协议和入站，发送一个配置用户名。',
-                        'err_send_message_1' => '❌ 消息发送系统当前正在执行操作。待其完成并通知您后，您可以发送新消息。',
-                        'btn_message_1' => '取消置顶消息',
-                        'msg_confirm' => '确认上述选项后，发送过程将开始',
-                        'ask_service_user_group' => '📌 该服务应应用于哪个用户组？',
-                        'err_error_message_please' => '❌ 发生错误。请从头重新执行消息发送步骤',
-                        'ask_service_user' => '📌 该服务应应用于哪类用户？',
-                        'msg_panel_user_message' => '📌 该消息应发送给下方面板中的哪些用户？',
-                        'msg_message' => '📌 您是否希望将发送的消息置顶？',
-                        'ask_send_user_bot_day' => '📌 在此功能中，消息会发送给您指定的、在一定天数内未使用机器人的用户
-请发送您的天数。',
-                        'ask_send_message' => '📌 请发送您的消息文本。',
-                        'msg_select_message_button_show' => '📌 如果您希望在消息下方显示一个按钮，请从下方列表中选择一个选项；否则，请点击“不带按钮发送”按钮',
-                        'msg_user_day_1' => '📌 在“在指定天数内未使用机器人的用户”部分，仅可发送文本。',
-                        'msg' => '📌 在群发部分，仅可发送文本。',
-                        'msg_user_day_2' => '在指定天数内未使用的用户',
-                        'btn_user_1' => '发送给所有用户',
-                        'btn_1' => '客户',
-                        'btn_buy' => '没有购买记录的人',
-                        'ok_1' => '✅ 操作已开始。完成后将通知您。',
-                        'btn_message_2' => '📌 消息发送已取消。',
-                        'ask_send_1' => '📌 请发送您的文本或图片',
-                        'ask_send_user_number_1' => '📌 用户是否可以回复？
-1 - 是，可以回复 
-2 - 否，不可回复
-请以数字发送答案',
-                        'btn_user_message' => '📤 将消息转发给某用户',
-                        'err_tutorial_name_must' => '❌ 教程名称必须少于 150 个字符',
-                        'err_tutorial_name' => '❌ 该教程名称已存在。请使用其他名称。',
-                        'ask_send_tutorial_name' => '📌 请发送教程的分类名称',
-                        'ok_bot' => '✅ 机器人已开启',
-                        'err_bot' => '❌ 机器人已关闭',
-                        'ok_confirm_1' => '✅ 规则确认已开启',
-                        'err_confirm_1' => '❌ 规则确认已关闭',
-                        'ok_confirm_2' => '✅ 手机号码验证已开启',
-                        'err_enable_disable_1' => '❌ 电话号码身份验证已停用',
-                        'ok_2' => '✅ 伊朗号码验证已开启',
-                        'err_enable_disable_2' => '❌ 伊朗号码检查已停用',
-                        'err_select_set_group_number' => '❌ 所选群组未处于论坛模式。请先启用群组的话题功能，然后重新设置群组的数字ID',
-                        'btn_report_buy_1' => '🛍 购买报告',
-                        'err_admin_bot_group' => '❌ 机器人不是该群组的管理员',
-                        'btn_report_buy_2' => '📌 服务购买报告',
-                        'btn_account_report' => '🔑 测试账户报告',
-                        'btn_report_1' => '⚙️ 其他报告',
-                        'err_error_report' => '❌ 错误报告',
-                        'btn_report_2' => '💰 财务报告',
-                        'btn_bot_backup' => '🤖 机器人备份 ',
-                        'err_name_must' => '❌ 产品名称必须少于 150 个字符',
-                        'err_invalid_select_panel' => '❌ 所选面板错误',
-                        'ask_send_name_1' => '📌 请发送您的分类名称。',
-                        'err_notfound_select_add_1' => '❌ 所选分类不存在。请从“套餐” >“添加分类”添加您的分类，然后再添加产品。',
-                        'ask_send_user_1' => ' 🗒 请发送该产品的备注。此备注将显示在用户的预开账单中。',
-                        'ask_send_user_2' => ' 🗒 请发送该产品的备注。此备注将显示在用户的预开账单中。',
-                        'ask_admin_delete_button' => '📌 在下方部分，您可以查看管理员列表。您也可以点击 X 按钮删除某个管理员',
-                        'msg_user_renew_buy' => '⚠️ 如需批准用户请求，请先审核并批准购买或续费收据。然后批准钱包充值收据。 ',
-                        'ask_select_user_1' => '📌 请选择用户类型',
-                        'ask_send_price' => '请发送新价格',
-                        'ok_price_day' => '✅ 产品价格已更新',
-                        'ask_send_2' => '请发送新的备注',
-                        'ok_day_1' => '✅ 产品备注已更新',
-                        'ask_select_name_1' => '请选择新的分类名称',
-                        'err_notfound_select_add_2' => '❌ 所选分类不存在。请从“套餐” >“添加分类”添加您的分类，然后再添加产品。',
-                        'ok_day_2' => '✅ 产品分类已更新',
-                        'ask_send_name_2' => '请发送新名称',
-                        'ok_day_name' => '✅ 产品名称已更新',
-                        'ask_send_user_3' => '请发送新的用户类型：
-用户类型：f、n、n2',
-                        'err_invalid_user_group_1' => '❌ 用户组无效',
-                        'ask_send_volume_1' => '请发送流量重置类型',
-                        'ask_select_1' => '📌 请选择新的产品位置',
-                        'err_change_name' => '❌ 您无法将已定义的产品更改为位置名称 /all。',
-                        'ok_day_3' => '✅ 产品位置已更新',
-                        'ask_send_volume_2' => '请发送新的流量',
-                        'msg_user_group' => '📌 充值应存入以下哪个用户组？',
-                        'btn_user_2' => '📌 全体充值应发送给哪位用户？',
-                        'ask_user_message' => '📌 是否应向用户发送充值通知消息？
-是：1
-否：0',
-                        'ok_message' => '✅ 消息发送操作已开始。完成后将通知您。',
-                        'btn_balance' => '⬇️ 减少余额',
-                        'btn_3' => '📌 最大金额为 1 亿里亚尔。',
-                        'btn_name_1' => '未知',
-                        'btn_5' => '未认证',
-                        'btn_6' => '已认证',
-                        'btn_7' => '隐藏',
-                        'btn_show_2' => '显示',
-                        'btn_date' => '⭕️ 代理到期日期：',
-                        'btn_delete_1' => '🗑 删除协议',
-                        'ask_select_account_user' => '⭕️ 请通过下方按钮选择账户的用户名生成方式。
+                        'checkReportGroup' => '❌ 创建订阅时发生错误；要解决此问题，请在您的报告群组中查看错误原因',
+                        'paymentApproved' => '📣 一位管理员批准了付款收据。
         
-⚠️ 如果用户没有用户名，您选择的词语将被注册并用作用户名。
+信息：
+💸 支付方式：%s
+👤 批准管理员的数字 ID：%s
+💰 付款金额：%s
+👤 用户数字 ID：<code>%s</code>
+👤 用户用户名：@%s 
+        付款跟踪码：%s',
+                        'paymentRejected' => '❌ 一位管理员拒绝了付款收据。
         
-⚠️ 如果用户名已存在，将在用户名后添加一个随机数字',
-                        'ask_user_name_register' => '📌 如果用户没有用户名，应注册什么名称？',
-                        'ask_send_user_card_1' => '💳 请发送您的银行卡号
+信息：
+💸 支付方式：%s
+👤 批准管理员的数字 ID：%s
+批准管理员的用户名：@%s
+💰 付款金额：%s
+拒绝原因：%s
+👤 用户数字 ID：%s',
+                        'balanceDecreased' => '📌 一位管理员减少了用户的余额：
+        
+🪪 减少余额的管理员信息： 
+用户名：@%s
+数字 ID：%s
+👤 用户信息：
+用户数字 ID：%s
+余额金额：%s
+减少后的用户余额：%s',
+                        'balanceIncreased' => '📌 一位管理员增加了用户的余额：
+        
+🪪 增加余额的管理员信息： 
+用户名：@%s
+数字 ID：%s
+👤 接收余额的用户信息：
+用户数字 ID：%s
+余额金额：%s
+增加后的用户余额：%s',
+                        'balanceDecreased2' => '📌 一位管理员减少了用户的余额：
+        
+🪪 减少余额的管理员信息： 
+用户名：@%s
+数字 ID：%s
+👤 用户信息：
+用户数字 ID：%s
+余额金额：%s
+减少后的用户余额：%s',
+                        'userBlocked' => '数字 ID 为
+%s 的用户已在机器人中被封禁 
+封禁管理员：%s',
+                        'userUnblocked' => '数字 ID 为
+%s 的用户已在机器人中被解封 
+封禁管理员：%s',
+                        'balanceManualAdd' => '管理员确认卡对卡收据并手动增加余额
+        
+用户数字 ID：%s
+用户用户名：%s
+发票中的交易金额：%s
+管理员存入的交易金额：%s',
+                        'deleteRequestApproved' => '⭕️ 一位管理员批准了用户提出删除请求的服务
+        
+批准用户的信息： 
 
-⚠️ 请注意，您可以定义多个卡号；如果定义了多个卡号，将随机向用户显示其中一个卡号',
-                        'err_card_number_must' => '❌ 卡号必须为数字。',
-                        'err_card' => '❌ 该卡号已存在于数据库中。',
-                        'err_card_name_register_please' => '❌ 卡号注册失败。请重试或联系客服。',
-                        'ask_select_2' => '📌 请选择一个选项',
-                        'err_invalid_panel_user' => '❌ 面板用户名或密码错误',
-                        'err_error_1' => '❌ 获取数据时发生错误。错误代码：',
-                        'err_error_2' => '❌ 获取数据时发生错误。错误：',
-                        'err_invalid_panel_link' => '❌ 发送的面板链接有误',
-                        'btn_panel' => '面板未连接',
-                        'ask_select_3' => '请选择一个选项',
-                        'err_send_panel_user_2' => '📌 请发送用户类型
-用户组：f,n,n2
-❌ 如果您希望该面板对所有用户组显示，请发送文本 all',
-                        'ok_success_user_1' => '📌 用户组修改成功',
-                        'btn_link_domain_sub' => '🔗 订阅链接域名',
-                        'ask_send_panel_user_1' => '📌 如果您使用的是 Sanaei 面板，请从面板复制一个用户的订阅链接，然后在此部分发送。其他面板需按其结构发送。',
-                        'btn_link_sub_enable' => '订阅链接未激活',
-                        'err_invalid_link_sub_name' => '订阅链接无效',
-                        'ask_send_admin' => '📌 请发送管理员 UUID',
-                        'ok_admin_save' => '✅ 管理员 UUID 已保存',
-                        'ask_send_testservice_service_time' => '🕰 请发送测试服务的时长。
-⚠️ 时间以小时为单位。',
-                        'ask_send_testservice_service_volume' => '请发送测试服务的流量。
-⚠️ 流量以兆字节为单位。',
-                        'ask_send_panel_name_id' => '📌 请发送您希望用于生成配置的入站 ID。入站 ID 是一个多位数字，写在面板入站页面的 id 列中。
+🪪 数字 ID：<code>%s</code>
+💰 退款金额：%s 托曼
+👤 用户名：%s
+        取消请求者的数字 ID：%s',
+                        'deleteRequestApproved2' => '⭕️ 一位管理员批准了用户提出删除请求的服务
+        
+批准用户的信息： 
 
-⚠️ 如果您使用的是 wgdashboard 面板，则必须发送配置名称',
-                        'ok_success_save_1' => '✅ 入站 ID 保存成功',
-                        'btn_set_1' => '⚙️ 协议设置',
-                        'ask_send_confirm' => '如需确认，请发送下方的词语。
-<code>تایید</code>',
-                        'ask_select_4' => '📌 请从下方列表中选择一个选项',
-                        'ask_group' => '📌 您想查看哪一组代理？',
-                        'err_amount' => '❌ 最大金额为 1 亿托曼',
-                        'ask_button_confirm' => '如需确认，请点击确认按钮',
-                        'ok_success_user_2' => '✅ 用户认证成功。',
-                        'ok_success_user_3' => '💎 尊敬的用户，您的账户已由管理员成功认证，现在您可以进行购买',
-                        'ok_success_user_4' => '✅ 已成功取消该用户的认证状态。',
-                        'msg_user_sub_bot' => '✳️ 您的账户已解除封禁 ✳️
-现在您可以使用机器人了 ✔️',
-                        'err_user_1' => '❌ 该用户没有下线。',
-                        'msg_user_id' => '📌 已发送与该用户下线相关的 ID。',
-                        'btn_user_3' => '📌 该用户已从下线中移除。',
-                        'btn_user_delete' => '📌 该用户的下线已删除。',
-                        'err_service_delete' => '❌ 该服务已被删除',
-                        'err_error_3' => '发生了错误',
-                        'ask_send_discount_hour_enable' => '📌 优惠码应激活多少小时？如果您希望无限期有效，请发送数字 0',
-                        'ask_send_user_limit' => '📌 请发送单个用户的使用次数限制。',
-                        'btn_discount' => '📌 优惠码应适用于哪个部分？',
-                        'msg_user_limit_must' => '📌 单个用户的使用次数必须小于总限制',
-                        'ask_send_select_panel_discount' => '📌 要为特定产品设置优惠码，请先选择产品位置。
-注意：要选择所有面板，请发送词语 <code>/all</code>',
-                        'ask_send_discount' => '📌 优惠码应适用于哪个产品？请注意，如果您希望优惠码适用于所有产品，请发送词语 all',
-                        'err_invalid_name_1' => '百分比无效',
-                        'ask_user_amount_sub_1' => '📌 请设置您希望用户为账户充值的最低金额',
-                        'msg_user_balance_group' => '📌 最低余额应适用于哪个用户组？
-f
-n
-n2',
-                        'ask_user_amount_sub_2' => '📌 请设置您希望用户为账户充值的最高金额',
-                        'ok_success_change_1' => '更改已成功应用',
-                        'ask_send_user_balance_1' => '📌 请发送用户购买时余额可以为负的最大金额
-注意：数字不应带有横线或负号
-如果您希望用户无限购买，请发送数字 0',
-                        'ask_select_service' => '⚠️ 找到多个服务；请从下方列表中选择正确的服务',
-                        'btn_hour' => '小时',
-                        'btn_8' => '兆字节',
-                        'btn_day_1' => '天',
-                        'btn_9' => '千兆字节',
-                        'err_notfound_panel_user' => '该用户在面板中不存在',
-                        'btn_10' => '在线',
-                        'btn_11' => '离线',
-                        'btn_12' => '未连接',
-                        'err_account' => '❌ 关闭账户',
-                        'btn_admin_renew' => '由管理员续费',
-                        'btn_volume_add' => '额外流量',
-                        'btn_time_add' => '额外时间',
-                        'btn_sub' => '转移至其他账户',
-                        'btn_renew' => '因用户不在列表中而续费',
-                        'btn_change' => '更改位置',
-                        'btn_time' => '全员时间赠送',
-                        'btn_volume' => '全员流量赠送',
-                        'btn_13' => '🪪 导出数据',
-                        'btn_set_settings' => '🕚 定时任务设置',
-                        'err_notfound' => '❌ 没有可导出的数据',
-                        'btn_user_4' => '🪪 导出用户数据',
-                        'btn_user_order' => '🪪 导出用户订单',
-                        'btn_user_payment' => '🪪 导出用户付款记录',
-                        'err_notfound_service_volume_time' => '❌ 由于流量和时间均为无限，无法删除该服务。',
-                        'ask_send_amount_1' => '📌 请发送退款金额',
-                        'ok_success_user_5' => '✅ 金额已成功添加到用户账户。',
-                        'btn_day_2' => '天',
-                        'msg_user_day_message_config' => '在此部分，您必须设置：如果用户在若干天后仍未连接到其配置且处于 on_hold 状态，则向用户发送消息',
-                        'ok_tutorial_day_name_1' => '✅ 教程名称已更新',
-                        'ask_send_3' => '请发送您的新分类',
-                        'ok_tutorial_day_name_2' => '✅ 教程分类名称已更新',
-                        'ask_send_4' => '请发送新的说明',
-                        'ok_tutorial_day' => '✅ 教程说明已更新',
-                        'ask_send_5' => '请发送新的图片或视频',
-                        'ask_user_enable_disable' => '对所有用户还是仅对新用户禁用？
-    新用户 0 
-    所有用户 1
-    2 除代理外的用户',
-                        'err_invalid_select_name_renew' => '❌ 续费方式无效；请从下方列表中选择正确的续费方式',
-                        'err_confirm_2' => '❌ 请先关闭无需审核的自动批准。',
-                        'err_user_bot_name' => '❌ 该用户名在机器人中已存在。',
-                        'err_error_group_report' => '❌ 创建订阅时发生错误；要解决此问题，请在您的报告群组中查看错误原因',
-                        'msg_user_card_enable_buy' => '💳 尊敬的用户，卡号已为您激活；现在您可以进行购买。',
-                        'ok_card_enable' => '✅ 卡号已激活',
-                        'ok_card_enable_disable' => '✅ 卡号已停用',
-                        'ask_send_card_delete' => '📌 请发送您要删除的卡号。',
-                        'ok_success_card' => '✅ 卡号删除成功。',
-                        'ok_success_1' => '✅ 请求已成功被拒绝。',
-                        'err_user_2' => '❌ 尊敬的用户，您的代理申请已被拒绝。',
-                        'ok_user_agent' => '✅ 尊敬的用户，您的代理申请已获批准，您已成为代理。',
-                        'msg_agent_change_button' => '
-请使用下方按钮更改代理类型。',
-                        'btn_gateway' => 'Tornado 网关状态',
-                        'ask_gateway' => '在此部分，您可以关闭或开启 Tornado 网关',
-                        'btn_15' => '已关闭',
-                        'btn_16' => '已开启',
-                        'ok_success_save_2' => '入站名称保存成功',
-                        'btn_bot' => '🗑 优化机器人',
-                        'err_service_user_admin_payment' => '❌❌❌❌❌❌❌ 请仔细阅读以下文本
+🪪 数字 ID：<code>%s</code>
+💰 退款金额：%s 托曼
+👤 用户名：%s
+取消请求者的数字 ID：%s',
+                        'errorConfigCreateAdmin' => '
+从管理面板创建配置时出错
+✍️ 错误原因： 
+%s
+管理员 ID：%s
+面板名称：%s',
+                        'errorAccountCreate' => '
+⭕️ 一位用户尝试获取账户，但配置创建遇到错误，未向用户提供配置
+✍️ 错误原因： 
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s',
+                        'configCreatedByAdmin' => ' 🛍 管理员创建配置 
 
-📌 确认下方选项后，将执行以下操作，且不可恢复
+配置用户名：%s
+配置流量：%s GB
+配置时间：%s 天
+管理员数字 ID：%s
+管理员用户名：%s
+创建数量：%s',
+                        'errorRenewServiceAdmin' => '
+        服务续费错误
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'renewedByAdmin' => '⭕️ 管理员续费了用户的服务。
+        
+用户信息： 
+        
+🪪 管理员数字 ID：<code>%s</code>
+🪪 数字 ID：<code>%s</code>
+🛍 产品名称：%s
+👤 客户在面板中的用户名：%s
+用户服务位置：%s',
+                        'discountUsedRenew' => '⭕️ 用户名为 @{username}、数字 ID 为 {from_id} 的用户使用了优惠码 {discount_code}，并续费了其服务。',
+                        'discountUsed' => '⭕️ 用户名为 @{username}、数字 ID 为 {from_id} 的用户使用了优惠码 {discount_code}。',
+                        'accountCreated' => '📣 账户创建详情已记录在您的机器人中。
 
-1 - 将删除未激活的订单
-2 - 将删除未付款的订单。
-3 - 由管理员删除的订单 
-4- 删除未激活的测试服务
-5 - 由用户删除的订单 
-6 - 时间或流量已用尽的订单',
-                        'err_error_send_user_volume' => '📌 在此部分，您可以设置：当用户的流量达到 x 时发送警告消息。请以 GB 为单位发送流量。',
-                        'err_invalid_name_2' => '❌ 值无效',
-                        'ok_success_save_3' => '✅ 更改保存成功',
-                        'ask_send_user_manage' => '📌 在此部分，您可以手动创建并接收订单 
-⚠️ 如果您希望将配置添加到用户账户并由用户管理，则必须使用添加订单选项。
-- 要添加配置，请先发送用户名。',
-                        'ask_send_config_1' => '📌 请发送您要创建的配置数量；最多可发送 10 个',
-                        'err_send_number' => '❌ 最少 1 个，最多可发送 10 个。',
-                        'ask_send_account_volume' => '📌 请发送账户的使用流量。流量以 GB 为单位。',
-                        'ask_send_service_time_day' => '📌 请发送服务时长；时间以天为单位。',
-                        'btn_17' => '自定义套餐',
-                        'msg_help_bot_group_message' => '💬 | 机器人反馈
+%s
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️用户姓名：%s
+▫️服务位置：%s
+▫️产品名称：%s
+▫️已购买时间：%s 天
+▫️已购买流量：%s GB
+▫️购买前余额：%s 托曼
+▫️购买后余额：%s 托曼
+▫️跟踪码：%s
+▫️用户类型：%s
+▫️用户电话号码：%s
+▫️产品分类：%s
+▫️产品价格：%s 托曼
+▫️最终价格：%s 托曼
+▫️购买时间：%s',
+                        'accountCreatedAfterPay' => '📣 付款后账户创建详情已记录在机器人中。
 
-🔹 | 如果您在机器人运行中遇到<b>错误或问题</b>，请将其报告给我们以便审核。
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | 如果您遇到<b>严重错误</b>或异常行为，请尽快报告以便修复。
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | 如果您有<b>添加新功能</b>的建议或改进机器人性能的想法，我们很乐意听取。
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | 此外，如果您需要<b>指导</b>或帮助，可以通过私信联系客服团队。
+%s
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️服务位置：%s
+▫️已购买时间：%s 天
+▫️已购买产品名称：%s
+▫️已购买流量：%s GB
+▫️购买前余额：%s 托曼
+▫️购买后余额：%s 托曼
+▫️跟踪码：%s
+▫️用户类型：%s
+▫️用户电话号码：%s
+▫️产品价格：%s 托曼
+▫️最终价格：%s 托曼
+▫️购买时间：%s',
+                        'accountCreatedMiniapp' => '📣 账户创建详情已记录在小程序中。
+        
+%s
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️服务位置：%s
+▫️产品名称：%s
+▫️已购买时间：%s 天
+▫️已购买流量：%s GB
+▫️购买前余额：%s 托曼
+▫️购买后余额：%s 托曼
+▫️跟踪码：%s
+▫️用户类型：%s
+▫️用户电话号码：%s
+▫️产品分类：%s
+▫️产品价格：%s 托曼
+▫️购买时间：%s',
+                        'userDeletedService' => '尊敬的管理员，一位用户在其流量或时间结束后删除了服务
+配置用户名：%s',
+                        'commissionPaid' => '
+金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
+时间：%s',
+                        'commissionPaid2' => '
+金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
+时间：%s',
+                        'commissionPaidFn' => '
+金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
+时间：%s',
+                        'commissionPaidFn2' => '
+金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
+时间：%s',
+                        'commissionPaidMiniapp' => '
+    金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
+    时间：%s',
+                        'commissionPaidMiniapp2' => '
+金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
+时间：%s',
+                        'agentExpiredGroupChanged' => '📌 由于代理到期，用户的用户组已更改为 f
 
-📩 | 要发送报告、建议或请求指导，请在 <b>Mirza 群组</b>中留言：
-<a href="https://t.me/mirzapanelgroup" rel="nofollow" target="_blank">Mirza Group</a>',
-                        'ask_select_panel' => '🪚 要使用此功能，请选择下方的一个面板',
-                        'err_admin' => '❌ 此部分仅主管理员可用',
-                        'err_notfound_set_settings' => '❌ 无法查看节点设置',
-                        'msg_panel_manage' => '📌 在此部分，您可以管理 Marzban 面板节点。',
-                        'ask_send_6' => '📌 请发送您节点的使用系数。',
-                        'ok_success_save_4' => '✅ 节点使用系数保存成功。',
-                        'btn_name_2' => '📌 请发送您节点的名称。',
-                        'ok_success_save_5' => '✅ 节点名称保存成功。',
-                        'btn_18' => '📌 请发送节点的 IP。',
-                        'ok_success_address' => '✅ 节点地址保存成功。',
-                        'ok_3' => '✅ 节点重新连接完成。',
-                        'ok_success_delete_1' => '✅ 节点删除成功',
-                        'msg_manage_gateway' => '📌 在下方列表中，您可以管理网关。
+用户数字 ID：%s
+用户用户名：‌ %s',
+                        'errorAqayePardakhtLink' => '⭕️ 创建 Aghaye Pardakht 链接出错
+✍️ 错误原因：%s
+            
+用户 ID：%s
+用户用户名：@%s',
+                        'errorBulkAccountCreate' => '
+⭕️ 批量部分创建账户出错
+✍️ 错误原因： 
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s',
+                        'bulkAccountCreated' => '📣 批量账户创建详情已记录在您的机器人中。
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s_0-%s
+▫️用户姓名：%s
+▫️服务位置：%s
+▫️产品名称：%s
+▫️已购买时间：%s 天
+▫️已购买流量：%s GB
+▫️购买前余额：%s 托曼
+▫️购买后余额：%s 托曼
+▫️跟踪码：%s
+▫️用户类型：%s
+▫️用户电话号码：%s
+▫️产品价格：%s 托曼
+▫️最终价格：%s 托曼
+▫️配置数量：%s 个
+▫️购买时间：%s',
+                        'linkChanged' => '📣 链接更改详情已记录在您的机器人中。
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️用户姓名：%s
+▫️服务位置：%s
+▫️用户类型：%s
+▫️链接更改时间：%s',
+                        'errorChangeLocation' => '更改服务位置时出错
+错误原因： 
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s
+目标面板名称：%s',
+                        'locationChanged' => '  
+服务位置更改 
 
-⚠️ Mirza 团队不对网关提供任何保证，所有使用和责任由您承担',
-                        'ask_send_user_sub_enable' => '📌 请发送续费后您希望作为礼品充值到用户账户的百分比。
-⚠️ 如果您希望禁用，请发送数字 0',
-                        'ask_select_user_2' => '📌 请选择用户类型
-f
-n
-n2',
-                        'err_invalid_user_group_2' => '❌ 用户组无效',
-                        'ok_success_amount_1' => '✅ 金额设置成功',
-                        'ask_send_user_payment_sub_1' => '📌 在此部分，您可以设置付款后作为礼品充值到用户账户的百分比。（要禁用此功能，请发送零）',
-                        'ask_send_account_set' => '📌 请发送您的产品名称。如果您想为测试账户设置，请发送文本 test。',
-                        'btn_19' => '测试',
-                        'ask_notfound_send_set_name' => '未找到此名称的产品。请发送准确的产品名称，或发送文本 test 以设置测试配置。',
-                        'ask_send_name_config_1' => '📌 请按以下示例发送您的配置。
+🔻数字 ID：<code>%s</code>
+🔻用户名：@%s
+🔻旧面板名称：%s
+🔻新面板名称：%s
+🔻 客户在面板中的用户名：%s
+🔻最终服务流量：%s
+🔻用户余额：%s 托曼',
+                        'errorConfigCreate' => '
+⭕️ 创建配置出错
+✍️ 错误原因： 
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s',
+                        'errorConfigCreatePanel' => '
+从管理面板创建配置时出错
+✍️ 错误原因： 
+%s
+管理员 ID：%s
+面板名称：%s',
+                        'errorCryptoLink' => '
+                        ⭕️ 一位用户打算使用货币网关付款，但创建付款链接遇到错误，未向用户提供链接
+✍️ 错误原因：%s
+            
+用户 ID：%s
+用户用户名：@%s',
+                        'errorCryptoLink2' => '
+                        ⭕️ 一位用户打算使用货币网关付款，但创建付款链接遇到错误，未向用户提供链接
+✍️ 错误原因：%s
+            
+用户 ID：%s
+用户用户名：@%s',
+                        'deleteServiceRequest' => '管理员您好 👋
+        
+📌 一位用户向您发送了服务删除请求。请审核，如果正确且您同意，请批准。 
+        
+        
+📊 用户服务信息：
+用户数字 ID：%s
+用户用户名：@%s
+配置用户名：%s
+服务状态：%s
+服务位置：%s
+服务代码：%s
 
-# 配置名称（仅一行，名称前加 #）
-配置（多行 
+🟢 您的最后连接时间：%s
 
-# 配置名称（仅一行，名称前加 #）
-
-trojan://xyz',
-                        'ok_save_config' => '✅ 已保存的配置数量：',
-                        'err_error_save_config_please' => '❌ 保存配置时发生错误。请重试。',
-                        'err_delete_config' => '❌ 删除配置',
-                        'ask_send_delete_name_config' => '📌 请发送您要删除的配置名称 ',
-                        'ok_success_delete_2' => '✅ 配置删除成功。',
-                        'ask_send_panel_price_change' => '📌 请发送从其他面板更改到此面板的位置更改价格',
-                        'ok_success_price_1' => '📌 位置更改价格修改成功',
-                        'ask_send_panel_price_volume_1' => '📌 请发送此面板额外流量的价格。',
-                        'ask_send_user_price' => '⚠️ 如果您希望为所有用户组设置价格，请发送文本 <code>all</code>',
-                        'ask_send_panel_price_volume_2' => '📌 请发送此面板自定义额外流量的价格。',
-                        'ask_send_panel_price_time_1' => '📌 请发送此面板额外时间的价格。',
-                        'ask_send_panel_price_time_2' => '📌 请发送此面板自定义时间的价格。',
-                        'msg_user_payment_gateway_card' => '📌 开启此功能后，用户首次付款后将为其激活卡对卡网关',
-                        'btn_20' => '已关闭',
-                        'btn_21' => '已开启',
-                        'ask_send_name_config_2' => '📌 请发送您要编辑的配置名称 ',
-                        'ask_select_5' => '请选择下方的一个选项 ',
-                        'ask_send_config_2' => '请发送新的配置内容',
-                        'ok_save' => '✅ 已保存。',
-                        'ask_panel_price_change_must_1' => '📌 您想为哪个面板的产品提价？
-如果您在定义产品时使用了 /all，若希望此分类有价格变动，则必须发送 /all',
-                        'msg_user_price_group' => '📌 价格应适用于哪个用户组
-f,n.n2',
-                        'msg_amount_add' => '📌 金额应按百分比添加还是固定金额？',
-                        'ask_send_amount_2' => '📌 请发送您要应用的金额',
-                        'ask_send_7' => '📌 请发送您要应用的百分比',
-                        'err_notfound_price_change' => '❌ 未找到可更改价格的产品',
-                        'ok_success_amount_2' => '✅ 金额已成功应用于所有产品',
-                        'ask_panel_price_change_must_2' => '📌 您想为哪个面板的产品降价？
-如果您在定义产品时使用了 /all，若希望此分类有价格变动，则必须发送 /all',
-                        'ask_send_amount_3' => '📌 请发送最低充值金额',
-                        'ok_amount_set_1' => '✅ 最低充值金额已设置。',
-                        'ask_send_amount_4' => '📌 请发送最高充值金额',
-                        'ok_amount_set_2' => '✅ 最高充值金额已设置。',
-                        'ask_send_panel_user_volume_1' => '📌 请发送用户可为此面板购买的最低流量。',
-                        'ask_send_panel_user_volume_2' => '📌 请发送用户可为此面板购买的最高流量。',
-                        'ask_send_panel_user_time_1' => '📌 请发送用户可为此面板购买的最短自定义时间。',
-                        'ask_send_panel_user_time_2' => '📌 请发送用户可为此面板购买的最长自定义时间。',
-                        'msg_admin_message_number' => '📌 请发送您希望将消息发送到的管理员数字 ID',
-                        'ask_send_name_3' => '📌 请发送部门名称',
-                        'ok_success_add_1' => '📌 部门添加成功。',
-                        'err_notfound_delete' => '❌ 没有可删除的部门。',
-                        'ask_send_delete' => '📌 请发送要删除的部门类型。',
-                        'btn_delete_2' => '📌 所选部分已删除。',
-                        'ask_send_panel_service_user' => '📌 要设置服务，请在您的面板中创建一个配置，在面板内激活您希望启用的服务，然后发送该配置的用户名',
-                        'ok_success_set_1' => '✅ 信息设置成功',
-                        'ask_send_tutorial' => '📌 请发送您的教程。
-1 - 如果您不希望显示教程，请发送数字 2
-2 - 您可以以视频、文本或图片形式发送教程',
-                        'err_invalid_name_3' => '❌ 提交的内容无效。',
-                        'ok_success_tutorial' => '✅ 教程保存成功。',
-                        'btn_perfectmoney_tutorial_set' => '📚 设置 Perfect Money 教程',
-                        'ask_send_join_price' => '📌 请发送代理会员申请的价格。',
-                        'err_confirm_3' => '❌ 请先关闭自动批准。',
-                        'ask_card_bot_time_enable' => '📌 激活此功能后，在您不在线的时段，机器人会自动批准所有卡对卡交易；待您上线后，您再审核收据，如果发送的是虚假收据，则取消该交易',
-                        'ask_send_user_balance_2' => '请发送您希望将所有信息转移到的用户的数字 ID
-    请注意，如果目标用户有余额，余额将被删除',
-                        'err_user_3' => '❌ 您无法将信息转移到当前用户',
-                        'ok_success_user_6' => '信息已成功转移到新用户账户',
-                        'ask_send_8' => '请发送您的背景图片',
-                        'err_invalid_name_4' => '图片无效',
-                        'ok_success_set_2' => '🖼 背景设置成功',
-                        'btn_set_group_name' => '🎛 设置群组名称',
-                        'btn_set_2' => '⚙️ 节点设置',
-                        'ask_send_group_name' => '📌 请发送您希望默认使用的群组名称。',
-                        'ask_send_panel_user_2' => '📌 要设置节点，请在您的面板中创建一个用户，在面板内激活您希望启用的节点，然后发送该用户的用户名',
-                        'ask_send_panel_user_3' => '📌 要设置入站和协议，您必须在面板中创建一个配置，在面板内激活您希望启用的协议和入站，然后发送该配置的用户名',
-                        'err_notfound_panel_1' => '❌ 该用户在面板中不存在。',
-                        'ok_success_set_3' => '✅ 群组名称设置成功。',
-                        'ok_success_set_4' => '✅ 您的入站和协议设置成功。',
-                        'btn_user_confirm' => '✍️ 该用户已认证',
-                        'msg_channel_join_user_bot' => '📌 从现在起，用户无需加入频道即可在机器人中活动',
-                        'err_notfound_admin_delete' => '❌ 无法删除主管理员',
-                        'btn_notfound_admin_id' => '⚠️ 未找到此 ID 的管理员。',
-                        'ok_success_admin' => '✅ 管理员删除成功',
-                        'err_send_account_bot' => '❌ 机器人当前正在关闭或开启账户；请等待上一个操作完成后再发送新请求',
-                        'ok_user_time_hour_enable_1' => '✅ 该用户的配置已加入激活队列。请注意，这可能需要超过 2 小时；时间取决于配置数量。',
-                        'ok_user_time_hour_enable_2' => '✅ 该用户的配置已加入停用队列。请注意，这可能需要超过 2 小时；时间取决于配置数量。',
-                        'ask_send_panel_user_number' => '📌 请发送此面板用户的数字 ID。',
-                        'ok_success_panel_1' => '✅ 该面板已成功对用户隐藏',
-                        'err_notfound_user_1' => '❌ 隐藏列表中没有用户',
-                        'err_notfound_user_2' => '❌ 该用户不在列表中',
-                        'err_notfound_user_3' => '❌ 该用户不在列表中。',
-                        'ok_success_user_7' => '✅ 该用户已成功从列表中移除。',
-                        'ask_send_user_amount_sub' => '📌 请发送您要为用户账户充值的金额。',
-                        'ok_success_amount_3' => '✅ 奖励金额设置成功',
-                        'err_payment_confirm' => '❌ 您没有未批准的付款。',
-                        'err_user_payment_card_delete' => '📌 未批准的卡对卡付款 
-在此部分，您可以查看未批准的付款并批准或拒绝它们。
-❌ ：拒绝付款 
-✅ ：批准付款
-📝 付款详情
-🗑 ：删除收据而不通知用户',
-                        'ok_success_delete_3' => '✅ 所有收据已成功删除 ',
-                        'ask_send_panel_user_4' => '📌 如果您使用的是 Marzban 或 Marzneshin 面板，请从面板复制一个配置的用户名并发送；否则，对于 Sanaei 和 Alireza 面板，请发送入站 ID',
-                        'err_notfound_panel_2' => '❌ 此面板不支持定义入站',
-                        'ok_day_4' => '✅ 产品已更新',
-                        'err_user_4' => '❌ 该用户不存在。',
-                        'err_error_renew' => '❌ 续费遇到错误；请重新执行续费步骤。',
-                        'ask_send_volume_3' => '📌 请发送您请求的流量。',
-                        'ask_select_service_time' => '⌛️ 请选择您的服务时长 ',
-                        'err_error_service_renew' => '❌ 续费服务时发生错误；请联系客服',
-                        'ok_success_delete_4' => '✅ 收据删除成功。',
-                        'err_agent_bot' => '❌ 目前您仅限为您的代理创建 15 个机器人。',
-                        'err_notfound_bot_1' => '❌ 此机器人已安装；无法重新安装。',
-                        'ask_send_token_agent_bot' => '📌 通过此部分，您可以为您的代理创建一个销售机器人，使代理能够使用自己的专属机器人进行销售
-
-- 要创建机器人，请发送机器人令牌。',
-                        'err_invalid_token_name' => '❌ 令牌无效',
-                        'btn_token_register' => '📌 此令牌已注册',
-                        'ask_send_admin_number' => '📌 请发送管理员的数字 ID',
-                        'ask_payment_amount_card' => '如需付款，请将金额存入下方卡号',
-                        'err_success_agent' => '❌ 代理的销售机器人删除成功。',
-                        'ask_price_agent_volume' => '📌 请设置您希望代理为每 GB 流量支付的最低价格',
-                        'ok_success_price_2' => '✅ 价格保存成功。',
-                        'ask_price_agent_time_day' => '📌 请设置您希望代理为每天时间支付的最低价格',
-                        'msg_user_time_day' => '📌 在此部分，您可以设置在订阅结束前多少天通知用户。时间以天为单位',
-                        'ask_select_6' => '📌 请选择一个选项。',
-                        'ask_send_link_add_name' => '📌 要添加应用下载链接，请发送应用名称或按钮名称。',
-                        'btn_name_must' => '📌 名称必须少于 200 个字符。',
-                        'ask_send_link_1' => '📌 请发送应用下载链接',
-                        'ok_success_link_1' => '✅ 您的应用链接添加成功。',
-                        'ask_select_delete_name' => '📌 要删除应用，请从下方列表中选择应用名称',
-                        'ok_success_delete_5' => '✅ 应用删除成功。',
-                        'ask_send_user_payment_sub_2' => '📌 在此部分，您可以设置付款后作为礼品充值到用户账户的百分比。（要禁用此功能，请发送零）',
-                        'ask_send_panel_service_price' => '📌 提交信息前，请阅读以下文本。 
-1 - 此功能用于自定义服务。
-2 - 如果您所有面板价格相同，则无需逐个设置价格，可以使用此功能一次性设置所有价格。
-3 - 在此部分设置价格后不可恢复。
+📥 已用流量：%s
+♾ 服务流量：%s
+🪫 剩余流量：%s
+📅 有效期至：%s (%s)
 
 
-要设置价格，请先发送 f 组的价格。',
-                        'ask_send_price_group_1' => '📌 请发送 n 组的价格。',
-                        'ask_send_price_group_2' => '📌 请发送 n2 组的价格。',
-                        'ok_success_price_3' => '✅ 价格设置成功',
-                        'ask_select_user_change_limit' => '📌 请选择一个选项。
-1 - 用户总共可以更改位置的总限制次数。
-2 - 在总限制中，用户可以免费更改位置的免费限制次数。',
-                        'ok_success_set_5' => '✅ 限制设置成功。',
-                        'msg_user_change' => '📌 确认下方选项后，用户所做的所有位置更改将被重置为零。如果您同意，请点击下方选项。',
-                        'ok_user_limit' => '✅ 所有用户的限制已重置为零。',
-                        'ask_send_user_set_change' => '📌 请发送您要为用户设置的新限制。请注意，此功能会更改已进行的位置更改次数',
-                        'ok_success_user_8' => '✅ 用户的使用次数保存成功。',
-                        'err_send_select_panel_agent_1' => '❌ 请从下方按钮选择您不希望向此代理显示的面板；选择后，发送 /finish 命令以保存。',
-                        'ok_success_panel_2' => '✅ 面板保存成功，并已对用户隐藏这些面板。',
-                        'err_panel_add' => '❌ 该面板已被添加',
-                        'ok_send_select_panel_save_1' => '✅ 已选择该面板；完成后，发送 /finish 命令以最终保存。',
-                        'err_send_select_panel_agent_2' => '❌ 请从下方列表中选择您希望在代理机器人中重新显示的面板；选择所有面板后，发送 /remove 命令以保存。',
-                        'ok_success_panel_3' => '✅ 面板显示成功，并已为用户激活这些面板。',
-                        'err_notfound_panel_3' => '❌ 该面板不在列表中',
-                        'ok_send_select_panel_save_2' => '✅ 已选择该面板；完成后，发送 /remove 命令以最终保存。',
-                        'err_send_message_2' => '❌ 礼品发送系统正在执行操作；待其完成并通知您后，您可以发送新消息。',
-                        'ask_panel_service_volume_time' => '📌 您想为哪个面板的服务赠送流量或时间？',
-                        'err_notfound_panel_4' => '❌ 该面板不存在',
-                        'ask_select_7' => '📌 请选择下方的一个礼品。',
-                        'msg_service_user_volume_add' => '📌 您想为用户的服务添加多少 GB 流量？',
-                        'msg_service_user_day_add' => '📌 您想为用户的服务添加多少天？',
-                        'ask_send_user_4' => '📌 请发送您希望发送给用户的文本',
-                        'msg_admin_time_limit_confirm' => '📌 尊敬的管理员，确认下方选项后，将开始应用礼品的流程。请注意，由于限制，应用礼品将需要一些时间。',
-                        'err_error_4' => '❌ 发生了错误；请从头执行各步骤。',
-                        'ok_success_add_2' => '✅ 礼品发送操作已成功开始；待添加并完成后将通知您。',
-                        'btn_23' => '📌 礼品发送已取消。',
-                        'ask_send_user_agent_bot' => '🕘 请发送代理到期时间。在指定天数结束后，用户将退出代理状态并成为用户组 f。
-请注意，此功能与机器人生成器或代理销售机器人功能无关，仅与您的主机器人相关
+<b>❌ 尊敬的管理员请注意，您点击的删除服务按钮由机器人自动计算，可能存在错误，建议使用手动删除</b>
 
-📌 请发送天数',
-                        'ok_user_time_date' => '✅ 到期日期已设置。
-📌 时间结束后，用户的用户组将更改为 f 并通知用户。',
-                        'msg_card' => '📌 请发送您希望显示卡号的 ID 列表 
-示例： 
-1234435423
-23423131',
-                        'ok_user_card_enable' => '✅ 卡号已为所发送的用户激活。',
-                        'btn_user_card_enable' => '📌 尚未为任何用户激活卡号',
-                        'msg_user_card_enable' => '🪪 卡号已激活的用户列表',
-                        'msg_user_buy' => '您可以决定佣金是仅为下线的首次购买提供，还是为其所有购买提供。',
-                        'err_notfound_service_change_config' => '❌ 尚未连接到配置，无法更改服务状态。连接到配置后，您可以使用此功能。',
-                        'ok_enable_disable_confirm_config' => '✅ 确认并停用配置',
-                        'err_notfound_service_account_manage' => '📌 确认下方选项后，您的配置将被关闭，您将无法再连接到该配置。
-⚠️ 如果您希望重新激活配置，必须从服务管理部分点击 <u>💡 开启账户</u> 按钮',
-                        'ok_enable_confirm_config' => '✅ 确认并启用配置',
-                        'err_service_account_manage_enable' => '📌 确认下方选项后，您的配置将被开启，您将能够连接到该配置。
-⚠️ 如果您希望再次停用配置，必须从服务管理部分点击 <u>❌ 关闭账户</u> 按钮',
-                        'msg_panel_service_sub_bot' => '📌 确认下方选项后，此服务将从机器人数据库中彻底删除，且不再计入账户统计（此部分不会从面板删除服务，仅从机器人数据库删除）',
-                        'ok_success_service' => '✅ 服务删除成功。',
-                        'ask_send_add_name' => '📌 要添加分类，请发送分类名称。',
-                        'ok_success_add_3' => '✅ 分类添加成功。',
-                        'ask_select_delete' => '📌 请选择您要删除的分类',
-                        'ok_success_delete_6' => '✅ 分类删除成功。',
-                        'msg_user_time' => '📌 此功能仅在您将产品位置定义为 /all 时有效。',
-                        'ask_send_select_panel' => '📌 如果您将面板位置选择为 /all，但需要不显示某个面板，可以使用此功能
+服务删除原因：%s',
+                        'discountCodeUsed' => '⭕️ 用户名为 @%s、数字 ID 为 %s 的用户使用了优惠码 %s。',
+                        'discountCodeUsedFn' => '⭕️ 用户名为 @%s、数字 ID 为 %s 的用户使用了优惠码 %s。',
+                        'disruption' => '
+    ⚠️ 具有以下信息的用户提交了服务中断报告。
 
-要隐藏面板，请从下方列表中选择您的面板，然后发送 /end_hide 命令。',
-                        'ok_success_select' => '✅ 面板保存成功，并已为所选产品隐藏这些面板。',
-                        'ok_send_select_panel_save_3' => '✅ 已选择该面板；完成后，发送 /end_hide 命令以最终保存。',
-                        'ok_panel_delete' => '✅ 所有隐藏的面板已被移除',
-                        'err_notfound_bot_2' => '❌ 没有机器人',
-                        'btn_24' => '📌 正在执行 webhook ...',
-                        'ok_success_2' => '✅ webhook 执行成功。',
-                        'ok_user_enable' => '✅ 已为用户启用定时任务通知。',
-                        'ok_user_enable_disable' => '✅ 已为用户停用定时任务通知。',
-                        'ask_select_8' => '📌 请选择您要编辑的分类',
-                        'ask_send_name_4' => '📌 请发送新的分类名称',
-                        'ok_success_change_2' => '✅ 分类名称修改成功。',
-                        'ask_select_name_2' => '📌 要编辑应用，请从下方列表中选择应用名称',
-                        'ask_send_link_2' => '📌 请发送新的应用链接',
-                        'ok_success_link_2' => '✅ 应用链接更新成功。',
-                        'ok_success_time' => '✅ 时间注册成功。',
-                        'btn_25' => '关闭',
-                        'btn_26' => '开启',
-                        'msg_buy' => '📌 通过此功能，您可以设置此产品是否为首次购买专用',
-                        'msg_select_confirm' => '📌 请选择一个选项
-⚠️ 此部分用于无需审核的自动批准',
-                        'ask_send_user_number_2' => '📌 请发送用户的数字 ID',
-                        'err_notfound_user_4' => '❌ 该用户不存在。',
-                        'err_user_5' => '❌ 该用户已在例外列表中',
-                        'ok_success_user_9' => '✅ 该用户已成功添加到列表。',
-                        'ask_send_user_delete_number' => '📌 请发送要从列表中删除的用户的数字 ID',
-                        'err_notfound_user_5' => '❌ 该用户不在例外列表中',
-                        'ok_success_user_10' => '✅ 该用户已成功从列表中移除。',
-                        'err_notfound_user_6' => '❌ 列表中没有用户',
-                        'btn_27' => '人员列表👇',
-                        'msg_panel_admin_bot_report' => '💎 | Version Bot: %s
-📌 | Version Mini App: 0.1.1
+- 用户名：@%s
+- 数字 ID：%s
+- 配置用户名：%s
+- 已购买套餐名称：%s
+- 服务位置：%s
+- 中断说明：%s',
+                        'errorExtraTime' => '购买额外流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'errorExtraTimeFn' => '购买额外流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'extraTime' => '⭕️ 一位用户购买了额外时间
+        
+用户信息： 
+🪪 数字 ID：%s
+🛍 已购买时间：%s 天
+💰 支付金额：%s 托曼
+👤 配置用户名：%s',
+                        'extraTimeFn' => '⭕️ 一位用户购买了额外时间
+        
+用户信息： 
+🪪 数字 ID：%s
+🛍 已购买时间：%s 天
+💰 支付金额：%s 托曼
+👤 配置用户名 %s',
+                        'errorExtraVolume' => '购买额外流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'errorExtraVolume2' => '购买额外流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'errorExtraVolumeFn' => '购买额外流量出错
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'extraVolume' => '⭕️ 一位用户购买了额外流量
+        
+用户信息： 
+🪪 数字 ID：%s
+🛍 已购买流量：%s GB
+💰 支付金额：%s 托曼
+👤 配置用户名：%s
+购买前用户余额：%s
 
-<blockquote>🔹 | 此机器人完全免费，由 Mirza 团队开发</blockquote>
-
-<blockquote>🔹 | 任何对此机器人的出售或收费均视为违规。</blockquote>
-
-<blockquote>🔹 | 如果您发现任何出售或收费行为，请追踪并追回您的款项。</blockquote>
-
-<blockquote>🐞 | 如果您在机器人运行中遇到错误或问题，请通过管理面板中的 **📬 机器人反馈** 按钮联系我们。</blockquote>',
-                        'ok_payment_gateway_name' => '
-📌 网关名称：<code>%s</code>
- - 成功支付次数：<code>%s</code>
- - 支付总额：<code>%s</code>
 ',
-                        'msg_panel_service_account_user' => '📊 <b>机器人总体统计</b>
+                        'extraVolumeFn' => '⭕️ 一位用户购买了额外流量
+        
+用户信息： 
+🪪 数字 ID：%s
+🛍 已购买流量：%s GB
+💰 支付金额：%s 托曼
+👤 配置用户名 %s
+购买前用户余额：%s
+
+',
+                        'newPaymentIranpay' => '💵 新付款
+- 👤 用户用户名：@%s
+- 🆔用户数字 ID：%s
+- 💸 交易金额 %s
+- 💳 支付方式：第三里亚尔货币',
+                        'membershipGiftPaid' => '🎁 会员礼品支付
+ -数字 ID：%s
+ - 用户名：@%s
+ - 推荐人数字 ID：%s
+ - 下线礼品前余额：%s
+ - 下线礼品后余额：%s
+  - 推荐人礼品前余额：%s
+ - 推荐人礼品后余额：%s
+ ',
+                        'newPayment' => '💵 新付款
+                
+用户数字 ID：%s
+交易金额：%s 
+支付方式：第一里亚尔货币网关',
+                        'newPaymentAutoConfirm' => '💵 新付款
+        
+用户数字 ID：%s
+交易金额 %s
+支付方式：无需审核的自动批准
+%s',
+                        'newPaymentBalance' => '
+⭕️ 已进行一笔新付款。
+余额增加            
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💵 用户总付款次数：%s 个
+💸 支付金额：%s 托曼
+                
+说明：%s %s
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentBalance2' => '
+⭕️ 已进行一笔新付款。
+余额增加            
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💸 支付金额：%s 托曼
+                
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentBalanceFn' => '⭕️ 已进行一笔新付款
+        余额增加。
+👤 用户 ID：<code>%s</code>
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💸 支付金额：%s 托曼
+💎 增加前余额：%s
+✍️ 说明：%s',
+                        'newPaymentExtraTime' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+购买额外时间
+服务用户名：%s
+已购买天数：%s
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💵 用户总付款次数：%s 个
+💸 支付金额：%s 托曼
+                
+说明：%s %s
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentExtraTime2' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+购买额外时间
+服务用户名：%s
+已购买天数：%s
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💸 支付金额：%s 托曼
+                
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentExtraVolume' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+购买额外流量
+服务用户名：%s
+已购买流量：%s
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💵 用户总付款次数：%s 个
+💸 支付金额：%s 托曼
+                
+说明：%s %s
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentExtraVolume2' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+购买额外流量
+服务用户名：%s
+已购买流量：%s
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💸 支付金额：%s 托曼
+                
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentService' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+购买新服务
+
+服务用户名：%s
+产品名称：%s
+产品流量：%s GB 
+产品时间：%s 天
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💵 用户总付款次数：%s 个
+💸 支付金额：%s 托曼
+                
+说明：%s %s
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentService2' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+购买新服务
+
+服务用户名：%s
+产品名称：%s
+产品流量：%s GB 
+产品时间：%s 天
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💸 支付金额：%s 托曼
+                
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentRenew' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+续费
+服务用户名：%s
+产品名称：%s
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💵 用户总付款次数：%s 个
+💸 支付金额：%s 托曼
+                
+说明：%s %s
+✍️ 如果收据正确，请批准付款。',
+                        'newPaymentRenew2' => '
+⭕️ 已进行一笔新付款。
+
+⭕️⭕️⭕️⭕️⭕️
+续费
+服务用户名：%s
+产品名称：%s
+👤 用户账户名称：%s
+👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
+💸 用户当前余额：%s 托曼
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💸 支付金额：%s 托曼
+                
+✍️ 如果收据正确，请批准付款。',
+                        'paymentConfirmedExtraTime' => '✅ 付款已批准
+🔋 购买额外时间
+🛍 已购买时间：%s 天
+👤 配置用户名 %s
+👤 用户 ID：<code>%s</code>
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💎 增加前余额：%s
+💸 支付金额：%s 托曼
+
+',
+                        'paymentConfirmedExtraVolume' => '✅ 付款已批准
+🔋 购买额外流量
+🛍 已购买流量：%s GB
+👤 配置用户名 %s
+👤 用户 ID：<code>%s</code>
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💎 增加前余额：%s
+💸 支付金额：%s 托曼
+
+',
+                        'paymentConfirmedService' => '✅ 付款已批准
+ 🛍购买服务 
+ ▫️配置用户名：%s
+▫️服务位置：%s
+👤 用户 ID：<code>%s</code>
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💎 购买前余额：%s
+💸 支付金额：%s 托曼
+✍️ 说明：%s
+
+
+',
+                        'paymentConfirmedRenew' => '✅ 付款已批准
+🔋 续费服务
+🪪 配置用户名：%s
+🛍 产品名称：%s
+🌏 位置名称：%s
+👤 用户 ID：<code>%s</code>
+🛒 付款跟踪码：%s
+⚜️ 用户名：@%s
+💎 续费前余额：%s
+💸 支付金额：%s 托曼
+✍️ 说明：%s
+
+
+',
+                        'errorPaymentLink' => '
+⭕️ 一位用户打算付款，但创建付款链接遇到错误，未向用户提供链接
+✍️ 错误原因：%s
+
+用户 ID：%s
+支付方式：%s
+用户用户名：@%s',
+                        'errorPaymentLink2' => '
+                        ⭕️ 一位用户打算付款，但创建付款链接遇到错误，未向用户提供链接
+✍️ 错误原因：%s
+            
+用户 ID：%s
+支付方式：%s
+用户用户名：@%s',
+                        'errorPaymentLink3' => '
+⭕️ 一位用户打算付款，但创建付款链接遇到错误，未向用户提供链接
+✍️ 错误原因：%s
+            
+用户 ID：%s
+支付方式：%s
+用户用户名：@%s',
+                        'newPaymentPlisio' => '💵 新付款
+- 👤 用户用户名：@%s
+- 🆔用户数字 ID：%s
+- 💸 交易金额 %s
+- 🔗 <a href = "%s">付款链接 </a>
+- 🔗 <a href = "%s">plisio 付款链接 </a>
+- 📥 已存入的 Tron 金额：%s
+- 💳 支付方式：plisio',
+                        'renewed' => '📣 账户续费详情已记录在您的机器人中。
+    
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️用户姓名：%s
+▫️服务位置：%s
+▫️产品名称：%s
+▫️产品流量：%s
+▫️产品时间：%s
+▫️续费金额：%s 托曼
+▫️购买前余额：%s 托曼
+▫️购买后余额：%s 托曼
+▫️购买时间：%s',
+                        'renewedFn' => '📣 账户续费详情已记录在您的机器人中。
+    
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️服务位置：%s
+▫️产品名称：%s
+▫️产品流量：%s
+▫️产品时间：%s
+▫️续费金额：%s 托曼
+▫️购买前余额：%s 托曼
+▫️购买时间：%s',
+                        'errorRenewService' => '服务续费错误
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'errorRenewService2' => '服务续费错误
+        面板名称：%s
+        服务用户名：%s
+        错误原因：%s',
+                        'errorRenewServiceApi' => '
+        服务续费错误
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'errorRenewServiceFn' => '
+        服务续费错误
+面板名称：%s
+服务用户名：%s
+错误原因：%s',
+                        'noteChanged' => '📌  一位用户更改了其服务备注。
+
+▫️ 服务用户名：%s
+▫️ 之前的备注：‌ %s
+▫️ 新备注：‌  %s
+
+备注更改时间：%s ',
+                        'errorStarInvoice' => '
+创建 Star 发票时出错
+✍️ 错误原因：%s
+            
+用户 ID：%s
+支付方式：%s
+用户用户名：@%s',
+                        'errorSubscriptionCreate' => '⭕️ 创建订阅出错
+✍️ 错误原因：
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s',
+                        'errorSubscriptionCreateAdmin' => '⭕️ 创建订阅出错 
+✍️ 错误原因： 
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s',
+                        'errorSubscriptionCreateApi' => '❌ 创建订阅时发生错误；要解决此问题，请在您的报告群组中查看错误原因',
+                        'supportMessage' => '
+    📣 尊敬的客服，一位用户向您发送了一条消息。
+
+用户数字 ID：<a href = "tg://user?id=%s">%s</a>
+发送时间：%s
+消息状态：未回复
+用户用户名：@%s    
+部门名称：%s
+
+消息内容：%s %s',
+                        'supportMessage2' => '
+    📣 尊敬的客服，一位用户向您发送了一条消息。
+
+用户数字 ID：<a href = "tg://user?id=%s">%s</a>
+发送时间：%s
+消息状态：客户回复
+用户用户名：@%s    
+部门名称：%s
+
+消息内容：%s',
+                        'errorTestAccountCreate' => '
+⭕️ 一位用户打算获取测试账户，但创建配置遇到错误，未向用户提供配置
+✍️ 错误原因： 
+%s
+用户 ID：%s
+用户用户名：@%s
+面板名称：%s',
+                        'testAccountCreated' => '📣 测试账户创建详情已记录在您的机器人中。
+▫️用户数字 ID：<code>%s</code>
+▫️用户用户名：@%s
+▫️配置用户名：%s
+▫️用户姓名：%s
+▫️服务位置：%s
+▫️已购买时间：%s 小时
+▫️已购买流量：%s MB
+▫️跟踪码：%s
+▫️用户类型：%s
+▫️用户电话号码：%s
+▫️购买时间：%s',
+                        'userBlockedByApi' => '数字 ID 为 %s 的用户已在机器人中被封禁 
+执行管理员：api site',
+                        'userUnblockedByApi' => '数字 ID 为 %s 的用户已在机器人中被解封 
+执行管理员：api site',
+                        'errorZarinpalLink' => '⭕️ 创建 ZarinPal 链接出错
+✍️ 错误原因：%s
+            
+用户 ID：%s
+用户用户名：@%s',
+                ],
+                'stats' => [
+                        'invalidDate' => '日期必须有效',
+                        'askDate' => '请发送结束日期，例如：
+<code>2025/09/08</code>',
+                        'overall' => '📊 <b>机器人总体统计</b>
 ━━━━━━━━━━━━━━━━━━
 👥 <b>用户总数：</b> <code>%s</code> 人  
 💳 <b>有购买的用户：</b> <code>%s</code> 人  
@@ -1306,7 +3246,7 @@ f,n.n2',
 🧩 <b>面板数量：</b> <code>%s</code>  
 %s
 ',
-                        'msg_account_user_amount_volume_1' => '
+                        'lastHour' => '
 🕐 <b>过去 1 小时统计</b>
 
 
@@ -1328,7 +3268,7 @@ f,n.n2',
 🔑 测试账户：%s 个
 👤 用户数量：%s 人
 ',
-                        'msg_account_user_amount_volume_2' => '
+                        'yesterday' => '
 🕐 <b>前一天统计</b>
 
 ⏳ 时间范围：%s 至%s
@@ -1351,7 +3291,7 @@ f,n.n2',
 🔑 测试账户：%s 个
 👤 用户数量：%s 人
 ',
-                        'msg_account_user_amount_volume_3' => '
+                        'today' => '
 🕐 <b>当天统计</b>
 
 ⏳ 时间范围：%s 至%s
@@ -1374,7 +3314,7 @@ f,n.n2',
 🔑 测试账户：%s 个
 👤 用户数量：%s 人
 ',
-                        'msg_account_user_amount_volume_4' => '
+                        'lastMonth' => '
 🕐 <b>上月统计</b>
 
 ⏳ 时间范围：%s 至%s
@@ -1397,7 +3337,7 @@ f,n.n2',
 🔑 测试账户：%s 个
 👤 用户数量：%s 人
 ',
-                        'msg_account_user_amount_volume_5' => '
+                        'thisMonth' => '
 🕐 <b>本月统计</b>
 
 ⏳ 时间范围：%s 至%s
@@ -1420,7 +3360,7 @@ f,n.n2',
 🔑 测试账户：%s 个
 👤 用户数量：%s 人
 ',
-                        'msg_select_account_user_amount' => '
+                        'selectedRange' => '
 🕐 <b>所选日期统计</b>
 
 ⏳ 时间范围：%s 至 %s
@@ -1443,157 +3383,7 @@ f,n.n2',
 🔑 测试账户：%s 个
 👤 用户数量：%s 人
 ',
-                        'msg_message_button_confirm' => '📌 您正在执行发送消息操作；查看以下信息并确认下方按钮后，发送操作将开始。
-⚙️ 操作类型：%s',
-                        'btn_user_day_message' => '用户未发消息的天数：%s',
-                        'msg_service_user_message' => '📌 您正在执行发送消息操作；查看以下信息并确认下方按钮后，发送操作将开始。
-⚙️ 操作类型：%s
-🎛 服务类型：%s
-🗂 用户类型：%s
-%s
-',
-                        'msg_admin_message' => '
-👤 管理员发送了一条消息  
-消息内容：
-
-%s',
-                        'msg_manage_message_1' => '
-📩 管理层向您发送了一条消息。
-                    
-消息内容： 
-%s',
-                        'msg_manage_message_2' => '
-📩 管理层向您发送了一条消息。
-                    
-消息内容： 
-%s',
-                        'ask_send_admin_tutorial' => '📣 在此部分，您可以发送群组的数字 ID 以发送通知
-群组设置教程：
-1 - 首先创建一个群组 
-2 - 将机器人 @myidbot 加入群组，并在群组内发送命令 /getgroupid@myidbot 
-3 - 在群组设置中开启话题或论坛模式4
-4 - 将您自己的机器人设为群组管理员 
-5 - 将发送的数字 ID 发送给机器人。
-
-您当前的数字 ID：%s',
-                        'err_success_error' => '❌ 连接到群组未成功  
-
-收到的错误：  %s',
-                        'err_name_1' => '❌ 名为 %s 的产品已存在',
-                        'ok_user_admin_payment' => '✅. 该付款已由另一位管理员批准
-👤 用户 ID：<code>%s</code>
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💎 批准后余额：%s
-💸 支付金额：%s 托曼
-',
-                        'msg_user_amount_sub' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
-                        'msg_user_admin_payment' => '📣 一位管理员批准了付款收据。
-        
-信息：
-💸 支付方式：%s
-👤 批准管理员的数字 ID：%s
-💰 付款金额：%s
-👤 用户数字 ID：<code>%s</code>
-👤 用户用户名：@%s 
-        付款跟踪码：%s',
-                        'err_user_payment' => '❌ 尊敬的用户，您的付款因以下原因被拒绝。
-✍️ %s
-🛒 付款跟踪码：%s
-                
-',
-                        'err_user_admin_payment' => '❌ 一位管理员拒绝了付款收据。
-        
-信息：
-💸 支付方式：%s
-👤 批准管理员的数字 ID：%s
-批准管理员的用户名：@%s
-💰 付款金额：%s
-拒绝原因：%s
-👤 用户数字 ID：%s',
-                        'msg_user_price_volume' => '
-📌 正在编辑的产品信息：
-产品名称：%s
-产品价格：%s
-产品流量：%s
-产品位置：%s
-产品时间：%s
-产品用户类型：%s
-产品流量周期性重置：%s
-产品备注：%s
-产品分类：%s
-已售产品数量：%s
-    
-',
-                        'err_name_2' => '❌ 名为 %s 的产品已存在',
-                        'msg_user_manage_amount' => '🎁 尊敬的用户，管理层向您的钱包赠送了 %s 托曼。',
-                        'err_user_balance_amount_1' => '❌ 尊敬的用户，已从您的钱包余额中扣除 %s 托曼。',
-                        'msg_user_admin_balance_1' => '📌 一位管理员减少了用户的余额：
-        
-🪪 减少余额的管理员信息： 
-用户名：@%s
-数字 ID：%s
-👤 用户信息：
-用户数字 ID：%s
-余额金额：%s
-减少后的用户余额：%s',
-                        'msg_join_account_user' => '👀 用户信息：
-
-🔗 用户账户信息
-
-⭕️ 用户状态：%s
-⭕️ 用户用户名：@%s
-⭕️ 用户数字 ID：<a href = "tg://user?id=%s">%s</a>
-⭕️ 用户推荐码：%s
-⭕️ 用户加入时间：%s
-⭕️ 用户最后使用机器人的时间：%s
-⭕️ 测试账户限制：%s 
-⭕️ 规则接受状态：%s
-⭕️ 手机号码：<code>%s</code>
-⭕️ 用户类型：%s
-⭕️ 用户下线数量：%s
-⭕  用户推荐人：%s
-⭕  身份认证状态：%s   
-⭕  卡号显示：%s
-⭕ 用户积分：%s
-⭕️  已购买的活跃总流量（要获得准确的流量统计，必须开启定时任务）：%s
-%s
-
-💎 财务报告
-
-🔰 用户余额：%s
-🔰 用户总购买次数：%s
-🔰️ 总支付金额：%s
-🔰 总购买额：%s
-🔰 用户折扣百分比：%s
-🔰 过去一小时销售数量：%s
-🔰 过去一小时销售总额：%s 托曼
-🔰 过去一个月销售数量：%s
-🔰 过去一个月销售总额：%s 托曼
-
-
-',
-                        'ask_send_api' => '⚙️ 请发送您的 Plisio API 密钥。
-
-🔑 要获取 API 密钥，请访问以下网站：
-plisio.net
-
-📌 您当前的密钥：
-<code>%s</code>',
-                        'ask_enter_api' => '⚙️ 请发送您的 NowPayments API 密钥。
-
-🔑 要获取 API 密钥，请访问以下网站：
-nowpayments.io
-
-📌 您当前的密钥：
-<code>%s</code>',
-                        'ask_enter_payment_merchant' => '💳 从 Aghaye Pardakht 获取您的商户代码并在此部分输入
-        
-您当前的商户代码：%s',
-                        'ask_enter_zarinpal_merchant' => '💳 从 ZarinPal 获取您的商户代码并在此部分输入
-        
-您当前的商户代码：%s',
-                        'ok_select_panel_user_1' => '
+                        'panelMarzban' => '
 您的面板统计👇：
                              
 🖥 Marzban 面板连接状态：✅ 面板已连接
@@ -1608,10 +3398,7 @@ nowpayments.io
 用户组：%s
         
 ⭕️ 要管理面板，请选择下方的一个选项',
-                        'err_error_5' => '错误原因： 
-%s',
-                        'err_error_6' => '错误原因 %s',
-                        'ok_select_panel_user_2' => '
+                        'panelServer' => '
 您的面板统计👇：
                              
 🖥 面板连接状态：✅ 面板已连接
@@ -1619,7 +3406,7 @@ nowpayments.io
 💻 面板内存使用：%s
 用户组：%s
 ⭕️ 要管理面板，请选择下方的一个选项',
-                        'ok_select_panel_user_3' => '
+                        'panelMarzban2' => '
 您的面板统计👇：
                              
 🖥 Marzban 面板连接状态：✅ 面板已连接
@@ -1630,7 +3417,7 @@ nowpayments.io
 用户组：%s
         
 ⭕️ 要管理面板，请选择下方的一个选项',
-                        'ok_select_panel_user_4' => '
+                        'panelSales' => '
 您的面板统计👇：
 
 🖥 面板连接状态：✅ 面板已连接
@@ -1639,9 +3426,7 @@ nowpayments.io
 用户组：%s
 
 ⭕️ 要管理面板，请选择下方的一个选项',
-                        'err_invalid_panel_token' => '❌ 面板令牌无效',
-                        'ask_send_new_text' => '📌 发送您的新文本',
-                        'msg_time_name' => '<b>📡 您的 MikroTik 系统信息：</b>
+                        'mikrotik' => '<b>📡 您的 MikroTik 系统信息：</b>
 
 <blockquote>
 🖥 <b>平台：</b> %s  
@@ -1674,129 +3459,56 @@ nowpayments.io
 🧮 <b>写入扇区总数：</b> %s
 </blockquote>
 ',
-                        'msg_user_balance_amount_add_1' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
-                        'msg_user_admin_balance_2' => '📌 一位管理员增加了用户的余额：
-        
-🪪 增加余额的管理员信息： 
-用户名：@%s
-数字 ID：%s
-👤 接收余额的用户信息：
-用户数字 ID：%s
-余额金额：%s
-增加后的用户余额：%s',
-                        'err_user_balance_amount_2' => '❌ 尊敬的用户，已从您的钱包余额中扣除 %s 托曼。',
-                        'msg_user_admin_balance_3' => '📌 一位管理员减少了用户的余额：
-        
-🪪 减少余额的管理员信息： 
-用户名：@%s
-数字 ID：%s
-👤 用户信息：
-用户数字 ID：%s
-余额金额：%s
-减少后的用户余额：%s',
-                        'msg_user_admin_bot_number_1' => '数字 ID 为
-%s 的用户已在机器人中被封禁 
-封禁管理员：%s',
-                        'msg_user_admin_bot_number_2' => '数字 ID 为
-%s 的用户已在机器人中被解封 
-封禁管理员：%s',
-                        'msg_user_payment_amount_date_1' => '🛒 付款编号：<code>%s</code>
-🙍‍♂️ 用户 ID：<code>%s</code>
-💰 支付金额：%s 托曼
-⚜️ 付款状态：%s
-⭕️ 支付方式：%s 
-📆 购买日期：%s',
-                        'msg_user_balance_amount_add_2' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
-                        'ok_success_panel_4' => '
-🎁 您的优惠码创建成功。
+                        'server' => '🖥 <b>服务器状态</b>
 
-📩 优惠码名称：<code>%s</code>
-🧮 优惠码百分比：%s
-🎛 面板：%s
-📌  产品：%s
-♻️ 用户类型：%s
-🔴 使用限制：%s',
-                        'ask_send_user_card_2' => '📌 请发送您不带 @ 的用户名以接收卡号
+⚙️ <b>处理器</b>
+├ 使用率: <code>{cpu}%</code>
+├ 核心: <code>{cpuCores}</code> (逻辑: {logicalPro})
+└ 频率: <code>{cpuSpeed} GHz</code>
 
-%s',
-                        'msg_user_balance_amount_add_3' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
-                        'msg_user_admin_balance_4' => '管理员确认卡对卡收据并手动增加余额
-        
-用户数字 ID：%s
-用户用户名：%s
-发票中的交易金额：%s
-管理员存入的交易金额：%s',
-                        'msg_service_user_payment_1' => '
-🛒 订单编号：<code>%s</code>
-🛒  机器人中的订单状态：<code>%s</code>
-🙍‍♂️ 用户 ID：<code>%s</code>
-👤 订阅用户名：<code>%s</code> 
-📍 服务位置：%s
-🛍 产品名称：%s
-💰 服务支付价格：%s 托曼
-⚜️ 已购买的服务流量：%s
-⏳ 已购买的服务时间：%s 
-📆 购买日期：%s  
+📊 <b>系统负载</b> (1/5/15 分钟)
+└ <code>{load1} | {load5} | {load15}</code>
 
-',
-                        'msg_service_user_link_volume' => '
-  
- 服务状态：%s
-        
-🔋 服务流量：%s
-📥 已用流量：%s
-💢 剩余流量：%s (%s%%)
+🧠 <b>内存</b>
+└ <code>{memUsed} / {memTotal}</code> ({memPercent}%)
 
-📅 有效期至：%s (%s)
+💾 <b>磁盘</b>
+└ <code>{diskUsed} / {diskTotal}</code> ({diskPercent}%)
 
-用户订阅链接： 
-<code>%s</code>
+🌐 <b>网络 (实时)</b>
+├ 上传: <code>{netUp}/s</code>
+└ 下载: <code>{netDown}/s</code>
 
-📶 最后连接时间：%s
-🔄 订阅链接最后更新时间：%s
-#️⃣ 已连接的客户端：<code>%s</code>',
-                        'msg_service_user_amount' => '
-📌 服务报告 
-🔗  服务类型：%s
-🕰 服务执行时间：%s 
+📡 <b>总流量</b>
+├ 已发送: <code>{netSent}</code>
+└ 已接收: <code>{netRecv}</code>
 
-(%s)
-💰服务执行金额：%s
-👤 用户数字 ID：%s
-👤 配置用户名：%s',
-                        'err_user_delete_name' => '❌ 尊敬的用户，您使用用户名 %s 的删除请求未获批准。
-        
-        未批准原因：%s',
-                        'msg_user_balance_amount_add_4' => '💰尊敬的用户，已向您的余额添加 %s 托曼。',
-                        'err_user_balance_amount_add' => '❌ 已向用户余额添加 %s 托曼。',
-                        'ok_user_delete_name_1' => '✅ 尊敬的用户，您使用用户名 %s 的删除请求已获批准。',
-                        'msg_service_user_admin_1' => '⭕️ 一位管理员批准了用户提出删除请求的服务
-        
-批准用户的信息： 
+🔌 <b>连接数</b>
+└ TCP: <code>{tcp}</code> | UDP: <code>{udp}</code>
 
-🪪 数字 ID：<code>%s</code>
-💰 退款金额：%s 托曼
-👤 用户名：%s
-        取消请求者的数字 ID：%s',
-                        'ok_user_delete_name_2' => '✅ 尊敬的用户，您使用用户名 %s 的删除请求已获批准。',
-                        'msg_user_balance_amount_add_5' => '💰尊敬的用户，已向您的余额添加 %s 托曼。',
-                        'msg_service_user_admin_2' => '⭕️ 一位管理员批准了用户提出删除请求的服务
-        
-批准用户的信息： 
+🛡 <b>Xray</b>
+├ 状态: <code>{xrayState}</code>
+└ 版本: <code>{xrayVersion}</code>
 
-🪪 数字 ID：<code>%s</code>
-💰 退款金额：%s 托曼
-👤 用户名：%s
-取消请求者的数字 ID：%s',
-                        'ask_send_address_api' => '📌 请发送 API 地址。
+🏷 <b>面板版本:</b> <code>{panelVersion}</code>
+⏱ <b>运行时间:</b> <code>{uptime}</code>
 
-当前地址：%s',
-                        'btn_token_api' => '您的 api 令牌：<code>%s</code>',
-                        'msg_api_docs_link' => '📘 完整 API 文档：
-%s
-
-请在每个请求的 <code>Token</code> 头中携带上面的令牌。',
-                        'ok_success_panel_5' => '✅  您的网页面板已成功激活。
+🔗 <b>公网 IP</b>
+├ IPv4: <code>{ipv4}</code>
+└ IPv6: <code>{ipv6}</code>',
+                        'xrayRunning' => '🟢 运行中',
+                        'xrayStopped' => '🔴 已停止',
+                        'ipNone' => '无',
+                ],
+                'unit' => [
+                        'hours' => '小时',
+                        'megabytes' => '兆字节',
+                        'days' => '天',
+                        'gigabytes' => '千兆字节',
+                        'day' => '天',
+                ],
+                'webpanel' => [
+                        'activated' => '✅  您的网页面板已成功激活。
 
 
 🔗登录地址：https://%s/panel
@@ -1804,141 +3516,7 @@ nowpayments.io
 🔑密码：<code>%s</code>
 
 ⚠️ 如果您再次点击面板激活按钮，将收到新密码。',
-                        'err_error_panel_admin_name' => '
-从管理面板创建配置时出错
-✍️ 错误原因： 
-%s
-管理员 ID：%s
-面板名称：%s',
-                        'ask_send_user_amount_buy' => '📌 请发送您希望用户进行批量购买的最低金额。
-        
-当前金额：%s',
-                        'msg_user_name_register_1' => '📣 一位用户提交了代理申请；请审核信息并确定状态。
-
-数字 ID：%s
-用户名：%s 
-说明：%s ',
-                        'msg_user_name_register_2' => '📣 一位用户提交了代理申请；请审核信息并确定状态。
-
-数字 ID：%s
-用户名：%s
-说明：%s ',
-                        'btn_confirm_1' => '
-状态：已批准 (%s)',
-                        'msg_user_name_register_3' => '📣 一位用户提交了代理申请；请审核信息并确定状态。
-
-数字 ID：%s
-用户名：%s
-说明：%s ',
-                        'btn_confirm_2' => '
-状态：已批准 (%s)',
-                        'ask_enter_merchant' => '💳 获取您的商户代码并在此部分输入
-        
-您当前的商户代码：%s',
-                        'ok_admin_payment_delete_enable' => '
-✅ 已删除 %s 个未付款订单
-✅ 已删除 %s 个未激活订单。
-✅ 已删除 %s 个管理员删除的订单
-✅ 已删除 %s 个测试订单。',
-                        'err_error_panel_account_user' => '
-⭕️ 一位用户尝试获取账户，但配置创建遇到错误，未向用户提供配置
-✍️ 错误原因： 
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s',
-                        'msg_user_admin_volume' => ' 🛍 管理员创建配置 
-
-配置用户名：%s
-配置流量：%s GB
-配置时间：%s 天
-管理员数字 ID：%s
-管理员用户名：%s
-创建数量：%s',
-                        'err_error_7' => '❌  发生了错误。错误代码：%s',
-                        'err_error_8' => '❌  发生了错误。错误代码：%s',
-                        'err_error_9' => '❌  发生了错误。错误代码：%s',
-                        'msg_api_name' => '📌 节点信息 
-
-🖥 节点名称：%s
-🌍 节点 IP：%s
-🔻 节点端口：%s
-🔺 节点 api 端口：%s
-🔋节点总消耗：%s
-🔄 节点消耗系数：%s
-🔵 节点 xray 版本：%s
-🟢 节点状态：%s
-    
-',
-                        'ask_send_wallet_address' => '💳 请发送您的 Tron trc20 钱包地址
-        
-        您当前的钱包：%s',
-                        'ask_send_api_merchant_1' => '📌 请发送您的 API 代码。
-        
-        您当前的商户：%s',
-                        'ask_send_user_name' => '📌 请发送您不带 @ 的用户名以联系客服
-
-%s',
-                        'err_error_10' => '❌  发生了错误。错误代码：%s',
-                        'err_error_11' => '❌  发生了错误。错误代码：%s',
-                        'btn_user_balance_amount' => '用户 %s 的余额已重置为零',
-                        'msg_user_payment_amount_date_2' => '🛒 付款编号：<code>%s</code>
-🙍‍♂️ 用户 ID：<code>%s</code>
-💰 支付金额：%s 托曼
-⚜️ 付款状态：%s
-⭕️ 支付方式：%s 
-📆 购买日期：%s',
-                        'err_error_12' => '❌  发生了错误。错误代码：%s',
-                        'ok_service_user_volume' => '📜 您用户名为 %s 的续费发票已创建。
-        
-🛍 产品名称：%s
-⏱ 续费时长：%s 天
-🔋 续费流量：%s GB
-✍️ 说明：%s
-✅ 要确认并续费服务，请点击下方按钮',
-                        'err_error_panel_service_user' => '
-        服务续费错误
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                        'msg_panel_service_user' => '⭕️ 管理员续费了用户的服务。
-        
-用户信息： 
-        
-🪪 管理员数字 ID：<code>%s</code>
-🪪 数字 ID：<code>%s</code>
-🛍 产品名称：%s
-👤 客户在面板中的用户名：%s
-用户服务位置：%s',
-                        'msg_service_user_payment_2' => '
-🛒 订单编号：%s
-🛒  机器人中的订单状态：%s
-🙍‍♂️ 用户 ID：%s
-👤 订阅用户名：%s
-📍 服务位置：%s
-🛍 产品名称：%s
-💰 服务支付价格：%s 托曼
-⚜️ 已购买的服务流量：%s
-⏳ 已购买的服务时间：%s 
-📆 购买日期：%s  
-
-',
-                        'url_telegram_sendmessage' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ 尊敬的用户，您的机器人已成功安装。',
-                        'ok_success_user_11' => '✅ 代理机器人创建成功。
-⚙️ 机器人用户名：@%s
-🤠 机器人令牌：<code>%s</code>',
-                        'ask_send_user_change_limit_1' => '📌  请发送用户可以更改位置的总限制次数。请注意，此限制适用于所有配置
-当前限制：%s',
-                        'ask_send_user_change_limit_2' => '📌  请发送用户可以免费更改位置的免费限制次数。请注意，此限制适用于所有配置
-当前限制：%s',
-                        'err_notfound_user_number' => '📌 数字 ID 为 %s 的用户在数据库中不存在',
-                        'ask_send_time_confirm' => '📌 在此部分，您可以设置无需审核的自动批准在多少分钟后批准收据。
-请以分钟为单位发送您的时间
-当前时间：%s',
-                        'ask_send_api_merchant_2' => '请在此部分发送收到的 api
-        
-您当前的商户代码：%s',
-                        'msg_mini_app_instruction' => '📌 在 BotFather 机器人中激活小程序的教程
+                        'miniAppHelp' => '📌 在 BotFather 机器人中激活小程序的教程
 
 /mybots > Select Bot > Bot Setting >  Configure Mini App > Enable Mini App  > Edit Mini App URL
 
@@ -2555,1488 +4133,14 @@ nowpayments.io
                 'zarinPalGateway' => '🟡 ZarinPal',
                 'zarinPalMerchant' => 'ZarinPal 商户',
                 'zeroBalance' => '0️⃣ 余额清零',
-        ],
-        'language' => [
-                'changeButton' => '🌏 切换语言',
-                'selectPrompt' => '🌏 请选择您想要的语言。',
-                'setSuccess' => '✅ 语言设置成功',
-        ],
-        'extracted' => [
-                'admin_php' => [
-                        'panelNotFound' => '❌ 未找到所需的面板。',
-                        'panelErrorCode' => '❌ 发生错误，错误代码：%s',
-                        'selectPanelForOrder' => '📌 请从下方列表中选择该订单将在哪个面板上创建',
-                        'panelSelectedSuccess' => '✅ 面板选择成功',
-                        'serverStatus' => '🖥 <b>服务器状态</b>
-
-⚙️ <b>处理器</b>
-├ 使用率: <code>{cpu}%</code>
-├ 核心: <code>{cpuCores}</code> (逻辑: {logicalPro})
-└ 频率: <code>{cpuSpeed} GHz</code>
-
-📊 <b>系统负载</b> (1/5/15 分钟)
-└ <code>{load1} | {load5} | {load15}</code>
-
-🧠 <b>内存</b>
-└ <code>{memUsed} / {memTotal}</code> ({memPercent}%)
-
-💾 <b>磁盘</b>
-└ <code>{diskUsed} / {diskTotal}</code> ({diskPercent}%)
-
-🌐 <b>网络 (实时)</b>
-├ 上传: <code>{netUp}/s</code>
-└ 下载: <code>{netDown}/s</code>
-
-📡 <b>总流量</b>
-├ 已发送: <code>{netSent}</code>
-└ 已接收: <code>{netRecv}</code>
-
-🔌 <b>连接数</b>
-└ TCP: <code>{tcp}</code> | UDP: <code>{udp}</code>
-
-🛡 <b>Xray</b>
-├ 状态: <code>{xrayState}</code>
-└ 版本: <code>{xrayVersion}</code>
-
-🏷 <b>面板版本:</b> <code>{panelVersion}</code>
-⏱ <b>运行时间:</b> <code>{uptime}</code>
-
-🔗 <b>公网 IP</b>
-├ IPv4: <code>{ipv4}</code>
-└ IPv6: <code>{ipv6}</code>',
-                        'xuiErrorCode' => '❌ 发生错误。错误代码：  ',
-                        'xuiErrorReason' => '❌ 发生错误。原因：  ',
-                        'xrayActive' => '🟢 运行中',
-                        'xrayStopped' => '🔴 已停止',
-                        'ipNone' => '无',
-                        'eylanErrorCode' => '❌  发生错误。错误代码：  %s',
-                        'eylanUserNotExist' => '❌ 用户在面板中不存在。',
-                        'eylanPanelOutput' => '面板输出：',
-                ],
-                'keyboard_php' => [
-                        'panelSetting' => '🎛 面板设置',
-                        'mirzaAgentPanel' => 'Mirza 代理',
-                        'setGroupName' => '🎛 设置群组名称',
-                        'subLinkDomain' => '🔗 订阅链接域名',
-                        'panelTypeSanaei' => 'Sanaei 单端口',
-                        'panelTypeAlireza' => 'Alireza 单端口',
-                        'usernameMethodAgentCustom' => '自定义代理文本 + 顺序编号',
-                        'currencyToman' => '托曼',
-                ],
-                'index_php' => [
-                        'langBtnFa' => '🇮🇷 فارسی',
-                        'langBtnEn' => '🇬🇧 English',
-                        'langBtnZh' => '🇨🇳 中文',
-                        'langBtnRu' => '🇷🇺 Русский',
-                        'acceptRulesButton' => '✅ 我接受规则',
-                        'affiliateBalanceGift' => '🎁 来自用户 ID 为 {from_id} 的下线，金额 {addbalancediscount} 已添加到您的余额。',
-                        'unlimited' => '无限制',
-                        'dayUnit' => '天',
-                        'remainingSuffix' => ' 其他',
-                        'statusOnline' => '在线',
-                        'statusOffline' => '离线',
-                        'statusNotConnected' => '未连接',
-                        'servicesFound' => '🛍 找到 {countservice} 个服务。要查看和管理服务，请点击其中一个服务',
-                        'accountInfoUnavailable' => '❌ 目前无法查看账户信息',
-                        'servicePassword' => '🔑 您的服务密码：<code>{subscription_url}</code>',
-                        'configNote' => '✍️ 配置备注：{note}',
-                        'lastOnlineTime' => '📶 您的最后连接时间：{lastonline}',
-                        'subscriptionFile' => '您的订阅文件',
-                        'turnOffAccountButton' => '❌ 关闭账户',
-                        'turnOnAccountButton' => '💡 开启账户',
-                        'editNoteButton' => '📝 更改备注',
-                        'refreshInfoButton' => '♻️ 更新信息',
-                        'serviceDeletedSuccess' => '📌 服务删除成功',
-                        'askDeleteReason' => '📌 请发送删除您服务的原因。',
-                        'configReadError' => '❌  读取配置信息出错。请联系客服。',
-                        'selectConfigFromList' => '📌 请从下方列表中选择并使用一个配置。',
-                        'featureUnavailable' => '❌ 此功能目前不可用',
-                        'featureUnavailableDot' => '❌ 此功能目前不可用。',
-                        'notConnectedCannotChangeStatus' => '❌ 您尚未连接到配置，无法更改服务状态。连接到配置后，您可以使用此功能。',
-                        'confirmDisableConfigButton' => '✅ 确认并停用配置',
-                        'confirmEnableConfigButton' => '✅ 确认并启用配置',
-                        'renewError' => '❌ 续费遇到错误；请重新执行续费步骤。',
-                        'renewNotSupportedPanel' => '❌ 此面板无法续费',
-                        'notConnectedConnectFirst' => '❌ 您尚未连接到服务。要续费服务，请先连接到服务，然后再续费',
-                        'renewNotPossibleCurrentPlan' => '❌ 无法使用当前套餐续费。请从头执行各步骤并选择其他套餐。',
-                        'renewGenericError' => '❌ 发生了错误。请从头执行续费步骤。',
-                        'renewServiceError' => '❌ 续费服务时发生错误；请联系客服',
-                        'renewProcessRestartError' => '❌ 续费服务时发生错误；请联系客服',
-                        'customVolumeButton' => '🛍 自定义流量',
-                        'customServiceButton' => '⚙️ 自定义服务',
-                        'currencyToman' => '托曼',
-                        'invalidVolume' => '❌ 流量无效。
-🔔 最小流量为 {mainvolume} GB，最大流量为 {maxvolume} GB',
-                        'invalidTime' => '❌ 提交的时间无效。时间必须在 {maintime} 天到 {maxtime} 天之间',
-                        'discountCodeExpired' => '❌ 优惠码时间已过期。',
-                        'discountCodeUseLimit' => '⭕️ 此码仅可使用 {useuser}  次',
-                        'discountCodeAppliedRenew' => '🤩 您的优惠码有效，发票已应用 {discount_price}% 折扣。',
-                        'discountCodeApplied' => '🤩 您的优惠码有效，发票已应用 {discount_price}% 折扣。',
-                        'discountCodeUsedNoticeRenew' => '⭕️ 用户名为 @{username}、数字 ID 为 {from_id} 的用户使用了优惠码 {discount_code}，并续费了其服务。',
-                        'discountCodeUsedNotice' => '⭕️ 用户名为 @{username}、数字 ID 为 {from_id} 的用户使用了优惠码 {discount_code}。',
-                        'discountCodeNotAllowed' => '❌ 无法使用此优惠码购买',
-                        'earned2Points' => '📌您获得了 2 个新积分。',
-                        'earned1Point' => '📌您获得了 1 个新积分。',
-                        'serviceInactiveCannotChangeLink' => '❌ 服务已停用，无法更改服务链接。',
-                        'changeLinkError' => '❌ 更改链接时发生错误。',
-                        'configUpdatedSuccess' => '✅ 您的配置更新成功。',
-                        'subscriptionLine' => '您的订阅：<code>{output_config_link}</code>',
-                        'extraVolumeNotSupportedPanel' => '❌ 此面板无法购买额外流量',
-                        'purchaseError' => '❌ 购买失败。请重新执行各步骤。',
-                        'extraVolumeServiceError' => '❌为服务购买额外流量时发生错误。请联系客服',
-                        'locationChangeLimitReached' => '❌ 您的位置更改限制已用完',
-                        'genericProcessRestart' => '❌ 发生了错误。请重新执行各步骤',
-                        'transferToPanelNotPossible' => '❌ 无法转移到面板。',
-                        'configUnusedCannotTransfer' => '❌ 您的配置处于未使用状态，无法转移服务位置。',
-                        'requestSubmittedSuccess' => '✅ 感谢您提交请求。您的请求已发送，正在由客服审核。',
-                        'extraTimeNotSupportedPanel' => '❌ 此面板无法购买额外时间',
-                        'serviceTransferredNotice' => '✅ 尊敬的用户，用户名为 {service_username} 的服务已由用户 ID 为 {from_id} 的用户转移到您的账户。',
-                        'testServiceUnavailable' => '📌 测试服务目前不可用。',
-                        'serviceStockFinished' => '❌ 此服务的流量已用完。',
-                        'serviceStockFinishedBuyAnother' => '❌ 此服务的流量已用完。请购买其他服务。',
-                        'selectCategoryShort' => '📌 请选择一个分类',
-                        'selectCategory' => '📌 请选择您的分类！',
-                        'buttonDisabled' => '❌ 此按钮已停用',
-                        'buttonDisabledForYou' => '❌ 此按钮对您已停用',
-                        'selectSupportDepartment' => '📌 请选择您要发送消息的客服部分。',
-                        'sendYourMessage' => '📌 请发送您的消息',
-                        'messageSentForReview' => '✅ 您的消息发送成功，审核后将给您回复。',
-                        'messageAnsweredByOtherAdmin' => '❌ 该消息已由另一位管理员回复。',
-                        'sendMessageText' => '📌 请发送您的消息文本',
-                        'messageSentSuccess' => '消息发送成功',
-                        'messageSentForRequestReview' => '✅  您针对此请求的消息发送成功。审核后将给您回复。',
-                        'notSentLabel' => '❌<b> 未发送 </b>❌',
-                        'confirmedByAdmin' => '✅ 已由管理员批准',
-                        'roleNormal' => '普通',
-                        'roleAgent' => '代理',
-                        'roleAdvancedAgent' => '高级代理',
-                        'accountScore' => '🥅 您的账户积分：{score}',
-                        'panelUnavailableUseAnother' => '❌ 此面板不可用。请从其他面板进行购买。',
-                        'confirmError' => '❌ 确认过程中发生错误。请重新执行付款步骤',
-                        'purchaseRestartProcess' => '❌ 请重新执行购买步骤',
-                        'creatingService' => '♻️ 正在创建您的服务...',
-                        'purchaseRestartFromStart' => '❌ 请从头重新执行购买步骤',
-                        'firstPurchaseLabel' => '📌 用户首次购买',
-                        'bulkPurchaseDisabled' => '❌ 此部分当前已停用',
-                        'bulkPurchaseMinBalance' => '❌ 批量购买您必须至少有 {PaySetting} 托曼余额。',
-                        'depositAmountRange' => '❌ 此支付方式的最低存款金额必须为 {mainbalance}，最高为 {maxbalance} 托曼',
-                        'depositAmountRangePlisio' => '❌ 此支付方式的最低存款金额必须为 {mainbalance}，最高为 {maxbalance} 托曼',
-                        'bankCardRetrieveError' => '❌ 检索银行卡时发生内部错误。请稍后再试。',
-                        'noActiveBankCard' => '❌ 未找到此支付方式的有效银行卡。请稍后再试或联系客服。',
-                        'receiptCooldown' => '❗ 您在过去 2 分钟内已发送收据。请 2 分钟后再发送新收据。',
-                        'transactionAlreadyConfirmed' => '❗️ 您的交易已由机器人批准。',
-                        'transactionExpired' => '❗此交易的时间已过期，无法对此交易进行付款。',
-                        'sendReceiptImage' => '🖼 请发送您的收据图片',
-                        'sendReceiptOrTronLink' => '📌 请发送您的存款图片或 Tron 交易链接。',
-                        'purchaseOrPaymentRestart' => '❌ 发生了错误。请重新执行购买或付款步骤',
-                        'infoFetchErrorRestart' => '❌ 检索信息时发生错误。请从头执行各步骤',
-                        'onlyOneImageAllowed' => '❌  您只能发送一张图片',
-                        'receiptSentRenewPending' => '🚀 您的收据已发送，审核后将续费您的服务',
-                        'receiptSentExtraVolumePending' => '🚀 您的收据已发送，审核后将为您的服务添加流量。',
-                        'receiptSentExtraTimePending' => '🚀 您的收据已发送，审核后将为您的服务添加时间',
-                        'sectionDisabledNow' => '📛 此部分当前已停用',
-                        'notAffiliateOfAnyone' => '📛 您不是任何用户的下线。',
-                        'affiliateJoinedGift' => '🎉 有人通过您的推荐加入了！礼品已充值到您的账户。',
-                        'affiliateJoinGiftActivated' => '🎉 会员礼品已为您激活！',
-                        'noPurchaseUsersOnly' => '❌ 很遗憾，此选项仅对未从机器人购买过的用户有效。',
-                        'gameResultError' => '❌ 获取游戏结果时出错。请稍后再试。',
-                        'priceFetchError' => '❌ 目前无法获取价格。请稍后再试。',
-                        'genericErrorRestart' => '❌ 发生了错误。请从头执行各步骤',
-                ],
-        ],
-        'hardcoded' => [
-                'accountCreateReportAdmin' => '📣 账户创建详情已记录在您的机器人中。
-
-%s
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️用户姓名：%s
-▫️服务位置：%s
-▫️产品名称：%s
-▫️已购买时间：%s 天
-▫️已购买流量：%s GB
-▫️购买前余额：%s 托曼
-▫️购买后余额：%s 托曼
-▫️跟踪码：%s
-▫️用户类型：%s
-▫️用户电话号码：%s
-▫️产品分类：%s
-▫️产品价格：%s 托曼
-▫️最终价格：%s 托曼
-▫️购买时间：%s',
-                'accountCreateReportAfterPay' => '📣 付款后账户创建详情已记录在机器人中。
-
-%s
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️服务位置：%s
-▫️已购买时间：%s 天
-▫️已购买产品名称：%s
-▫️已购买流量：%s GB
-▫️购买前余额：%s 托曼
-▫️购买后余额：%s 托曼
-▫️跟踪码：%s
-▫️用户类型：%s
-▫️用户电话号码：%s
-▫️产品价格：%s 托曼
-▫️最终价格：%s 托曼
-▫️购买时间：%s',
-                'accountCreateReportMiniapp' => '📣 账户创建详情已记录在小程序中。
-        
-%s
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️服务位置：%s
-▫️产品名称：%s
-▫️已购买时间：%s 天
-▫️已购买流量：%s GB
-▫️购买前余额：%s 托曼
-▫️购买后余额：%s 托曼
-▫️跟踪码：%s
-▫️用户类型：%s
-▫️用户电话号码：%s
-▫️产品分类：%s
-▫️产品价格：%s 托曼
-▫️购买时间：%s',
-                'accountInfoText' => '
-🗂 您的账户信息：
-
-
-🪪 用户 ID：<code>%s</code>
-👤 姓名：<code>%s</code>
-👨‍👩‍👦 您的推荐码：<code>%s</code>
-📱 联系号码：%s
-⌚️注册时间：%s
-💰 余额：%s 托曼
-🛒 已购买的服务数量：%s 个
-📑 已支付的发票数量：%s 个
-🤝 您的下线数量：%s 人
-🔖 用户组：%s
-%s
-%s
-
-📆 %s → ⏰ %s
-                    
-',
-                'accountNotVerifiedNotice' => '⚠️ 您的账户未认证。您的消息已发送给管理员。
-    为更快跟进，您可以向以下 ID 发送消息
-    @%s',
-                'accountUnblockedNotice' => '✳️ 您的账户已解除封禁 ✳️
-现在您可以使用机器人了 ✔️',
-                'accountVerifiedNotice' => '💎 尊敬的用户，您的账户认证成功，现在可以进行购买',
-                'accountVerifiedSuccess' => '您的账户认证成功',
-                'adminUserDeletedService' => '尊敬的管理员，一位用户在其流量或时间结束后删除了服务
-配置用户名：%s',
-                'affiliateCommissionPaidLog' => '
-金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
-时间：%s',
-                'affiliateCommissionPaidLog2' => '
-金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
-时间：%s',
-                'affiliateCommissionPaidLogFn' => '
-金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
-时间：%s',
-                'affiliateCommissionPaidLogFn2' => '
-金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
-时间：%s',
-                'affiliateCommissionPaidLogMiniapp' => '
-    金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
-    时间：%s',
-                'affiliateCommissionPaidLogMiniapp2' => '
-金额 %s 已作为来自用户 %s 的佣金充值给用户 %s 
-时间：%s',
-                'affiliateCommissionPaidUser' => '🎁  佣金支付 
-        
-        来自您下线的金额 %s 托曼已充值到您的钱包',
-                'affiliateCommissionPaidUser2' => '🎁  佣金支付 
-        
-        来自您下线的金额 %s 托曼已充值到您的钱包',
-                'affiliateCommissionPaidUserFn' => '🎁  佣金支付 
-        
-        来自您下线的金额 %s 托曼已充值到您的钱包',
-                'affiliateCommissionPaidUserFn2' => '🎁  佣金支付 
-        
-        来自您下线的金额 %s 托曼已充值到您的钱包',
-                'affiliateCommissionPaidUserMiniapp' => '🎁  佣金支付 
-            
-            来自您下线的金额 %s 托曼已充值到您的钱包',
-                'affiliateCommissionPaidUserMiniapp2' => '🎁  佣金支付 
-        
-        来自您下线的金额 %s 托曼已充值到您的钱包',
-                'affiliateNewReferralJoined' => '<b>🎉 一个新下线！</b>
-用户 <b>@%s</b> 通过您的邀请链接加入了机器人 ✅
-
-通过此用户的购买，<b>您的礼品份额</b>将充值到您的账户 🔥',
-                'affiliateWelcomeGiftInfo' => '<b>💼 下线收集与欢迎礼品</b>
-
-通过您的<b>专属链接</b>邀请朋友，无需支付 1 里亚尔即可充值您的钱包，并使用机器人的服务！
-
-%s
-%s
-
-<b>📊 您的统计：</b>
-• 👥 下线：%s 人
-• 🛒 购买：%s 个
-• 💵 总购买额：%s 托曼
-
-<b>📢 邀请，获得礼品，成长！</b>
-',
-                'affiliateWelcomeInvited' => '<b>🎉 欢迎！</b>
-
-您通过 <b>@%s</b> 的邀请加入了机器人，并被登记为下线 ✅
-
-要领取会员礼品：
-🔘 进入<b>下线收集</b>菜单  
-🔘 点击 <b>🎁 领取会员礼品</b> 按钮
-
-这样，您和您的推荐人都能获得礼品！ 💰
-',
-                'agentExpiredGroupChangedLog' => '📌 由于代理到期，用户的用户组已更改为 f
-
-用户数字 ID：%s
-用户用户名：‌ %s',
-                'agentExpiredNotice' => '📌 尊敬的代理，您的代理期限已结束，您的账户已退出代理状态。要重新激活代理，您可以联系客服。',
-                'amountRangeError' => '❌ 错误 
-💬 金额必须至少 %s 托曼，最多 %s 托曼',
-                'aqayePardakhtLinkError' => '⭕️ 创建 Aghaye Pardakht 链接出错
-✍️ 错误原因：%s
-            
-用户 ID：%s
-用户用户名：@%s',
-                'autoConfirmedByBot' => '由机器人无需审核批准',
-                'backupDatabaseCaption' => '📌 主机器人数据库导出 ',
-                'balanceAddedNotice' => '💎 尊敬的用户，已向您的钱包余额添加 %s 托曼。',
-                'balanceChargedThanks' => '💎 尊敬的用户，金额 %s 托曼已充值到您的钱包。感谢您的付款。
-                
-🛒 您的跟踪码：%s',
-                'balanceDeductedNotice' => '❌ 尊敬的用户，已从您的钱包余额中扣除 %s 托曼。',
-                'balanceLessThanPrice' => '余额少于产品价格',
-                'botActivatedTelegramUrl' => 'https://api.telegram.org/bot%s/sendmessage?chat_id=%s&text=✅ 尊敬的用户，您的机器人已成功安装。',
-                'bulkAccountCreateError' => '
-⭕️ 批量部分创建账户出错
-✍️ 错误原因： 
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s',
-                'bulkAccountReportAdmin' => '📣 批量账户创建详情已记录在您的机器人中。
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s_0-%s
-▫️用户姓名：%s
-▫️服务位置：%s
-▫️产品名称：%s
-▫️已购买时间：%s 天
-▫️已购买流量：%s GB
-▫️购买前余额：%s 托曼
-▫️购买后余额：%s 托曼
-▫️跟踪码：%s
-▫️用户类型：%s
-▫️用户电话号码：%s
-▫️产品价格：%s 托曼
-▫️最终价格：%s 托曼
-▫️配置数量：%s 个
-▫️购买时间：%s',
-                'bulkMessageDone' => '📌 操作已对所有请求的用户执行。',
-                'bulkMessageProgress' => '✏️ 消息发送操作正在进行中...
-
-剩余人数：%s',
-                'cardPaymentInstruction' => '如需付款，请将金额存入下方卡号',
-                'changeLinkReportAdmin' => '📣 链接更改详情已记录在您的机器人中。
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️用户姓名：%s
-▫️服务位置：%s
-▫️用户类型：%s
-▫️链接更改时间：%s',
-                'changeLocationConfirmPrompt' => '📍 确认服务位置转移后，您的服务将从此位置删除并转移到新位置。
-💰 转移费用为 %s 托曼
-📌 您的剩余限制：%s（剩余免费限制：‌%s）
-
-✅ 要确认转移，请点击下方按钮',
-                'changeLocationError' => '更改服务位置时出错
-错误原因： 
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s
-目标面板名称：%s',
-                'changeLocationReportAdmin' => '  
-服务位置更改 
-
-🔻数字 ID：<code>%s</code>
-🔻用户名：@%s
-🔻旧面板名称：%s
-🔻新面板名称：%s
-🔻 客户在面板中的用户名：%s
-🔻最终服务流量：%s
-🔻用户余额：%s 托曼',
-                'changeLocationSuccess' => '✅ 您的配置已成功转移到服务器 (%s)。
-
-🖥 服务名称：%s
-💠 服务流量：%s
-⏳ 到期时间：%s | %s 
-
-
-🔗 您的订阅链接： 
-
-<code>%s</code>',
-                'configCreateError' => '
-⭕️ 创建配置出错
-✍️ 错误原因： 
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s',
-                'configCreateErrorAdminPanel' => '
-从管理面板创建配置时出错
-✍️ 错误原因： 
-%s
-管理员 ID：%s
-面板名称：%s',
-                'confirmDisableConfigPrompt' => '📌 确认下方选项后，您的配置将被关闭，您将无法再连接到该配置。
-⚠️ 如果您希望重新激活配置，必须从服务管理部分点击 <u>💡 开启账户</u> 按钮',
-                'confirmEnableConfigPrompt' => '📌 确认下方选项后，您的配置将被开启，您将能够连接到该配置。
-⚠️ 如果您希望再次停用配置，必须从服务管理部分点击 <u>❌ 关闭账户</u> 按钮',
-                'confirmedByAdmin' => '✅ 已由管理员批准',
-                'cryptoPaymentInstruction' => '
-<b>💲 要通过加密货币充值您的钱包余额，请点击消息末尾的付款按钮</b>
-
-⚠️ 注意：付款时间为 30 分钟；30 分钟后交易将被取消
-
-🌐 一些购买加密货币的国内网站 👇
-🔸 nikpardakht.com
-🔹 webpurse.org
-🔸 bitpin.ir
-🔹 sarmayex.com
-🔸 ok-ex.io
-🔹 nobitex.ir
-🔸 bitbarg.com
-🔹 cafearz.com
-🔸 pay98.app
-🔢 发票编号：%s
-💰 发票金额：%s 托曼
-📊 美元价格：截至此刻 %s 托曼
-
-请使用下方按钮付款👇🏻',
-                'cryptoPaymentInstruction2' => '
-<b>💲 要通过加密货币充值您的钱包余额，请点击消息末尾的付款按钮</b>
-
-⚠️ 注意：付款时间为 30 分钟；30 分钟后交易将被取消
-
-🌐 一些购买加密货币的国内网站 👇
-🔸 nikpardakht.com
-🔹 webpurse.org
-🔸 bitpin.ir
-🔹 sarmayex.com
-🔸 ok-ex.io
-🔹 nobitex.ir
-🔸 bitbarg.com
-🔹 cafearz.com
-🔸 pay98.app
-🔢 发票编号：%s
-💰 发票金额：%s 托曼
-📊 美元价格：截至此刻 %s 托曼
-
-
-<blockquote>⚠️ 付款后，如果交易金额已正确存入，您的余额将在接下来最多 15 分钟内自动充值。</blockquote>
-
-
-请使用下方按钮付款👇🏻',
-                'cryptoPaymentLinkErrorAdmin' => '
-                        ⭕️ 一位用户打算使用货币网关付款，但创建付款链接遇到错误，未向用户提供链接
-✍️ 错误原因：%s
-            
-用户 ID：%s
-用户用户名：@%s',
-                'cryptoPaymentLinkErrorAdmin2' => '
-                        ⭕️ 一位用户打算使用货币网关付款，但创建付款链接遇到错误，未向用户提供链接
-✍️ 错误原因：%s
-            
-用户 ID：%s
-用户用户名：@%s',
-                'customServiceLabel' => '⚙️ 自定义服务',
-                'customTimePrompt' => '⌛️ 请选择您的服务时间 
-📌 每天费率：%s  托曼
-⚠️ 您最少可购买 %s 天，最多 %s 天',
-                'customTimePrompt2' => '⌛️ 请选择您的服务时间 
-📌 每天费率：%s  托曼
-⚠️ 您最少可购买 %s 天，最多 %s 天',
-                'customUsernameLabel' => '自定义用户名',
-                'customUsernameRandomLabel' => '自定义用户名 + 随机数',
-                'customVolumePrompt' => '📌 请发送您请求的流量。
-🔔每 GB 流量价格为 %s 托曼。
-🔔 最小流量为 %s GB，最大流量为 %s GB。',
-                'customVolumePrompt2' => '📌 请发送您请求的流量。
-🔔每 GB 流量价格为 %s 托曼。
-🔔 最小流量为 %s GB，最大流量为 %s GB。',
-                'customVolumePrompt3' => '📌 请发送您请求的流量。
-🔔每 GB 流量价格为 %s 托曼。
-🔔 最小流量为 %s GB，最大流量为 %s GB。',
-                'customVolumePrompt4' => '📌 请发送您请求的流量。
-🔔每 GB 流量价格为 %s 托曼。
-🔔 最小流量为 %s GB，最大流量为 %s GB。',
-                'customVolumePrompt5' => '📌 请发送您请求的流量。
-🔔每 GB 流量价格为 %s 托曼。
-🔔 最小流量为 %s GB，最大流量为 %s GB。',
-                'dailyBotReport' => '📌 机器人每日运行报告：
-
-🧲 今日续费数量：%s 个
-💰 今日续费总额：%s 托曼
-🛍 今日订单数量：%s 个
-🛍 今日订单总金额：%s 托曼
-🔑 今日测试账户：%s 个
-🔋 已售流量总和：%s GB
-今日加入机器人的用户数量：%s 人
-
-',
-                'dailyPanelReportRow' => '
-面板名称：%s
-🛍 今日订单数量：%s 个
-🛍 今日订单总金额：%s 托曼
-🔋 已售流量总和：%s GB
----------------
-
-',
-                'dailyPanelsReportTitle' => '面板报告：
-
-',
-                'dailyTopAgentRow' => '
-用户数字 ID：%s
-用户用户名：%s
-今日总购买额：%s
----------------
-
-',
-                'dailyTopAgentsTitle' => '今日购买最多的代理列表：
-
-',
-                'debtPaymentRequired' => '❌ 您有欠款；您必须至少支付 %s 托曼。
-         请重新发送您的金额',
-                'deleteServiceRequestAdmin' => '管理员您好 👋
-        
-📌 一位用户向您发送了服务删除请求。请审核，如果正确且您同意，请批准。 
-        
-        
-📊 用户服务信息：
-用户数字 ID：%s
-用户用户名：@%s
-配置用户名：%s
-服务状态：%s
-服务位置：%s
-服务代码：%s
-
-🟢 您的最后连接时间：%s
-
-📥 已用流量：%s
-♾ 服务流量：%s
-🪫 剩余流量：%s
-📅 有效期至：%s (%s)
-
-
-<b>❌ 尊敬的管理员请注意，您点击的删除服务按钮由机器人自动计算，可能存在错误，建议使用手动删除</b>
-
-服务删除原因：%s',
-                'discountCodeUsedAdmin' => '⭕️ 用户名为 @%s、数字 ID 为 %s 的用户使用了优惠码 %s。',
-                'discountCodeUsedAdminFn' => '⭕️ 用户名为 @%s、数字 ID 为 %s 的用户使用了优惠码 %s。',
-                'disruptionReportAdmin' => '
-    ⚠️ 具有以下信息的用户提交了服务中断报告。
-
-- 用户名：@%s
-- 数字 ID：%s
-- 配置用户名：%s
-- 已购买套餐名称：%s
-- 服务位置：%s
-- 中断说明：%s',
-                'disruptionReportConfirmPrompt' => '❓ 您确定要发送中断报告吗
-
-🔹 发送报告前，请查看连接教程。( /help )',
-                'disruptionReportPrompt' => '❓ 请写下您中断的原因
-
-🔹 发送报告前，请查看连接教程。( /help )',
-                'enterAmountToman' => '💸 请输入金额（托曼）：
-
-⚠️  最低金额为 <b>%s</b>，最高为 <b>%s</b> 托曼',
-                'extraTimeError' => '购买额外流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'extraTimeErrorFn' => '购买额外流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'extraTimeInvoiceCreated' => '📜 已为您创建额外时间购买发票。
-        
-📌 额外时间每天费率：%s 托曼
-📆 请求的额外天数：%s 天
-💰 您的发票金额：%s 托曼
-        
-✅ 要付款并添加时间，请点击下方按钮',
-                'extraTimePrompt' => '📆 请输入所需的额外天数（以天为单位）：
-        
-📌 每天费率：%s',
-                'extraTimeReportAdmin' => '⭕️ 一位用户购买了额外时间
-        
-用户信息： 
-🪪 数字 ID：%s
-🛍 已购买时间：%s 天
-💰 支付金额：%s 托曼
-👤 配置用户名：%s',
-                'extraTimeReportAdminFn' => '⭕️ 一位用户购买了额外时间
-        
-用户信息： 
-🪪 数字 ID：%s
-🛍 已购买时间：%s 天
-💰 支付金额：%s 托曼
-👤 配置用户名 %s',
-                'extraTimeSuccess' => '✅ 已成功为您的服务添加时间
- 
-▫️服务名称：%s
-▫️添加时间：%s 天
-
-▫️增加时间金额：%s 托曼',
-                'extraTimeSuccessFn' => '✅ 已成功为您的服务添加时间
- 
-▫️服务名称：%s
-▫️添加时间：%s 天
-
-▫️增加时间金额：%s 托曼',
-                'extraVolumeError' => '购买额外流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'extraVolumeError2' => '购买额外流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'extraVolumeErrorFn' => '购买额外流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'extraVolumeInvoiceCreated' => '📜 已为您创建额外流量购买发票。
-        
-📌 额外流量每 GB 费率：%s 托曼
-🔋 请求的额外流量：%s GB
-💰 您的发票金额：%s 托曼
-        
-✅ 要付款并添加流量，请点击下方按钮',
-                'extraVolumePrompt' => ' ⭕️ 请发送您要购买的流量。
-❌ 请用英文发送金额。
-        ⚠️ 每 GB 额外流量为 %s 托曼。',
-                'extraVolumeReportAdmin' => '⭕️ 一位用户购买了额外流量
-        
-用户信息： 
-🪪 数字 ID：%s
-🛍 已购买流量：%s GB
-💰 支付金额：%s 托曼
-👤 配置用户名：%s
-购买前用户余额：%s
-
-',
-                'extraVolumeReportAdminFn' => '⭕️ 一位用户购买了额外流量
-        
-用户信息： 
-🪪 数字 ID：%s
-🛍 已购买流量：%s GB
-💰 支付金额：%s 托曼
-👤 配置用户名 %s
-购买前用户余额：%s
-
-',
-                'extraVolumeSuccess' => '✅ 已成功为您的服务添加流量
- 
-▫️服务名称：%s
-▫️添加流量：%s GB
-
-▫️增加流量金额：%s 托曼',
-                'extraVolumeSuccessFn' => '✅ 已成功为您的服务添加流量
- 
-▫️服务名称：%s
-▫️添加流量：%s GB
-
-▫️增加流量金额：%s 托曼',
-                'firstPurchaseLabel' => '📌 用户首次购买',
-                'gatewayPerfectMoney' => 'Perfect Money',
-                'gatewayRialName1' => '里亚尔货币支付',
-                'gatewayRialName2' => '第二里亚尔货币支付',
-                'getConfigHint' => '📌 要获取配置，请点击获取配置按钮',
-                'giftDepositNotice' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
-                'giftOperationDone' => '📌 操作已对所有请求的服务执行。',
-                'giftVolumeAddError' => '添加礼品流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'giftVolumeAddError2' => '添加礼品流量出错
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'invalidTimeRestart' => '时间无效。请从头进行购买',
-                'invalidVolumeRestart' => '流量无效。请从头进行购买',
-                'invoiceExpiredNotice' => '⭕️ 尊敬的用户，以下发票因未在指定时间内付款而过期。
-❗️请在任何情况下都不要为此发票支付任何金额，并重新创建发票。
-
-🛒 您的支付方式：%s
-📌 发票代码：<code>%s</code>
-🪙 发票金额：%s 托曼',
-                'iranpayGiftDepositNotice' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
-                'iranpayNewPaymentLog' => '💵 新付款
-- 👤 用户用户名：@%s
-- 🆔用户数字 ID：%s
-- 💸 交易金额 %s
-- 💳 支付方式：第三里亚尔货币',
-                'lotteryAdminReport' => '📌 尊敬的管理员，以下用户赢得了抽奖，其账户已充值。
-
-',
-                'lotteryWinnerNotice' => '🎁 抽奖结果 
-
-😎 尊敬的用户，恭喜！您是第 %s 名，赢得了 %s 托曼余额，您的账户已充值。',
-                'lotteryWinnerRow' => '
-用户名：@%s
-数字 ID：%s
-金额：%s
-第几名：%s
---------------',
-                'membershipGiftAlreadyClaimed' => '<b>⛔ 您已领取过会员礼品。</b>
-此礼品仅可激活<b>一次</b>。',
-                'membershipGiftInfo' => '<b>🎁 会员礼品：</b>
-• 🎉 礼品总额：%s 托曼  
-• 🔻 50% 给您（推荐人）  
-• 🔻 50% 给下线（新用户）
-
-',
-                'membershipGiftPaidLog' => '🎁 会员礼品支付
- -数字 ID：%s
- - 用户名：@%s
- - 推荐人数字 ID：%s
- - 下线礼品前余额：%s
- - 下线礼品后余额：%s
-  - 推荐人礼品前余额：%s
- - 推荐人礼品后余额：%s
- ',
-                'messageFromAdmin' => '
-📩 管理层向您发送了一条消息。
-                    
-消息内容： 
-%s',
-                'newPaymentAdmin' => '💵 新付款
-                
-用户数字 ID：%s
-交易金额：%s 
-支付方式：第一里亚尔货币网关',
-                'newPaymentAutoConfirm' => '💵 新付款
-        
-用户数字 ID：%s
-交易金额 %s
-支付方式：无需审核的自动批准
-%s',
-                'newPaymentBalanceCharge' => '
-⭕️ 已进行一笔新付款。
-余额增加            
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💵 用户总付款次数：%s 个
-💸 支付金额：%s 托曼
-                
-说明：%s %s
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentBalanceCharge2' => '
-⭕️ 已进行一笔新付款。
-余额增加            
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💸 支付金额：%s 托曼
-                
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentBalanceChargeFn' => '⭕️ 已进行一笔新付款
-        余额增加。
-👤 用户 ID：<code>%s</code>
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💸 支付金额：%s 托曼
-💎 增加前余额：%s
-✍️ 说明：%s',
-                'newPaymentExtraTime' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-购买额外时间
-服务用户名：%s
-已购买天数：%s
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💵 用户总付款次数：%s 个
-💸 支付金额：%s 托曼
-                
-说明：%s %s
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentExtraTime2' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-购买额外时间
-服务用户名：%s
-已购买天数：%s
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💸 支付金额：%s 托曼
-                
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentExtraVolume' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-购买额外流量
-服务用户名：%s
-已购买流量：%s
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💵 用户总付款次数：%s 个
-💸 支付金额：%s 托曼
-                
-说明：%s %s
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentExtraVolume2' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-购买额外流量
-服务用户名：%s
-已购买流量：%s
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💸 支付金额：%s 托曼
-                
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentNewService' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-购买新服务
-
-服务用户名：%s
-产品名称：%s
-产品流量：%s GB 
-产品时间：%s 天
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💵 用户总付款次数：%s 个
-💸 支付金额：%s 托曼
-                
-说明：%s %s
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentNewService2' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-购买新服务
-
-服务用户名：%s
-产品名称：%s
-产品流量：%s GB 
-产品时间：%s 天
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💸 支付金额：%s 托曼
-                
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentRenew' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-续费
-服务用户名：%s
-产品名称：%s
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💵 用户总付款次数：%s 个
-💸 支付金额：%s 托曼
-                
-说明：%s %s
-✍️ 如果收据正确，请批准付款。',
-                'newPaymentRenew2' => '
-⭕️ 已进行一笔新付款。
-
-⭕️⭕️⭕️⭕️⭕️
-续费
-服务用户名：%s
-产品名称：%s
-👤 用户账户名称：%s
-👤 用户 ID：<a href = "tg://user?id=%s">%s</a>
-💸 用户当前余额：%s 托曼
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💸 支付金额：%s 托曼
-                
-✍️ 如果收据正确，请批准付款。',
-                'nodeDownNotice' => '🚨 尊敬的管理员，名为 %s 的节点未连接。
-节点状态：%s
-✍️ 错误原因：<code> %s</code>',
-                'notConnectedLabel' => '未连接',
-                'notifDeleteCronInfo' => '📌 删除定时任务通知
-
-服务用户名：‌ <code>%s</code>
-服务状态：%s
-剩余天数‌:‌%s
-剩余流量：%s',
-                'notifGreeting' => '您好，尊敬的用户 👋
-
-',
-                'notifGreeting2' => '您好，尊敬的用户 👋
-
-',
-                'notifRemainingDays' => '剩余天数‌:‌%s',
-                'notifRemainingVolume' => '剩余流量：%s',
-                'notifServiceDeleted' => '📌 尊敬的用户，由于未续费，服务 %s 已从您的服务列表中删除
-
-🌟 要获取新服务，请从购买服务部分进行操作',
-                'notifServiceDeleted2' => '📌 尊敬的用户，由于未续费，服务 %s 已从您的服务列表中删除
-
-🌟 要获取新服务，请从购买服务部分进行操作',
-                'notifServiceStatus' => '服务状态：%s
-
-',
-                'notifServiceStatus2' => '服务状态：%s
-
-',
-                'notifServiceUsername' => '服务用户名：‌ <code>%s</code>
-
-',
-                'notifServiceUsername2' => '服务用户名：‌ <code>%s</code>
-
-',
-                'notifThanks' => '感谢您的陪伴',
-                'notifTimeActionHint' => '如果您希望续费此服务，请通过«%s»部分进行操作。 ',
-                'notifTimeCronTitle' => '📌 时间定时任务通知
-
-
-',
-                'notifTimeRemaining' => '📌 使用服务 %s 的期限仅剩 %s 天。 ',
-                'notifVolumeActionHint' => '请，如有需要，通过«%s»部分购买额外流量或续费您的服务',
-                'notifVolumeCronTitle' => '📌 流量定时任务通知
-
-
-',
-                'notifVolumeDeleteCronInfo' => '📌  流量删除定时任务通知 
-服务用户名：%s 
- 服务状态：%s 
-剩余天数：%s 
- 剩余流量：%s
-用户最后连接：%s',
-                'notifVolumeRemaining' => '🚨 服务 %s 的流量仅剩 %s。 ',
-                'offlineLabel' => '离线',
-                'onHoldReminderNotice' => '您好！🌐
-
-我们注意到您尚未连接到用户名为 %s 的配置，距其激活已超过 %s 天。如果您在设置或使用服务时遇到任何问题，请通过以下 ID 联系我们的客服团队，以便我们为您提供帮助。
-我们随时准备解决任何问题！📞
-
-客服账户：@%s',
-                'onlineLabel' => '在线',
-                'panelDownNotice' => '🚨 尊敬的管理员，名为 <code>%s</code> 的面板未连接。',
-                'paymentConfirmedExtraTime' => '✅ 付款已批准
-🔋 购买额外时间
-🛍 已购买时间：%s 天
-👤 配置用户名 %s
-👤 用户 ID：<code>%s</code>
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💎 增加前余额：%s
-💸 支付金额：%s 托曼
-
-',
-                'paymentConfirmedExtraVolume' => '✅ 付款已批准
-🔋 购买额外流量
-🛍 已购买流量：%s GB
-👤 配置用户名 %s
-👤 用户 ID：<code>%s</code>
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💎 增加前余额：%s
-💸 支付金额：%s 托曼
-
-',
-                'paymentConfirmedNewService' => '✅ 付款已批准
- 🛍购买服务 
- ▫️配置用户名：%s
-▫️服务位置：%s
-👤 用户 ID：<code>%s</code>
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💎 购买前余额：%s
-💸 支付金额：%s 托曼
-✍️ 说明：%s
-
-
-',
-                'paymentConfirmedRenew' => '✅ 付款已批准
-🔋 续费服务
-🪪 配置用户名：%s
-🛍 产品名称：%s
-🌏 位置名称：%s
-👤 用户 ID：<code>%s</code>
-🛒 付款跟踪码：%s
-⚜️ 用户名：@%s
-💎 续费前余额：%s
-💸 支付金额：%s 托曼
-✍️ 说明：%s
-
-
-',
-                'paymentInvoiceCreated' => '✅ 已创建付款发票。
-
-🔢 发票编号：%s
-💰 发票金额：%s 托曼
-
-❌ 此交易有效期为一小时；之后无法对此交易进行付款。        
-
-📌请在付款且交易成功后稍等片刻，直到您在我们的网站收到付款成功消息。否则，您的账户将不会被充值。
-
-请使用下方按钮付款👇🏻',
-                'paymentInvoiceCreated2' => '
-✅ 已创建付款发票。
-            
-🔢 发票编号：%s
-💰 发票金额：%s 托曼
-
-❌ 此交易有效期为一天；之后无法对此交易进行付款。        
-
-📌请在付款且交易成功后稍等片刻，直到您在我们的网站收到付款成功消息。否则，您的账户将不会被充值。
-
-请使用下方按钮付款👇🏻',
-                'paymentLinkErrorAdmin' => '
-⭕️ 一位用户打算付款，但创建付款链接遇到错误，未向用户提供链接
-✍️ 错误原因：%s
-
-用户 ID：%s
-支付方式：%s
-用户用户名：@%s',
-                'paymentLinkErrorAdmin2' => '
-                        ⭕️ 一位用户打算付款，但创建付款链接遇到错误，未向用户提供链接
-✍️ 错误原因：%s
-            
-用户 ID：%s
-支付方式：%s
-用户用户名：@%s',
-                'paymentLinkErrorAdmin3' => '
-⭕️ 一位用户打算付款，但创建付款链接遇到错误，未向用户提供链接
-✍️ 错误原因：%s
-            
-用户 ID：%s
-支付方式：%s
-用户用户名：@%s',
-                'paymentQueueBusyNotice' => '支付网关队列中的人数极多 📊
-
-‼️目前请使用其他支付方式',
-                'plisioGiftDepositNotice' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
-                'plisioNewPaymentLog' => '💵 新付款
-- 👤 用户用户名：@%s
-- 🆔用户数字 ID：%s
-- 💸 交易金额 %s
-- 🔗 <a href = "%s">付款链接 </a>
-- 🔗 <a href = "%s">plisio 付款链接 </a>
-- 📥 已存入的 Tron 金额：%s
-- 💳 支付方式：plisio',
-                'plisioTransactionExpired' => '❌ 以下交易因未付款而过期。请不要为此交易支付任何金额
-
-🛒 订单代码：%s
-💰 金额：%s 托曼',
-                'pointsEarned1' => '📌您获得了 1 个新积分。',
-                'pointsEarned2' => '📌您获得了 2 个新积分。',
-                'pointsEarned2b' => '📌您获得了 2 个新积分。',
-                'preInvoiceText' => '
-📇 您的预开发票：
-👤 用户名：<code>%s</code>
-🔐 服务名称：%s
-📆 有效期：%s 天
-💶 原价：<del>%s 托曼</del>
-💶 折后价：%s  托曼
-👥 账户流量：%s GB
-💵 您的钱包余额：%s
-                  
-        💰 您的订单已准备好付款。  ',
-                'preInvoiceText2' => '
-📇 您的预开发票：
-👤 用户名：<code>%s</code>
-🔐 服务名称：%s
-📆 有效期：%s 天
-💶 价格：%s  托曼
-👥 账户流量：%s GB
-💵 您的钱包余额：%s
-⭕️配置数量：%s
-                  
-💰 您的订单已准备好付款。  ',
-                'purchaseCommissionInfo' => '<b>💸 购买佣金：</b>  
-•  下线购买金额的 %s% 归您所有',
-                'receiptNotSent' => '🔴 未发送 🔴',
-                'referralLinkText' => '
-
-🔗 用于验证下线的推荐链接：
-https://t.me/%s?start=%s',
-                'renewGenericError' => '❌ 续费过程中发生错误。请联系客服',
-                'renewGiftCharged' => '恭喜 🎉
-📌 作为续费礼品，金额 %s 托曼已充值到您的账户',
-                'renewGiftChargedFn' => '恭喜 🎉
-📌 作为续费礼品，金额 %s 托曼已充值到您的账户',
-                'renewInvoiceCreated' => '📜 您用户名为 %s 的续费发票已创建。
-        
-🛍 产品名称：%s
-💸 续费金额：%s 托曼
-⏱ 续费时长：%s 天
-🔋 续费流量：%s GB
-✍️ 说明：%s
-💸 钱包余额：%s
-✅ 要确认并续费服务，请点击下方按钮',
-                'renewInvoiceCreated2' => '📜 您用户名为 %s 的续费发票已创建。
-        
-🛍 产品名称：%s
-💸 续费金额：%s
-⏱ 续费时长：%s 天
-🔋 续费流量：%s GB
-✍️ 说明：%s
-💸 钱包余额：%s
-
-✅ 要确认并续费服务，请点击下方按钮',
-                'renewReportAdmin' => '📣 账户续费详情已记录在您的机器人中。
-    
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️用户姓名：%s
-▫️服务位置：%s
-▫️产品名称：%s
-▫️产品流量：%s
-▫️产品时间：%s
-▫️续费金额：%s 托曼
-▫️购买前余额：%s 托曼
-▫️购买后余额：%s 托曼
-▫️购买时间：%s',
-                'renewReportAdminFn' => '📣 账户续费详情已记录在您的机器人中。
-    
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️服务位置：%s
-▫️产品名称：%s
-▫️产品流量：%s
-▫️产品时间：%s
-▫️续费金额：%s 托曼
-▫️购买前余额：%s 托曼
-▫️购买时间：%s',
-                'renewServiceError' => '服务续费错误
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'renewServiceError2' => '服务续费错误
-        面板名称：%s
-        服务用户名：%s
-        错误原因：%s',
-                'renewServiceErrorApi' => '
-        服务续费错误
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'renewServiceErrorFn' => '
-        服务续费错误
-面板名称：%s
-服务用户名：%s
-错误原因：%s',
-                'renewServiceGenericErrorApi' => '❌ 续费服务时发生错误；请联系客服',
-                'renewServiceSuccess' => '✅ 您的服务续费成功
- 
-▫️服务名称：%s
-▫️产品名称：%s
-▫️续费金额 %s 托曼
-
-',
-                'renewServiceSuccess2' => '✅ 您的服务续费成功
- 
-▫️服务名称：%s
-▫️产品名称：%s
-▫️续费金额 %s 托曼
-
-',
-                'renewServiceSuccessFn' => '✅ 您的服务续费成功
- 
-▫️服务名称：%s
-▫️产品名称：%s
-▫️续费金额 %s 托曼
-
-',
-                'roleAdvancedAgent' => '高级代理',
-                'roleAgent' => '代理',
-                'roleNormal' => '普通',
-                'selectedPanelInactive' => '所选面板当前未激活',
-                'selectedPanelMissing' => '所选面板不存在。',
-                'selectedProductNotFound' => '未找到所选产品',
-                'serviceConnectionInfo' => '
-📶 最后连接时间：%s
-🔄 订阅链接最后更新时间：%s
-#️⃣ 已连接的客户端：<code>%s</code>',
-                'serviceCreateFailedRefund' => '💎  尊敬的用户，由于服务未创建，金额 %s 托曼已添加到您的钱包。',
-                'serviceCreatedSuccess' => '✅ 服务创建成功
-
-👤 服务用户名：{username}
-🌿 服务名称：{name_service}
-‏🇺🇳 位置：{location}
-⏳ 时长：{day}  小时
-🗜 服务流量：{volume} 兆字节
-
-🧑‍🦯 您可以通过按下方按钮并选择您的操作系统来获取连接方法',
-                'serviceCreatedSuccess2' => '✅ 服务创建成功
-
-👤 服务用户名：{username}
-🌿 服务名称：{name_service}
-‏🇺🇳 位置：{location}
-⏳ 时长：{day}  天
-🗜 服务流量：{volume} 千兆字节
-
-🧑‍🦯 您可以通过按下方按钮并选择您的操作系统来获取连接方法',
-                'serviceInfoBasic' => '服务状态：<b>%s</b>
-服务用户名：%s
-📎 服务跟踪码：%s
-
-📌 服务信息： 
-%s',
-                'serviceInfoDetailed' => '服务状态：<b>%s</b>
-👤 服务用户名：<code>%s</code>
-🌍 服务位置：%s
-产品名称：%s
-
-📶 您的最后连接时间：%s
-
-🔋 流量：%s
-📥 已用流量：%s
-💢 剩余流量：%s (%s%%)
-
-📅 到期日期：%s (%s)
-
-%s',
-                'serviceInfoFull' => '📊服务状态：%s
-👤 服务名称：<code>%s</code>
-%s
-%s
-🌍 服务位置：%s
-🗂 产品名称：%s
-
-🔋 流量：%s
-📥 已用流量：%s
-💢 剩余流量：%s (%s%%)
-
-📅 到期日期：%s (%s)
-
-%s
-
-💡 要切断他人的访问，只需点击“更改链接”选项。',
-                'serviceNoteChangedAdmin' => '📌  一位用户更改了其服务备注。
-
-▫️ 服务用户名：%s
-▫️ 之前的备注：‌ %s
-▫️ 新备注：‌  %s
-
-备注更改时间：%s ',
-                'serviceRenewFailedRefund' => '💎  尊敬的用户，由于服务未续费，金额 %s 托曼已添加到您的钱包。',
-                'serviceStatusSummary' => '
-  
- 服务状态：%s
-        
-🔋 服务流量：%s
-📥 已用流量：%s
-💢 剩余流量：%s (%s%%)
-
-📅 有效期至：%s (%s)
-
-用户订阅链接： 
-<code>%s</code>
-
-📶 最后连接时间：%s
-🔄 订阅链接最后更新时间：%s
-#️⃣ 已连接的客户端：<code>%s</code>',
-                'serviceTimePrompt' => '⌛️ 请选择您的服务时间 
-📌 每天费率：%s  托曼
-⚠️ 您最少可购买 %s 天，最多 %s 天',
-                'serviceVolumePrompt' => '🔋 请输入所需的服务流量（以 GB 为单位）：
-📌 每 GB 费率：%s 
-🔔 最小流量为 1 GB，最大为 1000 GB。',
-                'starInvoiceError' => '
-创建 Star 发票时出错
-✍️ 错误原因：%s
-            
-用户 ID：%s
-支付方式：%s
-用户用户名：@%s',
-                'subscriptionCreateError' => '⭕️ 创建订阅出错
-✍️ 错误原因：
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s',
-                'subscriptionCreateErrorAdmin' => '⭕️ 创建订阅出错 
-✍️ 错误原因： 
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s',
-                'subscriptionCreateErrorApi' => '❌ 创建订阅时发生错误；要解决此问题，请在您的报告群组中查看错误原因',
-                'subscriptionCreateGenericError' => '创建订阅时发生错误。请联系客服',
-                'supportMessageFromUser' => '
-    📣 尊敬的客服，一位用户向您发送了一条消息。
-
-用户数字 ID：<a href = "tg://user?id=%s">%s</a>
-发送时间：%s
-消息状态：未回复
-用户用户名：@%s    
-部门名称：%s
-
-消息内容：%s %s',
-                'supportMessageFromUser2' => '
-    📣 尊敬的客服，一位用户向您发送了一条消息。
-
-用户数字 ID：<a href = "tg://user?id=%s">%s</a>
-发送时间：%s
-消息状态：客户回复
-用户用户名：@%s    
-部门名称：%s
-
-消息内容：%s',
-                'testAccountCreateError' => '
-⭕️ 一位用户打算获取测试账户，但创建配置遇到错误，未向用户提供配置
-✍️ 错误原因： 
-%s
-用户 ID：%s
-用户用户名：@%s
-面板名称：%s',
-                'testAccountReportAdmin' => '📣 测试账户创建详情已记录在您的机器人中。
-▫️用户数字 ID：<code>%s</code>
-▫️用户用户名：@%s
-▫️配置用户名：%s
-▫️用户姓名：%s
-▫️服务位置：%s
-▫️已购买时间：%s 小时
-▫️已购买流量：%s MB
-▫️跟踪码：%s
-▫️用户类型：%s
-▫️用户电话号码：%s
-▫️购买时间：%s',
-                'testLabel' => '测试',
-                'testServiceName' => '测试服务',
-                'testServiceName2' => '测试服务',
-                'testServiceName3' => '测试服务',
-                'testServiceName4' => '测试服务',
-                'testServiceName5' => '测试服务',
-                'testServiceNameFn' => '测试服务',
-                'transactionCreated' => '✅ 您的交易已创建
-        
-🛒 跟踪码：<code>%s</code> 
-💲 交易金额（托曼）：<code>%s</code>
-
-
-💢 付款前请注意以下事项 👇
-        
-❌ 此交易有效期为 24 小时；之后无法对此交易进行付款。        
-
-
-✅ 如有问题，您可以联系客服',
-                'transactionCreated2' => '✅ 您的交易已创建
-        
-🛒 跟踪码：<code>%s</code> 
-💲 交易金额（托曼）：<code>%s</code>
-
-💢 付款前请注意以下事项 👇
-        
-🔹 交易有效期为一天，之后即使付款也不会被批准。
-❌ 交易后需要 15 分钟到一小时才能批准交易
-
-✅ 如有问题，您可以联系客服',
-                'transactionCreated3' => '✅ 您的交易已创建
-        
-🛒 跟踪码：<code>%s</code> 
-💲 交易金额（托曼）：<code>%s</code> 托曼
-
-
-💢 付款前请注意以下事项 👇
-        
-❌ 此交易有效期为一天；之后无法对此交易进行付款。        
-
-✅ 如有问题，您可以联系客服',
-                'transactionCreatedStar' => '✅ 您的交易已创建
-
-🛒 跟踪码：<code>%s</code>
-💲 交易金额：%s ⭐（相当于 %s 托曼）
-
-📌 请将 %s 托曼兑换为 Telegram Stars 并存入。
-
-💢 付款前的重要事项： 👇
-🔹 每笔交易有效期为 1 天；过期后请勿存入。
-
-✅ 如有问题，请联系客服。',
-                'transactionCreatedTron' => '✅ 您的交易已创建
-
-🛒 跟踪码：<code>%s</code>
-🌐 网络：TRX - Tron
-💳 钱包地址：<code>%s</code>
-
-📌 请向上述钱包地址存入 <code>%s</code> TRX，然后点击下方按钮并发送收据。
-
-💢 付款前请注意以下事项 👇
-🔸 如果钱包地址输入错误，交易将不被批准，且无法退款。
-🔹 发送的金额不得少于或多于规定金额。
-🔹 如果存入超过规定金额，无法补加差额。
-🔹 每笔交易有效期为一小时，收到交易过期消息后，请在任何情况下都不要向钱包发送任何金额。
-
-✅ 如有问题，您可以联系客服。',
-                'unitByte' => '字节',
-                'unitGig' => 'GB',
-                'unitGigabyte' => '千兆字节',
-                'unitGigabyteFn' => '千兆字节',
-                'unitKilobyte' => '千字节',
-                'unitMegabyte' => '兆字节',
-                'unitTerabyte' => '太字节',
-                'unknownLabel' => '未知',
-                'unlimitedLabel' => '无限制',
-                'userBlockedByApiLog' => '数字 ID 为 %s 的用户已在机器人中被封禁 
-执行管理员：api site',
-                'userUnblockedByApiLog' => '数字 ID 为 %s 的用户已在机器人中被解封 
-执行管理员：api site',
-                'usernameExistsRestart' => '用户名已存在。请从头执行各步骤',
-                'zarinpalLinkError' => '⭕️ 创建 ZarinPal 链接出错
-✍️ 错误原因：%s
-            
-用户 ID：%s
-用户用户名：@%s',
-        ],
-        'db_defaults' => [
-                'namecardNotSet' => '未设置',
-                'departmanGeneral' => '☎️ 公共部分',
+                'panelSetting' => '🎛 面板设置',
+                'mirzaAgentPanel' => 'Mirza 代理',
+                'setGroupName' => '🎛 设置群组名称',
+                'subLinkDomain' => '🔗 订阅链接域名',
+                'panelTypeSanaei' => 'Sanaei 单端口',
+                'panelTypeAlireza' => 'Alireza 单端口',
+                'usernameMethodAgentCustom' => '自定义代理文本 + 顺序编号',
+                'acceptRulesButton' => '✅ 我接受规则',
         ],
         'panel' => [
                 'configInvalidRequest' => '无效请求。',
@@ -4592,5 +4696,9 @@ https://t.me/%s?start=%s',
                 'invoiceAmount' => '支付金额：',
                 'invoiceAmountUnit' => '托曼',
                 'invoiceDate' => '日期：',
+        ],
+        'db_defaults' => [
+                'namecardNotSet' => '未设置',
+                'departmanGeneral' => '☎️ 公共部分',
         ],
 ];

@@ -42,7 +42,7 @@ if ($return_var !== 0) {
         'chat_id' => $setting['Channel_Report'],
         'message_thread_id' => $reportbackup,
         'document' => new CURLFile($backup_file_name),
-        'caption' => $textbotlang['hardcoded']['backupDatabaseCaption'],
+        'caption' => $textbotlang['Admin']['report']['backupCaption'],
     ]);
     unlink($backup_file_name);
 }

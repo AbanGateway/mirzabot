@@ -69,7 +69,7 @@ class ServiceMonitor
     private function getActiveInvoices()
     {
         $time_hours = time() - 3600;
-        $QUERY = "SELECT * FROM invoice WHERE (Status = 'active' OR Status = 'end_of_time' OR Status = 'end_of_volume' OR Status = 'sendedwarn' OR Status = 'send_on_hold') AND name_product != '{$this->textBotLang['Admin']['adminphp']['db_test_service_name']}' AND (time_cron <= '$time_hours' OR time_cron IS NULL) ORDER BY time_cron  LIMIT 30";
+        $QUERY = "SELECT * FROM invoice WHERE (Status = 'active' OR Status = 'end_of_time' OR Status = 'end_of_volume' OR Status = 'sendedwarn' OR Status = 'send_on_hold') AND name_product != '{$this->textBotLang['common']['labels']['testServiceName']}' AND (time_cron <= '$time_hours' OR time_cron IS NULL) ORDER BY time_cron  LIMIT 30";
         $stmt = $this->pdo->prepare($QUERY);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -111,13 +111,13 @@ class ServiceMonitor
 
         if ($isVolumeWarning) {
             $formattedVolume = formatBytes($remainingVolume);
-            $message = $this->textBotLang['hardcoded']['notifGreeting'] .
-                sprintf($this->textBotLang['hardcoded']['notifVolumeRemaining'], $username, $formattedVolume) .
-                sprintf($this->textBotLang['hardcoded']['notifVolumeActionHint'], $this->text_Purchased_services);
-            $reportMessage = $this->textBotLang['hardcoded']['notifVolumeCronTitle'] .
-                sprintf($this->textBotLang['hardcoded']['notifServiceUsername'], $username) .
-                sprintf($this->textBotLang['hardcoded']['notifServiceStatus'], $userData['status']) .
-                sprintf($this->textBotLang['hardcoded']['notifRemainingVolume'], $formattedVolume);
+            $message = $this->textBotLang['users']['notify']['greeting'] .
+                sprintf($this->textBotLang['users']['notify']['volumeRemaining'], $username, $formattedVolume) .
+                sprintf($this->textBotLang['users']['notify']['volumeActionHint'], $this->text_Purchased_services);
+            $reportMessage = $this->textBotLang['users']['notify']['volumeTitle'] .
+                sprintf($this->textBotLang['users']['notify']['serviceUsername'], $username) .
+                sprintf($this->textBotLang['users']['notify']['serviceStatus'], $userData['status']) .
+                sprintf($this->textBotLang['users']['notify']['remainingVolume'], $formattedVolume);
             $this->send_notifactions($invoice, $user, $message, true, $invoice['bottype']);
             $this->sendReportNotification($reportMessage);
             $this->updateInvoiceStatus("volume", $invoice);
@@ -133,19 +133,19 @@ class ServiceMonitor
         $removalThreshold = intval("-" . $this->setting['removedayc']);
         $result = $daysRemaining <= $removalThreshold;
         $statusText = $statusMap = [
-            'active' => $this->textBotLang['users']['stateus']['active'],
-            'limited' => $this->textBotLang['users']['stateus']['limited'],
-            'disabled' => $this->textBotLang['users']['stateus']['disabled'],
-            'expired' => $this->textBotLang['users']['stateus']['expired'],
-            'on_hold' => $this->textBotLang['users']['stateus']['on_hold'],
-            'Unknown' => $this->textBotLang['users']['stateus']['Unknown']
+            'active' => $this->textBotLang['users']['status']['active'],
+            'limited' => $this->textBotLang['users']['status']['limited'],
+            'disabled' => $this->textBotLang['users']['status']['disabled'],
+            'expired' => $this->textBotLang['users']['status']['expired'],
+            'on_hold' => $this->textBotLang['users']['status']['on_hold'],
+            'Unknown' => $this->textBotLang['users']['status']['unknown']
         ][$userData['status']];
         $remainingVolume = formatBytes($userData['data_limit'] - $userData['used_traffic']);
         if ($result) {
             update("invoice", "status", "removeTime", "username", $username);
             $this->Panel->RemoveUser($invoice['Service_location'], $username);
-            $message = sprintf($this->textBotLang['hardcoded']['notifServiceDeleted'], $invoice['username']);
-            $reportMessage = sprintf($this->textBotLang['hardcoded']['notifDeleteCronInfo'], $invoice['username'], $statusText, $daysRemaining, $remainingVolume);
+            $message = sprintf($this->textBotLang['users']['notify']['serviceDeleted'], $invoice['username']);
+            $reportMessage = sprintf($this->textBotLang['users']['notify']['deleteInfo'], $invoice['username'], $statusText, $daysRemaining, $remainingVolume);
             $this->send_notifactions($invoice, $user, $message, false, $invoice['bottype']);
             $this->sendReportNotification($reportMessage);
         }
@@ -176,19 +176,19 @@ class ServiceMonitor
         $removalThreshold = intval($this->setting['cronvolumere']);
         $result = $timelastconect >= $removalThreshold;
         $statusText = [
-            'active' => $this->textBotLang['users']['stateus']['active'],
-            'limited' => $this->textBotLang['users']['stateus']['limited'],
-            'disabled' => $this->textBotLang['users']['stateus']['disabled'],
-            'expired' => $this->textBotLang['users']['stateus']['expired'],
-            'on_hold' => $this->textBotLang['users']['stateus']['on_hold'],
-            'Unknown' => $this->textBotLang['users']['stateus']['Unknown']
+            'active' => $this->textBotLang['users']['status']['active'],
+            'limited' => $this->textBotLang['users']['status']['limited'],
+            'disabled' => $this->textBotLang['users']['status']['disabled'],
+            'expired' => $this->textBotLang['users']['status']['expired'],
+            'on_hold' => $this->textBotLang['users']['status']['on_hold'],
+            'Unknown' => $this->textBotLang['users']['status']['unknown']
         ][$userData['status']];
         $remainingVolume = formatBytes($userData['data_limit'] - $userData['used_traffic']);
         if ($result) {
             update("invoice", "status", "removevolume", "username", $username);
             $this->Panel->RemoveUser($invoice['Service_location'], $username);
-            $message = sprintf($this->textBotLang['hardcoded']['notifServiceDeleted2'], $username);
-            $reportMessage = sprintf($this->textBotLang['hardcoded']['notifVolumeDeleteCronInfo'], $username, $statusText, $daysRemaining, $remainingVolume, $userData['online_at']);
+            $message = sprintf($this->textBotLang['users']['notify']['serviceDeleted2'], $username);
+            $reportMessage = sprintf($this->textBotLang['users']['notify']['volumeDeleteInfo'], $username, $statusText, $daysRemaining, $remainingVolume, $userData['online_at']);
             $this->send_notifactions($invoice, $user, $message, false, $invoice['bottype']);
             $this->sendReportNotification($reportMessage);
         }
@@ -221,14 +221,14 @@ class ServiceMonitor
         $isTimeWarning = $timeRemaining <= $warningThreshold && $timeRemaining > 0;
 
         if ($isTimeWarning) {
-            $message = $this->textBotLang['hardcoded']['notifGreeting2'] .
-                sprintf($this->textBotLang['hardcoded']['notifTimeRemaining'], $username, $daysRemaining) .
-                sprintf($this->textBotLang['hardcoded']['notifTimeActionHint'], $this->text_Purchased_services) .
-                $this->textBotLang['hardcoded']['notifThanks'];
-            $reportMessage = $this->textBotLang['hardcoded']['notifTimeCronTitle'] .
-                sprintf($this->textBotLang['hardcoded']['notifServiceUsername2'], $invoice['username']) .
-                sprintf($this->textBotLang['hardcoded']['notifServiceStatus2'], $userData['status']) .
-                sprintf($this->textBotLang['hardcoded']['notifRemainingDays'], $daysRemaining);
+            $message = $this->textBotLang['users']['notify']['greeting2'] .
+                sprintf($this->textBotLang['users']['notify']['timeRemaining'], $username, $daysRemaining) .
+                sprintf($this->textBotLang['users']['notify']['timeActionHint'], $this->text_Purchased_services) .
+                $this->textBotLang['users']['notify']['thanks'];
+            $reportMessage = $this->textBotLang['users']['notify']['timeTitle'] .
+                sprintf($this->textBotLang['users']['notify']['serviceUsername2'], $invoice['username']) .
+                sprintf($this->textBotLang['users']['notify']['serviceStatus2'], $userData['status']) .
+                sprintf($this->textBotLang['users']['notify']['remainingDays'], $daysRemaining);
             $this->send_notifactions($invoice, $user, $message, true, $invoice['bottype']);
             $this->sendReportNotification($reportMessage);
             $this->updateInvoiceStatus("time", $invoice);

@@ -41,13 +41,13 @@ if (intval($setting['scorestatus']) == 1) {
         $stmt->execute();
 
         $count = 0;
-        $textlotterygroup = $textbotlang['hardcoded']['lotteryAdminReport'];
 
         $textJson = languagechange();
         if (!is_array($textJson)) {
             error_log("Language file (lang/fa.php) could not be loaded.");
             exit;
         }
+        $textlotterygroup = $textJson['Admin']['report']['lotteryTitle'];
 
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $userLang = isset($result['language']) && !empty($result['language']) ? $result['language'] : 'fa';
@@ -68,20 +68,22 @@ if (intval($setting['scorestatus']) == 1) {
             $balanceFormatted = number_format($prizeAmount);
             $rank = $count + 1;
 
-            $textlottery = sprintf($textbotlang['hardcoded']['lotteryWinnerNotice'], $rank, $balanceFormatted);
+            $textlottery = sprintf($textJson['users']['lottery']['winnerNotice'], $rank, $balanceFormatted);
             sendmessage($result['id'], $textlottery, null, 'html');
 
-            $textlotterygroup .= sprintf($textbotlang['hardcoded']['lotteryWinnerRow'], $result['username'], $result['id'], $balanceFormatted, $rank);
+            $textlotterygroup .= sprintf($textJson['Admin']['report']['lotteryWinnerRow'], $result['username'], $result['id'], $balanceFormatted, $rank);
 
             $count++;
         }
 
-        telegram('sendmessage', [
-            'chat_id' => $setting['Channel_Report'],
-            'message_thread_id' => $otherreport,
-            'text' => $textlotterygroup,
-            'parse_mode' => "HTML"
-        ]);
+        if ($count > 0) {
+            telegram('sendmessage', [
+                'chat_id' => $setting['Channel_Report'],
+                'message_thread_id' => $otherreport,
+                'text' => $textlotterygroup,
+                'parse_mode' => "HTML"
+            ]);
+        }
 
         update("user", "score", "0", null, null);
     }
