@@ -956,9 +956,6 @@ If you want the user to purchase unlimited, send the number 0',
     2 Users except agents',
                         'err_invalid_select_name_renew' => '❌ The renewal method is invalid; select the correct renewal method from the list below',
                         'err_confirm_2' => '❌ First turn off automatic approval without review.',
-                        'msg_account_api_bot_message' => '📌 Bot API documentation 
-Notes: 
-1 - If you need a specific endpoint, message the support account so it can be reviewed.',
                         'err_user_bot_name' => '❌ This username already exists in the bot.',
                         'err_error_group_report' => '❌ An error occurred while creating the subscription; to fix the issue, check the cause of the error in your report group',
                         'msg_user_card_enable_buy' => '💳 Dear user, the card number has been activated for you; you can now make your purchase.',

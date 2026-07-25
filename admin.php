@@ -6117,9 +6117,8 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     $token = bin2hex(random_bytes(16));
     file_put_contents('api/hash.txt', $token);
     sendmessage($from_id, sprintf($textbotlang['Admin']['adminphp']['btn_token_api'], $token), null, 'HTML');
-    $apiDocsUrl = "https://$domainhostsEscaped/api/";
+    $apiDocsUrl = "https://$domainhostsEscaped/api/index.html";
     sendmessage($from_id, sprintf($textbotlang['Admin']['adminphp']['msg_api_docs_link'], $apiDocsUrl), null, 'HTML');
-    sendDocument($from_id, 'api/documents.txt', $textbotlang['Admin']['adminphp']['msg_account_api_bot_message']);
 } elseif ($text == $textbotlang['keyboard']['activateWebPanel'] && $adminrulecheck['rule'] == "administrator") {
     $admin_select = select("admin", "*", "id_admin", $from_id, "select");
     $randomString = bin2hex(random_bytes(6));

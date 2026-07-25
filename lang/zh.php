@@ -956,9 +956,6 @@ n2',
     2 除代理外的用户',
                         'err_invalid_select_name_renew' => '❌ 续费方式无效；请从下方列表中选择正确的续费方式',
                         'err_confirm_2' => '❌ 请先关闭无需审核的自动批准。',
-                        'msg_account_api_bot_message' => '📌 机器人 API 文档 
-注意： 
-1 - 如果您需要特定的 endpoint，请向客服账户发送消息以便审核。',
                         'err_user_bot_name' => '❌ 该用户名在机器人中已存在。',
                         'err_error_group_report' => '❌ 创建订阅时发生错误；要解决此问题，请在您的报告群组中查看错误原因',
                         'msg_user_card_enable_buy' => '💳 尊敬的用户，卡号已为您激活；现在您可以进行购买。',
