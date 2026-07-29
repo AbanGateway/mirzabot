@@ -1402,7 +1402,10 @@ function addBackgroundImage($urlimage, $qrCodeResult, $backgroundPath)
 
     imagecopy($backgroundImage, $qrCodeImage, $x, $y, 0, 0, $qrCodeWidth, $qrCodeHeight);
 
-    imagepng($backgroundImage, $urlimage);
+    if (!@imagepng($backgroundImage, $urlimage)) {
+        error_log("addBackgroundImage: Failed to write image to $urlimage");
+        @file_put_contents($urlimage, $qrString);
+    }
 
     imagedestroy($qrCodeImage);
     imagedestroy($backgroundImage);
@@ -1703,7 +1706,16 @@ function generateAuthStr($length = 10)
 }
 function createqrcode($contents)
 {
-    $contents = mb_convert_encoding((string)$contents, 'UTF-8', 'UTF-8');
+    $contents = (string) $contents;
+    if ($contents === '') {
+        return null;
+    }
+    if (!mb_check_encoding($contents, 'UTF-8')) {
+        $contents = mb_convert_encoding($contents, 'UTF-8', 'UTF-8');
+        if ($contents === false || $contents === '') {
+            return null;
+        }
+    }
     $builder = new Builder(
         writer: new PngWriter(),
         writerOptions: [],
@@ -1715,12 +1727,19 @@ function createqrcode($contents)
     );
 
     try {
-        $result = $builder->build();
+        return $builder->build();
     } catch (\Throwable $e) {
         error_log('createqrcode failed: ' . $e->getMessage());
         return null;
     }
-    return $result;
+}
+function qrTempPath($filename)
+{
+    $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mirzabot_qr';
+    if (!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+        $dir = sys_get_temp_dir();
+    }
+    return rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($filename, DIRECTORY_SEPARATOR);
 }
 function sanitize_recursive(array $data): array
 {
@@ -1802,29 +1821,38 @@ function sendMessageService($panel_info, $config, $sub_link, $username_service, 
     }
     if ($STATUS_SEND_MESSAGE_PHOTO) {
         if ($panel_info['type'] == "WGDashboard") {
-            $urlimage = "{$panel_info['inboundid']}_{$invoice_id}.conf";
-            file_put_contents($urlimage, $sub_link);
-            telegram('senddocument', [
-                'chat_id' => $user_id,
-                'document' => new CURLFile($urlimage),
-                'reply_markup' => $reply_markup,
-                'caption' => $caption,
-                'parse_mode' => "HTML",
-            ]);
-            unlink($urlimage);
+            $urlimage = qrTempPath("{$panel_info['inboundid']}_{$invoice_id}.conf");
+            if (@file_put_contents($urlimage, $sub_link) === false) {
+                sendmessage($user_id, $caption, $reply_markup, 'HTML');
+            } else {
+                telegram('senddocument', [
+                    'chat_id' => $user_id,
+                    'document' => new CURLFile($urlimage),
+                    'reply_markup' => $reply_markup,
+                    'caption' => $caption,
+                    'parse_mode' => "HTML",
+                ]);
+                @unlink($urlimage);
+            }
         } else {
-            $urlimage = "$user_id$invoice_id.png";
+            $urlimage = qrTempPath("$user_id$invoice_id.png");
             $qrCode = createqrcode($out_put_qrcode);
-            file_put_contents($urlimage, $qrCode->getString());
-            addBackgroundImage($urlimage, $qrCode, $image);
-            telegram('sendphoto', [
-                'chat_id' => $user_id,
-                'photo' => new CURLFile($urlimage),
-                'reply_markup' => $reply_markup,
-                'caption' => $caption,
-                'parse_mode' => "HTML",
-            ]);
-            unlink($urlimage);
+            $photoSent = false;
+            if ($qrCode !== null && @file_put_contents($urlimage, $qrCode->getString()) !== false) {
+                addBackgroundImage($urlimage, $qrCode, $image);
+                $response = telegram('sendphoto', [
+                    'chat_id' => $user_id,
+                    'photo' => new CURLFile($urlimage),
+                    'reply_markup' => $reply_markup,
+                    'caption' => $caption,
+                    'parse_mode' => "HTML",
+                ]);
+                $photoSent = is_array($response) && !empty($response['ok']);
+                @unlink($urlimage);
+            }
+            if (!$photoSent) {
+                sendmessage($user_id, $caption, $reply_markup, 'HTML');
+            }
         }
     } else {
         sendmessage($user_id, $caption, $reply_markup, 'HTML');

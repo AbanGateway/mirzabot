@@ -1157,7 +1157,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         ]);
         update("user", "Processing_value", $nameloc['username'], "id", $from_id);
         $subscriptionurl = $DataUserOut['subscription_url'];
-        $urlimage = "{$marzban_list_get['inboundid']}_{$nameloc['username']}.conf";
+        $urlimage = qrTempPath("{$marzban_list_get['inboundid']}_{$nameloc['username']}.conf");
         file_put_contents($urlimage, $subscriptionurl);
         telegram('senddocument', [
             'chat_id' => $from_id,
@@ -1182,9 +1182,12 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         update("user", "Processing_value", $nameloc['username'], "id", $from_id);
         $subscriptionurl = $DataUserOut['subscription_url'];
         $randomString = bin2hex(random_bytes(3));
-        $urlimage = "$from_id$randomString.png";
+        $urlimage = qrTempPath("$from_id$randomString.png");
         $qrCode = createqrcode($subscriptionurl);
-        file_put_contents($urlimage, $qrCode->getString());
+        if ($qrCode === null || @file_put_contents($urlimage, $qrCode->getString()) === false) {
+            sendmessage($from_id, $textsub, $bakinfos, 'HTML');
+            return;
+        }
         addBackgroundImage($urlimage, $qrCode, 'images.jpg');
         telegram('sendphoto', [
             'chat_id' => $from_id,
@@ -1193,7 +1196,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             'caption' => $textsub,
             'parse_mode' => "HTML",
         ]);
-        unlink($urlimage);
+        @unlink($urlimage);
     }
 } elseif (preg_match('/removeauto-(\w+)/', $datain, $dataget)) {
     $id_invoice = $dataget[1];
@@ -1259,13 +1262,12 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     if ($dataget[2] == "1520") {
         for ($i = 0; $i < count($DataUserOut['links']); ++$i) {
             $randomString = bin2hex(random_bytes(3));
-            $urlimage = "$from_id$randomString.png";
+            $urlimage = qrTempPath("$from_id$randomString.png");
             $qrCode = createqrcode($DataUserOut['links'][$i]);
-            if ($qrCode === null) {
+            if ($qrCode === null || @file_put_contents($urlimage, $qrCode->getString()) === false) {
                 sendmessage($from_id, "<code>{$DataUserOut['links'][$i]}</code>", null, 'HTML');
                 continue;
             }
-            file_put_contents($urlimage, $qrCode->getString());
             addBackgroundImage($urlimage, $qrCode, 'images.jpg');
             telegram('sendphoto', [
                 'chat_id' => $from_id,
@@ -1273,18 +1275,17 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
                 'caption' => "<code>{$DataUserOut['links'][$i]}</code>",
                 'parse_mode' => "HTML",
             ]);
-            unlink($urlimage);
+            @unlink($urlimage);
         }
         return;
     }
     $randomString = bin2hex(random_bytes(3));
-    $urlimage = "$from_id$randomString.png";
+    $urlimage = qrTempPath("$from_id$randomString.png");
     $qrCode = createqrcode($DataUserOut['links'][$dataget[2]]);
-    if ($qrCode === null) {
+    if ($qrCode === null || @file_put_contents($urlimage, $qrCode->getString()) === false) {
         sendmessage($from_id, "<code>{$DataUserOut['links'][$dataget[2]]}</code>", null, 'HTML');
         return;
     }
-    file_put_contents($urlimage, $qrCode->getString());
     addBackgroundImage($urlimage, $qrCode, 'images.jpg');
     telegram('sendphoto', [
         'chat_id' => $from_id,
@@ -1292,7 +1293,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         'caption' => "<code>{$DataUserOut['links'][$dataget[2]]}</code>",
         'parse_mode' => "HTML",
     ]);
-    unlink($urlimage);
+    @unlink($urlimage);
 } elseif (preg_match('/changestatus_(\w+)/', $datain, $dataget)) {
     $statuschangeservice = select("shopSetting", "*", "Namevalue", "statuschangeservice", "select")['value'];
     if ($statuschangeservice == "offstatus") {
@@ -3758,7 +3759,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         '{username}' => $username_ac,
         '{name_product}' => $info_product['name_product'],
         '{Service_time}' => $info_product['Service_time'],
-        '{note}' => $info_product['note'],
+        '{note}' => $info_product['note'] ?? '',
         '{price}' => $info_product_price_product,
         '{Volume}' => $info_product['Volume_constraint'],
         '{userBalance}' => $userBalance
