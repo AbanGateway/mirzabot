@@ -3461,6 +3461,17 @@ elseif ($datain == "systemsms") {
     step('home', $from_id);
 } elseif ($datain == "aqayepardakhtsetting" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['users']['selectoption'], $aqayepardakht, 'HTML');
+} elseif ($datain == "cubepaysetting" && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['users']['selectoption'], $cubepay, 'HTML');
+} elseif ($text == $textbotlang['keyboard']['setCubepayToken'] && $adminrulecheck['rule'] == "administrator") {
+    $PaySetting = select("PaySetting", "ValuePay", "NamePay", "merchant_token_cubepay")['ValuePay'];
+    $textcubepay = sprintf($textbotlang['Admin']['gateway']['askCubepayToken'], $PaySetting);
+    sendmessage($from_id, $textcubepay, $backadmin, 'HTML');
+    step('merchant_token_cubepay', $from_id);
+} elseif ($user['step'] == "merchant_token_cubepay") {
+    sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $cubepay, 'HTML');
+    update("PaySetting", "ValuePay", $text, "NamePay", "merchant_token_cubepay");
+    step('home', $from_id);
 } elseif ($datain == "zarinpalsetting" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['Admin']['selectOption'], $keyboardzarinpal, 'HTML');
 } elseif ($text == $textbotlang['keyboard']['setAqayePardakhtMerchant'] && $adminrulecheck['rule'] == "administrator") {
@@ -6874,6 +6885,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     $arzireyali2 = getPaySettingValue('statustarnado', 'offternado');
     $arzireyali3 = getPaySettingValue('statusiranpay3', 'offiranpay3');
     $aqayepardakht = getPaySettingValue('statusaqayepardakht', 'offaqayepardakht');
+    $cubepay = getPaySettingValue('statuscubepay', 'offcubepay');
     $zarinpal = getPaySettingValue('zarinpalstatus', 'offzarinpal');
     $affilnecurrency = getPaySettingValue('digistatus', 'offdigi');
     $paymentstatussnotverify = getPaySettingValue('paymentstatussnotverify', 'offpaymentstatus');
@@ -6899,6 +6911,10 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
         'onaqayepardakht' => $textbotlang['Admin']['Status']['statuson'],
         'offaqayepardakht' => $textbotlang['Admin']['Status']['statusoff']
     ][$aqayepardakht];
+    $cubepaystatus = [
+        'oncubepay' => $textbotlang['Admin']['Status']['statuson'],
+        'offcubepay' => $textbotlang['Admin']['Status']['statusoff']
+    ][$cubepay];
     $zarinpalstatus = [
         'onzarinpal' => $textbotlang['Admin']['Status']['statuson'],
         'offzarinpal' => $textbotlang['Admin']['Status']['statusoff']
@@ -6960,6 +6976,11 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "aqayepardakhtsetting"],
                 ['text' => $aqayepardakhtstatus, 'callback_data' => "editpayment-aqayepardakht-$aqayepardakht"],
                 ['text' => $textbotlang['keyboard']['aqayePardakhtGateway'], 'callback_data' => "aqayepardakht"],
+            ],
+            [
+                ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "cubepaysetting"],
+                ['text' => $cubepaystatus, 'callback_data' => "editpayment-cubepay-$cubepay"],
+                ['text' => $textbotlang['keyboard']['cubepayGateway'], 'callback_data' => "cubepay"],
             ],
             [
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "zarinpalsetting"],
@@ -7050,6 +7071,13 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
             $valuenew = "onaqayepardakht";
         }
         update("PaySetting", "ValuePay", $valuenew, "NamePay", "statusaqayepardakht");
+    } elseif ($type == "cubepay") {
+        if ($value == "oncubepay") {
+            $valuenew = "offcubepay";
+        } else {
+            $valuenew = "oncubepay";
+        }
+        update("PaySetting", "ValuePay", $valuenew, "NamePay", "statuscubepay");
     } elseif ($type == "zarinpal") {
         if ($value == "onzarinpal") {
             $valuenew = "offzarinpal";
@@ -7092,6 +7120,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     $arzireyali1 = getPaySettingValue('statusSwapWallet', 'offSwapinoBot');
     $arzireyali2 = getPaySettingValue('statustarnado', 'offternado');
     $aqayepardakht = getPaySettingValue('statusaqayepardakht', 'offaqayepardakht');
+    $cubepay = getPaySettingValue('statuscubepay', 'offcubepay');
     $affilnecurrency = getPaySettingValue('digistatus', 'offdigi');
     $arzireyali3 = getPaySettingValue('statusiranpay3', 'offiranpay3');
     $paymentstatussnotverify = getPaySettingValue('paymentstatussnotverify', 'offpaymentstatus');
@@ -7117,6 +7146,10 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
         'onaqayepardakht' => $textbotlang['Admin']['Status']['statuson'],
         'offaqayepardakht' => $textbotlang['Admin']['Status']['statusoff']
     ][$aqayepardakht];
+    $cubepaystatus = [
+        'oncubepay' => $textbotlang['Admin']['Status']['statuson'],
+        'offcubepay' => $textbotlang['Admin']['Status']['statusoff']
+    ][$cubepay];
     $zarinpalstatus = [
         'onzarinpal' => $textbotlang['Admin']['Status']['statuson'],
         'offzarinpal' => $textbotlang['Admin']['Status']['statusoff']
@@ -7180,6 +7213,11 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
                 ['text' => $textbotlang['keyboard']['aqayePardakhtGateway'], 'callback_data' => "aqayepardakht"],
             ],
             [
+                ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "cubepaysetting"],
+                ['text' => $cubepaystatus, 'callback_data' => "editpayment-cubepay-$cubepay"],
+                ['text' => $textbotlang['keyboard']['cubepayGateway'], 'callback_data' => "cubepay"],
+            ],
+            [
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "zarinpalsetting"],
                 ['text' => $zarinpalstatus, 'callback_data' => "editpayment-zarinpal-$zarinpal"],
                 ['text' => $textbotlang['keyboard']['zarinPalGateway'], 'callback_data' => "zarinpal"],
@@ -7226,6 +7264,17 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     sendmessage($from_id, $textbotlang['Admin']['price']['priceSaved'], $CartManage, 'HTML');
     step("home", $from_id);
     update("PaySetting", "ValuePay", $text, "NamePay", "chashbackaqaypardokht");
+} elseif ($text == $textbotlang['keyboard']['cashbackCubepay']) {
+    sendmessage($from_id, $textbotlang['Admin']['price']['askPaymentCashback'], $backadmin, 'HTML');
+    step("getcashcubepay", $from_id);
+} elseif ($user['step'] == "getcashcubepay") {
+    if (!ctype_digit($text)) {
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
+        return;
+    }
+    sendmessage($from_id, $textbotlang['Admin']['price']['priceSaved'], $CartManage, 'HTML');
+    step("home", $from_id);
+    update("PaySetting", "ValuePay", $text, "NamePay", "chashbackcubepay");
 } elseif ($text == $textbotlang['keyboard']['cashbackIranPay2']) {
     sendmessage($from_id, $textbotlang['Admin']['price']['askPaymentCashback'], $backadmin, 'HTML');
     step("getcashiranpay2", $from_id);
@@ -7798,6 +7847,28 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     sendmessage($from_id, $textbotlang['Admin']['Balance']['maxDepositSaved'], $aqayepardakht, 'HTML');
     step("home", $from_id);
     update("PaySetting", "ValuePay", $text, "NamePay", "maxbalanceaqayepardakht");
+} elseif ($text == $textbotlang['keyboard']['minAmountCubepay']) {
+    sendmessage($from_id, $textbotlang['Admin']['Balance']['askMinDeposit'], $backadmin, 'HTML');
+    step("getmaincubepay", $from_id);
+} elseif ($user['step'] == "getmaincubepay") {
+    if (!ctype_digit($text)) {
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
+        return;
+    }
+    sendmessage($from_id, $textbotlang['Admin']['Balance']['minDepositSaved'], $cubepay, 'HTML');
+    step("home", $from_id);
+    update("PaySetting", "ValuePay", $text, "NamePay", "minbalancecubepay");
+} elseif ($text == $textbotlang['keyboard']['maxAmountCubepay']) {
+    sendmessage($from_id, $textbotlang['Admin']['Balance']['askMaxDeposit'], $backadmin, 'HTML');
+    step("getmaaxcubepay", $from_id);
+} elseif ($user['step'] == "getmaaxcubepay") {
+    if (!ctype_digit($text)) {
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
+        return;
+    }
+    sendmessage($from_id, $textbotlang['Admin']['Balance']['maxDepositSaved'], $cubepay, 'HTML');
+    step("home", $from_id);
+    update("PaySetting", "ValuePay", $text, "NamePay", "maxbalancecubepay");
 } elseif ($text == $textbotlang['keyboard']['minAmountZarinPal']) {
     sendmessage($from_id, $textbotlang['Admin']['Balance']['askMinDeposit'], $backadmin, 'HTML');
     step("getmainaqzarinpal", $from_id);
@@ -8288,6 +8359,40 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
             'videoid' => $videoid
         ));
         update("PaySetting", "ValuePay", $data, "NamePay", "helpaqayepardakht");
+    } else {
+        sendmessage($from_id, $textbotlang['Admin']['Help']['invalidContent'], $backadmin, 'HTML');
+        return;
+    }
+    step('home', $from_id);
+    sendmessage($from_id, $textbotlang['Admin']['Help']['tutorialSaved'], $CartManage, 'HTML');
+} elseif ($text == $textbotlang['keyboard']['setEducationCubepay'] && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['Admin']['Help']['askTutorialMedia'], $backadmin, 'HTML');
+    step("helpcubepay", $from_id);
+} elseif ($user['step'] == "helpcubepay") {
+    if ($text) {
+        if (intval($text) == 2) {
+            update("PaySetting", "ValuePay", "0", "NamePay", "helpcubepay");
+        } else {
+            $data = json_encode(array(
+                'type' => "text",
+                'text' => $text
+            ));
+            update("PaySetting", "ValuePay", $data, "NamePay", "helpcubepay");
+        }
+    } elseif ($photo) {
+        $data = json_encode(array(
+            'type' => "photo",
+            'text' => $caption,
+            'photoid' => $photoid
+        ));
+        update("PaySetting", "ValuePay", $data, "NamePay", "helpcubepay");
+    } elseif ($video) {
+        $data = json_encode(array(
+            'type' => "video",
+            'text' => $caption,
+            'videoid' => $videoid
+        ));
+        update("PaySetting", "ValuePay", $data, "NamePay", "helpcubepay");
     } else {
         sendmessage($from_id, $textbotlang['Admin']['Help']['invalidContent'], $backadmin, 'HTML');
         return;

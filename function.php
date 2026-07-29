@@ -1894,7 +1894,39 @@ function createPayaqayepardakht($price, $order_id)
     curl_close($curl);
     return json_decode($response, true);
 }
-function parseConfigs($input)
+function createPaycubepay($price, $order_id)
+{
+    global $domainhosts;
+    $token_cubepay = select("PaySetting", "ValuePay", "NamePay", "merchant_token_cubepay", "select")['ValuePay'];
+    // Bot internal prices are stored in Toman; CubePay's API expects Rial.
+    $amount_rial = intval($price) * 10;
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://cubevps.ir/smspay/api/create-payment.php',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token_cubepay
+        ),
+    ));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
+        'amount' => $amount_rial,
+        'order_id' => $order_id,
+        'callback_url' => "https://$domainhosts/payment/cubepay.php",
+        'type' => 'card',
+        'customer_user_id' => (string) ($GLOBALS['from_id'] ?? ''),
+    ], JSON_UNESCAPED_UNICODE));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    return json_decode($response, true);
+}
+
 {
     $lines = explode("\n", $input);
     $configs = [];
