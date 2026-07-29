@@ -18,6 +18,7 @@ while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $status_var = [
         'cart to cart' =>  $textbotlang['textbot']['cartToCart'],
         'aqayepardakht' => $textbotlang['textbot']['aqayePardakht'],
+        'cubepay' => $textbotlang['textbot']['cubepay'],
         'zarinpal' => $textbotlang['textbot']['zarinPal'],
         'plisio' => $textbotlang['textbot']['nowPayment'],
         'arze digital offline' => $textbotlang['textbot']['nowPaymentTron'],
