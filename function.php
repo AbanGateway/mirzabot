@@ -530,13 +530,20 @@ function rate_arze()
 {
     $arze_rate = [];
     $requests_tron = json_decode(file_get_contents('https://api.diadata.org/v1/assetQuotation/Tron/0x0000000000000000000000000000000000000000'), true);
-    $html_read = file_get_contents("https://www.bon-bast.com/");
-    preg_match('/<span>\s*([\d,]+)\s*<\/span>/', $html_read, $matches);
-    if (!empty($matches[1])) {
-        $requestsusd = str_replace(',', '', $matches[1]);
+    $requestsusd = 0;
+    $html_read = @file_get_contents("https://www.bon-bast.com/");
+    if ($html_read !== false) {
+        preg_match('/<span>\s*([\d,]+)\s*<\/span>/', $html_read, $matches);
+        if (!empty($matches[1])) {
+            $requestsusd = intval(str_replace(',', '', $matches[1]));
+        }
     }
-    $arze_rate['USD'] = intval($requestsusd);
-    $arze_rate['TRX'] = intval($requests_tron['Price'] * $arze_rate['USD']);
+    if ($requestsusd === 0) {
+        error_log('rate_arze: failed to fetch USD rate from bon-bast.com');
+        return null;
+    }
+    $arze_rate['USD'] = $requestsusd;
+    $arze_rate['TRX'] = intval(($requests_tron['Price'] ?? 0) * $arze_rate['USD']);
 
     return $arze_rate;
 }
@@ -1696,6 +1703,7 @@ function generateAuthStr($length = 10)
 }
 function createqrcode($contents)
 {
+    $contents = mb_convert_encoding((string)$contents, 'UTF-8', 'UTF-8');
     $builder = new Builder(
         writer: new PngWriter(),
         writerOptions: [],
@@ -1706,7 +1714,12 @@ function createqrcode($contents)
         margin: 10,
     );
 
-    $result = $builder->build();
+    try {
+        $result = $builder->build();
+    } catch (\Throwable $e) {
+        error_log('createqrcode failed: ' . $e->getMessage());
+        return null;
+    }
     return $result;
 }
 function sanitize_recursive(array $data): array
