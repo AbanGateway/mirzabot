@@ -54,7 +54,13 @@ function telegram($method, $datas = [], $token = null)
     }
 
     if (isset($decodedResponse['ok']) && !$decodedResponse['ok']) {
-        error_log(json_encode($decodedResponse));
+        $errorCode = $decodedResponse['error_code'] ?? 0;
+        $description = $decodedResponse['description'] ?? '';
+        $silent = $errorCode === 403
+            || ($errorCode === 400 && str_contains($description, 'message is not modified'));
+        if (!$silent) {
+            error_log(json_encode($decodedResponse));
+        }
     }
 
     return $decodedResponse;
