@@ -791,6 +791,11 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         return;
     }
     $nameloc = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$nameloc) {
+        sendmessage($from_id, $textbotlang['users']['status']['infoUnavailable'], $keyboard, 'html');
+        step('home', $from_id);
+        return;
+    }
     $username = $nameloc['id_invoice'];
     if (!in_array($nameloc['Status'], ['active', 'end_of_time', 'end_of_volume', 'sendedwarn', 'send_on_hold'])) {
         sendmessage($from_id, $textbotlang['users']['status']['infoUnavailable'], $keyboard, 'html');
@@ -1256,6 +1261,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             $randomString = bin2hex(random_bytes(3));
             $urlimage = "$from_id$randomString.png";
             $qrCode = createqrcode($DataUserOut['links'][$i]);
+            if ($qrCode === null) {
+                sendmessage($from_id, "<code>{$DataUserOut['links'][$i]}</code>", null, 'HTML');
+                continue;
+            }
             file_put_contents($urlimage, $qrCode->getString());
             addBackgroundImage($urlimage, $qrCode, 'images.jpg');
             telegram('sendphoto', [
@@ -1271,6 +1280,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $randomString = bin2hex(random_bytes(3));
     $urlimage = "$from_id$randomString.png";
     $qrCode = createqrcode($DataUserOut['links'][$dataget[2]]);
+    if ($qrCode === null) {
+        sendmessage($from_id, "<code>{$DataUserOut['links'][$dataget[2]]}</code>", null, 'HTML');
+        return;
+    }
     file_put_contents($urlimage, $qrCode->getString());
     addBackgroundImage($urlimage, $qrCode, 'images.jpg');
     telegram('sendphoto', [
@@ -3060,8 +3073,13 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
             sendmessage($from_id, $textbotlang['users']['selectoption'], $json_list_help, 'HTML');
         }
     }
-} elseif (preg_match('/^helpctgoryـ(.*)/', $datain, $dataget)) {
-    $helplist = select("help", "*", "category", $dataget[1], "fetchAll");
+} elseif (preg_match('/^helpctg_([0-9a-f]+)/', $datain, $dataget) || preg_match('/^helpctgoryـ(.*)/', $datain, $dataget)) {
+    if (isset($helpCategoryMap) && isset($helpCategoryMap[$dataget[1]])) {
+        $helpCategoryName = $helpCategoryMap[$dataget[1]];
+    } else {
+        $helpCategoryName = $dataget[1];
+    }
+    $helplist = select("help", "*", "category", $helpCategoryName, "fetchAll");
     $helpidos = ['inline_keyboard' => []];
     foreach ($helplist as $result) {
         $helpidos['inline_keyboard'][] = [
@@ -3834,7 +3852,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     ));
     $stmt = $pdo->prepare("INSERT IGNORE INTO invoice (id_user, id_invoice, username,time_sell, Service_location, name_product, price_product, Volume, Service_time,Status,note,refral,notifctions) VALUES (?,  ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)");
     $Status = "unpaid";
-    $stmt->execute([$from_id, $randomString, $username_ac, $date, $marzban_list_get['name_panel'], $info_product['name_product'], $priceproduct, $info_product['Volume_constraint'], $info_product['Service_time'], $Status, $userdate['nameconfig'], $user['affiliates'], $notifctions]);
+    $stmt->execute([$from_id, $randomString, $username_ac, $date, $marzban_list_get['name_panel'], $info_product['name_product'], $priceproduct, $info_product['Volume_constraint'], $info_product['Service_time'], $Status, $userdate['nameconfig'] ?? null, $user['affiliates'], $notifctions]);
     if ($priceproduct > $user['Balance'] && $user['agent'] != "n2" && intval($priceproduct) != 0) {
         $marzbandirectpay = select("shopSetting", "*", "Namevalue", "statusdirectpabuy", "select")['value'];
         $Balance_prim = $priceproduct - $user['Balance'];
@@ -4923,7 +4941,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         updatePaymentMessageId($message_id, $randomString);
     } elseif ($datain == "iranpay1") {
         $rates = rate_arze();
-        if ($rates === null) {
+        if ($rates === null || empty($rates['TRX']) || empty($rates['USD'])) {
             sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
             step('home', $from_id);
             return;
@@ -6479,7 +6497,12 @@ if (isset($update['message']['successful_payment'])) {
     update("user", "Processing_value", $location, "id", $from_id);
     $query = "SELECT * FROM product WHERE (Location = '$location' OR Location = '/all') AND agent= '{$user['agent']}'";
     $marzban_list_get = select("marzban_panel", "*", "code_panel", $location, "select");
-    $statuscustomvolume = json_decode($marzban_list_get['customvolume'], true)[$user['agent']];
+    if (empty($marzban_list_get)) {
+        sendmessage($from_id, $textbotlang['users']['status']['infoUnavailable'], null, 'HTML');
+        step('home', $from_id);
+        return;
+    }
+    $statuscustomvolume = json_decode($marzban_list_get['customvolume'] ?? '[]', true)[$user['agent']] ?? null;
     if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
         $datakeyboard = "prodcutservicesom_";
     } else {
