@@ -56,7 +56,6 @@ $methodMap = [
   'Currency Rial tow' => $textbotlang['panel']['paymentMethodRialGateway2'],
   'Currency Rial 3' => $textbotlang['panel']['paymentMethodRialGateway3'],
   'aqayepardakht' => $textbotlang['panel']['paymentMethodAqayePardakht'],
-  'cubepay' => $textbotlang['panel']['paymentMethodCubepay'],
   'zarinpal' => $textbotlang['panel']['paymentMethodZarinpal'],
   'plisio' => 'Plisio',
   'arze digital offline' => $textbotlang['panel']['paymentMethodCryptoOffline'],
