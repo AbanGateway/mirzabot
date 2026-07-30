@@ -4723,66 +4723,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         }
         $message_id = sendmessage($from_id, $textnowpayments, $paymentkeyboard, 'HTML');
         updatePaymentMessageId($message_id, $randomString);
-    } elseif ($datain == "cubepay") {
-        if ($user['Processing_value'] < 5000) {
-            sendmessage($from_id, $textbotlang['users']['Balance']['zarinpal'], null, 'HTML');
-            return;
-        }
-        $mainbalance = select("PaySetting", "ValuePay", "NamePay", "minbalancecubepay", "select")['ValuePay'];
-        $maxbalance = select("PaySetting", "ValuePay", "NamePay", "maxbalancecubepay", "select")['ValuePay'];
-        if ($user['Processing_value'] < $mainbalance || $user['Processing_value'] > $maxbalance) {
-            $mainbalance = number_format($mainbalance);
-            $maxbalance = number_format($maxbalance);
-            sendmessage($from_id, strtr($textbotlang['users']['Balance']['depositRange'], ['{mainbalance}' => $mainbalance, '{maxbalance}' => $maxbalance]), null, 'HTML');
-            return;
-        }
-        deletemessage($from_id, $message_id);
-        sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
-        $dateacc = date('Y/m/d H:i:s');
-        $randomString = bin2hex(random_bytes(5));
-        $pay = createPaycubepay($user['Processing_value'], $randomString);
-        if (empty($pay['success'])) {
-            $text_error = json_encode($pay);
-            sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
-            step('home', $from_id);
-            $ErrorsLinkPayment = sprintf($textbotlang['Admin']['reportgroup']['errorCubepayLink'], $text_error, $from_id, $username);
-            if (strlen($setting['Channel_Report']) > 0) {
-                telegram('sendmessage', [
-                    'chat_id' => $setting['Channel_Report'],
-                    'message_thread_id' => $errorreport,
-                    'text' => $ErrorsLinkPayment,
-                    'parse_mode' => "HTML"
-                ]);
-            }
-            return;
-        }
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
-        $payment_Status = "Unpaid";
-        $Payment_Method = "cubepay";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
-        $paymentkeyboard = json_encode([
-            'inline_keyboard' => [
-                [
-                    ['text' => $textbotlang['users']['Balance']['payments'], 'url' => $pay['payment_link']],
-                ]
-            ]
-        ]);
-        $price_format = number_format($user['Processing_value'], 0);
-        $textnowpayments = sprintf($textbotlang['users']['Balance']['invoiceCreated'], $randomString, $price_format);
-        $gethelp = select("PaySetting", "ValuePay", "NamePay", "helpcubepay", "select")['ValuePay'];
-        if ($gethelp != 2) {
-            $data = json_decode($gethelp, true);
-            if ($data['type'] == "text") {
-                sendmessage($from_id, $data['text'], null, 'HTML');
-            } elseif ($data['type'] == "photo") {
-                sendphoto($from_id, $data['photoid'], null);
-            } elseif ($data['type'] == "video") {
-                sendvideo($from_id, $data['videoid'], null);
-            }
-        }
-        $message_id = sendmessage($from_id, $textnowpayments, $paymentkeyboard, 'HTML');
-        updatePaymentMessageId($message_id, $randomString);
+    } elseif ($datain == "zarinpal") {
         if ($user['Processing_value'] < 5000) {
             sendmessage($from_id, $textbotlang['users']['Balance']['zarinpal'], null, 'HTML');
             return;
@@ -5048,16 +4989,6 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $message_id = sendmessage($from_id, $textnowpayments, $paymentkeyboard, 'HTML');
         updatePaymentMessageId($message_id, $randomString);
     } elseif ($datain == "iranpay2") {
-        $rates = rate_arze();
-        if ($rates === null) {
-            sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
-            step('home', $from_id);
-            return;
-        }
-        $trx = $rates['TRX'];
-        $usd = $rates['USD'];
-        $trxprice = $user['Processing_value'] / $trx;
-        $usdprice = $user['Processing_value'] / $usd;
         $mainbalance = select("PaySetting", "ValuePay", "NamePay", "minbalanceiranpay2", "select")['ValuePay'];
         $maxbalance = select("PaySetting", "ValuePay", "NamePay", "maxbalanceiranpay2", "select")['ValuePay'];
         if ($user['Processing_value'] < $mainbalance || $user['Processing_value'] > $maxbalance) {
@@ -5075,8 +5006,8 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $payment_Status = "Unpaid";
         $Payment_Method = "Currency Rial 2";
         $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
-        $payment = trnado($randomString, $trxprice);
-        if ($payment['IsSuccessful'] != "true") {
+        $payment = trnado($randomString, $user['Processing_value']);
+        if (empty($payment['success'])) {
             $text_error = json_encode($payment);
             sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
             step('home', $from_id);
@@ -5094,7 +5025,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
-                    ['text' => $textbotlang['users']['Balance']['payments'], 'url' => "https://t.me/tronado_robot/customerpayment?startapp={$payment['Data']['Token']}"]
+                    ['text' => $textbotlang['users']['Balance']['payments'], 'url' => $payment['payment_link']]
                 ]
             ]
         ]);
