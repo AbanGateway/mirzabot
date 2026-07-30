@@ -1,99 +1,282 @@
-# 📦 اتصال آماده‌ی CubePay به Mirzabot (نصب با فایل، نه ویرایش دستی)
+<div align="center">
 
-این راهنما برای کسایی‌ه که از ربات **Mirzabot** (نسخه‌ی گیت‌هاب `mahdiMGF2/mirzabot`) استفاده
-می‌کنن. به‌جای این‌که خط‌به‌خط کد رو دستی ویرایش کنید، فقط این فایل‌ها رو تو مسیر درست
-جایگزین کنید.
+# 🤖 Mirza Bot
 
-⚠️ **قبل از شروع، حتماً از کل پوشه‌ی ربات و دیتابیس‌تون بک‌آپ بگیرید.** این فایل‌ها **کامل
-جایگزین** فایل‌های فعلی می‌شن؛ اگه قبلاً خودتون تو همین فایل‌ها تغییری داده باشید (مثلاً یه
-درگاه دیگه اضافه کرده باشید)، اون تغییرات از دست می‌ره. اگه نسخه‌ی رباتتون قدیمی‌تر یا
-شخصی‌سازی‌شده‌ست، پایین همین راهنما بخش «اگه فایل‌ها جواب نداد» رو ببینید.
+### A powerful Telegram bot for selling VPN services — with fully automated config creation.
 
----
+<p>
+  <a href="https://t.me/mirzapanel">
+    <img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Channel"/>
+  </a>
+  <a href="https://t.me/mirzapanelgroup">
+    <img src="https://img.shields.io/badge/Telegram-Group-229ED9?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram Group"/>
+  </a>
+</p>
 
-## 🔴 بخش ۱ — فایل‌های اجرایی (اجباری، بدون این‌ها CubePay کار نمی‌کنه)
+<p>
+  <a href="https://github.com/mahdiMGF2/mirzabot/stargazers">
+    <img src="https://img.shields.io/github/stars/mahdiMGF2/mirzabot?style=flat-square&color=f5c518" alt="Stars"/>
+  </a>
+  <a href="https://github.com/mahdiMGF2/mirzabot/network/members">
+    <img src="https://img.shields.io/github/forks/mahdiMGF2/mirzabot?style=flat-square" alt="Forks"/>
+  </a>
+  <a href="https://github.com/mahdiMGF2/mirzabot/issues">
+    <img src="https://img.shields.io/github/issues/mahdiMGF2/mirzabot?style=flat-square" alt="Issues"/>
+  </a>
+  <a href="https://github.com/mahdiMGF2/mirzabot/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/mahdiMGF2/mirzabot?style=flat-square" alt="License"/>
+  </a>
+  <img src="https://img.shields.io/badge/PHP-8.2-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP 8.2"/>
+</p>
 
-| فایل | مسیر جایگزینی در پوشه‌ی ربات |
-|---|---|
-| `cubepay.php` | `payment/cubepay.php` (فایل **جدید**، از قبل وجود نداره) |
-| `function.php` | `function.php` |
-| `index.php` | `index.php` |
-| `admin.php` | `admin.php` |
-| `keyboard.php` | `keyboard.php` |
-| `table.php` | `table.php` |
-| `fa.php` | `lang/fa.php` |
-
-این هفت فایل با هم، «قلب اتصال» به CubePay‌ان: ساخت فاکتور، صفحه‌ی تایید پرداخت، منوی
-تنظیمات ادمین، و متن دکمه‌ها. هیچ توکن یا رمزی توشون نیست؛ توکن رو جدا، از داخل خود ربات
-وارد می‌کنید (قدم ۴ پایین‌تر).
-
-## 🔵 بخش ۲ — فایل‌های ظاهری پنل وب (اختیاری)
-
-| فایل | مسیر جایگزینی |
-|---|---|
-| `payment.php` | `panel/payment.php` |
-| `user.php` | `panel/user.php` |
-| `payment_expire.php` | `cronbot/payment_expire.php` |
-
-این سه‌تا فقط باعث می‌شن اسم «کیوب‌پی» درست تو **پنل وب مدیریت** و تو پیام انقضای فاکتور
-نمایش داده بشه. اگه این‌ها رو جایگزین نکنید، درگاه کاملاً کار می‌کنه؛ فقط جای اسم «کیوب‌پی»
-یه متن خام یا خالی می‌بینید.
+</div>
 
 ---
 
-## ✅ قدم‌های نصب
+## 📚 Table of Contents
 
-### قدم ۱ — بک‌آپ
-از کل پوشه‌ی ربات و دیتابیس یه کپی بگیرید.
+- [✨ Overview](#-overview)
+- [🧩 Supported Panels](#-supported-panels)
+- [💳 Payment Gateways](#-payment-gateways)
+- [⚙️ Features](#️-features)
+- [🚀 Installation](#-installation)
+  - [Prerequisites](#prerequisites)
+  - [Install](#install)
+  - [Update](#update)
+  - [Remove](#remove)
+  - [Non-Interactive (CLI) Usage](#non-interactive-cli-usage)
+- [💎 Free vs. Pro](#-free-vs-pro)
+- [🌍 Languages](#-languages)
+- [💵 Support the Project](#-support-the-project)
+- [👥 Contributors](#-contributors)
 
-### قدم ۲ — جایگزینی فایل‌ها
-فایل‌های بخش ۱ (و در صورت تمایل بخش ۲) رو دقیقاً تو همون مسیرهای بالا جایگزین کنید.
+---
 
-### قدم ۳ — اجرای یک‌بار جدول‌ساز
-فایل `table.php` معمولاً به‌صورت خودکار موقع لاگین به پنل ادمین یا اجرای ربات صدا زده
-می‌شه و ردیف‌های تنظیمات جدید (`statuscubepay`, `merchant_token_cubepay`, ...) رو با
-`INSERT IGNORE` به جدول `PaySetting` اضافه می‌کنه — نیازی به دستور SQL دستی نیست. فقط
-مطمئن شید بعد از جایگزینی فایل، یه‌بار پنل ادمین یا ربات رو باز کرده باشید تا این ردیف‌ها
-ساخته بشن.
+## ✨ Overview
 
-### قدم ۴ — ثبت‌نام تو CubePay و گرفتن توکن
-اگه هنوز فروشنده نشدید، به [@cubepy_bot](https://t.me/cubepy_bot) پیام بدید، ثبت‌نام کنید
-و بعد از تایید ادمین، توکن API‌تون رو از پنل فروشندگی بردارید.
+**Mirza Bot** is a feature-rich Telegram bot for selling VPN subscriptions and automating the entire sales workflow — from purchase and payment to config creation and service management.
 
-### قدم ۵ — تنظیم توکن و فعال‌سازی تو ربات خودتون
-تو ربات، برید به:
+It connects directly to your panels, builds configurations automatically, accepts a wide range of payment methods, and gives both customers and admins a clean experience through a **Telegram Mini App** and a **web admin panel**.
+
+> Whether you're handing out trial accounts or running a large-scale reseller business, Mirza Bot has the tools to run it end to end.
+
+---
+
+## 🧩 Supported Panels
+
+Mirza Bot integrates with the most popular VPN and network management panels:
+
+| Panel | Panel |
+|-------|-------|
+| 🟢 **Marzban** | 🟢 **Marzneshin** |
+| 🟢 **Sanaei / Alireza** |
+| 🟢 **S-UI** | 🟢 **Hiddify** |
+| 🟢 **WGDashboard** (WireGuard) | 🟢 **MikroTik** |
+| 🟢 **IBSng** | 🟢 **Pasarguard** |
+
+> Configs are generated automatically and are compatible with all common protocols.
+
+---
+
+## 💳 Payment Gateways
+
+| Gateway | Type |
+|---------|------|
+| 💵 **Card-to-Card** | Manual (receipt + admin approval) |
+| 🪙 **NowPayments** | Crypto |
+| 🪙 **Plisio** | Crypto |
+| 🪙 **Tronado** | TRON / crypto |
+| 🇮🇷 **Zarinpal** | Online gateway |
+| 🇮🇷 **Aqayepardakht** | Online gateway |
+| 🇮🇷 **IranPay** | Online gateway |
+
+---
+
+## ⚙️ Features
+
+### 🛒 Sales & Configuration
+- ✅ VPN purchase with **fully automated** config creation
+- ✅ Trial / test accounts for new users
+- ✅ Compatibility with all common protocols
+- ✅ QR codes for fast config import
+- ✅ Protocol-based configuration settings
+- ✅ Product, panel & gateway management
+
+### 👤 User Experience
+- ✅ **Telegram Mini App** for a modern, in-app interface
+- ✅ View & manage purchased services:
+  - Renew a service
+  - Buy additional volume
+  - Retrieve config / update subscription links
+- ✅ Wallet & balance system
+- ✅ Detailed purchase & trial reports
+- ✅ Support section, FAQ & customizable tutorials
+- ✅ Phone-number verification
+- ✅ Mandatory channel membership for purchases
+
+### 📈 Growth & Marketing
+- ✅ Affiliate / referral system
+- ✅ Cashback rewards
+- ✅ Discount codes
+- ✅ Gift codes
+- ✅ Lottery system
+- ✅ **Agent / reseller** system
+
+### 🛠️ Administration
+- ✅ **Web admin panel** (login-protected dashboard)
+- ✅ Multiple admins support
+- ✅ Balance & user management
+- ✅ Full text/message customization from the bot
+- ✅ Configurable username-generation methods
+- ✅ Automatic backups
+- ✅ Notification & expiry-reminder services (cron)
+- ✅ On-hold configurations
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+
+| Requirement | Details |
+|-------------|---------|
+| 🖥️ **OS** | A **clean** Ubuntu **22.04** or **24.04** server |
+| 🌐 **Domain** | A domain name pointed to your server's IP |
+| ⚙️ **Stack** | PHP 8.2, Apache, MySQL, SSL — *installed automatically by the script* |
+
+> 💡 Start from a fresh server with no existing web server, database, or panel installed.
+
+### Install
+
+Run the following command on your server as **root**:
+
+```bash
+curl -o install.sh -L https://raw.githubusercontent.com/mahdiMGF2/mirzabot/main/install.sh && bash install.sh
+```
+
+An interactive menu will appear:
 
 ```
-پنل مدیریت ← 💰 بخش مالی ← ردیف «🟣 کیوب‌پی»
+1) Install Mirza
+2) Update Mirza
+3) Remove Mirza
+4) Migrate: Free → Pro (Beta)
+5) Renew SSL certificate
+6) Help & Parameters
+7) Exit
 ```
 
-- روی «⚙️ تنظیمات» بزنید و توکن API رو وارد کنید
-- برگردید و روی وضعیت (روشن/خاموش) کنار همون ردیف بزنید تا سبز/روشن بشه
-- در صورت نیاز حداقل/حداکثر مبلغ واریزی و درصد کش‌بک رو هم از همون منو تنظیم کنید
+➡️ Select **`1`** to install the bot, then follow the prompts.
 
-### قدم ۶ — تنظیم کارت و وب‌هوک پیامک تو CubePay
-تو `@cubepy_bot`: «مدیریت کارت‌ها» → کارت خودتون رو ثبت کنید و طبق راهنمای همون ربات، اپ
-فورواردر پیامک رو رو گوشی‌تون نصب و تنظیم کنید.
+### Update
 
-⚠️ گوشی‌ای که این اپ روشه باید همیشه به اینترنت وصل باشه، وگرنه هیچ تراکنشی خودکار تایید
-نمی‌شه.
+Run the same command and select **`2`**:
 
-### قدم ۷ — تست
-یه شارژ کیف‌پول کوچیک (مثلاً ۱۰,۰۰۰ تومان) امتحان کنید:
-1. دکمه‌ی «🟣 کیوب‌پی» تو منوی شارژ حساب باید ظاهر بشه
-2. با زدنش، لینک پرداخت CubePay براتون بیاد
-3. بعد از واریز، ظرف چند ثانیه شارژ حساب خودکار انجام بشه و پیام تایید بیاد
+```bash
+curl -o install.sh -L https://raw.githubusercontent.com/mahdiMGF2/mirzabot/main/install.sh && bash install.sh
+```
+
+### Remove
+
+Run the same command and select **`3`** to completely remove the bot and its services.
+
+### Non-Interactive (CLI) Usage
+
+You can also drive the installer entirely from the command line — handy for automation and scripted deployments.
+
+**Commands**
+
+| Command | Description |
+|---------|-------------|
+| `install` | Install Mirza |
+| `update` | Update Mirza (choose channel / version) |
+| `remove` | Remove Mirza and its services |
+| `migrate` | Migrate Free → Pro |
+| `renew` | Renew the bot's SSL certificate |
+| `menu` | Open the interactive panel (default) |
+
+**Install parameters**
+
+| Parameter | Description |
+|-----------|-------------|
+| `--name` | Bot username |
+| `--token` | Telegram bot token |
+| `--admin` | Admin chat ID |
+| `--domain` | Domain name (e.g. `bot.example.com`) |
+| `--db-user` | Database username |
+| `--db-pass` | Database password |
+| `--version` | Specific release tag (e.g. `0.1.7`) |
+| `--channel` | `beta` · `release` · `auto` |
+| `-h`, `--help` | Show CLI help and exit |
+
+**Examples**
+
+```bash
+# Auto-pick the best channel
+mirza install --channel auto
+
+# Fully non-interactive install
+mirza install --name myvpnbot --token 123:ABC \
+              --admin 111 --domain bot.example.com --version 0.1.7
+
+# Update to a specific version or channel
+mirza update --version 0.1.6
+mirza update --channel release
+
+# Remove
+mirza remove
+```
 
 ---
 
-## ❓ اگه فایل‌ها جواب نداد
+## 💎 Free vs. Pro
 
-اگه بعد از جایگزینی با خطا مواجه شدید، احتمالاً نسخه‌ی Mirzabot شما با نسخه‌ای که این
-فایل‌ها روش ساخته شده (از گیت‌هاب رسمی، شاخه‌ی `main`) فرق داره — مثلاً خودتون قبلاً یه‌جای
-دیگه‌ی همین فایل‌ها رو تغییر داده بودید یا یه درگاه دیگه اضافه کرده بودید. در این حالت:
+| | Free 🆓 | Pro 💎 |
+|---|:---:|:---:|
+| Automated VPN sales & config creation | ✅ | ✅ |
+| Trial accounts, wallet & service management | ✅ | ✅ |
+| All supported panels & payment gateways | ✅ | ✅ |
+| Advanced customization & analytics | — | ✅ |
+| Enhanced management & extra modules | — | ✅ |
 
-- بک‌آپ رو برگردونید
-- به‌جای جایگزینی کامل فایل، از دیف/پچ زیر استفاده کنید که فقط خطوط مشخصی رو اضافه می‌کنه
-  (توضیح کامل در پیام قبلی و فایل `cubepay-integration.patch`)
-- یا `error_log` کنار فایل‌های PHP رو بفرستید تا دقیق بررسی بشه
+📌 **Pro purchase guide:** [View on Telegram »](https://t.me/mirzaperimium/4)
 
+---
+
+## 🌍 Languages
+
+Mirza Bot ships with full translations for:
+
+🇬🇧 English · 🇮🇷 Persian (فارسی) · 🇷🇺 Russian (Русский) · 🇨🇳 Chinese (中文)
+
+---
+
+## 💵 Support the Project
+
+If **Mirza Bot** helps your business, please consider supporting its development with a crypto donation:
+
+<a href="https://nowpayments.io/donation/mahdi">
+  <img src="https://img.shields.io/badge/Donate-NowPayments-1A1A2E?style=for-the-badge&logo=bitcoin&logoColor=white" alt="Donate"/>
+</a>
+
+Your support keeps the updates and improvements coming. Thank you! 🙌
+
+---
+
+## 👥 Contributors
+
+Thanks to everyone who has contributed to making Mirza Bot better:
+
+<a href="https://github.com/mahdiMGF2/mirzabot/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mahdiMGF2/mirzabot" alt="Contributors"/>
+</a>
+
+---
+
+<div align="center">
+
+**Made with ❤️ by the Mirza Panel community**
+
+💬 [Channel](https://t.me/mirzapanel) · 👥 [Group](https://t.me/mirzapanelgroup) · ⭐ [Star on GitHub](https://github.com/mahdiMGF2/mirzabot)
+
+</div>
