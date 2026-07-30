@@ -10118,7 +10118,10 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     step("home", $from_id);
 } elseif ($user['step'] == "getpanelhidebotsaz") {
     $userdata = json_decode($user['Processing_value'], true);
-    $list_panel = json_decode(select("botsaz", "hide_panel", "id_user", $userdata['id_user'], "select")['hide_panel'], true);
+    $list_panel = json_decode(select("botsaz", "hide_panel", "id_user", $userdata['id_user'], "select")['hide_panel'] ?? '[]', true);
+    if (!is_array($list_panel)) {
+        $list_panel = [];
+    }
     if (in_array($text, $list_panel)) {
         sendmessage($from_id, $textbotlang['Admin']['managepanel']['alreadyAdded'], null, 'HTML');
         return;
@@ -10130,7 +10133,10 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     global $list_hide_panel;
     $id_user = $datagetr[1];
     savedata("clear", "id_user", $id_user);
-    $list_panel = json_decode(select("botsaz", "hide_panel", "id_user", $id_user, "select")['hide_panel'], true);
+    $list_panel = json_decode(select("botsaz", "hide_panel", "id_user", $id_user, "select")['hide_panel'] ?? '[]', true);
+    if (!is_array($list_panel)) {
+        $list_panel = [];
+    }
     $list_hide_panel = [
         'keyboard' => [],
         'resize_keyboard' => true,
@@ -10151,7 +10157,10 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     step("home", $from_id);
 } elseif ($user['step'] == "getremovehidepanel") {
     $userdata = json_decode($user['Processing_value'], true);
-    $list_panel = json_decode(select("botsaz", "hide_panel", "id_user", $userdata['id_user'], "select")['hide_panel'], true);
+    $list_panel = json_decode(select("botsaz", "hide_panel", "id_user", $userdata['id_user'], "select")['hide_panel'] ?? '[]', true);
+    if (!is_array($list_panel)) {
+        $list_panel = [];
+    }
     if (!in_array($text, $list_panel)) {
         sendmessage($from_id, $textbotlang['Admin']['managepanel']['panelNotInList'], null, 'HTML');
         return;

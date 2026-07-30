@@ -557,14 +557,17 @@ $stmt = $pdo->prepare("SELECT * FROM help");
 $stmt->execute();
 $helpcwtgory = ['inline_keyboard' => []];
 $datahelp = [];
+$helpCategoryMap = [];
 while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
     if (in_array($result['category'], $datahelp))
         continue;
     if ($result['category'] == null)
         continue;
     $datahelp[] = $result['category'];
+    $catId = dechex(crc32($result['category']));
+    $helpCategoryMap[$catId] = $result['category'];
     $helpcwtgory['inline_keyboard'][] = [
-        ['text' => $result['category'], 'callback_data' => "helpctgoryـ{$result['category']}"]
+        ['text' => $result['category'], 'callback_data' => "helpctg_{$catId}"]
     ];
 }
 if ($setting['linkappstatus'] == "1") {
@@ -1623,16 +1626,15 @@ function keyboard_config($config_split, $id_invoice, $back_active = true)
         $config = $config_split[$i];
         $split_config = explode("://", $config);
         $type_prtocol = $split_config[0];
-        $split_config = $split_config[1];
+        $split_config = $split_config[1] ?? '';
         if (isBase64($split_config)) {
             $split_config = base64_decode($split_config);
         }
         if ($type_prtocol == "vmess") {
-            $split_config = json_decode($split_config, true)['ps'];
-        } elseif ($type_prtocol == "ss") {
-            $split_config = explode("#", $split_config)[1];
+            $split_config = json_decode($split_config, true)['ps'] ?? '';
         } else {
-            $split_config = explode("#", $split_config)[1];
+            $parts = explode("#", $split_config);
+            $split_config = $parts[1] ?? $parts[0];
         }
         $keyboard_config['inline_keyboard'][] = [
             ['text' => $textbotlang['keyboard']['getConfig'], 'callback_data' => "configget_{$id_invoice}_$i"],
