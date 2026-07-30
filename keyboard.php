@@ -228,15 +228,6 @@ $aqayepardakht = json_encode([
     ],
     'resize_keyboard' => true
 ]);
-$cubepay = json_encode([
-    'keyboard' => [
-        [['text' => $textbotlang['keyboard']['setCubepayToken']], ['text' => $textbotlang['keyboard']['cashbackCubepay']]],
-        [['text' => $textbotlang['keyboard']['minAmountCubepay']], ['text' => $textbotlang['keyboard']['maxAmountCubepay']]],
-        [['text' => $textbotlang['keyboard']['setEducationCubepay']]],
-        [['text' => $textbotlang['Admin']['backAdminBtn']], ['text' => $textbotlang['Admin']['backMenuBtn']]]
-    ],
-    'resize_keyboard' => true
-]);
 $NowPaymentsManage = json_encode([
     'keyboard' => [
         [['text' => $textbotlang['keyboard']['apiPlisio']], ['text' => $textbotlang['keyboard']['cashbackPlisio']]],
@@ -263,7 +254,6 @@ $setting_panel = json_encode([
 $PaySettingcard = getPaySettingValue("Cartstatus");
 $PaySettingnow = getPaySettingValue("nowpaymentstatus");
 $PaySettingaqayepardakht = getPaySettingValue("statusaqayepardakht");
-$PaySettingcubepay = getPaySettingValue("statuscubepay");
 $PaySettingpv = getPaySettingValue("Cartstatuspv");
 $usernamecart = getPaySettingValue("CartDirect");
 $Swapino = getPaySettingValue("statusSwapWallet");
@@ -328,11 +318,6 @@ if ($arzireyali3 == "oniranpay3" && $paymentexits >= 2) {
 if ($PaySettingaqayepardakht == "onaqayepardakht") {
     $step_payment['inline_keyboard'][] = [
         ['text' => $textbotlang['textbot']['aqayePardakht'], 'callback_data' => "aqayepardakht"]
-    ];
-}
-if ($PaySettingcubepay == "oncubepay") {
-    $step_payment['inline_keyboard'][] = [
-        ['text' => $textbotlang['textbot']['cubepay'], 'callback_data' => "cubepay"]
     ];
 }
 if ($zarinpal == "onzarinpal") {
