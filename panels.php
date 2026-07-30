@@ -92,7 +92,7 @@ class ManagePanel
                     if (isBase64($out_put_link)) {
                         $data_Output['links'] = base64_decode(string: $out_put_link);
                     }
-                    $data_Output['links'] = explode("\n", $data_Output['links'] ?? '');
+                    $data_Output['links'] = explode("\n", $data_Output['links'] ?? []);
                 }
                 if ($invoice != false) {
                     $data_Output['subscription_url'] = "https://$domainhosts/sub/" . $invoice['id_invoice'];
