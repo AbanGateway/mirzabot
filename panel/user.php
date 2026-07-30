@@ -352,7 +352,6 @@ include __DIR__ . '/inc/layout_head.php';
                                     'low balance by admin' => $textbotlang['panel']['userMethodAdminDeduct'],
                                     'zarinpal' => $textbotlang['panel']['userMethodZarinpal'],
                                     'aqayepardakht' => $textbotlang['panel']['userMethodAqayePardakht'],
-                                    'cubepay' => $textbotlang['panel']['userMethodCubepay'],
                                     'plisio' => 'Plisio',
                                     'nowpayment' => 'NowPayment',
                                     'Star Telegram' => $textbotlang['panel']['userMethodTelegramStar'],
