@@ -1823,9 +1823,6 @@ nowpayments.io
                         'askAqayePardakhtMerchant' => '💳 مرچنت کد خود را ازآقای پرداخت دریافت و در این قسمت وارد کنید
         
 مرچنت کد فعلی شما : %s',
-                        'askCubepayToken' => '💳 توکن دسترسی (API Token) خود را از ربات @cubepy_bot دریافت و در این قسمت وارد کنید
-        
-توکن فعلی شما : %s',
                         'askZarinpalMerchant' => '💳 مرچنت کد خود را از زرین پال دریافت و در این قسمت وارد کنید
         
 مرچنت کد فعلی شما : %s',
@@ -2655,11 +2652,6 @@ f,n.n2',
 آیدی عددی کاربر :  %s
 نام کاربری کاربر :‌ %s',
                         'errorAqayePardakhtLink' => '⭕️ خطا در ساخت لینک اقای پردات
-✍️ دلیل خطا : %s
-            
-آیدی کابر : %s
-نام کاربری کاربر : @%s',
-                        'errorCubepayLink' => '⭕️ خطا در ساخت لینک کیوب‌پی
 ✍️ دلیل خطا : %s
             
 آیدی کابر : %s
@@ -3558,7 +3550,6 @@ f,n.n2',
                 'agentPanel' => '👨‍💻 پنل نمایندگی',
                 'agentRequestDesc' => '📌 توضیحات خود را برای ثبت درخواست نمایندگی ارسال نمایید.',
                 'aqayePardakht' => '🔵 درگاه آقای پرداخت',
-                'cubepay' => '🟣 درگاه کارت به کارت (CubePay)',
                 'botOff' => '❌ ربات خاموش است، لطفا دقایقی دیگر مراجعه کنید',
                 'cart' => 'برای افزایش موجودی، مبلغ <code>{price}</code>  تومان  را به شماره‌ی حساب زیر واریز کنید 👇🏻
         
@@ -3741,7 +3732,6 @@ f,n.n2',
                 'appDownloadLink' => '🔗 لینک دانلود برنامه',
                 'appDownloadLinkAlt' => '🔗لینک دانلود برنامه',
                 'aqayePardakhtGateway' => '🔵 آقای پرداخت',
-                'cubepayGateway' => '🟣 کیوب‌پی',
                 'authWithLink' => '🔑 احراز هویت با لینک',
                 'authenticate' => '🔒 احراز هویت',
                 'authenticateUser' => 'احراز هویت کاربر',
@@ -3777,7 +3767,6 @@ f,n.n2',
                 'cancelPinnedMessages' => 'لغو پیام های پین شده',
                 'cartToCartGateway' => '🔌 کارت به کارت',
                 'cashbackAqayePardakht' => '💰 کش بک آقای پرداخت',
-                'cashbackCubepay' => '💰 کش بک کیوب‌پی',
                 'cashbackCartToCart' => '💰 کش بک کارت به کارت',
                 'cashbackIranPay1' => '💰 کش بک ارزی ریالی',
                 'cashbackIranPay2' => '💰 کش بک ارزی ریالی دوم',
@@ -3937,7 +3926,6 @@ f,n.n2',
                 'marzban' => 'مرزبان',
                 'marzneshin' => 'مرزنشین',
                 'maxAmountAqayePardakht' => '⬆️ حداکثر مبلغ آقای پرداخت',
-                'maxAmountCubepay' => '⬆️ حداکثر مبلغ کیوب‌پی',
                 'maxAmountCartToCart' => '⬆️ حداکثر مبلغ کارت به کارت',
                 'maxAmountCryptoOffline' => '⬆️ حداکثر مبلغ رمزارز آفلاین',
                 'maxAmountIranPay1' => '⬆️ حداکثر مبلغ ارزی ریالی',
@@ -3953,7 +3941,6 @@ f,n.n2',
                 'messagingSection' => '📨 بخش ارسال پیام',
                 'mikrotik' => 'میکروتیک',
                 'minAmountAqayePardakht' => '⬇️ حداقل مبلغ آقای پرداخت',
-                'minAmountCubepay' => '⬇️ حداقل مبلغ کیوب‌پی',
                 'minAmountCartToCart' => '⬇️ حداقل مبلغ کارت به کارت',
                 'minAmountCryptoOffline' => '⬇️ حداقل مبلغ رمزارز آفلاین',
                 'minAmountIranPay1' => '⬇️ حداقل مبلغ ارزی ریالی',
@@ -4045,10 +4032,8 @@ f,n.n2',
                 'setApi' => 'تنظیم api',
                 'setApiAddress' => 'تنظیم آدرس api',
                 'setAqayePardakhtMerchant' => 'تنظیم مرچنت آقای پرداخت',
-                'setCubepayToken' => 'تنظیم توکن کیوب‌پی',
                 'setCardNumber' => '💳 تنظیم شماره کارت',
                 'setEducationAqayePardakht' => '📚 تنظیم آموزش درگاه اقای پرداخت',
-                'setEducationCubepay' => '📚 تنظیم آموزش درگاه کیوب‌پی',
                 'setEducationCartToCart' => '📚 تنظیم آموزش کارت به کارت',
                 'setEducationCryptoOffline' => '📚 تنظیم آموزش  ارزی افلاین',
                 'setEducationIranPay1' => '📚 تنظیم آموزش ارزی ریالی اول',
@@ -4301,7 +4286,6 @@ f,n.n2',
                 'paymentMethodAdminAdd' => 'افزایش توسط ادمین',
                 'paymentMethodAdminDeduct' => 'کسر موجودی ادمین',
                 'paymentMethodAqayePardakht' => 'آقای پرداخت',
-                'paymentMethodCubepay' => 'کیوب‌پی',
                 'paymentMethodCardToCard' => 'کارت به کارت',
                 'paymentMethodCryptoOffline' => 'ارز دیجیتال آفلاین',
                 'paymentMethodRialGateway1' => 'درگاه ریالی ۱',
@@ -4526,7 +4510,6 @@ f,n.n2',
                 'userMethodAdminAdd' => 'افزایش ادمین',
                 'userMethodAdminDeduct' => 'کسر ادمین',
                 'userMethodAqayePardakht' => 'آقای پرداخت',
-                'userMethodCubepay' => 'کیوب‌پی',
                 'userMethodCardToCard' => 'کارت→کارت',
                 'userMethodCrypto' => 'ارز دیجیتال',
                 'userMethodRial1' => 'ریالی ۱',
@@ -4664,12 +4647,6 @@ f,n.n2',
 نام کاربری کاربر : %s
 مبلغ تراکنش %s
 روش پرداخت :  درگاه آقای پرداخت',
-                'reportCubepay' => '💵 پرداخت جدید
-        
-آیدی عددی کاربر : %s
-نام کاربری کاربر : %s
-مبلغ تراکنش %s
-روش پرداخت :  درگاه کیوب‌پی',
                 'reportIranpay' => '💵 پرداخت جدید
         
 آیدی عددی کاربر : %s
@@ -4685,13 +4662,10 @@ f,n.n2',
 موجودی کاربر : %s تومان
 کد پیگیری پرداخت : %s',
                 'reportTronado' => '💵 پرداخت جدید
-%s
 - 👤 نام کاربری کاربر : @%s
 - 🆔آیدی عددی کاربر : %s
 - 💸 مبلغ تراکنش %s
-- 🔗 <a href = "https://tronscan.org/#/transaction/%s">لینک پرداخت </a>
-- 📥 مبلغ واریز شده ترون. : %s
-- 💳 روش پرداخت :  ترونادو',
+- 💳 روش پرداخت : ارزی ریالی دوم (CubePay)',
                 'reportNowpayment' => '💵 پرداخت جدید
 - 👤 نام کاربری کاربر : @%s
 - ‏🆔آیدی عددی کاربر : %s
