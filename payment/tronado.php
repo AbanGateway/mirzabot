@@ -17,51 +17,67 @@ use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 
 $ManagePanel = new ManagePanel();
-$data = json_decode(file_get_contents("php://input"), true);
-$Payment_report = select("Payment_report", "*", "id_order", $data['PaymentID'], "select");
+
+// این کال‌بک قبلاً مخصوص Tronado بود؛ حالا همون آدرس رو نگه داشتیم ولی به‌جاش
+// callback واقعی CubePay رو می‌خونیم. CubePay هم با POST (بدنه‌ی JSON) و هم
+// با querystring GET صداش می‌زنه، پس هر دو رو پشتیبانی می‌کنیم.
+$rawInput = file_get_contents('php://input');
+$jsonInput = $rawInput ? json_decode($rawInput, true) : null;
+$jsonInput = is_array($jsonInput) ? $jsonInput : [];
+
+$authority = $jsonInput['authority'] ?? ($_REQUEST['authority'] ?? '');
+$data_order_id = $jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? '');
+$authority = htmlspecialchars($authority, ENT_QUOTES, 'UTF-8');
+$data_order_id = htmlspecialchars($data_order_id, ENT_QUOTES, 'UTF-8');
+
+$Payment_report = select("Payment_report", "*", "id_order", $data_order_id, "select");
 if (!$Payment_report)
     return;
-$apitronseller = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
+$token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
 if ($Payment_report['payment_Status'] == "expire")
     return;
 $setting = select("setting", "*", null, null, "select");
 $price = $Payment_report['price'];
-if ($Payment_report['payment_Status'] != "paid") {
-    $headers = [
-        'Content-Type' => "application/json",
-        'x-api-key' => $apitronseller
-    ];
-    $req = new CurlRequest("https://bot.tronado.cloud/Order/GetStatus");
-    $req->setHeaders($headers);
-    $order_id = explode('TrndOrderID_', $data['Hash'])[1];
-    $response = $req->post(array('id' => $order_id));
-    $response = is_string($response['body']) ? json_decode($response['body'], true) : false;
-    if ($response && $response['IsPaid'] && $data['IsPaid'] && $data['TronAmount'] == $response['TronAmount']) {
+if ($Payment_report['payment_Status'] != "paid" && $authority) {
+    $ch = curl_init('https://cubevps.ir/smspay/api/verify-payment.php');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['authority' => $authority]));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token_cubepay
+    ));
+    $result = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    $response = json_decode($result, true);
+
+    // ۲۰۰ یعنی همین الان با موفقیت تایید شد؛ ۴۰۹ یعنی قبلاً هم تایید شده
+    // بود (idempotent) — تو هر دو حالت تراکنش واقعاً پرداخت‌شده حساب می‌شه،
+    // ولی چک payment_Status بالاتر جلوی شارژ دوباره‌ی حساب رو می‌گیره.
+    if (($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) {
         echo json_encode(array("status" => true));
         $textbotlang = languagechange();
-        DirectPayment($data['PaymentID'], "../images.jpg");
+        DirectPayment($data_order_id, "../images.jpg");
         $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackiranpay2", "select")['ValuePay'];
         $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
         if ($pricecashback != "0") {
-            $result = ($Payment_report['price'] * $pricecashback) / 100;
-            $Balance_confrim = intval($Balance_id['Balance']) + $result;
+            $result_cashback = ($Payment_report['price'] * $pricecashback) / 100;
+            $Balance_confrim = intval($Balance_id['Balance']) + $result_cashback;
             update("user", "Balance", $Balance_confrim, "id", $Balance_id['id']);
             $pricecashback = number_format($pricecashback);
-            $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result);
+            $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result_cashback);
             sendmessage($Balance_id['id'], $text_report, null, 'HTML');
         }
         $paymentreports = select("topicid", "idreport", "report", "paymentreport", "select")['idreport'];
-        $balancelow = "";
-        if ($data['TronAmount'] < $data['ActualTronAmount']) {
-            $balancelow = $textbotlang['paymentGateway']['lowAmount'];
-        }
-        $text_reportpayment = sprintf($textbotlang['paymentGateway']['reportTronado'], $balancelow, $Balance_id['username'], $Balance_id['id'], $price, $data['Hash'], $data['TronAmount']);
+        $text_reportpayment = sprintf($textbotlang['paymentGateway']['reportTronado'], $Balance_id['username'], $Balance_id['id'], $price);
         $Status_change = "paid";
         $statement = $pdo->prepare("UPDATE Payment_report SET payment_Status = :payment_Status WHERE id_order = :id_order");
         $statement->bindValue(':payment_Status', $Status_change);
         $statement->bindValue(':id_order', $Payment_report['id_order']);
         $statement->execute();
-        $database = json_encode($data);
+        $database = json_encode($response);
         $statement = $pdo->prepare("UPDATE Payment_report SET dec_not_confirmed = :dec_not_confirmed WHERE id_order = :id_order");
         $statement->bindValue(':dec_not_confirmed', $database);
         $statement->bindValue(':id_order', $Payment_report['id_order']);
@@ -74,5 +90,7 @@ if ($Payment_report['payment_Status'] != "paid") {
                 'parse_mode' => "HTML"
             ]);
         }
+    } else {
+        echo json_encode(array("status" => false));
     }
 }
