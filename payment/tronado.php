@@ -18,9 +18,6 @@ use Endroid\QrCode\Writer\PngWriter;
 
 $ManagePanel = new ManagePanel();
 
-// این کال‌بک قبلاً مخصوص Tronado بود؛ حالا همون آدرس رو نگه داشتیم ولی به‌جاش
-// callback واقعی CubePay رو می‌خونیم. CubePay هم با POST (بدنه‌ی JSON) و هم
-// با querystring GET صداش می‌زنه، پس هر دو رو پشتیبانی می‌کنیم.
 $rawInput = file_get_contents('php://input');
 $jsonInput = $rawInput ? json_decode($rawInput, true) : null;
 $jsonInput = is_array($jsonInput) ? $jsonInput : [];
@@ -53,22 +50,12 @@ if ($Payment_report['payment_Status'] != "paid" && $authority) {
     curl_close($ch);
     $response = json_decode($result, true);
 
-    // این authority باید دقیقاً مال همین order_id و همین مبلغ باشه، وگرنه
-    // یعنی کسی داره یه authorityِ تاییدشده‌ی متعلق به یه سفارش دیگه (یا یه
-    // مبلغ دیگه) رو برای این سفارش replay می‌کنه. amount_rial همون مبلغ
-    // اصلیه که موقع ساخت فاکتور به create-payment.php فرستاده بودیم (بدون
-    // افستِ تشخیص پیامکی)، و verify-payment.php هم دقیقاً همینو تو فیلد
-    // amount برمی‌گردونه — نه pay_amountِ آفست‌دار.
     $amount_rial = intval($price) * 10;
     $isVerifiedForThisOrder = is_array($response)
         && isset($response['order_id'], $response['amount'])
         && (string) $response['order_id'] === (string) $data_order_id
         && intval($response['amount']) === $amount_rial;
 
-    // ۲۰۰ یعنی همین الان با موفقیت تایید شد؛ ۴۰۹ یعنی قبلاً هم تایید شده
-    // بود (idempotent) — تو هر دو حالت باید مطمئن بشیم authority واقعاً مال
-    // همین سفارش و همین مبلغه، وگرنه یه authorityِ تاییدشده رو می‌شه برای
-    // سفارش‌های دیگه هم replay کرد و بدون پرداخت واقعی paid علامت زد.
     if ((($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) && $isVerifiedForThisOrder) {
         echo json_encode(array("status" => true));
         $textbotlang = languagechange();

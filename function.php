@@ -638,12 +638,7 @@ function isValidDate($date)
 function trnado($order_id, $price)
 {
     global $domainhosts;
-    // این تابع قبلاً به Tronado وصل می‌شد؛ حالا همون اسلاتِ تنظیمات
-    // (apiternado) رو نگه داشتیم ولی به‌جاش به CubePay وصل می‌شیم — یعنی
-    // ادمین دقیقاً همون دکمه‌ی «API T» قبلی رو می‌زنه و توکن CubePay خودش
-    // رو (از @cubepy_bot) به‌جای کلید Tronado وارد می‌کنه.
     $token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
-    // مبلغ داخلی ربات به تومانه؛ create-payment.php کیوب‌پی ریال می‌خواد.
     $amount_rial = intval($price) * 10;
     $curl = curl_init();
     curl_setopt_array($curl, array(
