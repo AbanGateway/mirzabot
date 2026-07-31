@@ -427,10 +427,7 @@ $backadmin = json_encode([
     'resize_keyboard' => true,
 ]);
 //------------------  [ list panel ]----------------//
-$allBotTables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-$table_exists = in_array('marzban_panel', $allBotTables);
 $namepanel = [];
-if ($table_exists) {
     $allPanelRows = $pdo->query("SELECT * FROM marzban_panel")->fetchAll(PDO::FETCH_ASSOC);
     foreach ($allPanelRows as $row) {
         $namepanel[] = [$row['name_panel']];
@@ -457,11 +454,8 @@ if ($table_exists) {
     $list_marzban_panel_edit_product['inline_keyboard'][] = [['text' => $textbotlang['keyboard']['allPanels'], 'callback_data' => 'locationedit_all']];
     $list_marzban_panel_edit_product['inline_keyboard'][] = [['text' => $textbotlang['keyboard']['backToPreviousMenu'], 'callback_data' => 'backproductadmin']];
     $list_marzban_panel_edit_product = json_encode($list_marzban_panel_edit_product);
-}
 //------------------  [ list channel ]----------------//
-$table_exists = in_array('channels', $allBotTables);
 $list_channels = [];
-if ($table_exists) {
     $stmt = $pdo->prepare("SELECT * FROM channels");
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -481,11 +475,8 @@ if ($table_exists) {
         ['text' => $textbotlang['Admin']['backMenuBtn']]
     ];
     $list_channels_joins = json_encode($list_channels_join);
-}
 //------------------  [ list card ]----------------//
-$table_exists = in_array('card_number', $allBotTables);
 $list_card = [];
-if ($table_exists) {
     $stmt = $pdo->prepare("SELECT * FROM card_number");
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -505,10 +496,7 @@ if ($table_exists) {
         ['text' => $textbotlang['Admin']['backMenuBtn']]
     ];
     $list_card_remove = json_encode($list_card_remove);
-}
 //------------------  [ help list ]----------------//
-$table_exists = in_array('help', $allBotTables);
-if ($table_exists) {
     $helpRows = $pdo->query("SELECT * FROM help")->fetchAll(PDO::FETCH_ASSOC);
     $helpkey = [];
     foreach ($helpRows as $row) {
@@ -527,11 +515,7 @@ if ($table_exists) {
         ['text' => $textbotlang['users']['backbtn']],
     ];
     $json_list_helpkey = json_encode($help_arrke);
-}
 //------------------  [ help list ]----------------//
-if (!isset($helpRows)) {
-    $helpRows = $pdo->query("SELECT * FROM help")->fetchAll(PDO::FETCH_ASSOC);
-}
 $helpcwtgory = ['inline_keyboard' => []];
 $datahelp = [];
 $helpCategoryMap = [];
@@ -587,7 +571,7 @@ $stmt->bindParam(':agent', $users['agent']);
 $stmt->execute();
 $activePanelRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $manualsellCounts = [];
-if (in_array('Manualsale', array_column($activePanelRows, 'type')) && in_array('manualsell', $allBotTables)) {
+if (in_array('Manualsale', array_column($activePanelRows, 'type'))) {
     foreach ($pdo->query("SELECT codepanel, COUNT(*) AS c FROM manualsell WHERE status = 'active' GROUP BY codepanel")->fetchAll(PDO::FETCH_ASSOC) as $msRow) {
         $manualsellCounts[$msRow['codepanel']] = (int) $msRow['c'];
     }
