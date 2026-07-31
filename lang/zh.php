@@ -1658,9 +1658,6 @@ n2',
                         'askFallbackName' => '📌 如果用户没有用户名，应注册什么名称？',
                 ],
                 'api' => [
-                        'askAddress' => '📌 请发送 API 地址。
-
-当前地址：%s',
                         'token' => '您的 api 令牌：<code>%s</code>',
                         'docsLink' => '📘 完整 API 文档：
 %s
@@ -4046,7 +4043,6 @@ f,n.n2',
                 'setAffiliateBanner' => '🏞 设置下线收集横幅',
                 'setAffiliatePercent' => '🧮 设置下线百分比',
                 'setApi' => '设置 api',
-                'setApiAddress' => '设置 api 地址',
                 'setAqayePardakhtMerchant' => '设置 Aghaye Pardakht 商户',
                 'setCardNumber' => '💳 设置卡号',
                 'setEducationAqayePardakht' => '📚 设置 Aghaye Pardakht 网关教程',

@@ -1655,9 +1655,6 @@ n2',
                         'askFallbackName' => '📌 در صورتی که کاربر نام کاربری نداشت چه اسمی ثبت شود؟',
                 ],
                 'api' => [
-                        'askAddress' => '📌 آدرس api را ارسال نمایید.
-
-آدرس فعلی: %s',
                         'token' => 'توکن api شما : <code>%s</code>',
                         'docsLink' => '📘 مستندات کامل API:
 %s
@@ -4030,7 +4027,6 @@ f,n.n2',
                 'setAffiliateBanner' => '🏞 تنظیم بنر زیرمجموعه گیری',
                 'setAffiliatePercent' => '🧮 تنظیم درصد زیرمجموعه',
                 'setApi' => 'تنظیم api',
-                'setApiAddress' => 'تنظیم آدرس api',
                 'setAqayePardakhtMerchant' => 'تنظیم مرچنت آقای پرداخت',
                 'setCardNumber' => '💳 تنظیم شماره کارت',
                 'setEducationAqayePardakht' => '📚 تنظیم آموزش درگاه اقای پرداخت',
