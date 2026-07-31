@@ -853,13 +853,20 @@ function mini_purchase(array $data, string $method): void
 
     $charged = false;
     if ($price_product > 0) {
-        $stmt = $pdo->prepare("UPDATE user SET Balance = Balance - :price WHERE id = :id AND Balance >= :price_check");
-        $stmt->execute([':price' => $price_product, ':id' => $user_info['id'], ':price_check' => $price_product]);
+        if ($user_info['agent'] == "n2") {
+            $min_balance = intval($user_info['maxbuyagent']) != 0 ? -intval($user_info['maxbuyagent']) : PHP_INT_MIN;
+            $error_msg = $textbotlang['users']['Balance']['maxpurchasereached'];
+        } else {
+            $min_balance = 0;
+            $error_msg = $textbotlang['users']['Balance']['lessThanPrice'];
+        }
+        $stmt = $pdo->prepare("UPDATE user SET Balance = Balance - :price WHERE id = :id AND Balance - :price_check >= :min_balance");
+        $stmt->execute([':price' => $price_product, ':id' => $user_info['id'], ':price_check' => $price_product, ':min_balance' => $min_balance]);
         if ($stmt->rowCount() === 0) {
             http_response_code(500);
             echo json_encode(array(
                 'status' => false,
-                'msg' => $textbotlang['users']['Balance']['lessThanPrice']
+                'msg' => $error_msg
             ));
             return;
         }
