@@ -1,5 +1,4 @@
 <?php
-$version = file_get_contents('version');
 date_default_timezone_set('Asia/Tehran');
 ini_set('default_charset', 'UTF-8');
 ini_set('error_log', 'error_log');
@@ -50,9 +49,8 @@ if (!checktelegramip())
 if (intval($from_id) == 0)
     return;
 #-------------Variable----------#
-$users_ids = select("user", "id", null, null, "FETCH_COLUMN");
 $otherreport = select("topicid", "idreport", "report", "otherreport", "select")['idreport'];
-if (!in_array($from_id, $users_ids) && $setting['statusnewuser'] == "onnewuser") {
+if ($setting['statusnewuser'] == "onnewuser" && !rowExists("user", "id", $from_id)) {
     $Response = json_encode([
         'inline_keyboard' => [
             [
@@ -88,6 +86,9 @@ if ($from_id != 0) {
     $stmt->bindParam(':verifycode', $valueverify);
     $stmt->bindParam(':codeInvitation', $randomString);
     $stmt->execute();
+    if ($stmt->rowCount() > 0) {
+        clearSelectCache('user');
+    }
 }
 $user = select("user", "*", "id", $from_id, "select");
 if ($user == false) {
@@ -118,16 +119,7 @@ $admin_ids = select("admin", "id_admin", null, null, "FETCH_COLUMN");
 if (!is_array($admin_ids)) {
     $admin_ids = [];
 }
-$helpdata = select("help", "*");
-$id_invoice = select("invoice", "id_invoice", null, null, "FETCH_COLUMN");
-$usernameinvoice = select("invoice", "username", null, null, "FETCH_COLUMN");
-$code_Discount = select("Discount", "code", null, null, "FETCH_COLUMN");
-$marzban_list = select("marzban_panel", "name_panel", null, null, "FETCH_COLUMN");
-$name_product = select("product", "name_product", null, null, "FETCH_COLUMN");
-$SellDiscount = select("DiscountSell", "codeDiscount", null, null, "FETCH_COLUMN");
 $channels_id = select("channels", "link", null, null, "FETCH_COLUMN");
-$pricepayment = select("Payment_report", "price", null, null, "FETCH_COLUMN");
-$listcard = select("card_number", "cardnumber", null, null, "FETCH_COLUMN");
 $topic_id = select("topicid", "*", null, null, "fetchAll");
 $statusnote = false;
 foreach ($topic_id as $topic) {
@@ -179,8 +171,9 @@ if ($user['User_Status'] == "block" && !in_array($from_id, $admin_ids)) {
 $timebot = time();
 $TimeLastMessage = $timebot - intval($user['last_message_time']);
 if (floor($TimeLastMessage / 60) >= 1) {
-    update("user", "last_message_time", $timebot, "id", $from_id);
-    update("user", "message_count", "1", "id", $from_id);
+    $stmt = $pdo->prepare("UPDATE user SET last_message_time = ?, message_count = '1' WHERE id = ?");
+    $stmt->execute([$timebot, $from_id]);
+    clearSelectCache('user');
 } else {
     if (!in_array($from_id, $admin_ids)) {
         $addmessage = intval($user['message_count']) + 1;
@@ -221,7 +214,7 @@ if (strpos($text, "/start ") !== false && $user['step'] != "gettextSystemMessage
             sendmessage($from_id, $textbotlang['users']['affiliates']['offaffiliates'], $keyboard, 'HTML');
             return;
         }
-        if (is_numeric($affiliatesid) && in_array($affiliatesid, $users_ids)) {
+        if (is_numeric($affiliatesid) && rowExists("user", "id", $affiliatesid)) {
             if ($affiliatesid == $from_id) {
                 sendmessage($from_id, $textbotlang['users']['affiliates']['invalidaffiliates'], null, 'html');
                 return;
@@ -321,7 +314,7 @@ if ($user['joinchannel'] != "active") {
             $partsaffiliates = explode("_", $user['Processing_value_four']);
             if ($partsaffiliates[0] == "affiliates") {
                 $affiliatesid = $partsaffiliates[1];
-                if (!in_array($affiliatesid, $users_ids)) {
+                if (!rowExists("user", "id", $affiliatesid)) {
                     sendmessage($from_id, $textbotlang['users']['affiliates']['affiliatesidyou'], null, 'html');
                     return;
                 }
@@ -379,7 +372,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     step('home', $from_id);
     return;
 } elseif ($text == "version") {
-    sendmessage($from_id, $version, null, 'html');
+    sendmessage($from_id, file_get_contents('version'), null, 'html');
 } elseif ($text == $textbotlang['users']['backbtn'] || $datain == "backuser") {
     if ($datain == "backuser")
         deletemessage($from_id, $message_id);
@@ -1618,7 +1611,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $userdate = json_decode($user['Processing_value'], true);
     $nameloc = select("invoice", "*", "id_invoice", $userdate['id_invoice'], "select");
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
-    if (!in_array($text, $SellDiscount)) {
+    if (!rowExists("DiscountSell", "codeDiscount", $text)) {
         sendmessage($from_id, $textbotlang['users']['Discount']['notcode'], $backuser, 'HTML');
         return;
     }
@@ -2799,7 +2792,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     update("user", "Processing_value_one", $nameloc['username'], "id", $from_id);
     update("user", "Processing_value_tow", $nameloc['id_invoice'], "id", $from_id);
 } elseif ($user['step'] == "getidfortransfer") {
-    if (!in_array($text, $users_ids)) {
+    if (!rowExists("user", "id", $text)) {
         sendmessage($from_id, $textbotlang['users']['transfer']['notUserTrans'], $backuser, 'HTML');
         return;
     }
@@ -2941,7 +2934,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     $username_ac = strtolower($username_ac);
     $DataUserOut = $ManagePanel->DataUser($marzban_list_get['name_panel'], $username_ac);
     $random_number = rand(1000000, 9999999);
-    if (isset($DataUserOut['username']) || in_array($username_ac, $usernameinvoice)) {
+    if (isset($DataUserOut['username']) || rowExists("invoice", "username", $username_ac)) {
         $username_ac = $random_number . "_" . $username_ac;
     }
     $datac = array(
@@ -3744,7 +3737,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     $username_ac = strtolower($username_ac);
     $DataUserOut = $ManagePanel->DataUser($marzban_list_get['name_panel'], $username_ac);
     $random_number = rand(1000000, 9999999);
-    if (isset($DataUserOut['username']) || in_array($username_ac, $usernameinvoice)) {
+    if (isset($DataUserOut['username']) || rowExists("invoice", "username", $username_ac)) {
         $username_ac = $random_number . "_" . $username_ac;
     }
     if (isset($username_ac))
@@ -3820,14 +3813,14 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     }
     $username_ac = strtolower($user['Processing_value_tow']);
     $DataUserOut = $ManagePanel->DataUser($marzban_list_get['name_panel'], $username_ac);
-    if (isset($DataUserOut['username']) || in_array($username_ac, $usernameinvoice)) {
+    if (isset($DataUserOut['username']) || rowExists("invoice", "username", $username_ac)) {
         sendmessage($from_id, $textbotlang['users']['sell']['restartProcess'], null, 'HTML');
         return;
     }
     $date = time();
     $randomString = bin2hex(random_bytes(4));
     $random_number = rand(1000000, 9999999);
-    if (in_array($randomString, $id_invoice)) {
+    if (rowExists("invoice", "id_invoice", $randomString)) {
         $randomString = $random_number . $randomString;
     }
     if ($marzban_list_get['type'] == "Manualsale") {
@@ -4101,7 +4094,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     $stmt->execute();
     $info_product = $stmt->fetch(PDO::FETCH_ASSOC);
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
-    if (!in_array($text, $SellDiscount)) {
+    if (!rowExists("DiscountSell", "codeDiscount", $text)) {
         sendmessage($from_id, $textbotlang['users']['Discount']['notcode'], $backuser, 'HTML');
         return;
     }
@@ -4474,11 +4467,11 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $random_number = rand(1000000, 9999999);
         $username_acc = $username_ac . "_" . $i;
         $get_username_Check = $ManagePanel->DataUser($marzban_list_get['name_panel'], $username_acc);
-        if (isset($get_username_Check['username']) || in_array($username_acc, $usernameinvoice)) {
+        if (isset($get_username_Check['username']) || rowExists("invoice", "username", $username_acc)) {
             $username_acc = $random_number . "_" . $username_acc;
         }
         $randomString = bin2hex(random_bytes(4));
-        if (in_array($randomString, $id_invoice)) {
+        if (rowExists("invoice", "id_invoice", $randomString)) {
             $randomString = $random_number . $randomString;
         }
         $dataoutput = $ManagePanel->createUser($marzban_list_get['name_panel'], $info_product['code_product'], $username_acc, $datac);
@@ -5668,7 +5661,7 @@ if (preg_match('/^sendresidcart-(.*)/', $datain, $dataget)) {
     Editmessagetext($from_id, $message_id, $textbotlang['users']['Discount']['getcode'], $bakinfos);
     step('get_code_user', $from_id);
 } elseif ($user['step'] == "get_code_user") {
-    if (!in_array($text, $code_Discount)) {
+    if (!rowExists("Discount", "code", $text)) {
         sendmessage($from_id, $textbotlang['users']['Discount']['notcode'], null, 'HTML');
         return;
     }
@@ -5769,7 +5762,7 @@ if (preg_match('/^sendresidcart-(.*)/', $datain, $dataget)) {
         sendmessage($from_id, $textbotlang['users']['sectionDisabled'], $keyboard, 'HTML');
         return;
     }
-    if (!in_array($user['affiliates'], $users_ids)) {
+    if (!rowExists("user", "id", $user['affiliates'])) {
         sendmessage($from_id, $textbotlang['users']['affiliates']['notReferral'], $keyboard, 'HTML');
         return;
     }

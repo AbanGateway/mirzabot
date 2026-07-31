@@ -312,10 +312,17 @@ function ensureColumnExistsForUpdate($tableName, $fieldName, $valueSample = null
 {
     global $pdo;
 
+    static $knownColumns = [];
+    $columnKey = $tableName . '.' . $fieldName;
+    if (isset($knownColumns[$columnKey])) {
+        return;
+    }
+
     try {
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?');
         $stmt->execute([$tableName, $fieldName]);
         if ((int) $stmt->fetchColumn() > 0) {
+            $knownColumns[$columnKey] = true;
             return;
         }
 
@@ -329,6 +336,7 @@ function ensureColumnExistsForUpdate($tableName, $fieldName, $valueSample = null
         }
 
         addFieldToTable($tableName, $fieldName, $defaultValue, $datatype);
+        $knownColumns[$columnKey] = true;
     } catch (PDOException $e) {
         error_log('Failed to ensure column exists: ' . $e->getMessage());
     }
@@ -347,8 +355,6 @@ function update($table, $field, $newValue, $whereField = null, $whereValue = nul
 
     $executeUpdate = function ($value) use ($pdo, $table, $field, $whereField, $whereValue) {
         if ($whereField !== null) {
-            $stmt = $pdo->prepare("SELECT $field FROM $table WHERE $whereField = ? FOR UPDATE");
-            $stmt->execute([$whereValue]);
             $stmt = $pdo->prepare("UPDATE $table SET $field = ? WHERE $whereField = ?");
             $stmt->execute([$value, $whereValue]);
         } else {
@@ -453,10 +459,18 @@ function select($table, $field, $whereField = null, $whereValue = null, $type = 
         }
     }
 
-    $query = "SELECT $field FROM $table";
+    if ($type == "count") {
+        $query = "SELECT COUNT(*) FROM $table";
+    } else {
+        $query = "SELECT $field FROM $table";
+    }
 
     if ($whereField !== null) {
         $query .= " WHERE $whereField = :whereValue";
+    }
+
+    if ($type != "count" && $type != "fetchAll" && $type != "FETCH_COLUMN") {
+        $query .= " LIMIT 1";
     }
 
     try {
@@ -467,7 +481,7 @@ function select($table, $field, $whereField = null, $whereValue = null, $type = 
 
         $stmt->execute();
         if ($type == "count") {
-            $result = $stmt->rowCount();
+            $result = (int) $stmt->fetchColumn();
         } elseif ($type == "FETCH_COLUMN") {
             $results = $stmt->fetchAll(PDO::FETCH_COLUMN);
             if ($table === 'admin' && $field === 'id_admin') {
@@ -507,14 +521,34 @@ function select($table, $field, $whereField = null, $whereValue = null, $type = 
     return $result;
 }
 
+function rowExists($table, $field, $value)
+{
+    global $pdo;
+
+    assertSqlIdentifier($table);
+    assertSqlIdentifier($field);
+
+    try {
+        $stmt = $pdo->prepare("SELECT 1 FROM $table WHERE $field = ? LIMIT 1");
+        $stmt->execute([$value]);
+        return $stmt->fetchColumn() !== false;
+    } catch (PDOException $e) {
+        error_log("Query failed: " . $e->getMessage());
+        return false;
+    }
+}
 function getPaySettingValue($name, $default = null)
 {
-    $result = select("PaySetting", "ValuePay", "NamePay", $name, "select");
-    if (!is_array($result) || !array_key_exists('ValuePay', $result)) {
-        return $default;
+    $rows = select("PaySetting", "*", null, null, "fetchAll");
+    if (is_array($rows)) {
+        foreach ($rows as $row) {
+            if (isset($row['NamePay']) && strcasecmp(trim((string) $row['NamePay']), trim((string) $name)) === 0) {
+                return array_key_exists('ValuePay', $row) ? $row['ValuePay'] : $default;
+            }
+        }
     }
 
-    return $result['ValuePay'];
+    return $default;
 }
 function generateUUID()
 {
@@ -762,10 +796,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
     $format_price_cart = number_format($Payment_report['price']);
     $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
     $steppay = explode("|", $Payment_report['id_invoice']);
-    update("user", "Processing_value", "0", "id", $Balance_id['id']);
-    update("user", "Processing_value_one", "0", "id", $Balance_id['id']);
-    update("user", "Processing_value_tow", "0", "id", $Balance_id['id']);
-    update("user", "Processing_value_four", "0", "id", $Balance_id['id']);
+    $stmtReset = $pdo->prepare("UPDATE user SET Processing_value = '0', Processing_value_one = '0', Processing_value_tow = '0', Processing_value_four = '0' WHERE id = ?");
+    $stmtReset->execute([$Balance_id['id']]);
+    clearSelectCache('user');
     if ($steppay[0] == "getconfigafterpay") {
         $get_invoice = select("invoice", "*", "username", $steppay[1], "select");
         $stmt = $pdo->prepare("SELECT * FROM product WHERE name_product = :name_product AND (Location = :Service_location  or Location = '/all')");

@@ -303,16 +303,16 @@ function mini_user_info(array $data, string $method): void
         if ($user_info['number'] == "confrim number by admin") {
             $numberphone = $textbotlang['common']['labels']['confirmedByAdmin'];
         }
-        $stmt = $pdo->prepare("SELECT * FROM invoice WHERE id_user = :id_user AND name_product != :name_product AND (status = 'active' OR status = 'end_of_time'  OR status = 'end_of_volume' OR status = 'sendedwarn' OR Status = 'send_on_hold')");
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM invoice WHERE id_user = :id_user AND name_product != :name_product AND (status = 'active' OR status = 'end_of_time'  OR status = 'end_of_volume' OR status = 'sendedwarn' OR Status = 'send_on_hold')");
         $stmt->bindValue(':name_product', $textbotlang['common']['labels']['testServiceName'], PDO::PARAM_STR);
         $stmt->bindValue(':id_user', $user_info['id'], PDO::PARAM_INT);
         $stmt->execute();
-        $countorder = $stmt->rowCount();
-        $stmt = $pdo->prepare("SELECT * FROM Payment_report WHERE id_user = :from_id AND payment_Status = 'paid'");
+        $countorder = (int) $stmt->fetchColumn();
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM Payment_report WHERE id_user = :from_id AND payment_Status = 'paid'");
         $stmt->execute([
             ':from_id' => $user_info['id']
         ]);
-        $countpayment = $stmt->rowCount();
+        $countpayment = (int) $stmt->fetchColumn();
         $groupuser = [
             'f' => $textbotlang['common']['roles']['normal'],
             'n' => $textbotlang['common']['roles']['agent'],
@@ -659,6 +659,7 @@ function mini_services(array $data, string $method): void
         $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :loc OR Location = '/all')AND agent= :ag $category_remarks $time_range_day");
         $stmt->execute($queryParams);
         $product_list = [];
+        $countorder = null;
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $hide_panel = json_decode($result['hide_panel'], true);
             if (!is_array($hide_panel)) {
@@ -666,11 +667,15 @@ function mini_services(array $data, string $method): void
             }
             if (in_array($panel['name_panel'], $hide_panel))
                 continue;
-            $stmts2 = $pdo->prepare("SELECT * FROM invoice WHERE Status != 'Unpaid' AND id_user = :mp4");
-            $stmts2->execute([':mp4' => $user_info['id']]);
-            $countorder = $stmts2->rowCount();
-            if ($result['one_buy_status'] == "1" && $countorder != 0)
-                continue;
+            if ($result['one_buy_status'] == "1") {
+                if ($countorder === null) {
+                    $stmts2 = $pdo->prepare("SELECT COUNT(*) FROM invoice WHERE Status != 'Unpaid' AND id_user = :mp4");
+                    $stmts2->execute([':mp4' => $user_info['id']]);
+                    $countorder = (int) $stmts2->fetchColumn();
+                }
+                if ($countorder != 0)
+                    continue;
+            }
             if (intval($user_info['pricediscount']) != 0) {
                 $resultper = ($result['price_product'] * $user_info['pricediscount']) / 100;
                 $result['price_product'] = $result['price_product'] - $resultper;
@@ -785,10 +790,6 @@ function mini_purchase(array $data, string $method): void
         return;
     }
     $user_info = $usercheck;
-    $usernameinvoice = select("invoice", "username", null, null, "FETCH_COLUMN");
-    if (!is_array($usernameinvoice)) {
-        $usernameinvoice = [];
-    }
     if (empty($data['custom_service'])) {
         $product = select("product", "*", "code_product", $data['service_id'] ?? '', "select");
     } else {
@@ -898,7 +899,7 @@ function mini_purchase(array $data, string $method): void
         $username_ac = generateUsername($user_info['id'], $panel['MethodUsername'], $user_info['username'], $randomString, $data['custom_username'] ?? null, $panel['namecustom'], $user_info['namecustom']);
         $username_ac = strtolower($username_ac);
         $DataUserOut = $ManagePanel->DataUser($panel['name_panel'], $username_ac);
-        if (isset($DataUserOut['username']) || in_array($username_ac, $usernameinvoice)) {
+        if (isset($DataUserOut['username']) || rowExists("invoice", "username", $username_ac)) {
             $refundOnFailure();
             http_response_code(500);
             echo json_encode(array(
@@ -989,11 +990,11 @@ function mini_purchase(array $data, string $method): void
     }
     $affiliatescommission = select("affiliates", "*", null, null, "select");
     $marzbanporsant_one_buy = select("affiliates", "*", null, null, "select");
-    $stmt = $pdo->prepare("SELECT * FROM invoice WHERE name_product != :name_product AND id_user = :id_user");
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM invoice WHERE name_product != :name_product AND id_user = :id_user");
     $stmt->bindParam(':id_user', $user_info['id']);
     $stmt->bindParam(':name_product', $textbotlang['common']['labels']['testServiceName']);
     $stmt->execute();
-    $countinvoice = $stmt->rowCount();
+    $countinvoice = (int) $stmt->fetchColumn();
     if ($affiliatescommission['status_commission'] == "oncommission" && ($user_info['affiliates'] != null && intval($user_info['affiliates']) != 0)) {
         if ($marzbanporsant_one_buy['porsant_one_buy'] == "on_buy_porsant") {
             if ($countinvoice == 1) {

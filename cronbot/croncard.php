@@ -16,10 +16,16 @@ $autoconfirm = select("PaySetting", "ValuePay", "NamePay", "autoconfirmcart", "s
 if ($autoconfirm != "onauto")
     return;
 $paymentreports = select("topicid", "idreport", "report", "paymentreport", "select")['idreport'];
+$textbotlang = languagechange();
+$list_Exceptions = select("PaySetting", "ValuePay", "NamePay", "Exception_auto_cart", "select")['ValuePay'];
+$list_Exceptions = is_string($list_Exceptions) ? json_decode($list_Exceptions, true) : [];
+if (!is_array($list_Exceptions)) {
+    $list_Exceptions = [];
+}
+$timecheck = $setting['timeauto_not_verify'] * 60;
 $stmt = $pdo->prepare("SELECT * FROM Payment_report WHERE payment_Status = 'waiting' AND (Payment_Method = 'cart to cart' OR Payment_Method = 'arze digital offline') AND bottype IS NULL");
 $stmt->execute();
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $timecheck = $setting['timeauto_not_verify'] * 60;
     if ($row['at_updated'] == null)
         continue;
     $since_start = time() - strtotime($row['at_updated']);
@@ -28,17 +34,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     if ($since_start <= $timecheck)
         continue;
     $Payment_report = $row;
-    $list_Exceptions = select("PaySetting", "ValuePay", "NamePay", "Exception_auto_cart", "select")['ValuePay'];
-    $list_Exceptions = is_string($list_Exceptions) ? json_decode($list_Exceptions, true) : [];
-    $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
-    if (in_array($Balance_id['id'], $list_Exceptions))
+    if (in_array($Payment_report['id_user'], $list_Exceptions))
         continue;
-    $textbotlang = languagechange();
     if ($Payment_report['payment_Status'] == "paid") {
         continue;
     }
-    update("Payment_report", "payment_Status", "paid", "id_order", $Payment_report['id_order']);
-    update("Payment_report", "dec_not_confirmed", $textbotlang['common']['labels']['autoConfirmedByBot'], "id_order", $Payment_report['id_order']);
+    $stmtPaid = $pdo->prepare("UPDATE Payment_report SET payment_Status = 'paid', dec_not_confirmed = ? WHERE id_order = ?");
+    $stmtPaid->execute([$textbotlang['common']['labels']['autoConfirmedByBot'], $Payment_report['id_order']]);
+    clearSelectCache('Payment_report');
     DirectPayment($Payment_report['id_order'], "../images.jpg");
     $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackcart", "select")['ValuePay'];
     $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");

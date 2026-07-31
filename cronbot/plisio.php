@@ -13,8 +13,7 @@ $paymentreports = select("topicid", "idreport", "report", "paymentreport", "sele
 function statusplisio($tx_id)
 {
     global $pdo;
-    $apinowpayments = ($pdo->query("SELECT (ValuePay) FROM PaySetting WHERE NamePay = 'apinowpayment'"))->fetch(PDO::FETCH_ASSOC)['ValuePay'];
-    $api_key = $apinowpayments;
+    $api_key = getPaySettingValue('apinowpayment');
     $url = 'https://api.plisio.net/api/v1/operations?';
     $url .= '&api_key=' . urlencode($api_key);
     $url .= '&search=' . $tx_id;
@@ -27,13 +26,11 @@ function statusplisio($tx_id)
 }
 $list_service = $pdo->prepare("SELECT * FROM Payment_report WHERE payment_Status = 'Unpaid' AND Payment_Method = 'plisio'");
 $list_service->execute();
-while ($row = ($list_service)->fetch(PDO::FETCH_ASSOC)) {
-    $__q17 = $pdo->prepare("SELECT * FROM Payment_report WHERE id_order = ? LIMIT 1");
-    $__q17->bindValue(1, $row['id_order'], PDO::PARAM_STR);
-    $__q17->execute();
-    $Payment_report = $__q17->fetch(PDO::FETCH_ASSOC);
-    $textbotlang = languagechange();
-    if ($Payment_report['payment_Status'] == "paid")
+$textbotlang = languagechange();
+$statusCheck = $pdo->prepare("SELECT payment_Status FROM Payment_report WHERE id_order = ? LIMIT 1");
+while ($Payment_report = ($list_service)->fetch(PDO::FETCH_ASSOC)) {
+    $statusCheck->execute([$Payment_report['id_order']]);
+    if ($statusCheck->fetchColumn() != "Unpaid")
         continue;
     if (!isset($Payment_report['dec_not_confirmed']) or $Payment_report['dec_not_confirmed'] == null)
         continue;

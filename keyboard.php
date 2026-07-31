@@ -2,13 +2,6 @@
 require_once 'config.php';
 $setting = select("setting", "*", null, null, "select");
 $textbotlang = languagechange();
-if (!function_exists('getPaySettingValue')) {
-    function getPaySettingValue($name)
-    {
-        $result = select("PaySetting", "ValuePay", "NamePay", $name, "select");
-        return $result['ValuePay'] ?? null;
-    }
-}
 //-----------------------------[  text panel  ]-------------------------------
 $adminrulecheck = select("admin", "*", "id_admin", $from_id, "select");
 if (!$adminrulecheck) {
@@ -259,10 +252,10 @@ $usernamecart = getPaySettingValue("CartDirect");
 $Swapino = getPaySettingValue("statusSwapWallet");
 $trnadoo = getPaySettingValue("statustarnado");
 $paymentverify = getPaySettingValue("checkpaycartfirst");
-$stmt = $pdo->prepare("SELECT * FROM Payment_report WHERE id_user = :user_id AND payment_Status = 'paid' ");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM Payment_report WHERE id_user = :user_id AND payment_Status = 'paid'");
 $stmt->bindValue(':user_id', $from_id);
 $stmt->execute();
-$paymentexits = $stmt->rowCount();
+$paymentexits = (int) $stmt->fetchColumn();
 $zarinpal = getPaySettingValue("zarinpalstatus");
 $affilnecurrency = getPaySettingValue("digistatus");
 $arzireyali3 = getPaySettingValue("statusiranpay3");
@@ -434,15 +427,12 @@ $backadmin = json_encode([
     'resize_keyboard' => true,
 ]);
 //------------------  [ list panel ]----------------//
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'marzban_panel'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
+$allBotTables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+$table_exists = in_array('marzban_panel', $allBotTables);
 $namepanel = [];
 if ($table_exists) {
-    $stmt = $pdo->prepare("SELECT * FROM marzban_panel");
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $allPanelRows = $pdo->query("SELECT * FROM marzban_panel")->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($allPanelRows as $row) {
         $namepanel[] = [$row['name_panel']];
     }
     $list_marzban_panel = [
@@ -460,10 +450,8 @@ if ($table_exists) {
     ];
     $json_list_marzban_panel = json_encode($list_marzban_panel);
     //------------------  [ list panel inline ]----------------//
-    $stmt = $pdo->prepare("SELECT * FROM marzban_panel");
-    $stmt->execute();
     $list_marzban_panel_edit_product = ['inline_keyboard' => []];
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($allPanelRows as $row) {
         $list_marzban_panel_edit_product['inline_keyboard'][] = [['text' => $row['name_panel'], 'callback_data' => 'locationedit_' . $row['code_panel']]];
     }
     $list_marzban_panel_edit_product['inline_keyboard'][] = [['text' => $textbotlang['keyboard']['allPanels'], 'callback_data' => 'locationedit_all']];
@@ -471,10 +459,7 @@ if ($table_exists) {
     $list_marzban_panel_edit_product = json_encode($list_marzban_panel_edit_product);
 }
 //------------------  [ list channel ]----------------//
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'channels'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
+$table_exists = in_array('channels', $allBotTables);
 $list_channels = [];
 if ($table_exists) {
     $stmt = $pdo->prepare("SELECT * FROM channels");
@@ -498,10 +483,7 @@ if ($table_exists) {
     $list_channels_joins = json_encode($list_channels_join);
 }
 //------------------  [ list card ]----------------//
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'card_number'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
+$table_exists = in_array('card_number', $allBotTables);
 $list_card = [];
 if ($table_exists) {
     $stmt = $pdo->prepare("SELECT * FROM card_number");
@@ -525,17 +507,11 @@ if ($table_exists) {
     $list_card_remove = json_encode($list_card_remove);
 }
 //------------------  [ help list ]----------------//
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'help'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
+$table_exists = in_array('help', $allBotTables);
 if ($table_exists) {
-    $stmt = $pdo->prepare("SELECT * FROM help");
-    $stmt->execute();
+    $helpRows = $pdo->query("SELECT * FROM help")->fetchAll(PDO::FETCH_ASSOC);
     $helpkey = [];
-    $stmt = $pdo->prepare("SELECT * FROM help");
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($helpRows as $row) {
         $helpkey[] = [$row['name_os']];
     }
     $help_arrke = [
@@ -553,12 +529,13 @@ if ($table_exists) {
     $json_list_helpkey = json_encode($help_arrke);
 }
 //------------------  [ help list ]----------------//
-$stmt = $pdo->prepare("SELECT * FROM help");
-$stmt->execute();
+if (!isset($helpRows)) {
+    $helpRows = $pdo->query("SELECT * FROM help")->fetchAll(PDO::FETCH_ASSOC);
+}
 $helpcwtgory = ['inline_keyboard' => []];
 $datahelp = [];
 $helpCategoryMap = [];
-while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+foreach ($helpRows as $result) {
     if (in_array($result['category'], $datahelp))
         continue;
     if ($result['category'] == null)
@@ -582,10 +559,9 @@ $json_list_helpـcategory = json_encode($helpcwtgory);
 
 
 //------------------  [ help app ]----------------//
-$stmt = $pdo->prepare("SELECT * FROM app");
-$stmt->execute();
+$appRows = $pdo->query("SELECT * FROM app")->fetchAll(PDO::FETCH_ASSOC);
 $helpapp = ['inline_keyboard' => []];
-while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+foreach ($appRows as $result) {
     $helpapp['inline_keyboard'][] = [
         ['text' => $result['name'], 'url' => $result['link']]
     ];
@@ -595,10 +571,8 @@ $helpapp['inline_keyboard'][] = [
 ];
 $json_list_helpـlink = json_encode($helpapp);
 //------------------  [ help app admin ]----------------//
-$stmt = $pdo->prepare("SELECT * FROM app");
-$stmt->execute();
 $helpappremove = ['keyboard' => [], 'resize_keyboard' => true];
-while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+foreach ($appRows as $result) {
     $helpappremove['keyboard'][] = [
         ['text' => $result['name']],
     ];
@@ -611,21 +585,22 @@ $json_list_remove_helpـlink = json_encode($helpappremove);
 $stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE status = 'active' AND (agent = :agent OR agent = 'all')");
 $stmt->bindParam(':agent', $users['agent']);
 $stmt->execute();
+$activePanelRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$manualsellCounts = [];
+if (in_array('Manualsale', array_column($activePanelRows, 'type')) && in_array('manualsell', $allBotTables)) {
+    foreach ($pdo->query("SELECT codepanel, COUNT(*) AS c FROM manualsell WHERE status = 'active' GROUP BY codepanel")->fetchAll(PDO::FETCH_ASSOC) as $msRow) {
+        $manualsellCounts[$msRow['codepanel']] = (int) $msRow['c'];
+    }
+}
 $list_marzban_panel_users = ['inline_keyboard' => []];
 $panelcount = select("marzban_panel", "*", "status", "active", "count");
 if ($panelcount > 10) {
     $temp_row = [];
-    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($activePanelRows as $result) {
         if ($result['hide_user'] != null && in_array($from_id, json_decode($result['hide_user'], true)))
             continue;
-        if ($result['type'] == "Manualsale") {
-            $stmt = $pdo->prepare("SELECT * FROM manualsell WHERE codepanel = :codepanel AND status = 'active'");
-            $stmt->bindParam(':codepanel', $result['code_panel']);
-            $stmt->execute();
-            $configexits = $stmt->rowCount();
-            if (intval($configexits) == 0)
-                continue;
-        }
+        if ($result['type'] == "Manualsale" && empty($manualsellCounts[$result['code_panel']]))
+            continue;
         if ($users['step'] == "getusernameinfo") {
             $temp_row[] = ['text' => $result['name_panel'], 'callback_data' => "locationnotuser_{$result['code_panel']}"];
         } else {
@@ -640,15 +615,9 @@ if ($panelcount > 10) {
         $list_marzban_panel_users['inline_keyboard'][] = $temp_row;
     }
 } else {
-    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        if ($result['type'] == "Manualsale") {
-            $stmts = $pdo->prepare("SELECT * FROM manualsell WHERE codepanel = :codepanel AND status = 'active'");
-            $stmts->bindParam(':codepanel', $result['code_panel']);
-            $stmts->execute();
-            $configexits = $stmts->rowCount();
-            if (intval($configexits) == 0)
-                continue;
-        }
+    foreach ($activePanelRows as $result) {
+        if ($result['type'] == "Manualsale" && empty($manualsellCounts[$result['code_panel']]))
+            continue;
         if ($result['hide_user'] != null and in_array($from_id, json_decode($result['hide_user'], true)))
             continue;
         if ($users['step'] == "getusernameinfo") {
@@ -680,11 +649,8 @@ $list_marzban_panel_user = json_encode($list_marzban_panel_users);
 
 
 //------------------  [ listpanelusers omdhe ]----------------//
-$stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE status = 'active' AND (agent = :agent OR agent = 'all')");
-$stmt->bindParam(':agent', $users['agent']);
-$stmt->execute();
 $list_marzban_panel_users_om = ['inline_keyboard' => []];
-while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+foreach ($activePanelRows as $result) {
     if ($result['hide_user'] != null and in_array($from_id, json_decode($result['hide_user'], true)))
         continue;
     $list_marzban_panel_users_om['inline_keyboard'][] = [
@@ -697,15 +663,12 @@ $list_marzban_panel_users_om['inline_keyboard'][] = [
 $list_marzban_panel_userom = json_encode($list_marzban_panel_users_om);
 
 //------------------  [ change location ]----------------//
-$stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE status = 'active' AND (agent = :agent OR agent = 'all') AND name_panel != :name_panel");
-$stmt->bindValue(':name_panel', $users['Processing_value_four'], PDO::PARAM_STR);
-$stmt->bindValue(':agent', $users['agent'], PDO::PARAM_STR);
-$stmt->execute();
 $list_marzban_panel_users_change = ['inline_keyboard' => []];
-$panelcount = select("marzban_panel", "*", "status", "active", "count");
 if ($panelcount > 10) {
     $temp_row = [];
-    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($activePanelRows as $result) {
+        if ($result['name_panel'] == $users['Processing_value_four'])
+            continue;
         if ($result['hide_user'] != null && in_array($from_id, json_decode($result['hide_user'], true)))
             continue;
 
@@ -719,7 +682,9 @@ if ($panelcount > 10) {
         $list_marzban_panel_users_change['inline_keyboard'][] = $temp_row;
     }
 } else {
-    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($activePanelRows as $result) {
+        if ($result['name_panel'] == $users['Processing_value_four'])
+            continue;
         if ($result['hide_user'] != null and in_array($from_id, json_decode($result['hide_user'], true)))
             continue;
         $list_marzban_panel_users_change['inline_keyboard'][] = [
@@ -750,27 +715,7 @@ $list_marzban_panel_usertest['inline_keyboard'][] = [
 ];
 $list_marzban_usertest = json_encode($list_marzban_panel_usertest);
 
-
 //--------------------------------------------------
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'protocol'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
-if ($table_exists) {
-    $getdataprotocol = select("protocol", "*", null, null, "fetchAll");
-    $protocol = [];
-    foreach ($getdataprotocol as $result) {
-        $protocol[] = [['text' => $result['NameProtocol']]];
-    }
-    $protocol[] = [['text' => $textbotlang['Admin']['backAdminBtn']]];
-    $keyboardprotocollist = json_encode(['resize_keyboard' => true, 'keyboard' => $protocol]);
-}
-//--------------------------------------------------
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'product'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
-if ($table_exists) {
     $product = [];
     $stmt = $pdo->prepare("SELECT * FROM product WHERE Location = :text or Location = '/all' ");
     $stmt->bindParam(':text', $text, PDO::PARAM_STR);
@@ -791,13 +736,7 @@ if ($table_exists) {
         ];
     }
     $json_list_product_list_admin = json_encode($list_product);
-}
 //--------------------------------------------------
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'Discount'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
-if ($table_exists) {
     $Discount = [];
     $stmt = $pdo->prepare("SELECT * FROM Discount");
     $stmt->execute();
@@ -817,44 +756,7 @@ if ($table_exists) {
         ];
     }
     $json_list_Discount_list_admin = json_encode($list_Discount);
-}
 //--------------------------------------------------
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'Inbound'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
-if ($table_exists) {
-    $Inboundkeyboard = [];
-    $stmt = $pdo->prepare("SELECT * FROM Inbound WHERE location = :Processing_value AND protocol = :text");
-    $stmt->bindParam(':text', $text, PDO::PARAM_STR);
-    $stmt->bindParam(':Processing_value', $users['Processing_value'], PDO::PARAM_STR);
-    $stmt->execute();
-    if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $Inboundkeyboard[] = [$row['NameInbound']];
-        }
-
-    }
-    $list_Inbound = [
-        'keyboard' => [],
-        'resize_keyboard' => true,
-    ];
-    foreach ($Inboundkeyboard as $button) {
-        $list_Inbound['keyboard'][] = [
-            ['text' => $button[0]]
-        ];
-    }
-    $list_Inbound['keyboard'][] = [
-        ['text' => $textbotlang['Admin']['backAdminBtn']],
-    ];
-    $json_list_Inbound_list_admin = json_encode($list_Inbound);
-}
-//--------------------------------------------------
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'DiscountSell'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
-if ($table_exists) {
     $DiscountSell = [];
     $stmt = $pdo->prepare("SELECT * FROM DiscountSell");
     $stmt->execute();
@@ -874,7 +776,6 @@ if ($table_exists) {
         ];
     }
     $json_list_Discount_list_admin_sell = json_encode($list_Discountsell);
-}
 $payment = json_encode([
     'inline_keyboard' => [
         [['text' => $textbotlang['keyboard']['payAndGetService'], 'callback_data' => "confirmandgetservice"]],
@@ -1345,12 +1246,7 @@ $supportcenter = json_encode([
     'resize_keyboard' => true
 ]);
 //------------------  [ list departeman ]----------------//
-$stmt = $pdo->prepare("SHOW TABLES LIKE 'departman'");
-$stmt->execute();
-$result = $stmt->fetchAll();
-$table_exists = count($result) > 0;
 $departeman = [];
-if ($table_exists) {
     $stmt = $pdo->prepare("SELECT * FROM departman");
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -1370,16 +1266,15 @@ if ($table_exists) {
         ['text' => $textbotlang['Admin']['backMenuBtn']]
     ];
     $departemanslist = json_encode($departemans);
-}
 // list departeman
 $list_departman = ['inline_keyboard' => []];
-$stmt = $pdo->prepare("SELECT * FROM departman");
-$stmt->execute();
-while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $list_departman['inline_keyboard'][] = [
-        ['text' => $result['name_departman'], 'callback_data' => "departman_{$result['id']}"]
-    ];
-}
+    $stmt = $pdo->prepare("SELECT * FROM departman");
+    $stmt->execute();
+    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $list_departman['inline_keyboard'][] = [
+            ['text' => $result['name_departman'], 'callback_data' => "departman_{$result['id']}"]
+        ];
+    }
 $list_departman['inline_keyboard'][] = [
     ['text' => $textbotlang['users']['backbtn'], 'callback_data' => "backuser"],
 ];
@@ -1425,16 +1320,21 @@ function KeyboardProduct($location, $query, $pricediscount, $datakeyboard, $stat
     } else {
         $valuetow = "";
     }
+    $countorder = null;
     while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $hide_panel = json_decode($result['hide_panel'], true);
         if (in_array($location, $hide_panel))
             continue;
-        $stmts2 = $pdo->prepare("SELECT * FROM invoice WHERE Status != 'Unpaid' AND id_user = :id_user");
-        $stmts2->bindValue(':id_user', $from_id);
-        $stmts2->execute();
-        $countorder = $stmts2->rowCount();
-        if ($result['one_buy_status'] == "1" && $countorder != 0)
-            continue;
+        if ($result['one_buy_status'] == "1") {
+            if ($countorder === null) {
+                $stmts2 = $pdo->prepare("SELECT COUNT(*) FROM invoice WHERE Status != 'Unpaid' AND id_user = :id_user");
+                $stmts2->bindValue(':id_user', $from_id);
+                $stmts2->execute();
+                $countorder = (int) $stmts2->fetchColumn();
+            }
+            if ($countorder != 0)
+                continue;
+        }
         if (intval($pricediscount) != 0) {
             $resultper = ($result['price_product'] * $pricediscount) / 100;
             $result['price_product'] = $result['price_product'] - $resultper;
@@ -1457,16 +1357,20 @@ function KeyboardProduct($location, $query, $pricediscount, $datakeyboard, $stat
 function KeyboardCategory($location, $agent, $backuser = "backuser")
 {
     global $pdo, $textbotlang;
+    $stmts = $pdo->prepare("SELECT category, COUNT(*) AS c FROM product WHERE (Location = :location OR Location = '/all') AND agent = :agent GROUP BY category");
+    $stmts->bindParam(':location', $location, PDO::PARAM_STR);
+    $stmts->bindParam(':agent', $agent);
+    $stmts->execute();
+    $categoryCounts = [];
+    foreach ($stmts->fetchAll(PDO::FETCH_ASSOC) as $catRow) {
+        $categoryKey = mb_strtolower(trim((string) $catRow['category']), 'UTF-8');
+        $categoryCounts[$categoryKey] = ($categoryCounts[$categoryKey] ?? 0) + (int) $catRow['c'];
+    }
     $stmt = $pdo->prepare("SELECT * FROM category");
     $stmt->execute();
     $list_category = ['inline_keyboard' => [],];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $stmts = $pdo->prepare("SELECT * FROM product WHERE (Location = :location OR Location = '/all') AND category = :category AND agent = :agent");
-        $stmts->bindParam(':location', $location, PDO::PARAM_STR);
-        $stmts->bindParam(':category', $row['remark'], PDO::PARAM_STR);
-        $stmts->bindParam(':agent', $agent);
-        $stmts->execute();
-        if ($stmts->rowCount() == 0)
+        if (empty($categoryCounts[mb_strtolower(trim((string) $row['remark']), 'UTF-8')]))
             continue;
         $list_category['inline_keyboard'][] = [['text' => $row['remark'], 'callback_data' => "categorynames_" . $row['id']]];
     }

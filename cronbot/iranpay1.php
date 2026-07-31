@@ -45,7 +45,8 @@ while ($Payment_report = ($list_service)->fetch(PDO::FETCH_ASSOC)) {
             'parse_mode' => "HTML"
         ]);
     }
-    update("Payment_report", "dec_not_confirmed", json_encode($StatusPayment), "id_order", $Payment_report['id_order']);
-    update("Payment_report", "payment_Status", "paid", "id_order", $Payment_report['id_order']);
+    $stmtPaid = $pdo->prepare("UPDATE Payment_report SET dec_not_confirmed = ?, payment_Status = 'paid' WHERE id_order = ?");
+    $stmtPaid->execute([json_encode($StatusPayment), $Payment_report['id_order']]);
+    clearSelectCache('Payment_report');
 
 }

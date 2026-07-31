@@ -26,12 +26,11 @@ $stmt->execute();
         if(in_array($get_username_Check['status'],['on_hold'])){
             $timebuyremin = (time() - $resultss['time_sell'])/86400;
         if ($timebuyremin >= $setting['on_hold_day']) {
-        $sql = "SELECT * FROM service_other WHERE username = :username  AND type = 'change_location'";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':username', $line ,PDO::PARAM_STR);
-        $stmt->execute();
-        $service_other = $stmt->rowCount();
-        if($service_other != 0)continue;
+        $sql = "SELECT 1 FROM service_other WHERE username = :username  AND type = 'change_location' LIMIT 1";
+        $stmtOther = $pdo->prepare($sql);
+        $stmtOther->bindParam(':username', $line ,PDO::PARAM_STR);
+        $stmtOther->execute();
+        if($stmtOther->fetchColumn() !== false)continue;
                 $text = sprintf($textbotlang['users']['notify']['onHoldReminder'], $line, $setting['on_hold_day'], $setting['id_support']);
             sendmessage($resultss['id_user'], $text, null, 'HTML');
             update("invoice","Status","send_on_hold", "username",$line);
