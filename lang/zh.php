@@ -4678,13 +4678,10 @@ f,n.n2',
 用户余额：%s 托曼
 付款跟踪码：%s',
                 'reportTronado' => '💵 新付款
-%s
 - 👤 用户用户名：@%s
 - 🆔用户数字 ID：%s
 - 💸 交易金额 %s
-- 🔗 <a href = "https://tronscan.org/#/transaction/%s">付款链接 </a>
-- 📥 已存入的 Tron 金额：%s
-- 💳 支付方式：Tronado',
+- 💳 支付方式：Rial Currency 2 (CubePay)',
                 'reportNowpayment' => '💵 新付款
 - 👤 用户用户名：@%s
 - 🆔用户数字 ID：%s

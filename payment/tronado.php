@@ -53,10 +53,23 @@ if ($Payment_report['payment_Status'] != "paid" && $authority) {
     curl_close($ch);
     $response = json_decode($result, true);
 
+    // این authority باید دقیقاً مال همین order_id و همین مبلغ باشه، وگرنه
+    // یعنی کسی داره یه authorityِ تاییدشده‌ی متعلق به یه سفارش دیگه (یا یه
+    // مبلغ دیگه) رو برای این سفارش replay می‌کنه. amount_rial همون مبلغ
+    // اصلیه که موقع ساخت فاکتور به create-payment.php فرستاده بودیم (بدون
+    // افستِ تشخیص پیامکی)، و verify-payment.php هم دقیقاً همینو تو فیلد
+    // amount برمی‌گردونه — نه pay_amountِ آفست‌دار.
+    $amount_rial = intval($price) * 10;
+    $isVerifiedForThisOrder = is_array($response)
+        && isset($response['order_id'], $response['amount'])
+        && (string) $response['order_id'] === (string) $data_order_id
+        && intval($response['amount']) === $amount_rial;
+
     // ۲۰۰ یعنی همین الان با موفقیت تایید شد؛ ۴۰۹ یعنی قبلاً هم تایید شده
-    // بود (idempotent) — تو هر دو حالت تراکنش واقعاً پرداخت‌شده حساب می‌شه،
-    // ولی چک payment_Status بالاتر جلوی شارژ دوباره‌ی حساب رو می‌گیره.
-    if (($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) {
+    // بود (idempotent) — تو هر دو حالت باید مطمئن بشیم authority واقعاً مال
+    // همین سفارش و همین مبلغه، وگرنه یه authorityِ تاییدشده رو می‌شه برای
+    // سفارش‌های دیگه هم replay کرد و بدون پرداخت واقعی paid علامت زد.
+    if ((($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) && $isVerifiedForThisOrder) {
         echo json_encode(array("status" => true));
         $textbotlang = languagechange();
         DirectPayment($data_order_id, "../images.jpg");

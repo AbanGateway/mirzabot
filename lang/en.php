@@ -4678,13 +4678,10 @@ Information :
 User balance : %s Toman
 Payment tracking code : %s',
                 'reportTronado' => '💵 New payment
-%s
 - 👤 User username : @%s
 - 🆔User numeric ID : %s
 - 💸 Transaction amount %s
-- 🔗 <a href = "https://tronscan.org/#/transaction/%s">Payment link </a>
-- 📥 Deposited Tron amount. : %s
-- 💳 Payment method :  Tronado',
+- 💳 Payment method : Rial Currency 2 (CubePay)',
                 'reportNowpayment' => '💵 New payment
 - 👤 User username : @%s
 - 🆔User numeric ID : %s
