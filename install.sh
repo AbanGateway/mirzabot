@@ -530,6 +530,42 @@ ensure_composer() {
 }
 export -f ensure_composer
 
+# Detect the active CLI PHP major.minor (e.g. 8.5). Empty on failure.
+active_php_ver() {
+    php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;' 2>/dev/null
+}
+export -f active_php_ver
+
+ensure_php_exts_for_composer() {
+    local ver pkgs
+    ver="$(active_php_ver)"
+    if [ -z "$ver" ]; then
+        echo "PHP CLI not found - cannot install required extensions." >&2
+        return 1
+    fi
+
+    if php -m 2>/dev/null | grep -qi '^mbstring$' \
+        && php -m 2>/dev/null | grep -qi '^dom$'; then
+        return 0
+    fi
+
+    pkgs="php${ver}-mbstring php${ver}-xml php${ver}-zip php${ver}-gd php${ver}-curl php${ver}-intl php${ver}-bcmath"
+    echo "Ensuring PHP ${ver} extensions for Composer: ${pkgs}"
+    DEBIAN_FRONTEND=noninteractive apt-get install -y $pkgs || {
+        echo "Failed to install PHP ${ver} extensions required by Composer." >&2
+        return 1
+    }
+
+    if ! php -m 2>/dev/null | grep -qi '^mbstring$' \
+        || ! php -m 2>/dev/null | grep -qi '^dom$'; then
+        echo "PHP ${ver} is missing mbstring and/or dom after package install." >&2
+        echo "Run: php -m | grep -E 'mbstring|dom'  and php --ini" >&2
+        return 1
+    fi
+    return 0
+}
+export -f ensure_php_exts_for_composer
+
 # Build vendor/ from composer.json + composer.lock. vendor/ is not shipped in the
 # release archive, so this must run on every install, update and migration.
 install_php_deps() {
@@ -540,6 +576,7 @@ install_php_deps() {
         return 0
     fi
 
+    ensure_php_exts_for_composer || return 1
     ensure_composer || return 1
 
     COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_NO_INTERACTION=1 \
