@@ -5001,16 +5001,6 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $message_id = sendmessage($from_id, $textnowpayments, $paymentkeyboard, 'HTML');
         updatePaymentMessageId($message_id, $randomString);
     } elseif ($datain == "iranpay2") {
-        $rates = rate_arze();
-        if ($rates === null) {
-            sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
-            step('home', $from_id);
-            return;
-        }
-        $trx = $rates['TRX'];
-        $usd = $rates['USD'];
-        $trxprice = $user['Processing_value'] / $trx;
-        $usdprice = $user['Processing_value'] / $usd;
         $mainbalance = select("PaySetting", "ValuePay", "NamePay", "minbalanceiranpay2", "select")['ValuePay'];
         $maxbalance = select("PaySetting", "ValuePay", "NamePay", "maxbalanceiranpay2", "select")['ValuePay'];
         if ($user['Processing_value'] < $mainbalance || $user['Processing_value'] > $maxbalance) {
@@ -5028,8 +5018,8 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $payment_Status = "Unpaid";
         $Payment_Method = "Currency Rial 2";
         $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
-        $payment = trnado($randomString, $trxprice);
-        if ($payment['IsSuccessful'] != "true") {
+        $payment = trnado($randomString, $user['Processing_value']);
+        if (empty($payment['success'])) {
             $text_error = json_encode($payment);
             sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
             step('home', $from_id);
@@ -5047,7 +5037,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
-                    ['text' => $textbotlang['users']['Balance']['payments'], 'url' => "https://t.me/tronado_robot/customerpayment?startapp={$payment['Data']['Token']}"]
+                    ['text' => $textbotlang['users']['Balance']['payments'], 'url' => $payment['payment_link']]
                 ]
             ]
         ]);

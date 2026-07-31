@@ -1658,9 +1658,6 @@ Status: approved (%s)',
                         'askFallbackName' => '📌 What name should be registered if the user has no username?',
                 ],
                 'api' => [
-                        'askAddress' => '📌 Send the API address.
-
-Current address: %s',
                         'token' => 'Your api token: <code>%s</code>',
                         'docsLink' => '📘 Full API reference:
 %s
@@ -4046,7 +4043,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'setAffiliateBanner' => '🏞 Set referral banner',
                 'setAffiliatePercent' => '🧮 Set referral percentage',
                 'setApi' => 'Set api',
-                'setApiAddress' => 'Set api address',
                 'setAqayePardakhtMerchant' => 'Set Aghaye Pardakht merchant',
                 'setCardNumber' => '💳 Set card number',
                 'setEducationAqayePardakht' => '📚 Set Aghaye Pardakht gateway tutorial',
@@ -4678,13 +4674,10 @@ Information :
 User balance : %s Toman
 Payment tracking code : %s',
                 'reportTronado' => '💵 New payment
-%s
 - 👤 User username : @%s
 - 🆔User numeric ID : %s
 - 💸 Transaction amount %s
-- 🔗 <a href = "https://tronscan.org/#/transaction/%s">Payment link </a>
-- 📥 Deposited Tron amount. : %s
-- 💳 Payment method :  Tronado',
+- 💳 Payment method : Rial Currency 2 (CubePay)',
                 'reportNowpayment' => '💵 New payment
 - 👤 User username : @%s
 - 🆔User numeric ID : %s

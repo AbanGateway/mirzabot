@@ -679,35 +679,31 @@ function isValidDate($date)
 function trnado($order_id, $price)
 {
     global $domainhosts;
-    $apitronseller = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
-    $walletaddress = select("PaySetting", "*", "NamePay", "walletaddress", "select")['ValuePay'];
-    $urlpay = select("PaySetting", "*", "NamePay", "urlpaymenttron", "select")['ValuePay'];
+    $token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
+    $amount_rial = intval($price) * 10;
     $curl = curl_init();
-    $data = array(
-        "PaymentID" => $order_id,
-        "WalletAddress" => $walletaddress,
-        "TronAmount" => $price,
-        "CallbackUrl" => "https://" . $domainhosts . "/payment/tronado.php"
-    );
-    $datasend = json_encode($data);
     curl_setopt_array($curl, array(
-        CURLOPT_URL => "$urlpay",
+        CURLOPT_URL => 'https://cubevps.ir/smspay/api/create-payment.php',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
+        CURLOPT_TIMEOUT => 30,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => array(
-            'x-api-key:' . $apitronseller,
             'Content-Type: application/json',
-            'Cookie: ASP.NET_SessionId=spou2s5lo4nnxkjtavscrrlo'
+            'Authorization: Bearer ' . $token_cubepay
         ),
     ));
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $datasend);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
+        'amount' => $amount_rial,
+        'order_id' => $order_id,
+        'callback_url' => "https://$domainhosts/payment/iranpay2.php",
+    ], JSON_UNESCAPED_UNICODE));
 
     $response = curl_exec($curl);
+    curl_close($curl);
 
     return json_decode($response, true);
 }

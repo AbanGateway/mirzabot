@@ -1658,9 +1658,6 @@ n2',
                         'askFallbackName' => '📌 Какое имя зарегистрировать, если у пользователя нет имени пользователя?',
                 ],
                 'api' => [
-                        'askAddress' => '📌 Отправьте адрес API.
-
-Текущий адрес: %s',
                         'token' => 'Ваш api-токен: <code>%s</code>',
                         'docsLink' => '📘 Полная документация API:
 %s
@@ -4046,7 +4043,6 @@ ID пользователя : %s
                 'setAffiliateBanner' => '🏞 Установить баннер сбора рефералов',
                 'setAffiliatePercent' => '🧮 Установить процент реферала',
                 'setApi' => 'Установить api',
-                'setApiAddress' => 'Установить адрес api',
                 'setAqayePardakhtMerchant' => 'Установить продавца Aghaye Pardakht',
                 'setCardNumber' => '💳 Установить номер карты',
                 'setEducationAqayePardakht' => '📚 Установить инструкцию шлюза Aghaye Pardakht',
@@ -4678,13 +4674,10 @@ ID пользователя : %s
 Баланс пользователя : %s туманов
 Код отслеживания платежа : %s',
                 'reportTronado' => '💵 Новый платёж
-%s
 - 👤 Имя пользователя : @%s
 - 🆔Числовой ID пользователя : %s
 - 💸 Сумма транзакции %s
-- 🔗 <a href = "https://tronscan.org/#/transaction/%s">Ссылка оплаты </a>
-- 📥 Внесённая сумма Tron. : %s
-- 💳 Способ оплаты :  Tronado',
+- 💳 Способ оплаты : Rial Currency 2 (CubePay)',
                 'reportNowpayment' => '💵 Новый платёж
 - 👤 Имя пользователя : @%s
 - 🆔Числовой ID пользователя : %s

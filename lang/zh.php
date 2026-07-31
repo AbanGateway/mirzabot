@@ -1658,9 +1658,6 @@ n2',
                         'askFallbackName' => '📌 如果用户没有用户名，应注册什么名称？',
                 ],
                 'api' => [
-                        'askAddress' => '📌 请发送 API 地址。
-
-当前地址：%s',
                         'token' => '您的 api 令牌：<code>%s</code>',
                         'docsLink' => '📘 完整 API 文档：
 %s
@@ -4046,7 +4043,6 @@ f,n.n2',
                 'setAffiliateBanner' => '🏞 设置下线收集横幅',
                 'setAffiliatePercent' => '🧮 设置下线百分比',
                 'setApi' => '设置 api',
-                'setApiAddress' => '设置 api 地址',
                 'setAqayePardakhtMerchant' => '设置 Aghaye Pardakht 商户',
                 'setCardNumber' => '💳 设置卡号',
                 'setEducationAqayePardakht' => '📚 设置 Aghaye Pardakht 网关教程',
@@ -4678,13 +4674,10 @@ f,n.n2',
 用户余额：%s 托曼
 付款跟踪码：%s',
                 'reportTronado' => '💵 新付款
-%s
 - 👤 用户用户名：@%s
 - 🆔用户数字 ID：%s
 - 💸 交易金额 %s
-- 🔗 <a href = "https://tronscan.org/#/transaction/%s">付款链接 </a>
-- 📥 已存入的 Tron 金额：%s
-- 💳 支付方式：Tronado',
+- 💳 支付方式：Rial Currency 2 (CubePay)',
                 'reportNowpayment' => '💵 新付款
 - 👤 用户用户名：@%s
 - 🆔用户数字 ID：%s
