@@ -658,7 +658,7 @@ function trnado($order_id, $price)
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
         'amount' => $amount_rial,
         'order_id' => $order_id,
-        'callback_url' => "https://$domainhosts/payment/tronado.php",
+        'callback_url' => "https://$domainhosts/payment/iranpay2.php",
     ], JSON_UNESCAPED_UNICODE));
 
     $response = curl_exec($curl);
