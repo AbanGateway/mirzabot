@@ -825,7 +825,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         }
     }
     #-------------status----------------#
-    $status = $DataUserOut['status'];
+    $status = $DataUserOut['status'] ?? 'Unknown';
     $status_var = [
         'active' => $textbotlang['users']['status']['active'],
         'limited' => $textbotlang['users']['status']['limited'],
@@ -834,7 +834,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         'on_hold' => $textbotlang['users']['status']['on_hold'],
         'Unknown' => $textbotlang['users']['status']['unknown'],
         'deactivev' => $textbotlang['users']['status']['disabled'],
-    ][$status];
+    ][$status] ?? $textbotlang['users']['status']['unknown'];
     #--------------[ expire ]---------------#
     $expirationDate = $DataUserOut['expire'] ? jdate('Y/m/d', $DataUserOut['expire']) : $textbotlang['users']['status']['unlimited'];
     #-------------[ data_limit ]----------------#
@@ -2446,7 +2446,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         }
     }
     #-------------status----------------#
-    $status = $DataUserOut['status'];
+    $status = $DataUserOut['status'] ?? 'Unknown';
     $status_var = [
         'active' => $textbotlang['users']['status']['active'],
         'limited' => $textbotlang['users']['status']['limited'],
@@ -2455,7 +2455,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         'on_hold' => $textbotlang['users']['status']['on_hold'],
         'Unknown' => $textbotlang['users']['status']['unknown'],
         'deactivev' => $textbotlang['users']['status']['disabled'],
-    ][$status];
+    ][$status] ?? $textbotlang['users']['status']['unknown'];
     #--------------[ expire ]---------------#
     $expirationDate = $DataUserOut['expire'] ? jdate('Y/m/d', $DataUserOut['expire']) : $textbotlang['users']['status']['unlimited'];
     #-------------[ data_limit ]----------------#
@@ -2990,8 +2990,8 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     $Status = "active";
     $stmt->execute([$from_id, $randomString, $username_ac, $date, $marzban_list_get['name_panel'], $info_product['name_product'], $info_product['price_product'], $marzban_list_get['val_usertest'], $marzban_list_get['time_usertest'], $Status, $notifctions]);
     $dataoutput = $ManagePanel->createUser($marzban_list_get['name_panel'], "usertest", $username_ac, $datac);
-    if ($dataoutput['username'] == null) {
-        $dataoutput['msg'] = json_encode($dataoutput['msg']);
+    if (!is_array($dataoutput) || empty($dataoutput['username'])) {
+        $dataoutput['msg'] = json_encode($dataoutput['msg'] ?? $dataoutput ?? 'unknown error');
         sendmessage($from_id, $textbotlang['users']['usertest']['errorcreat'], $keyboard, 'html');
         $texterros = sprintf($textbotlang['Admin']['reportgroup']['errorTestAccountCreate'], $dataoutput['msg'], $from_id, $username, $marzban_list_get['name_panel']);
         if (strlen($setting['Channel_Report']) > 0) {
@@ -3600,7 +3600,17 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
 } elseif (preg_match('/^productmonth_(\w+)/', $datain, $dataget)) {
     $monthenumber = $dataget[1];
     $userdate = json_decode($user['Processing_value'], true);
-    $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel']);
+    if (!is_array($userdate) || empty($userdate['name_panel'])) {
+        sendmessage($from_id, $textbotlang['users']['sell']['panelUnavailable'], $keyboard, 'HTML');
+        step('home', $from_id);
+        return;
+    }
+    $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
+    if (empty($marzban_list_get)) {
+        sendmessage($from_id, $textbotlang['users']['sell']['panelUnavailable'], $keyboard, 'HTML');
+        step('home', $from_id);
+        return;
+    }
     if ($setting['statuscategorygenral'] == "oncategorys") {
         savedata("save", "monthproduct", $monthenumber);
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
@@ -3616,7 +3626,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     } else {
         $query = "SELECT * FROM product WHERE (Location = '{$userdate['name_panel']}' OR Location = '/all') AND agent= '{$user['agent']}' AND Service_time = '$monthenumber'";
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
-        $statuscustomvolume = json_decode($marzban_list_get['customvolume'], true)[$user['agent']];
+        $statuscustomvolume = json_decode($marzban_list_get['customvolume'] ?? '[]', true)[$user['agent']] ?? null;
         if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
             $datakeyboard = "prodcutservices_";
         } else {
@@ -3702,6 +3712,11 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     sendmessage($from_id, $textbotlang['users']['selectusername'], $backuser, 'html');
 } elseif ($user['step'] == "endstepuser" || $user['step'] == "endstepusers" || preg_match('/prodcutservice_(.*)/', $datain, $dataget) || $user['step'] == "getvolumecustomuser") {
     $userdate = json_decode($user['Processing_value'], true);
+    if (!is_array($userdate) || empty($userdate['name_panel'])) {
+        sendmessage($from_id, $textbotlang['users']['sell']['panelUnavailable'], $keyboard, 'HTML');
+        step('home', $from_id);
+        return;
+    }
     if ($user['step'] == "getvolumecustomuser") {
         if (!ctype_digit($text)) {
             sendmessage($from_id, $textbotlang['users']['customSellVolume']['invalidTime'], $backuser, 'HTML');
