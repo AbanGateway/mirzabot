@@ -57,7 +57,12 @@ function telegram($method, $datas = [], $token = null)
         $errorCode = $decodedResponse['error_code'] ?? 0;
         $description = $decodedResponse['description'] ?? '';
         $silent = $errorCode === 403
-            || ($errorCode === 400 && str_contains($description, 'message is not modified'));
+            || ($errorCode === 400 && (
+                str_contains($description, 'message is not modified')
+                || str_contains($description, "message can't be deleted")
+                || str_contains($description, 'message to delete not found')
+                || str_contains($description, 'chat not found')
+            ));
         if (!$silent) {
             error_log(json_encode($decodedResponse));
         }
