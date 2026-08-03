@@ -856,8 +856,8 @@ function DirectPayment($order_id, $image = 'images.jpg')
             'type' => 'buy'
         );
         $dataoutput = $ManagePanel->createUser($marzban_list_get['name_panel'], $info_product['code_product'], $username_ac, $datac);
-        if ($dataoutput['username'] == null) {
-            $dataoutput['msg'] = json_encode($dataoutput['msg']);
+        if (!is_array($dataoutput) || empty($dataoutput['username'])) {
+            $dataoutput['msg'] = json_encode($dataoutput['msg'] ?? $dataoutput ?? 'unknown error');
             $balance = $Balance_id['Balance'] + $Payment_report['price'];
             update("user", "Balance", $balance, "id", $Balance_id['id']);
             sendmessage($Balance_id['id'], $textbotlang['users']['sell']['errorConfig'], $keyboard, 'HTML');
@@ -1355,7 +1355,12 @@ function savedata($type, $namefiled, $valuefiled)
         update("user", "Processing_value", $data, "id", $from_id);
     } elseif ($type == "save") {
         $userdata = select("user", "*", "id", $from_id, "select");
-        $dataperevieos = json_decode($userdata['Processing_value'], true);
+        // Processing_value must be a JSON object string. It can also be null, "", or a
+        // plain scalar left over from older flows — those decode to null/int/string.
+        $dataperevieos = json_decode((string) ($userdata['Processing_value'] ?? ''), true);
+        if (!is_array($dataperevieos)) {
+            $dataperevieos = [];
+        }
         $dataperevieos[$namefiled] = $valuefiled;
         update("user", "Processing_value", json_encode($dataperevieos), "id", $from_id);
     }
