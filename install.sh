@@ -1953,6 +1953,13 @@ EOF
         install_pause "MySQL connection"
     }
 
+    MYSQL_AUTH_PLUGIN="mysql_native_password"
+    if ! mysql -u"$ROOT_USER" -p"$ROOT_PASSWORD" -N -B -e \
+        "SELECT PLUGIN_STATUS FROM INFORMATION_SCHEMA.PLUGINS WHERE PLUGIN_NAME='mysql_native_password';" 2>/dev/null \
+        | grep -qi ACTIVE; then
+        MYSQL_AUTH_PLUGIN="caching_sha2_password"
+    fi
+
     randomdbpass=$(openssl rand -base64 10 | tr -dc 'a-zA-Z0-9' | cut -c1-8)
     randomdbdb=$(openssl rand -base64 10 | tr -dc 'a-zA-Z' | cut -c1-8)
     dbname="mirzaprobot"
@@ -2000,7 +2007,7 @@ EOF
         fi
         # Idempotent: safe to re-run (IF NOT EXISTS), so a resumed install never breaks here
         run_step "Creating database & user" \
-            "mysql -u root -p$ROOT_PASSWORD -e \"CREATE DATABASE IF NOT EXISTS $dbname;\" && mysql -u root -p$ROOT_PASSWORD -e \"CREATE USER IF NOT EXISTS '$dbuser'@'%' IDENTIFIED WITH mysql_native_password BY '$dbpass'; GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'%'; FLUSH PRIVILEGES;\" && mysql -u root -p$ROOT_PASSWORD -e \"CREATE USER IF NOT EXISTS '$dbuser'@'localhost' IDENTIFIED WITH mysql_native_password BY '$dbpass'; GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost'; FLUSH PRIVILEGES;\"" \
+            "mysql -u root -p$ROOT_PASSWORD -e \"CREATE DATABASE IF NOT EXISTS $dbname;\" && mysql -u root -p$ROOT_PASSWORD -e \"CREATE USER IF NOT EXISTS '$dbuser'@'%' IDENTIFIED WITH $MYSQL_AUTH_PLUGIN BY '$dbpass'; GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'%'; FLUSH PRIVILEGES;\" && mysql -u root -p$ROOT_PASSWORD -e \"CREATE USER IF NOT EXISTS '$dbuser'@'localhost' IDENTIFIED WITH $MYSQL_AUTH_PLUGIN BY '$dbpass'; GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost'; FLUSH PRIVILEGES;\"" \
             || { show_step_error; install_pause "Creating database/user"; }
         mark_phase DB
     else
@@ -2424,6 +2431,14 @@ function migrate_to_pro() {
         echo -e "\033[31m[ERROR] Incorrect MySQL root password. Migration stopped.\033[0m"
         exit 1
     fi
+    # MySQL 8.4+ disables mysql_native_password by default; fall back to the server
+    # default plugin when it is not ACTIVE so CREATE USER does not fail.
+    MYSQL_AUTH_PLUGIN="mysql_native_password"
+    if ! mysql -u "$ROOT_USER" -p"$ROOT_PASS" -N -B -e \
+        "SELECT PLUGIN_STATUS FROM INFORMATION_SCHEMA.PLUGINS WHERE PLUGIN_NAME='mysql_native_password';" 2>/dev/null \
+        | grep -qi ACTIVE; then
+        MYSQL_AUTH_PLUGIN="caching_sha2_password"
+    fi
     echo -e "\033[32mDatabase connection successful.\033[0m"
     OLD_DB="mirzabot"
     NEW_DB="mirzaprobot"
@@ -2455,9 +2470,9 @@ function migrate_to_pro() {
     NEW_DB_USER=$(openssl rand -base64 10 | tr -dc 'a-zA-Z' | cut -c1-8)
     NEW_DB_PASS=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | cut -c1-10)
     echo -e "\033[33mCreating new database user...\033[0m"
-    mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "CREATE USER '$NEW_DB_USER'@'localhost' IDENTIFIED WITH mysql_native_password BY '$NEW_DB_PASS';"
+    mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "CREATE USER '$NEW_DB_USER'@'localhost' IDENTIFIED WITH $MYSQL_AUTH_PLUGIN BY '$NEW_DB_PASS';"
     mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "GRANT ALL PRIVILEGES ON $NEW_DB.* TO '$NEW_DB_USER'@'localhost';"
-    mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "CREATE USER '$NEW_DB_USER'@'%' IDENTIFIED WITH mysql_native_password BY '$NEW_DB_PASS';"
+    mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "CREATE USER '$NEW_DB_USER'@'%' IDENTIFIED WITH $MYSQL_AUTH_PLUGIN BY '$NEW_DB_PASS';"
     mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "GRANT ALL PRIVILEGES ON $NEW_DB.* TO '$NEW_DB_USER'@'%';"
     mysql -u "$ROOT_USER" -p"$ROOT_PASS" -e "FLUSH PRIVILEGES;"
     echo -e "\033[33mReading old configuration...\033[0m"
