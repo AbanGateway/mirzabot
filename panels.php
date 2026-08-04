@@ -63,10 +63,11 @@ class ManagePanel
         if ($Get_Data_Panel['type'] == "marzban") {
             //create user
             $ConnectToPanel = adduser($Get_Data_Panel['name_panel'], $data_limit, $usernameC, $expire, $note, $Get_Data_Product['data_limit_reset'], $Get_Data_Product['name_product']);
-            if (!empty($ConnectToPanel['status']) && $ConnectToPanel['status'] == 500) {
+            if (!empty($ConnectToPanel['status']) && $ConnectToPanel['status'] >= 400) {
+                $errBody = json_decode($ConnectToPanel['body'] ?? '', true);
                 return array(
                     'status' => 'Unsuccessful',
-                    'msg' => $ConnectToPanel['status']
+                    'msg' => is_array($errBody) && !empty($errBody['detail']) ? $errBody['detail'] : $ConnectToPanel['status']
                 );
             }
             if (!empty($ConnectToPanel['error'])) {
@@ -105,10 +106,11 @@ class ManagePanel
         } elseif ($Get_Data_Panel['type'] == "marzneshin") {
             //create user
             $ConnectToPanel = adduserm($Get_Data_Panel['name_panel'], $data_limit, $usernameC, $expire, $Get_Data_Product['name_product'], $note, $Get_Data_Product['data_limit_reset']);
-            if (!empty($ConnectToPanel['status']) && $ConnectToPanel['status'] == 500) {
+            if (!empty($ConnectToPanel['status']) && $ConnectToPanel['status'] >= 400) {
+                $errBody = json_decode($ConnectToPanel['body'] ?? '', true);
                 return array(
                     'status' => 'Unsuccessful',
-                    'msg' => $ConnectToPanel['status']
+                    'msg' => is_array($errBody) && !empty($errBody['detail']) ? $errBody['detail'] : $ConnectToPanel['status']
                 );
             }
             if (!empty($ConnectToPanel['error'])) {
@@ -344,7 +346,7 @@ class ManagePanel
                 $name_group = "usertest";
             }
             $data_Output = addUserIBsng($Get_Data_Panel['name_panel'], $usernameC, $password, $name_group);
-            if (!$data_Output) {
+            if (empty($data_Output['status'])) {
                 $Output['status'] = 'Unsuccessful';
                 $Output['msg'] = $data_Output['msg'];
             } else {
@@ -373,7 +375,7 @@ class ManagePanel
             }
         } elseif ($Get_Data_Panel['type'] == "mirza_agent") {
             //create user
-            $ConnectToPanel = create_user_mirza($Get_Data_Panel, $data_limit / pow(1024, 3), ($expire - time()) / 86400, $usernameC);
+            $ConnectToPanel = create_user_mirza($Get_Data_Panel, $data_limit / pow(1024, 3), $expire == 0 ? 0 : ($expire - time()) / 86400, $usernameC);
             if (!empty($ConnectToPanel['status']) && $ConnectToPanel['status'] != 200) {
                 return array(
                     'status' => 'Unsuccessful',
@@ -768,7 +770,7 @@ class ManagePanel
         } elseif ($Get_Data_Panel['type'] == "alireza_single") {
             $UsernameData2 = get_clinetsalireza($username, $Get_Data_Panel['name_panel']);
             if (!is_array($UsernameData2)) {
-                $Output = array(
+                return array(
                     'status' => 'Unsuccessful',
                     'msg' => "user not found"
                 );
@@ -1781,6 +1783,12 @@ class ManagePanel
             $configs['data'] = array_merge($configs['data'], $config);
             $configs['data'] = json_encode($configs['data'], true);
             $modify = updateClientS_ui($Get_Data_Panel['name_panel'], $configs);
+            if (!is_array($modify) || (array_key_exists('success', $modify) && !$modify['success'])) {
+                return array(
+                    'status' => false,
+                    'msg' => is_array($modify) ? ($modify['msg'] ?? 'panel update failed') : 'panel update failed'
+                );
+            }
             return array(
                 'status' => true,
                 'data' => $modify
@@ -1792,18 +1800,16 @@ class ManagePanel
         $DataUserOut = $this->DataUser($name_panel, $username);
         $Get_Data_Panel = select("marzban_panel", "*", "name_panel", $name_panel, "select");
         if ($DataUserOut['status'] == "Unsuccessful") {
-            $Output = array(
+            return array(
                 'status' => 'Unsuccessful',
-                'msg' => $DataUserOut['detail']
+                'msg' => $DataUserOut['msg']
             );
-            return;
         }
         if (!in_array($DataUserOut['status'], ["active", "disabled"])) {
-            $Output = array(
+            return array(
                 'status' => 'Unsuccessful',
                 'msg' => "status invalid"
             );
-            return;
         }
         if ($Get_Data_Panel['type'] == "marzban") {
             if ($DataUserOut['status'] == "active") {
@@ -2470,12 +2476,11 @@ class ManagePanel
                 ),
             );
         } elseif ($panel['type'] == "hiddify") {
-            $new_limit = ($old_limit_time / pow(1024, 3)) + $limit_time_new;
             $datauser = getdatauser($username_account, $panel['name_panel']);
             $data = array(
                 "current_usage_GB" => $datauser['current_usage_GB'],
                 "usage_limit_GB" => $datauser['usage_limit_GB'],
-                "package_days" => $new_limit,
+                "package_days" => $limit_time_new == 0 ? 0 : ($new_limit - time()) / 86400,
                 "start_date" => null
             );
         } elseif ($panel['type'] == "WGDashboard") {

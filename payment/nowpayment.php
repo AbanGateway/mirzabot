@@ -23,7 +23,6 @@ if (isset($data['payment_status']) && $data['payment_status'] == "finished") {
         try {
             DirectPayment($Payment_report['id_order'], "../images.jpg");
         } catch (Throwable $directPaymentError) {
-            releasePaymentPaid($Payment_report['id_order']);
             error_log("DirectPayment failed for order {$Payment_report['id_order']}: " . $directPaymentError->getMessage());
             return;
         }

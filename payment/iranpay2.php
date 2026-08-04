@@ -64,7 +64,6 @@ if ($Payment_report['payment_Status'] != "paid" && $authority) {
         try {
             DirectPayment($data_order_id, "../images.jpg");
         } catch (Throwable $directPaymentError) {
-            releasePaymentPaid($Payment_report['id_order']);
             error_log("DirectPayment failed for order {$data_order_id}: " . $directPaymentError->getMessage());
             return;
         }

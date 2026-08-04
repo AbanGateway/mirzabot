@@ -64,7 +64,6 @@ $response = json_decode($response,true);
     try {
         DirectPayment($invoice_id,"../images.jpg");
     } catch (Throwable $directPaymentError) {
-        releasePaymentPaid($invoice_id);
         error_log("DirectPayment failed for order {$invoice_id}: " . $directPaymentError->getMessage());
         return;
     }
