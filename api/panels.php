@@ -155,9 +155,9 @@ function panel_panel_add(array $data, string $method): void
         $panelData = [
             'code_panel' => bin2hex(random_bytes(3)),
             'name_panel' => $data['name'],
-            'url_panel' => $data['url'],
-            'username_panel' => $data['username_panel'],
-            'password_panel' => $data['password_panel'],
+            'url_panel' => htmlspecialchars_decode((string) $data['url'], ENT_QUOTES),
+            'username_panel' => htmlspecialchars_decode((string) $data['username_panel'], ENT_QUOTES),
+            'password_panel' => htmlspecialchars_decode((string) $data['password_panel'], ENT_QUOTES),
             'status' => empty($data['status']) ? "active" : $data['status'],
             'agent' => empty($data['agent']) ? "all" : $data['agent'],
             'sublink' => empty($data['sublink']) ? "onsublink" : $data['sublink'],
@@ -169,7 +169,7 @@ function panel_panel_add(array $data, string $method): void
             'limit_panel' => empty($data['limit_panel']) ? "unlimted" : $data['limit_panel'],
             'namecustom' => empty($data['namecustom']) ? "vpn" : $data['namecustom'],
             'conecton' => "offconecton",
-            'linksubx' => empty($data['linksubx']) ? null : $data['linksubx'],
+            'linksubx' => empty($data['linksubx']) ? null : htmlspecialchars_decode((string) $data['linksubx'], ENT_QUOTES),
             'inboundid' => empty($data['inboundid']) ? "1" : $data['inboundid'],
             'inboundstatus' => "offinbounddisable",
             'inbound_deactive' => "0",
@@ -253,6 +253,12 @@ function panel_panel_edit(array $data, string $method): void
 
         if ($panelData === []) {
             sendJsonResponse(false, "nothing to update", [], 200);
+        }
+
+        foreach (['url_panel', 'username_panel', 'password_panel', 'linksubx'] as $rawColumn) {
+            if (isset($panelData[$rawColumn]) && is_string($panelData[$rawColumn])) {
+                $panelData[$rawColumn] = htmlspecialchars_decode($panelData[$rawColumn], ENT_QUOTES);
+            }
         }
 
         // Credential changes invalidate the cached panel session.

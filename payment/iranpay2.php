@@ -58,8 +58,16 @@ if ($Payment_report['payment_Status'] != "paid" && $authority) {
 
     if ((($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) && $isVerifiedForThisOrder) {
         echo json_encode(array("status" => true));
+        if (!claimPaymentPaid($Payment_report['id_order']))
+            return;
         $textbotlang = languagechange();
-        DirectPayment($data_order_id, "../images.jpg");
+        try {
+            DirectPayment($data_order_id, "../images.jpg");
+        } catch (Throwable $directPaymentError) {
+            releasePaymentPaid($Payment_report['id_order']);
+            error_log("DirectPayment failed for order {$data_order_id}: " . $directPaymentError->getMessage());
+            return;
+        }
         $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackiranpay2", "select")['ValuePay'];
         $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
         if ($pricecashback != "0") {
@@ -72,11 +80,6 @@ if ($Payment_report['payment_Status'] != "paid" && $authority) {
         }
         $paymentreports = select("topicid", "idreport", "report", "paymentreport", "select")['idreport'];
         $text_reportpayment = sprintf($textbotlang['paymentGateway']['reportTronado'], $Balance_id['username'], $Balance_id['id'], $price);
-        $Status_change = "paid";
-        $statement = $pdo->prepare("UPDATE Payment_report SET payment_Status = :payment_Status WHERE id_order = :id_order");
-        $statement->bindValue(':payment_Status', $Status_change);
-        $statement->bindValue(':id_order', $Payment_report['id_order']);
-        $statement->execute();
         $database = json_encode($response);
         $statement = $pdo->prepare("UPDATE Payment_report SET dec_not_confirmed = :dec_not_confirmed WHERE id_order = :id_order");
         $statement->bindValue(':dec_not_confirmed', $database);

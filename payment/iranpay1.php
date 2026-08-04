@@ -58,9 +58,15 @@ if ($StatusPayment == 100) {
         $payment_status = $textbotlang['paymentGateway']['statusSuccess'];
         $dec_payment_status = $textbotlang['paymentGateway']['descThanks'];
         $Payment_report = select("Payment_report", "*", "id_order", $invoice_id, "select");
-        if ($Payment_report['payment_Status'] != "paid") {
+        if (claimPaymentPaid($invoice_id)) {
             $textbotlang = languagechange();
-            DirectPayment($invoice_id, "../images.jpg");
+            try {
+                DirectPayment($invoice_id, "../images.jpg");
+            } catch (Throwable $directPaymentError) {
+                releasePaymentPaid($invoice_id);
+                error_log("DirectPayment failed for order {$invoice_id}: " . $directPaymentError->getMessage());
+                return;
+            }
             $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackiranpay1", "select")['ValuePay'];
             $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
             if ($pricecashback != "0") {
@@ -71,7 +77,6 @@ if ($StatusPayment == 100) {
                 $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result);
                 sendmessage($Balance_id['id'], $text_report, null, 'HTML');
             }
-            update("Payment_report", "payment_Status", "paid", "id_order", $Payment_report['id_order']);
             $paymentreports = select("topicid", "idreport", "report", "paymentreport", "select")['idreport'];
             $price = number_format($price);
             $text_report = sprintf($textbotlang['paymentGateway']['reportIranpay'], $Payment_report['id_user'], $Balance_id['username'], $price);

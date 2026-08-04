@@ -792,8 +792,42 @@ function mini_purchase(array $data, string $method): void
     $user_info = $usercheck;
     if (empty($data['custom_service'])) {
         $product = select("product", "*", "code_product", $data['service_id'] ?? '', "select");
+        if (!empty($product)) {
+            $productLocation = $product['Location'] ?? '';
+            $allowedLocation = ($productLocation === $panel['name_panel'] || $productLocation === '/all');
+            $hide_panel = json_decode($product['hide_panel'] ?? '', true);
+            if (!is_array($hide_panel)) {
+                $hide_panel = [];
+            }
+            $blocked = !$allowedLocation
+                || ($product['agent'] ?? null) !== $user_info['agent']
+                || in_array($panel['name_panel'], $hide_panel);
+            if (!$blocked && ($product['one_buy_status'] ?? null) == "1") {
+                $stmtOneBuy = $pdo->prepare("SELECT COUNT(*) FROM invoice WHERE Status != 'Unpaid' AND id_user = :uid");
+                $stmtOneBuy->execute([':uid' => $user_info['id']]);
+                if ((int) $stmtOneBuy->fetchColumn() != 0) {
+                    $blocked = true;
+                }
+            }
+            if ($blocked) {
+                http_response_code(403);
+                echo json_encode(array(
+                    'status' => false,
+                    'msg' => $textbotlang['users']['sell']['productNotFound']
+                ));
+                return;
+            }
+        }
     } else {
         $agentKey = $user_info['agent'];
+        if (intval(panelAgentValue($panel['customvolume'], $agentKey)) !== 1 || $panel['type'] == "Manualsale") {
+            http_response_code(403);
+            echo json_encode(array(
+                'status' => false,
+                'msg' => $textbotlang['users']['sell']['invalidVolumeRestart']
+            ));
+            return;
+        }
         $mainvolume = panelAgentValue($panel['mainvolume'], $agentKey);
         $maxvolume = panelAgentValue($panel['maxvolume'], $agentKey);
         $maintime = panelAgentValue($panel['maintime'], $agentKey);
@@ -832,6 +866,14 @@ function mini_purchase(array $data, string $method): void
             echo json_encode(array(
                 'status' => false,
                 'msg' => $textbotlang['users']['sell']['invalidTimeRestart']
+            ));
+            return;
+        }
+        if ($product['price_product'] <= 0) {
+            http_response_code(403);
+            echo json_encode(array(
+                'status' => false,
+                'msg' => $textbotlang['users']['sell']['invalidVolumeRestart']
             ));
             return;
         }

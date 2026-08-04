@@ -59,9 +59,15 @@ $response = json_decode($response,true);
     $payment_status = $textbotlang['paymentGateway']['statusSuccess'];
     $dec_payment_status = $textbotlang['paymentGateway']['descThanks'];
     $Payment_report = select("Payment_report", "*", "id_order", $invoice_id,"select");
-    if($Payment_report['payment_Status'] != "paid"){
+    if(claimPaymentPaid($invoice_id)){
     $textbotlang = languagechange();
-    DirectPayment($invoice_id,"../images.jpg");
+    try {
+        DirectPayment($invoice_id,"../images.jpg");
+    } catch (Throwable $directPaymentError) {
+        releasePaymentPaid($invoice_id);
+        error_log("DirectPayment failed for order {$invoice_id}: " . $directPaymentError->getMessage());
+        return;
+    }
     $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackzarinpal","select")['ValuePay'];
     $Balance_id = select("user","*","id",$Payment_report['id_user'],"select");
     if($pricecashback != "0"){
@@ -72,7 +78,6 @@ $response = json_decode($response,true);
         $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result);
         sendmessage($Balance_id['id'], $text_report, null, 'HTML');
     }
-    update("Payment_report","payment_Status","paid","id_order",$Payment_report['id_order']);
     $paymentreports = select("topicid","idreport","report","paymentreport","select")['idreport'];
     $refcode = $response['data']['ref_id'];
     $cart_number = $response['data']['card_pan'];

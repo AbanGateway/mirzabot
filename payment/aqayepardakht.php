@@ -49,9 +49,15 @@ if ($result->code == "1") {
     $price = $Payment_report;
     $dec_payment_status = $textbotlang['paymentGateway']['descThanks'];
     $Payment_report = select("Payment_report", "*", "id_order", $invoice_id,"select");
-    if($Payment_report['payment_Status'] != "paid"){
+    if(claimPaymentPaid($invoice_id)){
     $textbotlang = languagechange();
-    DirectPayment($invoice_id,"../images.jpg");
+    try {
+        DirectPayment($invoice_id,"../images.jpg");
+    } catch (Throwable $directPaymentError) {
+        releasePaymentPaid($invoice_id);
+        error_log("DirectPayment failed for order {$invoice_id}: " . $directPaymentError->getMessage());
+        return;
+    }
     $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackaqaypardokht","select")['ValuePay'];
     $__q16 = $pdo->prepare("SELECT * FROM user WHERE id = ? LIMIT 1");
     $__q16->bindValue(1, $Payment_report['id_user'], PDO::PARAM_STR);
@@ -65,7 +71,6 @@ if ($result->code == "1") {
         $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result);
         sendmessage($Balance_id['id'], $text_report, null, 'HTML');
     }
-    update("Payment_report","payment_Status","paid","id_order",$Payment_report['id_order']);
     $paymentreports = select("topicid","idreport","report","paymentreport","select")['idreport'];
 
 $text_report = sprintf($textbotlang['paymentGateway']['reportAqayepardakht'], $Payment_report['id_user'], $Balance_id['username'], $price);

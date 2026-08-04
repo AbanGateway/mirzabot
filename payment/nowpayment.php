@@ -18,9 +18,15 @@ if (isset($data['payment_status']) && $data['payment_status'] == "finished") {
         return;
     $Payment_report = select("Payment_report", "*", "dec_not_confirmed", $pay['invoice_id'], "select");
     if ($Payment_report) {
-        if ($Payment_report['payment_Status'] == "paid")
+        if (!claimPaymentPaid($Payment_report['id_order']))
             return;
-        DirectPayment($Payment_report['id_order'], "../images.jpg");
+        try {
+            DirectPayment($Payment_report['id_order'], "../images.jpg");
+        } catch (Throwable $directPaymentError) {
+            releasePaymentPaid($Payment_report['id_order']);
+            error_log("DirectPayment failed for order {$Payment_report['id_order']}: " . $directPaymentError->getMessage());
+            return;
+        }
         $pricecashback = select("PaySetting", "ValuePay", "NamePay", "cashbacknowpayment", "select")['ValuePay'];
         $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
         if ($pricecashback != "0") {
@@ -40,6 +46,5 @@ if (isset($data['payment_status']) && $data['payment_status'] == "finished") {
                 'parse_mode' => "HTML"
             ]);
         }
-        update("Payment_report", "payment_Status", "paid", "id_order", $Payment_report['id_order']);
     }
 }

@@ -473,6 +473,8 @@ function select($table, $field, $whereField = null, $whereValue = null, $type = 
         $query .= " LIMIT 1";
     }
 
+    $result = null;
+    $queryFailed = false;
     try {
         $stmt = $pdo->prepare($query);
         if ($whereField !== null) {
@@ -506,10 +508,11 @@ function select($table, $field, $whereField = null, $whereValue = null, $type = 
             $result = $fetched === false ? null : $fetched;
         }
     } catch (PDOException $e) {
+        $queryFailed = true;
         error_log("Query failed: " . $e->getMessage());
     }
 
-    if ($useCache && $cacheKey !== null) {
+    if (!$queryFailed && $useCache && $cacheKey !== null) {
         $store = &getSelectCacheStore();
         $store['results'][$cacheKey] = $result;
         if (!isset($store['tableIndex'][$table])) {
@@ -778,6 +781,27 @@ function outputlink($text)
         return $response;
     }
 }
+
+function claimPaymentPaid($order_id)
+{
+    global $pdo;
+    $stmt = $pdo->prepare("UPDATE Payment_report SET payment_Status = 'paid' WHERE id_order = :id_order AND payment_Status <> 'paid'");
+    $stmt->bindValue(':id_order', $order_id);
+    $stmt->execute();
+    clearSelectCache('Payment_report');
+    return $stmt->rowCount() >= 1;
+}
+
+function releasePaymentPaid($order_id, $status = 'Unpaid')
+{
+    global $pdo;
+    $stmt = $pdo->prepare("UPDATE Payment_report SET payment_Status = :status WHERE id_order = :id_order AND payment_Status = 'paid'");
+    $stmt->bindValue(':status', $status);
+    $stmt->bindValue(':id_order', $order_id);
+    $stmt->execute();
+    clearSelectCache('Payment_report');
+}
+
 function DirectPayment($order_id, $image = 'images.jpg')
 {
     global $pdo, $ManagePanel, $textbotlang, $keyboardextendfnished, $keyboard, $Confirm_pay, $from_id, $message_id;
@@ -882,7 +906,7 @@ function DirectPayment($order_id, $image = 'images.jpg')
             update("invoice", "user_info", $dataoutput['subscription_url'], "id_invoice", $get_invoice['id_invoice']);
         }
         sendMessageService($marzban_list_get, $dataoutput['configs'], $output_config_link, $dataoutput['username'], $Shoppinginfo, $textcreatuser, $get_invoice['id_invoice'], $get_invoice['id_user'], $image);
-        $partsdic = explode("_", $Balance_id['Processing_value_four'], $get_invoice['id_user']);
+        $partsdic = explode("_", $Balance_id['Processing_value_four']);
         if ($partsdic[0] == "dis") {
             $SellDiscountlimit = select("DiscountSell", "*", "codeDiscount", $partsdic[1], "select");
             $value = intval($SellDiscountlimit['usedDiscount']) + 1;
@@ -1099,7 +1123,7 @@ function DirectPayment($order_id, $image = 'images.jpg')
         if ($Balance_id['agent'] == "f") {
             $valurcashbackextend = select("shopSetting", "*", "Namevalue", "chashbackextend", "select")['value'];
         } else {
-            $valurcashbackextend = json_decode(select("shopSetting", "*", "Namevalue", "chashbackextend_agent", "select")['value'], true)[$Balance_id['agenr']];
+            $valurcashbackextend = json_decode(select("shopSetting", "*", "Namevalue", "chashbackextend_agent", "select")['value'], true)[$Balance_id['agent']];
         }
         if (intval($valurcashbackextend) != 0) {
             $result = ($prodcut['price_product'] * $valurcashbackextend) / 100;
@@ -1172,7 +1196,8 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $stmt->bindParam(':type', $type);
         $stmt->bindParam(':time', $dateacc);
         $stmt->bindParam(':price', $Payment_report['price']);
-        $stmt->bindParam(':output', json_encode($extra_volume));
+        $extra_volume_output = json_encode($extra_volume);
+        $stmt->bindParam(':output', $extra_volume_output);
         $stmt->execute();
         $keyboardextrafnished = json_encode([
             'inline_keyboard' => [
@@ -1247,7 +1272,8 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $stmt->bindParam(':type', $type);
         $stmt->bindParam(':time', $dateacc);
         $stmt->bindParam(':price', $Payment_report['price']);
-        $stmt->bindParam(':output', json_encode($extra_time));
+        $extra_time_output = json_encode($extra_time);
+        $stmt->bindParam(':output', $extra_time_output);
         $stmt->execute();
         $keyboardextrafnished = json_encode([
             'inline_keyboard' => [
@@ -1837,7 +1863,7 @@ function sendMessageService($panel_info, $config, $sub_link, $username_service, 
     if (!check_active_btn($setting['keyboardmain'], "text_help"))
         $reply_markup = null;
     $user_id = $user_id == null ? $from_id : $user_id;
-    $STATUS_SEND_MESSAGE_PHOTO = $panel_info['config'] == "onconfig" && count($config) != 1 ? false : true;
+    $STATUS_SEND_MESSAGE_PHOTO = $panel_info['config'] == "onconfig" && (is_array($config) ? count($config) : 0) != 1 ? false : true;
     $out_put_qrcode = "";
     if ($panel_info['type'] == "Manualsale" || $panel_info['type'] == "ibsng" || $panel_info['type'] == "mikrotik") {
     }
