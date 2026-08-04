@@ -1145,12 +1145,13 @@ elseif ($datain == "systemsms") {
             } elseif ($typeusermessage == "customer") {
                 if ($userdata['selectpanel'] == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
+                    $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
                 } else {
                     $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE  u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :location) AND u.User_Status = 'Active'");
+                    $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
+                    $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
                 }
-                $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
-                $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
                 $stmt->execute();
                 $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "nonecustomer") {
@@ -1195,12 +1196,13 @@ elseif ($datain == "systemsms") {
             } elseif ($typeusermessage == "customer") {
                 if ($userdata['selectpanel'] == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
+                    $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
                 } else {
                     $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :location) AND u.User_Status = 'Active'");
+                    $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
+                    $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
                 }
-                $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
-                $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
                 $stmt->execute();
                 $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "nonecustomer") {
