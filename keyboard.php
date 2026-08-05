@@ -195,6 +195,7 @@ $trnado = json_encode([
     'keyboard' => [
         [['text' => $textbotlang['keyboard']['apiT']]],
         [['text' => $textbotlang['keyboard']['cashbackIranPay2']]],
+        [['text' => $textbotlang['keyboard']['feeStatusIranPay2']], ['text' => $textbotlang['keyboard']['feeAmountIranPay2']]],
         [['text' => $textbotlang['keyboard']['minAmountIranPay2']], ['text' => $textbotlang['keyboard']['maxAmountIranPay2']]],
         [['text' => $textbotlang['keyboard']['setEducationIranPay2']]],
         [['text' => $textbotlang['Admin']['backAdminBtn']], ['text' => $textbotlang['Admin']['backMenuBtn']]]

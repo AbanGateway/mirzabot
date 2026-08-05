@@ -7198,6 +7198,43 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     sendmessage($from_id, $textbotlang['Admin']['price']['priceSaved'], $CartManage, 'HTML');
     step("home", $from_id);
     update("PaySetting", "ValuePay", $text, "NamePay", "chashbackaqaypardokht");
+} elseif ($text == $textbotlang['keyboard']['feeStatusIranPay2'] && $adminrulecheck['rule'] == "administrator") {
+    // Toggle passing the CubePay fee on to the customer.
+    $feeStatusNow = select("PaySetting", "ValuePay", "NamePay", "feestatusternado", "select")['ValuePay'] ?? 'offfeeternado';
+    $feeStatusNew = ($feeStatusNow === 'onfeeternado') ? 'offfeeternado' : 'onfeeternado';
+    update("PaySetting", "ValuePay", $feeStatusNew, "NamePay", "feestatusternado");
+    if ($feeStatusNew === 'onfeeternado') {
+        $feeValueNow = (float) str_replace([',', '،'], '', (string) (select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0'));
+        $feeDescNow = $feeValueNow <= 100
+            ? $feeValueNow . '%'
+            : number_format($feeValueNow) . ' T';
+        sendmessage($from_id, sprintf($textbotlang['Admin']['gateway']['cubepayFeeOn'], $feeDescNow), $trnado, 'HTML');
+    } else {
+        sendmessage($from_id, $textbotlang['Admin']['gateway']['cubepayFeeOff'], $trnado, 'HTML');
+    }
+} elseif ($text == $textbotlang['keyboard']['feeAmountIranPay2'] && $adminrulecheck['rule'] == "administrator") {
+    $feeValueNow = select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0';
+    sendmessage($from_id, sprintf($textbotlang['Admin']['gateway']['cubepayFeeAsk'], $feeValueNow), $backadmin, 'HTML');
+    step("getfeeiranpay2", $from_id);
+} elseif ($user['step'] == "getfeeiranpay2") {
+    // Persian digits and separators are accepted so the value can be typed
+    // the same way as the other amount fields in this panel.
+    $feeInput = strtr(trim($text), ['۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4', '۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9', '٫' => '.', ',' => '', '،' => '']);
+    if (!is_numeric($feeInput) || (float) $feeInput < 0) {
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
+        return;
+    }
+    $feeValue = (float) $feeInput;
+    update("PaySetting", "ValuePay", (string) $feeValue, "NamePay", "feeternado");
+    // Echo back how the value was read, with a worked example, so a wrong
+    // entry (percentage vs fixed amount) is obvious right away.
+    if ($feeValue <= 100) {
+        $feeSavedText = sprintf($textbotlang['Admin']['gateway']['cubepayFeeSavedPercent'], $feeValue, number_format((int) ceil(100000 * (1 + $feeValue / 100))));
+    } else {
+        $feeSavedText = sprintf($textbotlang['Admin']['gateway']['cubepayFeeSavedFixed'], number_format($feeValue), number_format(100000 + (int) round($feeValue)));
+    }
+    sendmessage($from_id, $feeSavedText, $trnado, 'HTML');
+    step("home", $from_id);
 } elseif ($text == $textbotlang['keyboard']['cashbackIranPay2']) {
     sendmessage($from_id, $textbotlang['Admin']['price']['askPaymentCashback'], $backadmin, 'HTML');
     step("getcashiranpay2", $from_id);

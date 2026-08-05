@@ -679,11 +679,39 @@ function isValidDate($date)
 {
     return (strtotime($date) != false);
 }
+/**
+ * Amount the customer actually has to pay for a CubePay order (toman).
+ *
+ * The admin can pass the gateway fee on to the customer with a single value:
+ *   0 - 100    => a percentage added on top of the order (decimals allowed)
+ *   above 100  => a fixed amount in toman
+ * With the toggle off (or a value of 0) the base price is returned unchanged,
+ * so behaviour for existing installs does not change.
+ *
+ * Only the invoice sent to the gateway grows; the user's balance is still
+ * topped up with the amount they asked for.
+ */
+function cubepayPayableAmount($price)
+{
+    $base = intval($price);
+    $status = select("PaySetting", "ValuePay", "NamePay", "feestatusternado", "select")['ValuePay'] ?? 'offfeeternado';
+    if ($status !== 'onfeeternado') {
+        return $base;
+    }
+    $fee = (float) str_replace([',', '،'], '', (string) (select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0'));
+    if ($fee <= 0) {
+        return $base;
+    }
+
+    return $fee <= 100
+        ? (int) ceil($base * (1 + $fee / 100))
+        : $base + (int) round($fee);
+}
 function trnado($order_id, $price)
 {
     global $domainhosts;
     $token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
-    $amount_rial = intval($price) * 10;
+    $amount_rial = cubepayPayableAmount($price) * 10;
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://cubevps.ir/smspay/api/create-payment.php',

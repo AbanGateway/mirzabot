@@ -699,6 +699,8 @@ try {
         ['walletaddress', '0'],
         ['statustarnado', 'offternado'],
         ['apiternado', '0'],
+        ['feestatusternado', 'offfeeternado'],
+        ['feeternado', '0'],
         ['chashbackcart', '0'],
         ['chashbackstar', '0'],
         ['chashbackperfect', '0'],

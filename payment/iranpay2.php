@@ -50,11 +50,15 @@ if ($Payment_report['payment_Status'] != "paid" && $authority) {
     curl_close($ch);
     $response = json_decode($result, true);
 
+    // When the admin passes the gateway fee on to the customer, the invoice is
+    // larger than the order price, so an exact match would reject a valid
+    // payment. Underpayment is still refused; paying at least the order price
+    // is what matters here.
     $amount_rial = intval($price) * 10;
     $isVerifiedForThisOrder = is_array($response)
         && isset($response['order_id'], $response['amount'])
         && (string) $response['order_id'] === (string) $data_order_id
-        && intval($response['amount']) === $amount_rial;
+        && intval($response['amount']) >= $amount_rial;
 
     if ((($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) && $isVerifiedForThisOrder) {
         echo json_encode(array("status" => true));
