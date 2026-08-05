@@ -27,6 +27,16 @@ $data_order_id = $jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? '');
 $authority = htmlspecialchars($authority, ENT_QUOTES, 'UTF-8');
 $data_order_id = htmlspecialchars($data_order_id, ENT_QUOTES, 'UTF-8');
 
+// A crypto or VIP payment reports back without an authority: it sends
+// order_id + status + amount plus an HMAC signature instead. These values are
+// kept raw on purpose - the signature was computed over the exact strings that
+// were sent, so escaping them first would never match.
+$callback_sig = (string) ($jsonInput['sig'] ?? ($_REQUEST['sig'] ?? ''));
+$callback_status = (string) ($jsonInput['status'] ?? ($_REQUEST['status'] ?? ''));
+$callback_amount = (string) ($jsonInput['amount'] ?? $jsonInput['amount_toman'] ?? ($_REQUEST['amount'] ?? ($_REQUEST['amount_toman'] ?? '')));
+$callback_order_id = (string) ($jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? ''));
+$isSignedCallback = ($callback_sig !== '' && $callback_order_id !== '');
+
 $Payment_report = select("Payment_report", "*", "id_order", $data_order_id, "select");
 if (!$Payment_report)
     return;
@@ -35,32 +45,61 @@ if ($Payment_report['payment_Status'] == "expire")
     return;
 $setting = select("setting", "*", null, null, "select");
 $price = $Payment_report['price'];
-if ($Payment_report['payment_Status'] != "paid" && $authority) {
-    $ch = curl_init('https://cubevps.ir/smspay/api/verify-payment.php');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['authority' => $authority]));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . $token_cubepay
-    ));
-    $result = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    $response = json_decode($result, true);
+if ($Payment_report['payment_Status'] != "paid" && ($authority || $isSignedCallback)) {
+    if ($isSignedCallback) {
+        // Crypto / VIP: the signature is the proof, so there is nothing to call
+        // back to. It is built over "order_id|status|amount" with the same
+        // gateway token this bot already stores, and the amount is in toman.
+        $expected_sig = hash_hmac(
+            'sha256',
+            $callback_order_id . '|' . $callback_status . '|' . $callback_amount,
+            (string) $token_cubepay
+        );
+        $signatureValid = hash_equals($expected_sig, $callback_sig);
+        $isVerifiedForThisOrder = $signatureValid
+            && $callback_status === 'paid'
+            && (string) $callback_order_id === (string) $data_order_id
+            && (float) $callback_amount >= (float) $price;
+        $paymentAccepted = $isVerifiedForThisOrder;
+        $response = [
+            'order_id' => $callback_order_id,
+            'status' => $callback_status,
+            'amount_toman' => $callback_amount,
+            'verified_by' => 'signature',
+        ];
+        if (!$signatureValid) {
+            error_log("CubePay: invalid callback signature for order {$data_order_id}");
+        }
+    } else {
+        $ch = curl_init('https://cubevps.ir/smspay/api/verify-payment.php');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['authority' => $authority]));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token_cubepay
+        ));
+        $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        $response = json_decode($result, true);
 
-    // When the admin passes the gateway fee on to the customer, the invoice is
-    // larger than the order price, so an exact match would reject a valid
-    // payment. Underpayment is still refused; paying at least the order price
-    // is what matters here.
-    $amount_rial = intval($price) * 10;
-    $isVerifiedForThisOrder = is_array($response)
-        && isset($response['order_id'], $response['amount'])
-        && (string) $response['order_id'] === (string) $data_order_id
-        && intval($response['amount']) >= $amount_rial;
+        // When the admin passes the gateway fee on to the customer, the invoice is
+        // larger than the order price, so an exact match would reject a valid
+        // payment. Underpayment is still refused; paying at least the order price
+        // is what matters here.
+        $amount_rial = intval($price) * 10;
+        $isVerifiedForThisOrder = is_array($response)
+            && isset($response['order_id'], $response['amount'])
+            && (string) $response['order_id'] === (string) $data_order_id
+            && intval($response['amount']) >= $amount_rial;
 
-    if ((($httpCode == 200 && !empty($response['success'])) || $httpCode == 409) && $isVerifiedForThisOrder) {
+        $paymentAccepted = (($httpCode == 200 && !empty($response['success'])) || $httpCode == 409)
+            && $isVerifiedForThisOrder;
+    }
+
+    if ($paymentAccepted) {
         echo json_encode(array("status" => true));
         if (!claimPaymentPaid($Payment_report['id_order']))
             return;
