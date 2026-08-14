@@ -1911,10 +1911,12 @@ elseif ($datain == "systemsms") {
                     $currentCronJobs = runShellCommand(sprintf('%s -l 2>/dev/null', escapeshellarg($crontabBinary)));
                     $jobToRemove = "*/1 * * * * curl https://$domainhosts/cronbot/lottery.php";
                     $newCronJobs = preg_replace('/' . preg_quote($jobToRemove, '/') . '/', '', (string) $currentCronJobs);
-                    $tempCronFile = '/tmp/crontab.txt';
-                    file_put_contents($tempCronFile, trim($newCronJobs) . PHP_EOL);
-                    runShellCommand(sprintf('%s %s', escapeshellarg($crontabBinary), escapeshellarg($tempCronFile)));
-                    if (file_exists($tempCronFile)) {
+                    $tempCronFile = tempnam(sys_get_temp_dir(), 'cron');
+                    if ($tempCronFile === false) {
+                        error_log('Unable to create temporary file for lottery cron job removal.');
+                    } else {
+                        file_put_contents($tempCronFile, trim((string) $newCronJobs) . PHP_EOL);
+                        runShellCommand(sprintf('%s %s', escapeshellarg($crontabBinary), escapeshellarg($tempCronFile)));
                         unlink($tempCronFile);
                     }
                 }

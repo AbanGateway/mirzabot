@@ -76,7 +76,8 @@ _step_eta() {
 # Plan the run: count pending steps + total expected time (skips done phases).
 plan_eta() {
     STEP_TOTAL=0; ETA_REMAINING=0; STEP_NO=0
-    phase_done DEPS    || { STEP_TOTAL=$((STEP_TOTAL + 13)); ETA_REMAINING=$((ETA_REMAINING + 398)); }
+    phase_done DEPS    || { STEP_TOTAL=$((STEP_TOTAL + 12)); ETA_REMAINING=$((ETA_REMAINING + 388)); }
+    STEP_TOTAL=$((STEP_TOTAL + 1)); ETA_REMAINING=$((ETA_REMAINING + 10));
     phase_done FILES   || { STEP_TOTAL=$((STEP_TOTAL + 3));  ETA_REMAINING=$((ETA_REMAINING + 85)); }
     phase_done DBROOT  || { STEP_TOTAL=$((STEP_TOTAL + 1));  ETA_REMAINING=$((ETA_REMAINING + 10)); }
     if ! phase_done SSL; then
@@ -601,16 +602,73 @@ _pkg_installed_glob() {
     dpkg-query -W -f='${Package} ${Status}\n' "$1" 2>/dev/null | grep -q 'install ok installed'
 }
 
-ensure_cron() {
-    if ! command -v crontab >/dev/null 2>&1 \
-        || ! dpkg-query -W -f='${Status}' cron 2>/dev/null | grep -q 'install ok installed'; then
-        apt-get install -y cron || return 1
-    fi
-    systemctl enable cron >/dev/null 2>&1 || true
-    systemctl start cron 2>/dev/null || service cron start 2>/dev/null || true
-    command -v crontab >/dev/null 2>&1
+_crontab_present() {
+    command -v crontab >/dev/null 2>&1 || [ -x /usr/bin/crontab ] || [ -x /usr/sbin/crontab ]
 }
-export -f ensure_cron
+
+_cron_unit_name() {
+    if [ -f /lib/systemd/system/cron.service ] || [ -f /usr/lib/systemd/system/cron.service ]; then
+        echo cron
+    elif [ -f /lib/systemd/system/crond.service ] || [ -f /usr/lib/systemd/system/crond.service ]; then
+        echo crond
+    fi
+}
+
+_cron_daemon_active() {
+    local unit
+    unit="$(_cron_unit_name)"
+    if [ -n "$unit" ] && systemctl is-active --quiet "$unit" 2>/dev/null; then
+        return 0
+    fi
+    pgrep -x cron >/dev/null 2>&1 || pgrep -x crond >/dev/null 2>&1
+}
+
+# Install cron when crontab/daemon is missing, then enable + start it and
+# allow www-data to register jobs (PHP activecron() uses crontab as www-data).
+ensure_cron() {
+    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin${PATH:+:$PATH}"
+    hash -r 2>/dev/null || true
+
+    if ! _crontab_present; then
+        DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cron \
+            || DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cronie \
+            || return 1
+        hash -r 2>/dev/null || true
+        systemctl daemon-reload 2>/dev/null || true
+    elif ! _cron_daemon_active; then
+        if ! dpkg-query -W -f='${Status}' cron 2>/dev/null | grep -q 'install ok installed' \
+            && ! dpkg-query -W -f='${Status}' cronie 2>/dev/null | grep -q 'install ok installed'; then
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cron \
+                || DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cronie \
+                || return 1
+            hash -r 2>/dev/null || true
+            systemctl daemon-reload 2>/dev/null || true
+        fi
+    fi
+
+    if [ -f /etc/cron.allow ]; then
+        grep -qx 'www-data' /etc/cron.allow 2>/dev/null || echo 'www-data' >> /etc/cron.allow
+    fi
+
+    local unit
+    unit="$(_cron_unit_name)"
+    if [ -n "$unit" ]; then
+        systemctl unmask "$unit" >/dev/null 2>&1 || true
+        systemctl enable "$unit" >/dev/null 2>&1 || true
+        systemctl start "$unit" || return 1
+        if ! systemctl is-active --quiet "$unit"; then
+            sleep 1
+            systemctl start "$unit" || return 1
+            systemctl is-active --quiet "$unit" || return 1
+        fi
+    else
+        service cron start 2>/dev/null || service crond start 2>/dev/null || true
+        _cron_daemon_active || return 1
+    fi
+
+    _crontab_present || return 1
+}
+export -f _crontab_present _cron_unit_name _cron_daemon_active ensure_cron
 
 # Refuse to install on a server that already has conflicting software.
 # Only runs on a brand-new install (never on resume / Mirza's own partial state).
@@ -1653,9 +1711,6 @@ function install_bot() {
             "apt-get install -y software-properties-common git unzip curl wget jq" \
             || { show_step_error; install_pause "Installing base tools"; }
 
-        run_step "Ensuring cron is installed and running" "ensure_cron" \
-            || { show_step_error; install_pause "Installing cron"; }
-
         PHP_VER="$(resolve_php_ver)"; [ -z "$PHP_VER" ] && PHP_VER="8.2"
         state_set PHP_VER "$PHP_VER"
         echo -e "  ${C_DIM}Selected PHP version:${CR} ${C_KEY}${PHP_VER}${CR}"
@@ -1664,12 +1719,8 @@ function install_bot() {
             "DEBIAN_FRONTEND=noninteractive apt install -y php${PHP_VER} php${PHP_VER}-cli php${PHP_VER}-fpm php${PHP_VER}-mysql" \
             || { show_step_error; install_pause "Installing PHP ${PHP_VER}"; }
 
-        # Versioned packages only: unversioned (php-*, lamp-server^) would pull the
-        # newest PHP available as default and break the bot's mysqli/curl.
         WEBSTACK_CMD="DEBIAN_FRONTEND=noninteractive apt install -y mysql-server apache2 libapache2-mod-php${PHP_VER} php${PHP_VER}-mbstring php${PHP_VER}-zip php${PHP_VER}-gd php${PHP_VER}-curl php${PHP_VER}-intl php${PHP_VER}-xml php${PHP_VER}-bcmath"
         if ! run_step "Installing web stack (Apache, MySQL, PHP modules)" "$WEBSTACK_CMD"; then
-            # Most common cause: a broken/half-configured MySQL from an interrupted run.
-            # Safe to repair here because the fresh-server check ran and no DB exists yet.
             run_step "Repairing broken MySQL installation" "repair_mysql" \
                 || { show_step_error; install_pause "Repairing MySQL"; }
             run_step "Re-installing web stack" "$WEBSTACK_CMD" \
@@ -1719,6 +1770,9 @@ function install_bot() {
     else
         echo -e "  ${C_OK}●${CR} ${C_DIM}Dependencies already installed - skipping.${CR}"
     fi
+
+    run_step "Ensuring cron is installed and running" "ensure_cron" \
+        || { show_step_error; install_pause "Installing cron"; }
     # ╰─────────────────────────────────────────────────────────────╯
 
     # ╭──────────────────────── PHASE: FILES ───────────────────────╮
@@ -2316,6 +2370,15 @@ function remove_bot() {
         exit 0
     fi
     echo "Removing Mirza Bot..." | tee -a "$LOG_FILE"
+    if command -v crontab >/dev/null 2>&1 || [ -x /usr/bin/crontab ]; then
+        local _cb
+        _cb="$(command -v crontab || echo /usr/bin/crontab)"
+        if id www-data >/dev/null 2>&1; then
+            "$_cb" -u www-data -l 2>/dev/null | grep -v '/cronbot/' | "$_cb" -u www-data - 2>/dev/null || true
+        fi
+        "$_cb" -l 2>/dev/null | grep -v '/cronbot/' | "$_cb" - 2>/dev/null || true
+        echo -e "\e[92mRemoved Mirza cron jobs.\033[0m" | tee -a "$LOG_FILE"
+    fi
     CONFIG_PATH="/var/www/html/mirzaprobotconfig/config.php"
     if [ -f "$CONFIG_PATH" ]; then
         sudo shred -u -n 5 "$CONFIG_PATH" && echo -e "\e[92mConfig file securely removed: $CONFIG_PATH\033[0m" | tee -a "$LOG_FILE" || {
@@ -2591,6 +2654,7 @@ EOF
          "https://api.telegram.org/bot${OLD_API_KEY}/setWebhook"
     sleep 2
     curl -k "https://${DOMAIN_NAME}/table.php" > /dev/null 2>&1
+    ensure_cron || echo -e "\033[33mWarning: cron is not installed or not running.\033[0m"
     sed -i 's/\r$//' /root/install.sh
     chmod +x /root/install.sh
     rm -f /usr/local/bin/mirza

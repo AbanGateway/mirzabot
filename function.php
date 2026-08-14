@@ -83,12 +83,20 @@ function getCrontabBinary()
         }
     }
 
+    $knownPaths = ['/usr/bin/crontab', '/usr/sbin/crontab', '/bin/crontab'];
     if (isShellExecAvailable()) {
         $whichOutput = @shell_exec('command -v crontab 2>/dev/null');
         if (is_string($whichOutput)) {
             $whichOutput = trim($whichOutput);
-            if ($whichOutput !== '' && @is_executable($whichOutput)) {
+            if ($whichOutput !== '') {
                 $resolvedPath = $whichOutput;
+                return $resolvedPath;
+            }
+        }
+        foreach ($knownPaths as $knownPath) {
+            $probe = @shell_exec('test -x ' . escapeshellarg($knownPath) . ' && printf %s ' . escapeshellarg($knownPath));
+            if (is_string($probe) && trim($probe) === $knownPath) {
+                $resolvedPath = $knownPath;
                 return $resolvedPath;
             }
         }
@@ -1538,7 +1546,9 @@ function addCronIfNotExists($cronCommand)
     $existingCronJobs = trim((string) $existingCronJobs);
     $cronLines = $existingCronJobs === '' ? [] : preg_split('/\r?\n/', $existingCronJobs);
     $cronLines = array_values(array_filter(array_map('trim', $cronLines), static function ($line) {
-        return $line !== '' && strpos($line, '#') !== 0;
+        return $line !== ''
+            && strpos($line, '#') !== 0
+            && stripos($line, 'no crontab') === false;
     }));
 
     $newLineAdded = false;
@@ -1568,8 +1578,19 @@ function addCronIfNotExists($cronCommand)
         return false;
     }
 
-    runShellCommand(sprintf('%s %s', escapeshellarg($crontabBinary), escapeshellarg($temporaryFile)));
+    $applyMarker = 'MIRZA_CRON_OK';
+    $applyOutput = runShellCommand(sprintf(
+        '%s %s >/dev/null 2>&1 && echo %s',
+        escapeshellarg($crontabBinary),
+        escapeshellarg($temporaryFile),
+        $applyMarker
+    ));
     unlink($temporaryFile);
+
+    if (strpos((string) $applyOutput, $applyMarker) === false) {
+        error_log('crontab install failed; unable to register cron job(s): ' . $logContext);
+        return false;
+    }
 
     return true;
 }
