@@ -9,3 +9,4 @@ composer.phar
 error_log
 /api/hash.txt
 *.xlsx
+graphify-out

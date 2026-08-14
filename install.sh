@@ -43,6 +43,7 @@ _step_eta() {
         "Adding PHP repository"*|"Retrying PHP repository"*) echo 15 ;;
         "Updating & upgrading"*|"Re-running system update"*) echo 120 ;;
         "Installing base tools"*)            echo 25 ;;
+        "Ensuring cron"*)                    echo 10 ;;
         "Installing PHP dependencies"*)      echo 60 ;;
         "Installing PHP "*)                  echo 30 ;;
         "Installing web stack"*)             echo 90 ;;
@@ -75,7 +76,7 @@ _step_eta() {
 # Plan the run: count pending steps + total expected time (skips done phases).
 plan_eta() {
     STEP_TOTAL=0; ETA_REMAINING=0; STEP_NO=0
-    phase_done DEPS    || { STEP_TOTAL=$((STEP_TOTAL + 12)); ETA_REMAINING=$((ETA_REMAINING + 388)); }
+    phase_done DEPS    || { STEP_TOTAL=$((STEP_TOTAL + 13)); ETA_REMAINING=$((ETA_REMAINING + 398)); }
     phase_done FILES   || { STEP_TOTAL=$((STEP_TOTAL + 3));  ETA_REMAINING=$((ETA_REMAINING + 85)); }
     phase_done DBROOT  || { STEP_TOTAL=$((STEP_TOTAL + 1));  ETA_REMAINING=$((ETA_REMAINING + 10)); }
     if ! phase_done SSL; then
@@ -599,6 +600,17 @@ _pkg_installed() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'inst
 _pkg_installed_glob() {
     dpkg-query -W -f='${Package} ${Status}\n' "$1" 2>/dev/null | grep -q 'install ok installed'
 }
+
+ensure_cron() {
+    if ! command -v crontab >/dev/null 2>&1 \
+        || ! dpkg-query -W -f='${Status}' cron 2>/dev/null | grep -q 'install ok installed'; then
+        apt-get install -y cron || return 1
+    fi
+    systemctl enable cron >/dev/null 2>&1 || true
+    systemctl start cron 2>/dev/null || service cron start 2>/dev/null || true
+    command -v crontab >/dev/null 2>&1
+}
+export -f ensure_cron
 
 # Refuse to install on a server that already has conflicting software.
 # Only runs on a brand-new install (never on resume / Mirza's own partial state).
@@ -1641,6 +1653,9 @@ function install_bot() {
             "apt-get install -y software-properties-common git unzip curl wget jq" \
             || { show_step_error; install_pause "Installing base tools"; }
 
+        run_step "Ensuring cron is installed and running" "ensure_cron" \
+            || { show_step_error; install_pause "Installing cron"; }
+
         PHP_VER="$(resolve_php_ver)"; [ -z "$PHP_VER" ] && PHP_VER="8.2"
         state_set PHP_VER "$PHP_VER"
         echo -e "  ${C_DIM}Selected PHP version:${CR} ${C_KEY}${PHP_VER}${CR}"
@@ -2142,6 +2157,8 @@ function update_bot() {
     print_header "Updating Mirza Bot"
     run_step "Updating system packages" "apt update --allow-releaseinfo-change && apt upgrade -y" \
         || { show_step_error; echo -e "\e[91mError updating the server. Exiting...\033[0m"; exit 1; }
+    run_step "Ensuring cron is installed and running" "ensure_cron" \
+        || { show_step_error; echo -e "\e[91mError: Failed to install or start cron.\033[0m"; exit 1; }
     echo -e "\e[92mServer packages updated successfully...\033[0m\n"
     TEMP_DIR="/tmp/mirzaprobot_update"
     rm -rf "$TEMP_DIR"; mkdir -p "$TEMP_DIR"
