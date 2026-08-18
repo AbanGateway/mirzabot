@@ -1,15 +1,11 @@
 <?php
 require_once 'vendor/autoload.php';
 require 'config.php';
-require 'vendor/autoload.php';
 ini_set('error_log', 'error_log');
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Label\Font\OpenSans;
-use Endroid\QrCode\Label\LabelAlignment;
-use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 
 #-----------shell helper utilities------------#
@@ -800,16 +796,6 @@ function claimPaymentPaid($order_id)
     return $stmt->rowCount() >= 1;
 }
 
-function releasePaymentPaid($order_id, $status = 'Unpaid')
-{
-    global $pdo;
-    $stmt = $pdo->prepare("UPDATE Payment_report SET payment_Status = :status WHERE id_order = :id_order AND payment_Status = 'paid'");
-    $stmt->bindValue(':status', $status);
-    $stmt->bindValue(':id_order', $order_id);
-    $stmt->execute();
-    clearSelectCache('Payment_report');
-}
-
 function DirectPayment($order_id, $image = 'images.jpg')
 {
     global $pdo, $ManagePanel, $textbotlang, $keyboardextendfnished, $keyboard, $Confirm_pay, $from_id, $message_id;
@@ -829,6 +815,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
     clearSelectCache('user');
     if ($steppay[0] == "getconfigafterpay") {
         $get_invoice = select("invoice", "*", "username", $steppay[1], "select");
+        if ($get_invoice['Status'] == "active") {
+            return;
+        }
         $stmt = $pdo->prepare("SELECT * FROM product WHERE name_product = :name_product AND (Location = :Service_location  or Location = '/all')");
         $stmt->bindParam(':name_product', $get_invoice['name_product'], PDO::PARAM_STR);
         $stmt->bindParam(':Service_location', $get_invoice['Service_location'], PDO::PARAM_STR);
@@ -865,6 +854,11 @@ function DirectPayment($order_id, $image = 'images.jpg')
         );
         $dataoutput = $ManagePanel->createUser($marzban_list_get['name_panel'], $info_product['code_product'], $username_ac, $datac);
         if ($dataoutput['username'] == null) {
+            clearSelectCache('invoice');
+            $invoice_now = select("invoice", "*", "id_invoice", $get_invoice['id_invoice'], "select");
+            if ($invoice_now && $invoice_now['Status'] == "active") {
+                return;
+            }
             $dataoutput['msg'] = json_encode($dataoutput['msg']);
             $balance = $Balance_id['Balance'] + $Payment_report['price'];
             update("user", "Balance", $balance, "id", $Balance_id['id']);

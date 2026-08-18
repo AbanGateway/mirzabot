@@ -104,13 +104,6 @@ function sendvideo($chat_id,$videoid,$caption){
         'caption'=> $caption,
     ]);
 }
-function senddocumentsid($chat_id,$documentid,$caption){
-    telegram('sendDocument',[
-        'chat_id' => $chat_id,
-        'document'=> $documentid,
-        'caption'=> $caption,
-    ]);
-}
 function Editmessagetext($chat_id, $message_id, $text, $keyboard,$parse_mode = 'HTML'){
     return telegram('editmessagetext', [
         'chat_id' => $chat_id,
@@ -241,7 +234,6 @@ $from_id = $update['message']['from']['id'] ?? $update['callback_query']['from']
 $time_message = $update['message']['date'] ?? $update['callback_query']['date'] ?? $update["inline_query"]['date'] ?? 0;
 $is_bot = $update['message']['from']['is_bot'] ?? false;
 $chat_member = $update['chat_member'] ?? null;
-$language_code = strtolower($update['message']['from']['language_code'] ?? $update['callback_query']['from']['language_code'] ?? "fa");
 $Chat_type = $update["message"]["chat"]["type"] ?? $update['callback_query']['message']['chat']['type'] ?? '';
 $text = $update["message"]["text"]  ?? '';
 if(isset($update['pre_checkout_query'])){
@@ -259,9 +251,7 @@ $photoid = $photo ? end($photo)["file_id"] : '';
 $caption = $update["message"]["caption"] ?? '';
 $video = $update["message"]["video"] ?? 0;
 $videoid = $video ? $video["file_id"] : 0;
-$forward_from_id = $update["message"]["reply_to_message"]["forward_from"]["id"] ?? 0;
 $datain = $update["callback_query"]["data"] ?? '';
-$last_name = $update['message']['from']['last_name']  ?? $update["callback_query"]["from"]["last_name"] ?? $update["inline_query"]['from']['last_name'] ?? '';
 $first_name = $update['message']['from']['first_name']  ?? $update["callback_query"]["from"]["first_name"] ?? $update["inline_query"]['from']['first_name'] ?? '';
 $username = $update['message']['from']['username'] ?? $update['callback_query']['from']['username'] ?? $update["callback_query"]["from"]["username"] ?? 'NOT_USERNAME';
 $user_phone =$update["message"]["contact"]["phone_number"] ?? 0;

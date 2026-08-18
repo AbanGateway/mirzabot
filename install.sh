@@ -1380,16 +1380,6 @@ function show_help_screen() {
     read -r _
     show_menu
 }
-function find_free_port() {
-    for port in {3300..3330}; do
-        if ! ss -tuln | grep -q ":$port "; then
-            echo "$port"
-            return 0
-        fi
-    done
-    echo -e "\033[31m[ERROR] No free port found between 3300 and 3330.\033[0m"
-    exit 1
-}
 function fix_update_issues() {
     echo -e "\e[33mTrying to fix update issues by changing mirrors...\033[0m"
     # Broken apt mirrors are often a DNS problem - fix DNS first
