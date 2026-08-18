@@ -1351,7 +1351,6 @@ function show_help_screen() {
     _kv "menu" "${C_DIM}Open this interactive panel (default)${CR}"
 
     _sec "Install parameters"
-    _kv "--name" "${C_DIM}Bot username${CR}"
     _kv "--token" "${C_DIM}Telegram bot token${CR}"
     _kv "--admin" "${C_DIM}Admin chat id${CR}"
     _kv "--domain" "${C_DIM}Domain name (e.g. bot.example.com)${CR}"
@@ -1365,7 +1364,7 @@ function show_help_screen() {
 
     _sec "Examples"
     printf "    ${C_KEY}mirza install --channel auto${CR}\n"
-    printf "    ${C_KEY}mirza install --name myvpnbot --token 123:ABC \\\\${CR}\n"
+    printf "    ${C_KEY}mirza install --token 123:ABC \\\\${CR}\n"
     printf "    ${C_DIM}            --admin 111 --domain bot.example.com --version 0.1.7${CR}\n"
     printf "    ${C_KEY}mirza update --version 0.1.6${CR}\n"
     printf "    ${C_KEY}mirza update --channel release${CR}\n"
@@ -1497,10 +1496,20 @@ domain_points_here() {
 
 # 0 = valid+live, 1 = bad format, 2 = format ok but token rejected/unreachable
 validate_token() {
+    TG_BOT_USERNAME=""
     [[ "$1" =~ ^[0-9]{8,10}:[a-zA-Z0-9_-]{35}$ ]] || return 1
     local r; r=$(curl -fsSL --max-time 8 "https://api.telegram.org/bot$1/getMe" 2>/dev/null)
-    echo "$r" | grep -q '"ok":true' && return 0
-    return 2
+    echo "$r" | grep -q '"ok":true' || return 2
+    TG_BOT_USERNAME=$(printf '%s' "$r" | sed -n 's/.*"username"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+    return 0
+}
+
+fetch_bot_username() {
+    local r; r=$(curl -fsSL --max-time 8 "https://api.telegram.org/bot$1/getMe" 2>/dev/null)
+    echo "$r" | grep -q '"ok":true' || return 1
+    local u; u=$(printf '%s' "$r" | sed -n 's/.*"username"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+    [ -n "$u" ] || return 1
+    printf '%s' "$u"
 }
 
 # Safe identifiers/passwords (no quotes/specials that break SQL or config.php)
@@ -1986,10 +1995,12 @@ EOF
     if [ -n "$YOUR_BOTNAME" ]; then
         echo -e "\e[33m[+] \e[36musernamebot (resumed):\e[0m ${YOUR_BOTNAME}"
     else
-        if [ -n "$ARG_NAME" ]; then
-            YOUR_BOTNAME="$ARG_NAME"
-            echo -e "\e[33m[+] \e[36musernamebot (from --name):\e[0m ${YOUR_BOTNAME}"
+        YOUR_BOTNAME="$TG_BOT_USERNAME"
+        [ -z "$YOUR_BOTNAME" ] && YOUR_BOTNAME="$(fetch_bot_username "$YOUR_BOT_TOKEN")"
+        if [ -n "$YOUR_BOTNAME" ]; then
+            echo -e "\e[33m[+] \e[36musernamebot (from token):\e[0m @${YOUR_BOTNAME}"
         else
+            echo -e "  ${C_BAD}●${CR} ${C_BAD}Could not read the bot username from Telegram.${CR}"
             while true; do
                 printf "\e[33m[+] \e[36musernamebot: \033[0m"
                 read YOUR_BOTNAME
@@ -2663,7 +2674,7 @@ EOF
 
 # ── Command-line argument parsing ────────────────────────────
 # Globals filled from flags (consumed by install/update where relevant)
-ARG_NAME=""     ARG_TOKEN=""   ARG_ADMIN=""    ARG_DOMAIN=""
+ARG_TOKEN=""    ARG_ADMIN=""   ARG_DOMAIN=""
 ARG_DBUSER=""   ARG_DBPASS=""  ARG_VERSION=""  ARG_CHANNEL=""
 
 print_usage() {
@@ -2685,7 +2696,6 @@ print_usage() {
     menu               Show interactive menu (default)
 
   Options:
-    --name   <user>    Bot username
     --token  <token>   Telegram bot token
     --admin  <id>      Admin chat id
     --domain <domain>  Domain name (e.g. bot.example.com)
@@ -2697,7 +2707,7 @@ print_usage() {
 
   Examples:
     mirza install --channel auto
-    mirza install --name myvpnbot --token 123:ABC --admin 111 --domain bot.example.com --version 0.1.7
+    mirza install --token 123:ABC --admin 111 --domain bot.example.com --version 0.1.7
     mirza update --channel release
     mirza update --version 0.1.6
 
@@ -2718,7 +2728,6 @@ process_arguments() {
     # Parse remaining flags
     while [ $# -gt 0 ]; do
         case "$1" in
-            --name)    ARG_NAME="$2";    shift 2 ;;
             --token)   ARG_TOKEN="$2";   shift 2 ;;
             --admin)   ARG_ADMIN="$2";   shift 2 ;;
             --domain)  ARG_DOMAIN="$2";  shift 2 ;;
