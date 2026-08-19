@@ -1798,7 +1798,6 @@ Current time: ',
                         'deleted' => '📌 The selected section was deleted.',
                 ],
                 'gateway' => [
-                        'tronadoStatus' => 'Tornado gateway status',
                         'tronadoDesc' => 'In this section you can turn the Tornado gateway off or on',
                         'off' => 'Turned off',
                         'on' => 'Turned on',

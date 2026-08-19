@@ -6406,40 +6406,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     sendmessage($from_id, $textbotlang['users']['selectoption'], $trnado, 'HTML');
 } elseif ($datain == "iranpay3setting" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['users']['selectoption'], $iranpaykeyboard, 'HTML');
-} elseif ($text == $textbotlang['Admin']['gateway']['tronadoStatus'] && $adminrulecheck['rule'] == "administrator") {
-    $statusternadoosql = select("PaySetting", "ValuePay", "NamePay", "statustarnado", "select");
-    $statusternadoo = json_encode([
-        'inline_keyboard' => [
-            [
-                ['text' => $statusternadoosql['ValuePay'], 'callback_data' => $statusternadoosql['ValuePay']],
-            ],
-        ]
-    ]);
-    $textternado = $textbotlang['Admin']['gateway']['tronadoDesc'];
-    sendmessage($from_id, $textternado, $statusternadoo, 'HTML');
-} elseif ($datain == "onternado") {
-    update("PaySetting", "ValuePay", "offternado", "NamePay", "statustarnado");
-    $statusternadoosql = select("PaySetting", "ValuePay", "NamePay", "statustarnado", "select");
-    $statusternadoo = json_encode([
-        'inline_keyboard' => [
-            [
-                ['text' => $statusternadoosql['ValuePay'], 'callback_data' => $statusternadoosql['ValuePay']],
-            ],
-        ]
-    ]);
-    Editmessagetext($from_id, $message_id, $textbotlang['Admin']['gateway']['off'], $statusternadoo);
-} elseif ($datain == "offternado") {
-    update("PaySetting", "ValuePay", "onternado", "NamePay", "statustarnado");
-    $statusternadoosql = select("PaySetting", "ValuePay", "NamePay", "statustarnado", "select");
-    $statusternadoo = json_encode([
-        'inline_keyboard' => [
-            [
-                ['text' => $statusternadoosql['ValuePay'], 'callback_data' => $statusternadoosql['ValuePay']],
-            ],
-        ]
-    ]);
-    Editmessagetext($from_id, $message_id, $textbotlang['Admin']['gateway']['on'], $statusternadoo);
-} elseif ($text == "API T" && $adminrulecheck['rule'] == "administrator") {
+}elseif ($text == "API T" && $adminrulecheck['rule'] == "administrator") {
     $PaySetting = select("PaySetting", "ValuePay", "NamePay", "apiternado", "select");
     $texttronseller = sprintf($textbotlang['Admin']['gateway']['askMerchant'], $PaySetting['ValuePay']);
     sendmessage($from_id, $texttronseller, $backadmin, 'HTML');

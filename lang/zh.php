@@ -1798,7 +1798,6 @@ trojan://xyz',
                         'deleted' => '📌 所选部分已删除。',
                 ],
                 'gateway' => [
-                        'tronadoStatus' => 'Tornado 网关状态',
                         'tronadoDesc' => '在此部分，您可以关闭或开启 Tornado 网关',
                         'off' => '已关闭',
                         'on' => '已开启',
