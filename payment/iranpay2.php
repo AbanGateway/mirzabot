@@ -99,16 +99,14 @@ $rawInput = file_get_contents('php://input');
 $jsonInput = $rawInput ? json_decode($rawInput, true) : null;
 $jsonInput = is_array($jsonInput) ? $jsonInput : [];
 
-$authority = $jsonInput['authority'] ?? ($_REQUEST['authority'] ?? '');
-$data_order_id = $jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? '');
-$authority = htmlspecialchars($authority, ENT_QUOTES, 'UTF-8');
-$data_order_id = htmlspecialchars($data_order_id, ENT_QUOTES, 'UTF-8');
-
+$callback_order_id = (string) ($jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? ''));
 $callback_sig = (string) ($jsonInput['sig'] ?? ($_REQUEST['sig'] ?? ''));
 $callback_status = (string) ($jsonInput['status'] ?? ($_REQUEST['status'] ?? ''));
 $callback_amount = (string) ($jsonInput['amount'] ?? $jsonInput['amount_toman'] ?? ($_REQUEST['amount'] ?? ($_REQUEST['amount_toman'] ?? '')));
-$callback_order_id = (string) ($jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? ''));
 $isSignedCallback = ($callback_sig !== '' && $callback_order_id !== '');
+
+$authority = htmlspecialchars($jsonInput['authority'] ?? ($_REQUEST['authority'] ?? ''), ENT_QUOTES, 'UTF-8');
+$data_order_id = htmlspecialchars($callback_order_id, ENT_QUOTES, 'UTF-8');
 
 $Payment_report = select("Payment_report", "*", "id_order", $data_order_id, "select");
 if (!$Payment_report) {
@@ -132,92 +130,89 @@ if ($Payment_report['payment_Status'] == "paid") {
     cubepay_emit('already', $page_texts, $data_order_id, $price, $page_lang);
     return;
 }
-if ($Payment_report['payment_Status'] != "paid" && ($authority || $isSignedCallback)) {
-    if ($isSignedCallback) {
-        $expected_sig = hash_hmac(
-            'sha256',
-            $callback_order_id . '|' . $callback_status . '|' . $callback_amount,
-            (string) $token_cubepay
-        );
-        $signatureValid = hash_equals($expected_sig, $callback_sig);
-        $isVerifiedForThisOrder = $signatureValid
-            && $callback_status === 'paid'
-            && (string) $callback_order_id === (string) $data_order_id
-            && (float) $callback_amount >= (float) $price;
-        $paymentAccepted = $isVerifiedForThisOrder;
-        $response = [
-            'order_id' => $callback_order_id,
-            'status' => $callback_status,
-            'amount_toman' => $callback_amount,
-            'verified_by' => 'signature',
-        ];
-        if (!$signatureValid) {
-            error_log("CubePay: invalid callback signature for order {$data_order_id}");
-        }
-    } else {
-        $ch = curl_init('https://cubevps.ir/smspay/api/verify-payment.php');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['authority' => $authority]));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $token_cubepay
-        ));
-        $result = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        $response = json_decode($result, true);
-
-        $amount_rial = intval($price) * 10;
-        $isVerifiedForThisOrder = is_array($response)
-            && isset($response['order_id'], $response['amount'])
-            && (string) $response['order_id'] === (string) $data_order_id
-            && intval($response['amount']) >= $amount_rial;
-
-        $paymentAccepted = (($httpCode == 200 && !empty($response['success'])) || $httpCode == 409)
-            && $isVerifiedForThisOrder;
+$paymentAccepted = false;
+$response = null;
+if ($isSignedCallback) {
+    $expected_sig = hash_hmac(
+        'sha256',
+        $callback_order_id . '|' . $callback_status . '|' . $callback_amount,
+        (string) $token_cubepay
+    );
+    $signatureValid = hash_equals($expected_sig, $callback_sig);
+    if (!$signatureValid) {
+        error_log("CubePay: invalid callback signature for order {$data_order_id}");
     }
+    $paymentAccepted = $signatureValid
+        && $callback_status === 'paid'
+        && (float) $callback_amount >= (float) $price;
+    $response = [
+        'order_id' => $callback_order_id,
+        'status' => $callback_status,
+        'amount_toman' => $callback_amount,
+        'verified_by' => 'signature',
+    ];
+} elseif ($authority) {
+    $ch = curl_init('https://cubevps.ir/smspay/api/verify-payment.php');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['authority' => $authority]));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token_cubepay
+    ));
+    $result = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    $response = json_decode($result, true);
 
-    if ($paymentAccepted) {
-        cubepay_emit('success', $page_texts, $data_order_id, $price, $page_lang);
-        if (!claimPaymentPaid($Payment_report['id_order']))
-            return;
-        $textbotlang = languagechange();
-        try {
-            DirectPayment($data_order_id, "../images.jpg");
-        } catch (Throwable $directPaymentError) {
-            error_log("DirectPayment failed for order {$data_order_id}: " . $directPaymentError->getMessage());
-            return;
-        }
-        $pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackiranpay2", "select")['ValuePay'];
-        $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
-        if ($pricecashback != "0") {
-            $result_cashback = ($Payment_report['price'] * $pricecashback) / 100;
-            $Balance_confrim = intval($Balance_id['Balance']) + $result_cashback;
-            update("user", "Balance", $Balance_confrim, "id", $Balance_id['id']);
-            $pricecashback = number_format($pricecashback);
-            $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result_cashback);
-            sendmessage($Balance_id['id'], $text_report, null, 'HTML');
-        }
-        $paymentreports = select("topicid", "idreport", "report", "paymentreport", "select")['idreport'];
-        $text_reportpayment = sprintf($textbotlang['paymentGateway']['reportTronado'], $Balance_id['username'], $Balance_id['id'], $price);
-        $database = json_encode($response);
-        $statement = $pdo->prepare("UPDATE Payment_report SET dec_not_confirmed = :dec_not_confirmed WHERE id_order = :id_order");
-        $statement->bindValue(':dec_not_confirmed', $database);
-        $statement->bindValue(':id_order', $Payment_report['id_order']);
-        $statement->execute();
-        if (strlen($setting['Channel_Report']) > 0) {
-            telegram('sendmessage', [
-                'chat_id' => $setting['Channel_Report'],
-                'message_thread_id' => $paymentreports,
-                'text' => $text_reportpayment,
-                'parse_mode' => "HTML"
-            ]);
-        }
-    } else {
-        cubepay_emit('failed', $page_texts, $data_order_id, $price, $page_lang);
-    }
-} else {
+    $amount_rial = intval($price) * 10;
+    $isVerifiedForThisOrder = is_array($response)
+        && isset($response['order_id'], $response['amount'])
+        && (string) $response['order_id'] === (string) $data_order_id
+        && intval($response['amount']) >= $amount_rial;
+
+    $paymentAccepted = (($httpCode == 200 && !empty($response['success'])) || $httpCode == 409)
+        && $isVerifiedForThisOrder;
+}
+
+if (!$paymentAccepted) {
     cubepay_emit('failed', $page_texts, $data_order_id, $price, $page_lang);
+    return;
+}
+
+cubepay_emit('success', $page_texts, $data_order_id, $price, $page_lang);
+if (!claimPaymentPaid($Payment_report['id_order']))
+    return;
+$textbotlang = languagechange();
+try {
+    DirectPayment($data_order_id, "../images.jpg");
+} catch (Throwable $directPaymentError) {
+    error_log("DirectPayment failed for order {$data_order_id}: " . $directPaymentError->getMessage());
+    return;
+}
+$pricecashback = select("PaySetting", "ValuePay", "NamePay", "chashbackiranpay2", "select")['ValuePay'];
+$Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
+if ($pricecashback != "0") {
+    $result_cashback = ($Payment_report['price'] * $pricecashback) / 100;
+    $Balance_confrim = intval($Balance_id['Balance']) + $result_cashback;
+    update("user", "Balance", $Balance_confrim, "id", $Balance_id['id']);
+    $pricecashback = number_format($pricecashback);
+    $text_report = sprintf($textbotlang['paymentGateway']['giftReport'], $result_cashback);
+    sendmessage($Balance_id['id'], $text_report, null, 'HTML');
+}
+$paymentreports = select("topicid", "idreport", "report", "paymentreport", "select")['idreport'];
+$text_reportpayment = sprintf($textbotlang['paymentGateway']['reportTronado'], $Balance_id['username'], $Balance_id['id'], $price);
+$database = json_encode($response);
+$statement = $pdo->prepare("UPDATE Payment_report SET dec_not_confirmed = :dec_not_confirmed WHERE id_order = :id_order");
+$statement->bindValue(':dec_not_confirmed', $database);
+$statement->bindValue(':id_order', $Payment_report['id_order']);
+$statement->execute();
+if (strlen($setting['Channel_Report']) > 0) {
+    telegram('sendmessage', [
+        'chat_id' => $setting['Channel_Report'],
+        'message_thread_id' => $paymentreports,
+        'text' => $text_reportpayment,
+        'parse_mode' => "HTML"
+    ]);
 }

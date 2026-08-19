@@ -686,14 +686,15 @@ function isValidDate($date)
 {
     return (strtotime($date) != false);
 }
-function cubepayPayableAmount($price)
+function cubepayFeeValue()
 {
-    $base = intval($price);
-    $status = select("PaySetting", "ValuePay", "NamePay", "feestatusternado", "select")['ValuePay'] ?? 'offfeeternado';
-    if ($status !== 'onfeeternado') {
-        return $base;
-    }
-    $fee = (float) str_replace([',', '،'], '', (string) (select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0'));
+    $raw = select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0';
+
+    return (float) str_replace([',', '،'], '', (string) $raw);
+}
+function cubepayApplyFee($base, $fee)
+{
+    $base = intval($base);
     if ($fee <= 0) {
         return $base;
     }
@@ -701,6 +702,15 @@ function cubepayPayableAmount($price)
     return $fee <= 100
         ? (int) ceil($base * (1 + $fee / 100))
         : $base + (int) round($fee);
+}
+function cubepayPayableAmount($price)
+{
+    $status = select("PaySetting", "ValuePay", "NamePay", "feestatusternado", "select")['ValuePay'] ?? 'offfeeternado';
+    if ($status !== 'onfeeternado') {
+        return intval($price);
+    }
+
+    return cubepayApplyFee($price, cubepayFeeValue());
 }
 function trnado($order_id, $price)
 {
