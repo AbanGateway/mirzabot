@@ -679,18 +679,6 @@ function isValidDate($date)
 {
     return (strtotime($date) != false);
 }
-/**
- * Amount the customer actually has to pay for a CubePay order (toman).
- *
- * The admin can pass the gateway fee on to the customer with a single value:
- *   0 - 100    => a percentage added on top of the order (decimals allowed)
- *   above 100  => a fixed amount in toman
- * With the toggle off (or a value of 0) the base price is returned unchanged,
- * so behaviour for existing installs does not change.
- *
- * Only the invoice sent to the gateway grows; the user's balance is still
- * topped up with the amount they asked for.
- */
 function cubepayPayableAmount($price)
 {
     $base = intval($price);
@@ -714,10 +702,6 @@ function trnado($order_id, $price)
     $amount_toman = cubepayPayableAmount($price);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        // Unified entry point: it looks at the token and at what the merchant
-        // enabled, then builds a card-to-card invoice, a crypto invoice, or a
-        // "card or crypto?" chooser page. A vip_ token is only accepted here,
-        // never on the older card-only endpoint.
         CURLOPT_URL => 'https://cubevps.ir/pay/create-order.php',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
@@ -732,7 +716,6 @@ function trnado($order_id, $price)
         ),
     ));
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
-        // This endpoint takes toman, unlike the older one which took rial.
         'price_amount' => $amount_toman,
         'order_id' => $order_id,
         'callback_url' => "https://$domainhosts/payment/iranpay2.php",
@@ -742,8 +725,6 @@ function trnado($order_id, $price)
     curl_close($curl);
 
     $decoded = json_decode($response, true);
-    // The unified endpoint calls the link pay_page_url; the older one called it
-    // payment_link. Expose both so callers keep working either way.
     if (is_array($decoded) && empty($decoded['payment_link']) && !empty($decoded['pay_page_url'])) {
         $decoded['payment_link'] = $decoded['pay_page_url'];
     }

@@ -18,23 +18,12 @@ use Endroid\QrCode\Writer\PngWriter;
 
 $ManagePanel = new ManagePanel();
 
-/**
- * This file is both the gateway's server-to-server callback and the page the
- * customer's browser lands on after paying, so it has to answer twice over: a
- * machine caller still gets the JSON it expects, while a person gets a page
- * they can read. Previously a browser was shown raw JSON, or nothing at all
- * when the payment had already been confirmed.
- */
 function cubepay_wants_html()
 {
     return ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
         && strpos(strtolower((string) ($_SERVER['HTTP_ACCEPT'] ?? '')), 'text/html') !== false;
 }
 
-/**
- * Emit the outcome. $state is one of success, already, failed, expired,
- * notfound. Machine callers keep receiving {"status":true|false} unchanged.
- */
 function cubepay_emit($state, $texts = null, $orderId = null, $price = null, $lang = 'fa')
 {
     $ok = ($state === 'success' || $state === 'already');
@@ -71,8 +60,6 @@ function cubepay_emit($state, $texts = null, $orderId = null, $price = null, $la
             . '</span><b>' . number_format((float) $price) . '</b></div>';
     }
 
-    // config.php defines $usernamebot; it is left as a placeholder on installs
-    // that never filled it in, so only link when it looks real.
     global $usernamebot;
     $botLink = '';
     $botHandle = ltrim(trim((string) $usernamebot), '@');
@@ -117,10 +104,6 @@ $data_order_id = $jsonInput['order_id'] ?? ($_REQUEST['order_id'] ?? '');
 $authority = htmlspecialchars($authority, ENT_QUOTES, 'UTF-8');
 $data_order_id = htmlspecialchars($data_order_id, ENT_QUOTES, 'UTF-8');
 
-// A crypto or VIP payment reports back without an authority: it sends
-// order_id + status + amount plus an HMAC signature instead. These values are
-// kept raw on purpose - the signature was computed over the exact strings that
-// were sent, so escaping them first would never match.
 $callback_sig = (string) ($jsonInput['sig'] ?? ($_REQUEST['sig'] ?? ''));
 $callback_status = (string) ($jsonInput['status'] ?? ($_REQUEST['status'] ?? ''));
 $callback_amount = (string) ($jsonInput['amount'] ?? $jsonInput['amount_toman'] ?? ($_REQUEST['amount'] ?? ($_REQUEST['amount_toman'] ?? '')));
@@ -134,9 +117,6 @@ if (!$Payment_report) {
 }
 $token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
 
-// Show the page in the language of whoever placed the order, not the bot
-// default. languagechange() reads $from_id, which this file never sets, so the
-// language is looked up here and passed in explicitly.
 $payer_row = select("user", "*", "id", $Payment_report['id_user'], "select");
 $page_lang = is_array($payer_row) && !empty($payer_row['lang']) ? $payer_row['lang'] : 'fa';
 $page_texts = languagechange(dirname(__DIR__), $page_lang);
@@ -148,18 +128,12 @@ if ($Payment_report['payment_Status'] == "expire") {
 $setting = select("setting", "*", null, null, "select");
 $price = $Payment_report['price'];
 
-// An order that is already paid used to fall straight through and print
-// nothing. That is the normal case for a returning customer: the gateway's
-// own callback lands a moment before the browser does.
 if ($Payment_report['payment_Status'] == "paid") {
     cubepay_emit('already', $page_texts, $data_order_id, $price, $page_lang);
     return;
 }
 if ($Payment_report['payment_Status'] != "paid" && ($authority || $isSignedCallback)) {
     if ($isSignedCallback) {
-        // Crypto / VIP: the signature is the proof, so there is nothing to call
-        // back to. It is built over "order_id|status|amount" with the same
-        // gateway token this bot already stores, and the amount is in toman.
         $expected_sig = hash_hmac(
             'sha256',
             $callback_order_id . '|' . $callback_status . '|' . $callback_amount,
@@ -195,10 +169,6 @@ if ($Payment_report['payment_Status'] != "paid" && ($authority || $isSignedCallb
         curl_close($ch);
         $response = json_decode($result, true);
 
-        // When the admin passes the gateway fee on to the customer, the invoice is
-        // larger than the order price, so an exact match would reject a valid
-        // payment. Underpayment is still refused; paying at least the order price
-        // is what matters here.
         $amount_rial = intval($price) * 10;
         $isVerifiedForThisOrder = is_array($response)
             && isset($response['order_id'], $response['amount'])
@@ -249,7 +219,5 @@ if ($Payment_report['payment_Status'] != "paid" && ($authority || $isSignedCallb
         cubepay_emit('failed', $page_texts, $data_order_id, $price, $page_lang);
     }
 } else {
-    // Reached with neither an authority nor a signature - a plain visit to the
-    // URL, or a returning customer whose payment is still unconfirmed.
     cubepay_emit('failed', $page_texts, $data_order_id, $price, $page_lang);
 }
