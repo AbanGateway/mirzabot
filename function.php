@@ -686,14 +686,40 @@ function isValidDate($date)
 {
     return (strtotime($date) != false);
 }
+function cubepayFeeValue()
+{
+    $raw = select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0';
+
+    return (float) str_replace([',', '،'], '', (string) $raw);
+}
+function cubepayApplyFee($base, $fee)
+{
+    $base = intval($base);
+    if ($fee <= 0) {
+        return $base;
+    }
+
+    return $fee <= 100
+        ? (int) ceil($base * (1 + $fee / 100))
+        : $base + (int) round($fee);
+}
+function cubepayPayableAmount($price)
+{
+    $status = select("PaySetting", "ValuePay", "NamePay", "feestatusternado", "select")['ValuePay'] ?? 'offfeeternado';
+    if ($status !== 'onfeeternado') {
+        return intval($price);
+    }
+
+    return cubepayApplyFee($price, cubepayFeeValue());
+}
 function trnado($order_id, $price)
 {
     global $domainhosts;
     $token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
-    $amount_rial = intval($price) * 10;
+    $amount_toman = cubepayPayableAmount($price);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://cubevps.ir/smspay/api/create-payment.php',
+        CURLOPT_URL => 'https://cubevps.ir/pay/create-order.php',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -707,7 +733,7 @@ function trnado($order_id, $price)
         ),
     ));
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
-        'amount' => $amount_rial,
+        'price_amount' => $amount_toman,
         'order_id' => $order_id,
         'callback_url' => "https://$domainhosts/payment/iranpay2.php",
     ], JSON_UNESCAPED_UNICODE));
@@ -715,7 +741,12 @@ function trnado($order_id, $price)
     $response = curl_exec($curl);
     curl_close($curl);
 
-    return json_decode($response, true);
+    $decoded = json_decode($response, true);
+    if (is_array($decoded) && empty($decoded['payment_link']) && !empty($decoded['pay_page_url'])) {
+        $decoded['payment_link'] = $decoded['pay_page_url'];
+    }
+
+    return $decoded;
 }
 function formatBytes($bytes, $precision = 2): string
 {
