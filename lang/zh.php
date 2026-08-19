@@ -1798,7 +1798,6 @@ trojan://xyz',
                         'deleted' => '📌 所选部分已删除。',
                 ],
                 'gateway' => [
-                        'tronadoStatus' => 'Tornado 网关状态',
                         'cubepayFeeOn' => "✅ 已<b>开启</b>向客户收取手续费。\n\n💵 当前数值：<b>%s</b>\n该数值会加到客户的账单上，但用户余额仍按其请求的金额充值。",
                         'cubepayFeeOff' => "❌ 已<b>关闭</b>向客户收取手续费。",
                         'cubepayFeeAsk' => "💵 请发送手续费数值：\n\n▫️ <b>0 到 100</b> → 按<b>百分比</b>收取（可含小数，如 <code>9.9</code>）\n▫️ <b>大于 100</b> → 按<b>固定土曼金额</b>收取（如 <code>5000</code>）\n\n当前数值：<b>%s</b>",

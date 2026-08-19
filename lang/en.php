@@ -1798,7 +1798,6 @@ Current time: ',
                         'deleted' => '📌 The selected section was deleted.',
                 ],
                 'gateway' => [
-                        'tronadoStatus' => 'Tornado gateway status',
                         'cubepayFeeOn' => "✅ Passing the fee to the customer is <b>on</b>.\n\n💵 Current value: <b>%s</b>\nIt is added to the customer's invoice, while their balance is still topped up with the amount they requested.",
                         'cubepayFeeOff' => "❌ Passing the fee to the customer is <b>off</b>.",
                         'cubepayFeeAsk' => "💵 Send the fee value:\n\n▫️ <b>0 to 100</b> → a <b>percentage</b> fee (decimals allowed, e.g. <code>9.9</code>)\n▫️ <b>above 100</b> → a <b>fixed amount in toman</b> (e.g. <code>5000</code>)\n\nCurrent value: <b>%s</b>",

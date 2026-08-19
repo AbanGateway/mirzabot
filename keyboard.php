@@ -391,14 +391,6 @@ $request_contact = json_encode([
     ],
     'resize_keyboard' => true
 ]);
-$Feature_status = json_encode([
-    'keyboard' => [
-        [['text' => $textbotlang['keyboard']['viewAccountInfoFeature']]],
-        [['text' => $textbotlang['keyboard']['testAccountFeature']], ['text' => $textbotlang['keyboard']['educationFeature']]],
-        [['text' => $textbotlang['Admin']['backAdminBtn']], ['text' => $textbotlang['Admin']['backMenuBtn']]]
-    ],
-    'resize_keyboard' => true
-]);
 $channelkeyboard = json_encode([
     'keyboard' => [
         [['text' => $textbotlang['keyboard']['addChannel']], ['text' => $textbotlang['keyboard']['deleteChannel']]],

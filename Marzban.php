@@ -424,25 +424,6 @@ function Modifyuser_node($location, $id_node, array $data)
     $data_useer = json_decode($result, true);
     return $data_useer;
 }
-function hosts($location)
-{
-    $marzban_list_get = select("marzban_panel", "*", "name_panel", $location, "select");
-    $Check_token = token_panel($marzban_list_get['code_panel']);
-    $url = $marzban_list_get['url_panel'] . '/api/hosts';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-    $headers = array();
-    $headers[] = 'Accept: application/json';
-    $headers[] = 'Authorization: Bearer ' . $Check_token['access_token'];
-    $headers[] = 'Content-Type: application/json';
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-    $result = curl_exec($ch);
-    $data_hosts = $result;
-    return $data_hosts;
-}
 //----------------------------------
 function reconnect_node($location, $id_node)
 {

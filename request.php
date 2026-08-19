@@ -6,16 +6,11 @@ class CurlRequest {
     private $headers = [];
     private $timeout = null;
     private $authToken = null;
-    private $api_key = null;
     private $cookie = null;
     public function __construct($url) {
         global $request_exec_timeout;
         $this->url = $url;
         $this->timeout = $request_exec_timeout;
-    }
-
-    public function setTimeout($seconds) {
-        $this->timeout = $seconds;
     }
 
     public function setHeaders(array $headers) {
@@ -26,10 +21,6 @@ class CurlRequest {
         $this->authToken = $token;
     }
     
-    public function api_key($token) {
-        $this->api_key = $token;
-    }
-
     public function setCookie($cookieStr) {
         $this->cookie = $cookieStr;
     }
@@ -40,10 +31,6 @@ class CurlRequest {
         if ($this->authToken) {
             $headers[] = "Authorization: Bearer {$this->authToken}";
         }
-        if ($this->api_key) {
-            $headers[] = $this->authToken;
-        }
-
         return $headers;
     }
 
