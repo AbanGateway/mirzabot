@@ -1071,18 +1071,18 @@ elseif ($datain == "systemsms") {
         "sendmessage" => $textbotlang['keyboard']['broadcastSend'],
         "forwardmessage" => $textbotlang['keyboard']['broadcastForward'],
         "unpinmessage" => $textbotlang['Admin']['messageBulk']['btnCancelPin']
-    ][$userdata['typeservice']];
+    ][$userdata['typeservice'] ?? ''] ?? ($userdata['typeservice'] ?? '');
     $typeservice = [
         "all" => $textbotlang['Admin']['messageBulk']['targetAllUsers'],
         "customer" => $textbotlang['Admin']['messageBulk']['targetCustomers'],
         "nonecustomer" => $textbotlang['Admin']['messageBulk']['targetNoPurchase'],
-    ][$userdata['typeusermessage']];
-    if ($userdata['typeservice'] == "xdaynotmessage") {
-        $textday = sprintf($textbotlang['Admin']['messageBulk']['inactiveDaysLabel'], $userdata['daynoyuse']);
+    ][$userdata['typeusermessage'] ?? ''] ?? ($userdata['typeusermessage'] ?? '');
+    if (($userdata['typeservice'] ?? '') == "xdaynotmessage") {
+        $textday = sprintf($textbotlang['Admin']['messageBulk']['inactiveDaysLabel'], $userdata['daynoyuse'] ?? '');
     } else {
         $textday = "";
     }
-    $textconfirm = sprintf($textbotlang['Admin']['messageBulk']['confirmSummary2'], $typesend, $typeservice, $userdata['agent'], $textday);
+    $textconfirm = sprintf($textbotlang['Admin']['messageBulk']['confirmSummary2'], $typesend, $typeservice, $userdata['agent'] ?? '', $textday);
     $startaction = json_encode([
         'inline_keyboard' => [
             [
@@ -1126,13 +1126,18 @@ elseif ($datain == "systemsms") {
             if ($typeusermessage == "all") {
                 $userslist = json_encode(select("user", "id", "User_Status", "Active", "fetchAll"));
             } elseif ($typeusermessage == "customer") {
-                if ($userdata['selectpanel'] == "all") {
+                if (($userdata['selectpanel'] ?? 'all') == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
+                    $stmt->execute();
                 } else {
                     $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
+                    if (empty($panel['name_panel'])) {
+                        sendmessage($from_id, $textbotlang['Admin']['messageBulk']['errorRestart'], $keyboardadmin, 'HTML');
+                        return;
+                    }
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :mp1) AND u.User_Status = 'Active'");
+                    $stmt->execute([':mp1' => $panel['name_panel']]);
                 }
-                $stmt->execute([':mp1' => $panel['name_panel']]);
                 $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "nonecustomer") {
                 $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
@@ -1143,16 +1148,21 @@ elseif ($datain == "systemsms") {
             if ($typeusermessage == "all") {
                 $userslist = json_encode(select("user", "id", "agent", $agent, "fetchAll"));
             } elseif ($typeusermessage == "customer") {
-                if ($userdata['selectpanel'] == "all") {
+                if (($userdata['selectpanel'] ?? 'all') == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
                     $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
+                    $stmt->execute();
                 } else {
                     $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
+                    if (empty($panel['name_panel'])) {
+                        sendmessage($from_id, $textbotlang['Admin']['messageBulk']['errorRestart'], $keyboardadmin, 'HTML');
+                        return;
+                    }
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE  u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :location) AND u.User_Status = 'Active'");
                     $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
                     $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
+                    $stmt->execute();
                 }
-                $stmt->execute();
                 $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "nonecustomer") {
                 $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
@@ -1177,13 +1187,18 @@ elseif ($datain == "systemsms") {
             if ($typeusermessage == "all") {
                 $userslist = json_encode(select("user", "id", "User_Status", "Active", "fetchAll"));
             } elseif ($typeusermessage == "customer") {
-                if ($userdata['selectpanel'] == "all") {
+                if (($userdata['selectpanel'] ?? 'all') == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
+                    $stmt->execute();
                 } else {
                     $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
+                    if (empty($panel['name_panel'])) {
+                        sendmessage($from_id, $textbotlang['Admin']['messageBulk']['errorRestart'], $keyboardadmin, 'HTML');
+                        return;
+                    }
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :mp3) AND u.User_Status = 'Active'");
+                    $stmt->execute([':mp3' => $panel['name_panel']]);
                 }
-                $stmt->execute([':mp3' => $panel['name_panel']]);
                 $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "nonecustomer") {
                 $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
@@ -1194,16 +1209,21 @@ elseif ($datain == "systemsms") {
             if ($typeusermessage == "all") {
                 $userslist = json_encode(select("user", "id", "agent", $agent, "fetchAll"));
             } elseif ($typeusermessage == "customer") {
-                if ($userdata['selectpanel'] == "all") {
+                if (($userdata['selectpanel'] ?? 'all') == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
                     $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
+                    $stmt->execute();
                 } else {
                     $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
+                    if (empty($panel['name_panel'])) {
+                        sendmessage($from_id, $textbotlang['Admin']['messageBulk']['errorRestart'], $keyboardadmin, 'HTML');
+                        return;
+                    }
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :location) AND u.User_Status = 'Active'");
                     $stmt->bindParam(':agent', $agent, PDO::PARAM_STR);
                     $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
+                    $stmt->execute();
                 }
-                $stmt->execute();
                 $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "nonecustomer") {
                 $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id) AND u.User_Status = 'Active'");
@@ -3309,7 +3329,7 @@ elseif ($datain == "systemsms") {
         $text_expie_agent = "";
     }
     $textinfouser = sprintf($textbotlang['Admin']['manageUser']['infoSummary'], $user['User_Status'], $user['username'], $id_user, $id_user, $user['codeInvitation'], $userjoin, $lastmessage, $user['limit_usertest'], $roll_Status, $user['number'], $user['agent'], $user['affiliatescount'], $user['affiliates'], $userverify, $showcart, $user['score'], $sumvolume['SUM(Volume)'], $text_expie_agent, $user['Balance'], $dayListSell['COUNT(*)'], $balanceall['SUM(price)'], $subbuyuser['SUM(price_product)'], $user['pricediscount'], $listhours, $suminvoicehours, $listmonth, $suminvoicemonth);
-    if ($datain[0] == "u") {
+    if (isset($datain[0]) && $datain[0] == "u") {
         telegram('answerCallbackQuery', array(
             'callback_query_id' => $callback_query_id,
             'text' => $textbotlang['keyboard']['infoUpdated'],
@@ -5262,8 +5282,11 @@ elseif ($datain == "systemsms") {
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':username', $usernameconfig, PDO::PARAM_STR);
         $stmt->bindParam(':notes', $usernameconfig, PDO::PARAM_STR);
-    } elseif ($text[0] == "/") {
-        $usernameconfig = explode(" ", $text)[1];
+    } elseif (isset($text[0]) && $text[0] == "/") {
+        $usernameconfig = explode(" ", $text)[1] ?? '';
+        if ($usernameconfig === '') {
+            return;
+        }
         $sql = "SELECT * FROM invoice WHERE username LIKE CONCAT('%', :username, '%') OR note  LIKE CONCAT('%', :notes, '%')";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':username', $usernameconfig, PDO::PARAM_STR);
@@ -5344,11 +5367,11 @@ elseif ($datain == "systemsms") {
         $service_other = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!($service_other == false || !(is_string($service_other['value']) && is_array(json_decode($service_other['value'], true))))) {
             $service_other = json_decode($service_other['value'], true);
-            $codeproduct = select("product", "name_product", "code_product", $service_other['code_product'], "select");
+            $codeproduct = select("product", "*", "code_product", $service_other['code_product'], "select");
             if ($codeproduct != false) {
-                $OrderUser['name_product'] = $codeproduct['name_product'];
-                $OrderUser['Volume'] = $codeproduct['Volume_constraint'];
-                $OrderUser['Service_time'] = $codeproduct['Service_time'];
+                $OrderUser['name_product'] = $codeproduct['name_product'] ?? $OrderUser['name_product'];
+                $OrderUser['Volume'] = $codeproduct['Volume_constraint'] ?? $OrderUser['Volume'];
+                $OrderUser['Service_time'] = $codeproduct['Service_time'] ?? $OrderUser['Service_time'];
             }
         }
     }

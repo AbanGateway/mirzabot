@@ -90,10 +90,14 @@ class ManagePanel
                 }
                 if ($Get_Data_Panel['version_panel'] == "1") {
                     $out_put_link = outputlink($data_Output['subscription_url']);
-                    if (isBase64($out_put_link)) {
-                        $data_Output['links'] = base64_decode(string: $out_put_link);
-                    }
-                    $data_Output['links'] = explode("\n", $data_Output['links'] ?? '');
+
+                    $links = isBase64($out_put_link)
+                        ? base64_decode($out_put_link)
+                        : ($data_Output['links'] ?? ($out_put_link ?: ''));
+
+                    $data_Output['links'] = is_array($links)
+                        ? $links
+                        : explode("\n", (string) $links);
                 }
                 if ($invoice != false) {
                     $data_Output['subscription_url'] = "https://$domainhosts/sub/" . $invoice['id_invoice'];
@@ -474,20 +478,20 @@ class ManagePanel
                     'msg' => $UsernameData['status']
                 );
             } else {
-                $UsernameData = json_decode($UsernameData['body'], true);
-                if (!empty($UsernameData['detail'])) {
+                $UsernameData = json_decode($UsernameData['body'] ?? '', true);
+                if (!is_array($UsernameData) || !empty($UsernameData['detail']) || empty($UsernameData['username'])) {
                     return array(
                         'status' => 'Unsuccessful',
-                        'msg' => $UsernameData['detail']
+                        'msg' => is_array($UsernameData) ? ($UsernameData['detail'] ?? 'Unsuccessful') : 'Unsuccessful'
                     );
                 }
-                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $UsernameData['subscription_url'])) {
-                    $UsernameData['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($UsernameData['subscription_url'], "/");
+                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $UsernameData['subscription_url'] ?? '')) {
+                    $UsernameData['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($UsernameData['subscription_url'] ?? '', "/");
                 }
                 if ($Get_Data_Panel['version_panel'] == "1") {
-                    $UsernameData['expire'] = strtotime($UsernameData['expire']);
-                    $UsernameData['links'] = base64_decode(outputlink($UsernameData['subscription_url']));
-                    $UsernameData['links'] = explode("\n", $UsernameData['links']);
+                    $UsernameData['expire'] = strtotime($UsernameData['expire'] ?? '');
+                    $links = $UsernameData['links'] ?? base64_decode(outputlink($UsernameData['subscription_url']));
+                    $UsernameData['links'] = is_array($links) ? $links : explode("\n", (string) $links);
                     $sublist_update = get_list_update($name_panel, $username);
                     if (!empty($sublist_update['error'])) {
                         return array(
@@ -500,7 +504,7 @@ class ManagePanel
                             'msg' => $sublist_update['status']
                         );
                     }
-                    $sublist_update_body = json_decode($sublist_update['body'], true);
+                    $sublist_update_body = json_decode($sublist_update['body'] ?? '', true);
                     if (!empty($sublist_update_body['updates']) && is_array($sublist_update_body['updates'])) {
                         $first_update = $sublist_update_body['updates'][0];
                         $UsernameData['sub_updated_at'] = isset($first_update['created_at']) ? $first_update['created_at'] : null;
@@ -510,7 +514,7 @@ class ManagePanel
                         $UsernameData['sub_last_user_agent'] = isset($UsernameData['sub_last_user_agent']) ? $UsernameData['sub_last_user_agent'] : null;
                     }
                 } else {
-                    $UsernameData['expire'] = $UsernameData['expire'];
+                    $UsernameData['expire'] = $UsernameData['expire'] ?? null;
                 }
                 if ($invoice != false) {
                     $UsernameData['subscription_url'] = "https://$domainhosts/sub/" . $invoice['id_invoice'];
@@ -519,18 +523,18 @@ class ManagePanel
                     $UsernameData['proxies'] = isset($UsernameData['proxy_settings']) ? $UsernameData['proxy_settings'] : null;
                 }
                 $Output = array(
-                    'status' => $UsernameData['status'],
-                    'username' => $UsernameData['username'],
-                    'data_limit' => $UsernameData['data_limit'],
-                    'expire' => $UsernameData['expire'],
-                    'online_at' => $UsernameData['online_at'],
-                    'used_traffic' => $UsernameData['used_traffic'],
-                    'links' => $UsernameData['links'],
-                    'subscription_url' => $UsernameData['subscription_url'],
-                    'sub_updated_at' => $UsernameData['sub_updated_at'],
-                    'sub_last_user_agent' => $UsernameData['sub_last_user_agent'],
-                    'uuid' => $UsernameData['proxies'],
-                    'data_limit_reset' => $UsernameData['data_limit_reset_strategy']
+                    'status' => $UsernameData['status'] ?? 'Unknown',
+                    'username' => $UsernameData['username'] ?? $username,
+                    'data_limit' => $UsernameData['data_limit'] ?? null,
+                    'expire' => $UsernameData['expire'] ?? null,
+                    'online_at' => $UsernameData['online_at'] ?? null,
+                    'used_traffic' => $UsernameData['used_traffic'] ?? null,
+                    'links' => $UsernameData['links'] ?? [],
+                    'subscription_url' => $UsernameData['subscription_url'] ?? '',
+                    'sub_updated_at' => $UsernameData['sub_updated_at'] ?? null,
+                    'sub_last_user_agent' => $UsernameData['sub_last_user_agent'] ?? null,
+                    'uuid' => $UsernameData['proxies'] ?? null,
+                    'data_limit_reset' => $UsernameData['data_limit_reset_strategy'] ?? null
                 );
             }
         } elseif ($Get_Data_Panel['type'] == "marzneshin") {

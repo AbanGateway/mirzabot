@@ -7,9 +7,10 @@ require_once '../botapi.php';
 $reportbackup = select("topicid", "idreport", "report", "backupfile", "select")['idreport'];
 $destination = getcwd();
 $setting = select("setting", "*");
+$canSendReport = !isTelegramChatIdEmpty($setting['Channel_Report'] ?? '');
 $sourcefir = dirname($destination);
 $botlist = select("botsaz", "*", null, null, "fetchAll");
-if ($botlist) {
+if ($botlist && $canSendReport) {
     foreach ($botlist as $bot) {
         $folderName = $bot['id_user'] . $bot['username'];
         shell_exec("zip -r $destination/file.zip $sourcefir/vpnbot/$folderName/data $sourcefir/vpnbot/$folderName/product.json $sourcefir/vpnbot/$folderName/product_name.json");
@@ -32,17 +33,21 @@ $output = [];
 $return_var = 0;
 exec($command, $output, $return_var);
 if ($return_var !== 0) {
-    telegram('sendmessage', [
-        'chat_id' => $setting['Channel_Report'],
-        'message_thread_id' => $reportbackup,
-        'text' => $textbotlang['keyboard']['backupError'],
-    ]);
+    if ($canSendReport) {
+        telegram('sendmessage', [
+            'chat_id' => $setting['Channel_Report'],
+            'message_thread_id' => $reportbackup,
+            'text' => $textbotlang['keyboard']['backupError'],
+        ]);
+    }
 } else {
-    telegram('sendDocument', [
-        'chat_id' => $setting['Channel_Report'],
-        'message_thread_id' => $reportbackup,
-        'document' => new CURLFile($backup_file_name),
-        'caption' => $textbotlang['Admin']['report']['backupCaption'],
-    ]);
+    if ($canSendReport) {
+        telegram('sendDocument', [
+            'chat_id' => $setting['Channel_Report'],
+            'message_thread_id' => $reportbackup,
+            'document' => new CURLFile($backup_file_name),
+            'caption' => $textbotlang['Admin']['report']['backupCaption'],
+        ]);
+    }
     unlink($backup_file_name);
 }
