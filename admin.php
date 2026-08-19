@@ -1931,10 +1931,12 @@ elseif ($datain == "systemsms") {
                     $currentCronJobs = runShellCommand(sprintf('%s -l 2>/dev/null', escapeshellarg($crontabBinary)));
                     $jobToRemove = "*/1 * * * * curl https://$domainhosts/cronbot/lottery.php";
                     $newCronJobs = preg_replace('/' . preg_quote($jobToRemove, '/') . '/', '', (string) $currentCronJobs);
-                    $tempCronFile = '/tmp/crontab.txt';
-                    file_put_contents($tempCronFile, trim($newCronJobs) . PHP_EOL);
-                    runShellCommand(sprintf('%s %s', escapeshellarg($crontabBinary), escapeshellarg($tempCronFile)));
-                    if (file_exists($tempCronFile)) {
+                    $tempCronFile = tempnam(sys_get_temp_dir(), 'cron');
+                    if ($tempCronFile === false) {
+                        error_log('Unable to create temporary file for lottery cron job removal.');
+                    } else {
+                        file_put_contents($tempCronFile, trim((string) $newCronJobs) . PHP_EOL);
+                        runShellCommand(sprintf('%s %s', escapeshellarg($crontabBinary), escapeshellarg($tempCronFile)));
                         unlink($tempCronFile);
                     }
                 }
@@ -2718,6 +2720,20 @@ elseif ($datain == "systemsms") {
     $format_price_cart = number_format($Payment_report['price']);
     $Balance_id = select("user", "*", "id", $Payment_report['id_user'], "select");
     if ($Payment_report['payment_Status'] == "paid" || $Payment_report['payment_Status'] == "reject") {
+        telegram('answerCallbackQuery', array(
+            'callback_query_id' => $callback_query_id,
+            'text' => $textbotlang['Admin']['Payment']['reviewedPayment'],
+            'show_alert' => true,
+            'cache_time' => 5,
+        ));
+        $textconfrom = sprintf($textbotlang['Admin']['Payment']['approvedByOther'], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $Balance_id['Balance'], $format_price_cart);
+        Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+        return;
+    }
+    $claim = $pdo->prepare("UPDATE Payment_report SET payment_Status = 'paid' WHERE id_order = ? AND payment_Status NOT IN ('paid', 'reject')");
+    $claim->execute([$order_id]);
+    clearSelectCache('Payment_report');
+    if ($claim->rowCount() === 0) {
         telegram('answerCallbackQuery', array(
             'callback_query_id' => $callback_query_id,
             'text' => $textbotlang['Admin']['Payment']['reviewedPayment'],

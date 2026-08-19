@@ -1,15 +1,11 @@
 <?php
 require_once 'vendor/autoload.php';
 require 'config.php';
-require 'vendor/autoload.php';
 ini_set('error_log', 'error_log');
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Label\Font\OpenSans;
-use Endroid\QrCode\Label\LabelAlignment;
-use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 
 #-----------shell helper utilities------------#
@@ -83,12 +79,20 @@ function getCrontabBinary()
         }
     }
 
+    $knownPaths = ['/usr/bin/crontab', '/usr/sbin/crontab', '/bin/crontab'];
     if (isShellExecAvailable()) {
         $whichOutput = @shell_exec('command -v crontab 2>/dev/null');
         if (is_string($whichOutput)) {
             $whichOutput = trim($whichOutput);
-            if ($whichOutput !== '' && @is_executable($whichOutput)) {
+            if ($whichOutput !== '') {
                 $resolvedPath = $whichOutput;
+                return $resolvedPath;
+            }
+        }
+        foreach ($knownPaths as $knownPath) {
+            $probe = @shell_exec('test -x ' . escapeshellarg($knownPath) . ' && printf %s ' . escapeshellarg($knownPath));
+            if (is_string($probe) && trim($probe) === $knownPath) {
+                $resolvedPath = $knownPath;
                 return $resolvedPath;
             }
         }
@@ -659,6 +663,9 @@ function channel(array $id_channel)
     global $from_id;
     $channel_link = array();
     foreach ($id_channel as $channel) {
+        if (isTelegramChatIdEmpty($channel)) {
+            continue;
+        }
         $response = telegram('getChatMember', [
             'chat_id' => $channel,
             'user_id' => $from_id
@@ -792,16 +799,6 @@ function claimPaymentPaid($order_id)
     return $stmt->rowCount() >= 1;
 }
 
-function releasePaymentPaid($order_id, $status = 'Unpaid')
-{
-    global $pdo;
-    $stmt = $pdo->prepare("UPDATE Payment_report SET payment_Status = :status WHERE id_order = :id_order AND payment_Status = 'paid'");
-    $stmt->bindValue(':status', $status);
-    $stmt->bindValue(':id_order', $order_id);
-    $stmt->execute();
-    clearSelectCache('Payment_report');
-}
-
 function DirectPayment($order_id, $image = 'images.jpg')
 {
     global $pdo, $ManagePanel, $textbotlang, $keyboardextendfnished, $keyboard, $Confirm_pay, $from_id, $message_id;
@@ -821,6 +818,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
     clearSelectCache('user');
     if ($steppay[0] == "getconfigafterpay") {
         $get_invoice = select("invoice", "*", "username", $steppay[1], "select");
+        if ($get_invoice['Status'] == "active") {
+            return;
+        }
         $stmt = $pdo->prepare("SELECT * FROM product WHERE name_product = :name_product AND (Location = :Service_location  or Location = '/all')");
         $stmt->bindParam(':name_product', $get_invoice['name_product'], PDO::PARAM_STR);
         $stmt->bindParam(':Service_location', $get_invoice['Service_location'], PDO::PARAM_STR);
@@ -857,6 +857,11 @@ function DirectPayment($order_id, $image = 'images.jpg')
         );
         $dataoutput = $ManagePanel->createUser($marzban_list_get['name_panel'], $info_product['code_product'], $username_ac, $datac);
         if (!is_array($dataoutput) || empty($dataoutput['username'])) {
+            clearSelectCache('invoice');
+            $invoice_now = select("invoice", "*", "id_invoice", $get_invoice['id_invoice'], "select");
+            if ($invoice_now && $invoice_now['Status'] == "active") {
+                return;
+            }
             $dataoutput['msg'] = json_encode($dataoutput['msg'] ?? $dataoutput ?? 'unknown error');
             $balance = $Balance_id['Balance'] + $Payment_report['price'];
             update("user", "Balance", $balance, "id", $Balance_id['id']);
@@ -1029,7 +1034,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
         if ($Payment_report['Payment_Method'] == "cart to cart" or $Payment_report['Payment_Method'] == "arze digital offline") {
             update("invoice", "Status", "active", "id_invoice", $get_invoice['id_invoice']);
             $textconfrom = sprintf($textbotlang['Admin']['reportgroup']['paymentConfirmedService'], $username_ac, $get_invoice['Service_location'], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $Balance_id['Balance'], $format_price_cart, $Payment_report['dec_not_confirmed']);
-            Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            if (!isTelegramChatIdEmpty($from_id) && intval($message_id) != 0) {
+                Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            }
         }
     } elseif ($steppay[0] == "getextenduser") {
         $balanceformatsell = number_format(select("user", "Balance", "id", $Balance_id['id'], "select")['Balance'], 0);
@@ -1153,7 +1160,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
         if ($Payment_report['Payment_Method'] == "cart to cart" or $Payment_report['Payment_Method'] == "arze digital offline") {
 
             $textconfrom = sprintf($textbotlang['Admin']['reportgroup']['paymentConfirmedRenew'], $usernamepanel, $prodcut['name_product'], $nameloc['Service_location'], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $Balance_id['Balance'], $format_price_cart, $Payment_report['dec_not_confirmed']);
-            Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            if (!isTelegramChatIdEmpty($from_id) && intval($message_id) != 0) {
+                Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            }
         }
     } elseif ($steppay[0] == "getextravolumeuser") {
         $steppay = explode("%", $steppay[1]);
@@ -1217,7 +1226,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $volumes = $volume;
         if ($Payment_report['Payment_Method'] == "cart to cart") {
             $textconfrom = sprintf($textbotlang['Admin']['reportgroup']['paymentConfirmedExtraVolume'], $volumes, $steppay[0], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $Balance_id['Balance'], $format_price_cart);
-            Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            if (!isTelegramChatIdEmpty($from_id) && intval($message_id) != 0) {
+                Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            }
         }
         update("invoice", "Status", "active", "id_invoice", $nameloc['id_invoice']);
         $text_report = sprintf($textbotlang['Admin']['reportgroup']['extraVolumeFn'], $Balance_id['id'], $volumes, $Payment_report['price'], $steppay[0], $Balance_id['Balance']);
@@ -1293,7 +1304,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
         if ($Payment_report['Payment_Method'] == "cart to cart") {
             $volumes = $tmieextra;
             $textconfrom = sprintf($textbotlang['Admin']['reportgroup']['paymentConfirmedExtraTime'], $volumes, $steppay[0], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $Balance_id['Balance'], $format_price_cart);
-            Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            if (!isTelegramChatIdEmpty($from_id) && intval($message_id) != 0) {
+                Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            }
         }
         update("invoice", "Status", "active", "id_invoice", $nameloc['id_invoice']);
         $text_report = sprintf($textbotlang['Admin']['reportgroup']['extraTimeFn'], $Balance_id['id'], $volumes, $Payment_report['price'], $steppay[0]);
@@ -1312,7 +1325,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $format_price_cart = $Payment_report['price'];
         if ($Payment_report['Payment_Method'] == "cart to cart" or $Payment_report['Payment_Method'] == "arze digital offline") {
             $textconfrom = sprintf($textbotlang['Admin']['reportgroup']['newPaymentBalanceFn'], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $format_price_cart, $Balance_id['Balance'], $Payment_report['dec_not_confirmed']);
-            Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            if (!isTelegramChatIdEmpty($from_id) && intval($message_id) != 0) {
+                Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
+            }
         }
         sendmessage($Payment_report['id_user'], sprintf($textbotlang['users']['Balance']['chargedThanks'], $Payment_report['price'], $Payment_report['id_order']), null, 'HTML');
     }
@@ -1543,7 +1558,9 @@ function addCronIfNotExists($cronCommand)
     $existingCronJobs = trim((string) $existingCronJobs);
     $cronLines = $existingCronJobs === '' ? [] : preg_split('/\r?\n/', $existingCronJobs);
     $cronLines = array_values(array_filter(array_map('trim', $cronLines), static function ($line) {
-        return $line !== '' && strpos($line, '#') !== 0;
+        return $line !== ''
+            && strpos($line, '#') !== 0
+            && stripos($line, 'no crontab') === false;
     }));
 
     $newLineAdded = false;
@@ -1573,8 +1590,19 @@ function addCronIfNotExists($cronCommand)
         return false;
     }
 
-    runShellCommand(sprintf('%s %s', escapeshellarg($crontabBinary), escapeshellarg($temporaryFile)));
+    $applyMarker = 'MIRZA_CRON_OK';
+    $applyOutput = runShellCommand(sprintf(
+        '%s %s >/dev/null 2>&1 && echo %s',
+        escapeshellarg($crontabBinary),
+        escapeshellarg($temporaryFile),
+        $applyMarker
+    ));
     unlink($temporaryFile);
+
+    if (strpos((string) $applyOutput, $applyMarker) === false) {
+        error_log('crontab install failed; unable to register cron job(s): ' . $logContext);
+        return false;
+    }
 
     return true;
 }
@@ -1868,6 +1896,9 @@ function sendMessageService($panel_info, $config, $sub_link, $username_service, 
     if (!check_active_btn($setting['keyboardmain'], "text_help"))
         $reply_markup = null;
     $user_id = $user_id == null ? $from_id : $user_id;
+    if (isTelegramChatIdEmpty($user_id)) {
+        return;
+    }
     $STATUS_SEND_MESSAGE_PHOTO = $panel_info['config'] == "onconfig" && (is_array($config) ? count($config) : 0) != 1 ? false : true;
     $out_put_qrcode = "";
     if ($panel_info['type'] == "Manualsale" || $panel_info['type'] == "ibsng" || $panel_info['type'] == "mikrotik") {

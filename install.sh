@@ -43,6 +43,7 @@ _step_eta() {
         "Adding PHP repository"*|"Retrying PHP repository"*) echo 15 ;;
         "Updating & upgrading"*|"Re-running system update"*) echo 120 ;;
         "Installing base tools"*)            echo 25 ;;
+        "Ensuring cron"*)                    echo 10 ;;
         "Installing PHP dependencies"*)      echo 60 ;;
         "Installing PHP "*)                  echo 30 ;;
         "Installing web stack"*)             echo 90 ;;
@@ -76,6 +77,7 @@ _step_eta() {
 plan_eta() {
     STEP_TOTAL=0; ETA_REMAINING=0; STEP_NO=0
     phase_done DEPS    || { STEP_TOTAL=$((STEP_TOTAL + 12)); ETA_REMAINING=$((ETA_REMAINING + 388)); }
+    STEP_TOTAL=$((STEP_TOTAL + 1)); ETA_REMAINING=$((ETA_REMAINING + 10));
     phase_done FILES   || { STEP_TOTAL=$((STEP_TOTAL + 3));  ETA_REMAINING=$((ETA_REMAINING + 85)); }
     phase_done DBROOT  || { STEP_TOTAL=$((STEP_TOTAL + 1));  ETA_REMAINING=$((ETA_REMAINING + 10)); }
     if ! phase_done SSL; then
@@ -599,6 +601,74 @@ _pkg_installed() { dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'inst
 _pkg_installed_glob() {
     dpkg-query -W -f='${Package} ${Status}\n' "$1" 2>/dev/null | grep -q 'install ok installed'
 }
+
+_crontab_present() {
+    command -v crontab >/dev/null 2>&1 || [ -x /usr/bin/crontab ] || [ -x /usr/sbin/crontab ]
+}
+
+_cron_unit_name() {
+    if [ -f /lib/systemd/system/cron.service ] || [ -f /usr/lib/systemd/system/cron.service ]; then
+        echo cron
+    elif [ -f /lib/systemd/system/crond.service ] || [ -f /usr/lib/systemd/system/crond.service ]; then
+        echo crond
+    fi
+}
+
+_cron_daemon_active() {
+    local unit
+    unit="$(_cron_unit_name)"
+    if [ -n "$unit" ] && systemctl is-active --quiet "$unit" 2>/dev/null; then
+        return 0
+    fi
+    pgrep -x cron >/dev/null 2>&1 || pgrep -x crond >/dev/null 2>&1
+}
+
+# Install cron when crontab/daemon is missing, then enable + start it and
+# allow www-data to register jobs (PHP activecron() uses crontab as www-data).
+ensure_cron() {
+    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin${PATH:+:$PATH}"
+    hash -r 2>/dev/null || true
+
+    if ! _crontab_present; then
+        DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cron \
+            || DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cronie \
+            || return 1
+        hash -r 2>/dev/null || true
+        systemctl daemon-reload 2>/dev/null || true
+    elif ! _cron_daemon_active; then
+        if ! dpkg-query -W -f='${Status}' cron 2>/dev/null | grep -q 'install ok installed' \
+            && ! dpkg-query -W -f='${Status}' cronie 2>/dev/null | grep -q 'install ok installed'; then
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cron \
+                || DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=180 cronie \
+                || return 1
+            hash -r 2>/dev/null || true
+            systemctl daemon-reload 2>/dev/null || true
+        fi
+    fi
+
+    if [ -f /etc/cron.allow ]; then
+        grep -qx 'www-data' /etc/cron.allow 2>/dev/null || echo 'www-data' >> /etc/cron.allow
+    fi
+
+    local unit
+    unit="$(_cron_unit_name)"
+    if [ -n "$unit" ]; then
+        systemctl unmask "$unit" >/dev/null 2>&1 || true
+        systemctl enable "$unit" >/dev/null 2>&1 || true
+        systemctl start "$unit" || return 1
+        if ! systemctl is-active --quiet "$unit"; then
+            sleep 1
+            systemctl start "$unit" || return 1
+            systemctl is-active --quiet "$unit" || return 1
+        fi
+    else
+        service cron start 2>/dev/null || service crond start 2>/dev/null || true
+        _cron_daemon_active || return 1
+    fi
+
+    _crontab_present || return 1
+}
+export -f _crontab_present _cron_unit_name _cron_daemon_active ensure_cron
 
 # Refuse to install on a server that already has conflicting software.
 # Only runs on a brand-new install (never on resume / Mirza's own partial state).
@@ -1281,7 +1351,6 @@ function show_help_screen() {
     _kv "menu" "${C_DIM}Open this interactive panel (default)${CR}"
 
     _sec "Install parameters"
-    _kv "--name" "${C_DIM}Bot username${CR}"
     _kv "--token" "${C_DIM}Telegram bot token${CR}"
     _kv "--admin" "${C_DIM}Admin chat id${CR}"
     _kv "--domain" "${C_DIM}Domain name (e.g. bot.example.com)${CR}"
@@ -1295,7 +1364,7 @@ function show_help_screen() {
 
     _sec "Examples"
     printf "    ${C_KEY}mirza install --channel auto${CR}\n"
-    printf "    ${C_KEY}mirza install --name myvpnbot --token 123:ABC \\\\${CR}\n"
+    printf "    ${C_KEY}mirza install --token 123:ABC \\\\${CR}\n"
     printf "    ${C_DIM}            --admin 111 --domain bot.example.com --version 0.1.7${CR}\n"
     printf "    ${C_KEY}mirza update --version 0.1.6${CR}\n"
     printf "    ${C_KEY}mirza update --channel release${CR}\n"
@@ -1309,16 +1378,6 @@ function show_help_screen() {
     printf "  ${C_PROMPT}❯${CR} Press Enter to return to the menu... "
     read -r _
     show_menu
-}
-function find_free_port() {
-    for port in {3300..3330}; do
-        if ! ss -tuln | grep -q ":$port "; then
-            echo "$port"
-            return 0
-        fi
-    done
-    echo -e "\033[31m[ERROR] No free port found between 3300 and 3330.\033[0m"
-    exit 1
 }
 function fix_update_issues() {
     echo -e "\e[33mTrying to fix update issues by changing mirrors...\033[0m"
@@ -1437,10 +1496,20 @@ domain_points_here() {
 
 # 0 = valid+live, 1 = bad format, 2 = format ok but token rejected/unreachable
 validate_token() {
+    TG_BOT_USERNAME=""
     [[ "$1" =~ ^[0-9]{8,10}:[a-zA-Z0-9_-]{35}$ ]] || return 1
     local r; r=$(curl -fsSL --max-time 8 "https://api.telegram.org/bot$1/getMe" 2>/dev/null)
-    echo "$r" | grep -q '"ok":true' && return 0
-    return 2
+    echo "$r" | grep -q '"ok":true' || return 2
+    TG_BOT_USERNAME=$(printf '%s' "$r" | sed -n 's/.*"username"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+    return 0
+}
+
+fetch_bot_username() {
+    local r; r=$(curl -fsSL --max-time 8 "https://api.telegram.org/bot$1/getMe" 2>/dev/null)
+    echo "$r" | grep -q '"ok":true' || return 1
+    local u; u=$(printf '%s' "$r" | sed -n 's/.*"username"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+    [ -n "$u" ] || return 1
+    printf '%s' "$u"
 }
 
 # Safe identifiers/passwords (no quotes/specials that break SQL or config.php)
@@ -1649,12 +1718,8 @@ function install_bot() {
             "DEBIAN_FRONTEND=noninteractive apt install -y php${PHP_VER} php${PHP_VER}-cli php${PHP_VER}-fpm php${PHP_VER}-mysql" \
             || { show_step_error; install_pause "Installing PHP ${PHP_VER}"; }
 
-        # Versioned packages only: unversioned (php-*, lamp-server^) would pull the
-        # newest PHP available as default and break the bot's mysqli/curl.
         WEBSTACK_CMD="DEBIAN_FRONTEND=noninteractive apt install -y mysql-server apache2 libapache2-mod-php${PHP_VER} php${PHP_VER}-mbstring php${PHP_VER}-zip php${PHP_VER}-gd php${PHP_VER}-curl php${PHP_VER}-intl php${PHP_VER}-xml php${PHP_VER}-bcmath"
         if ! run_step "Installing web stack (Apache, MySQL, PHP modules)" "$WEBSTACK_CMD"; then
-            # Most common cause: a broken/half-configured MySQL from an interrupted run.
-            # Safe to repair here because the fresh-server check ran and no DB exists yet.
             run_step "Repairing broken MySQL installation" "repair_mysql" \
                 || { show_step_error; install_pause "Repairing MySQL"; }
             run_step "Re-installing web stack" "$WEBSTACK_CMD" \
@@ -1704,6 +1769,9 @@ function install_bot() {
     else
         echo -e "  ${C_OK}●${CR} ${C_DIM}Dependencies already installed - skipping.${CR}"
     fi
+
+    run_step "Ensuring cron is installed and running" "ensure_cron" \
+        || { show_step_error; install_pause "Installing cron"; }
     # ╰─────────────────────────────────────────────────────────────╯
 
     # ╭──────────────────────── PHASE: FILES ───────────────────────╮
@@ -1927,10 +1995,12 @@ EOF
     if [ -n "$YOUR_BOTNAME" ]; then
         echo -e "\e[33m[+] \e[36musernamebot (resumed):\e[0m ${YOUR_BOTNAME}"
     else
-        if [ -n "$ARG_NAME" ]; then
-            YOUR_BOTNAME="$ARG_NAME"
-            echo -e "\e[33m[+] \e[36musernamebot (from --name):\e[0m ${YOUR_BOTNAME}"
+        YOUR_BOTNAME="$TG_BOT_USERNAME"
+        [ -z "$YOUR_BOTNAME" ] && YOUR_BOTNAME="$(fetch_bot_username "$YOUR_BOT_TOKEN")"
+        if [ -n "$YOUR_BOTNAME" ]; then
+            echo -e "\e[33m[+] \e[36musernamebot (from token):\e[0m @${YOUR_BOTNAME}"
         else
+            echo -e "  ${C_BAD}●${CR} ${C_BAD}Could not read the bot username from Telegram.${CR}"
             while true; do
                 printf "\e[33m[+] \e[36musernamebot: \033[0m"
                 read YOUR_BOTNAME
@@ -2142,6 +2212,8 @@ function update_bot() {
     print_header "Updating Mirza Bot"
     run_step "Updating system packages" "apt update --allow-releaseinfo-change && apt upgrade -y" \
         || { show_step_error; echo -e "\e[91mError updating the server. Exiting...\033[0m"; exit 1; }
+    run_step "Ensuring cron is installed and running" "ensure_cron" \
+        || { show_step_error; echo -e "\e[91mError: Failed to install or start cron.\033[0m"; exit 1; }
     echo -e "\e[92mServer packages updated successfully...\033[0m\n"
     TEMP_DIR="/tmp/mirzaprobot_update"
     rm -rf "$TEMP_DIR"; mkdir -p "$TEMP_DIR"
@@ -2299,6 +2371,15 @@ function remove_bot() {
         exit 0
     fi
     echo "Removing Mirza Bot..." | tee -a "$LOG_FILE"
+    if command -v crontab >/dev/null 2>&1 || [ -x /usr/bin/crontab ]; then
+        local _cb
+        _cb="$(command -v crontab || echo /usr/bin/crontab)"
+        if id www-data >/dev/null 2>&1; then
+            "$_cb" -u www-data -l 2>/dev/null | grep -v '/cronbot/' | "$_cb" -u www-data - 2>/dev/null || true
+        fi
+        "$_cb" -l 2>/dev/null | grep -v '/cronbot/' | "$_cb" - 2>/dev/null || true
+        echo -e "\e[92mRemoved Mirza cron jobs.\033[0m" | tee -a "$LOG_FILE"
+    fi
     CONFIG_PATH="/var/www/html/mirzaprobotconfig/config.php"
     if [ -f "$CONFIG_PATH" ]; then
         sudo shred -u -n 5 "$CONFIG_PATH" && echo -e "\e[92mConfig file securely removed: $CONFIG_PATH\033[0m" | tee -a "$LOG_FILE" || {
@@ -2574,6 +2655,7 @@ EOF
          "https://api.telegram.org/bot${OLD_API_KEY}/setWebhook"
     sleep 2
     curl -k "https://${DOMAIN_NAME}/table.php" > /dev/null 2>&1
+    ensure_cron || echo -e "\033[33mWarning: cron is not installed or not running.\033[0m"
     sed -i 's/\r$//' /root/install.sh
     chmod +x /root/install.sh
     rm -f /usr/local/bin/mirza
@@ -2592,7 +2674,7 @@ EOF
 
 # ── Command-line argument parsing ────────────────────────────
 # Globals filled from flags (consumed by install/update where relevant)
-ARG_NAME=""     ARG_TOKEN=""   ARG_ADMIN=""    ARG_DOMAIN=""
+ARG_TOKEN=""    ARG_ADMIN=""   ARG_DOMAIN=""
 ARG_DBUSER=""   ARG_DBPASS=""  ARG_VERSION=""  ARG_CHANNEL=""
 
 print_usage() {
@@ -2614,7 +2696,6 @@ print_usage() {
     menu               Show interactive menu (default)
 
   Options:
-    --name   <user>    Bot username
     --token  <token>   Telegram bot token
     --admin  <id>      Admin chat id
     --domain <domain>  Domain name (e.g. bot.example.com)
@@ -2626,7 +2707,7 @@ print_usage() {
 
   Examples:
     mirza install --channel auto
-    mirza install --name myvpnbot --token 123:ABC --admin 111 --domain bot.example.com --version 0.1.7
+    mirza install --token 123:ABC --admin 111 --domain bot.example.com --version 0.1.7
     mirza update --channel release
     mirza update --version 0.1.6
 
@@ -2647,7 +2728,6 @@ process_arguments() {
     # Parse remaining flags
     while [ $# -gt 0 ]; do
         case "$1" in
-            --name)    ARG_NAME="$2";    shift 2 ;;
             --token)   ARG_TOKEN="$2";   shift 2 ;;
             --admin)   ARG_ADMIN="$2";   shift 2 ;;
             --domain)  ARG_DOMAIN="$2";  shift 2 ;;
