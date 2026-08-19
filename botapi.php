@@ -1,11 +1,35 @@
 <?php
 require_once 'config.php';
+function isTelegramChatIdEmpty($chat_id): bool
+{
+    if ($chat_id === null || $chat_id === false) {
+        return true;
+    }
+    if (is_array($chat_id) || is_object($chat_id)) {
+        return true;
+    }
+    $chat_id = trim((string) $chat_id);
+    if ($chat_id === '') {
+        return true;
+    }
+    return is_numeric($chat_id) && (int) $chat_id === 0;
+}
 function telegram($method, $datas = [], $token = null)
 {
     global $APIKEY;
 
     $token = $token === null ? $APIKEY : $token;
     $url = "https://api.telegram.org/bot" . $token . "/" . $method;
+
+    foreach (['chat_id', 'from_chat_id'] as $chatIdKey) {
+        if (array_key_exists($chatIdKey, $datas) && isTelegramChatIdEmpty($datas[$chatIdKey])) {
+            return [
+                'ok' => false,
+                'error_code' => 400,
+                'description' => 'Bad Request: chat_id is empty'
+            ];
+        }
+    }
 
     if (isset($datas['message_thread_id']) && intval($datas['message_thread_id']) <= 0) {
         unset($datas['message_thread_id']);
@@ -57,7 +81,12 @@ function telegram($method, $datas = [], $token = null)
         $errorCode = $decodedResponse['error_code'] ?? 0;
         $description = $decodedResponse['description'] ?? '';
         $silent = $errorCode === 403
-            || ($errorCode === 400 && str_contains($description, 'message is not modified'));
+            || ($errorCode === 400 && (
+                str_contains($description, 'message is not modified')
+                || str_contains($description, "message can't be deleted")
+                || str_contains($description, 'message to delete not found')
+                || str_contains($description, 'chat not found')
+            ));
         if (!$silent) {
             error_log(json_encode($decodedResponse));
         }
@@ -66,7 +95,9 @@ function telegram($method, $datas = [], $token = null)
     return $decodedResponse;
 }
 function sendmessage($chat_id,$text,$keyboard,$parse_mode,$bot_token = null){
-    if(intval($chat_id) == 0)return ['ok' => false];
+    if (isTelegramChatIdEmpty($chat_id)) {
+        return ['ok' => false];
+    }
     return telegram('sendmessage',[
         'chat_id' => $chat_id,
         'text' => $text,

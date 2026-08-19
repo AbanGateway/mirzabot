@@ -70,7 +70,7 @@ if (intval($setting['scorestatus']) == 1) {
             $count++;
         }
 
-        if ($count > 0) {
+        if ($count > 0 && !isTelegramChatIdEmpty($setting['Channel_Report'] ?? '')) {
             telegram('sendmessage', [
                 'chat_id' => $setting['Channel_Report'],
                 'message_thread_id' => $otherreport,

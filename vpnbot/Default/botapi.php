@@ -1,10 +1,33 @@
 <?php
 require_once 'config.php';
+function isTelegramChatIdEmpty($chat_id): bool
+{
+    if ($chat_id === null || $chat_id === false) {
+        return true;
+    }
+    if (is_array($chat_id) || is_object($chat_id)) {
+        return true;
+    }
+    $chat_id = trim((string) $chat_id);
+    if ($chat_id === '') {
+        return true;
+    }
+    return is_numeric($chat_id) && (int) $chat_id === 0;
+}
 function telegram($method, $datas = [],$botToken = null)
 {
     global $ApiToken;
     if($botToken != null){
         $ApiToken = $botToken;
+    }
+    foreach (['chat_id', 'from_chat_id'] as $chatIdKey) {
+        if (array_key_exists($chatIdKey, $datas) && isTelegramChatIdEmpty($datas[$chatIdKey])) {
+            return [
+                'ok' => false,
+                'error_code' => 400,
+                'description' => 'Bad Request: chat_id is empty'
+            ];
+        }
     }
     $url = "https://api.telegram.org/bot" . $ApiToken . "/" . $method;
     $ch = curl_init();
@@ -19,6 +42,9 @@ function telegram($method, $datas = [],$botToken = null)
     }
 }
 function sendmessage($chat_id,$text,$keyboard,$parse_mode){
+    if (isTelegramChatIdEmpty($chat_id)) {
+        return ['ok' => false];
+    }
     return telegram('sendmessage',[
         'chat_id' => $chat_id,
         'text' => $text,
