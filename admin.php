@@ -7222,17 +7222,12 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     sendmessage($from_id, sprintf($textbotlang['Admin']['gateway']['cubepayFeeAsk'], $feeValueNow), $backadmin, 'HTML');
     step("getfeeiranpay2", $from_id);
 } elseif ($user['step'] == "getfeeiranpay2") {
-    $feeInput = strtr(trim($text), ['۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4', '۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9', '٫' => '.', ',' => '', '،' => '']);
-    if (!is_numeric($feeInput) || (float) $feeInput < 0) {
-        sendmessage($from_id, $textbotlang['common']['invalidInput'], $backadmin, 'HTML');
-        return;
-    }
-    $feeValue = (float) $feeInput;
-    update("PaySetting", "ValuePay", (string) $feeValue, "NamePay", "feeternado");
-    $feeExample = number_format(cubepayApplyFee(100000, $feeValue));
-    $feeSavedText = $feeValue <= 100
-        ? sprintf($textbotlang['Admin']['gateway']['cubepayFeeSavedPercent'], $feeValue, $feeExample)
-        : sprintf($textbotlang['Admin']['gateway']['cubepayFeeSavedFixed'], number_format($feeValue), $feeExample);
+
+    update("PaySetting", "ValuePay", (string) $text, "NamePay", "feeternado");
+    $feeExample = number_format(cubepayApplyFee(100000, $text));
+    $feeSavedText = $text <= 100
+        ? sprintf($textbotlang['Admin']['gateway']['cubepayFeeSavedPercent'], $text, $feeExample)
+        : sprintf($textbotlang['Admin']['gateway']['cubepayFeeSavedFixed'], number_format($text), $feeExample);
     sendmessage($from_id, $feeSavedText, $trnado, 'HTML');
     step("home", $from_id);
 } elseif ($text == $textbotlang['keyboard']['cashbackIranPay2']) {
