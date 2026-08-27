@@ -1768,6 +1768,15 @@ function sanitizeUserName($userName)
 
     return $userName;
 }
+function normalizePanelUrl($url)
+{
+    $url = trim((string) $url);
+    if ($url === '') {
+        return $url;
+    }
+    $trimmed = rtrim($url, "/");
+    return $trimmed === '' ? $url : $trimmed;
+}
 function publickey()
 {
     $privateKey = sodium_crypto_box_keypair();
