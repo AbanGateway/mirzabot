@@ -259,6 +259,7 @@ $paymentexits = (int) $stmt->fetchColumn();
 $zarinpal = getPaySettingValue("zarinpalstatus");
 $affilnecurrency = getPaySettingValue("digistatus");
 $arzireyali3 = getPaySettingValue("statusiranpay3");
+$abangateway4 = getPaySettingValue("statusiranpay4", "offiranpay4");
 $paymentstatussnotverify = getPaySettingValue("paymentstatussnotverify");
 $paymentsstartelegram = getPaySettingValue("statusstar");
 $payment_status_nowpayment = getPaySettingValue("statusnowpayment");
@@ -301,6 +302,19 @@ if ($Swapino == "onSwapinoBot") {
 if ($trnadoo == "onternado") {
     $step_payment['inline_keyboard'][] = [
         ['text' => $textbotlang['textbot']['iranPay3'], 'callback_data' => "iranpay2"]
+    ];
+}
+// Both halves matter: the admin has switched it on, *and* the key and endpoint
+// exist. A gateway shown without them takes the buyer to a page that cannot be
+// created — the button is the last place to find that out.
+if (
+    $abangateway4 == "oniranpay4"
+    && trim((string) getPaySettingValue("apiiranpay4", "")) !== ""
+    && trim((string) getPaySettingValue("apiiranpay4", "")) !== "0"
+    && function_exists('abangatewayEndpoint') && abangatewayEndpoint() !== null
+) {
+    $step_payment['inline_keyboard'][] = [
+        ['text' => $textbotlang['textbot']['iranPay4'], 'callback_data' => "iranpay4"]
     ];
 }
 if ($arzireyali3 == "oniranpay3" && $paymentexits >= 2) {
@@ -1209,6 +1223,16 @@ $iranpaykeyboard = json_encode([
         [['text' => $textbotlang['keyboard']['minAmountIranPay3']], ['text' => $textbotlang['keyboard']['maxAmountIranPay3']]],
         [['text' => $textbotlang['keyboard']['cashbackIranPay3']]],
         [['text' => $textbotlang['keyboard']['setEducationIranPay3']]],
+        [['text' => $textbotlang['Admin']['backAdminBtn']], ['text' => $textbotlang['Admin']['backMenuBtn']]]
+    ],
+    'resize_keyboard' => true
+]);
+$abangatewaykeyboard = json_encode([
+    'keyboard' => [
+        [['text' => $textbotlang['keyboard']['apiIranPay4']], ['text' => $textbotlang['keyboard']['endpointIranPay4']]],
+        [['text' => $textbotlang['keyboard']['minAmountIranPay4']], ['text' => $textbotlang['keyboard']['maxAmountIranPay4']]],
+        [['text' => $textbotlang['keyboard']['cashbackIranPay4']]],
+        [['text' => $textbotlang['keyboard']['setEducationIranPay4']]],
         [['text' => $textbotlang['Admin']['backAdminBtn']], ['text' => $textbotlang['Admin']['backMenuBtn']]]
     ],
     'resize_keyboard' => true
