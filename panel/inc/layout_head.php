@@ -119,6 +119,11 @@ $initials = mb_strtoupper(mb_substr($currentUser, 0, 1, 'UTF-8'), 'UTF-8');
             <span class="nav-icon"><?= icon('package') ?></span><span
               class="nav-label"><?= $textbotlang['panel']['layoutMenuSectionSystem'] ?></span>
           </a>
+          <a href="category.php" class="nav-item <?= $activeNav === 'category' ? 'active' : '' ?>"
+            title="<?= $textbotlang['panel']['categoryPageTitle'] ?>">
+            <span class="nav-icon"><?= icon('folder') ?></span><span
+              class="nav-label"><?= $textbotlang['panel']['categoryPageTitle'] ?></span>
+          </a>
           <a href="payment.php" class="nav-item <?= $activeNav === 'payment' ? 'active' : '' ?>"
             title="<?= $textbotlang['panel']['layoutPageTitlePayment'] ?>">
             <span class="nav-icon"><?= icon('card') ?></span><span
