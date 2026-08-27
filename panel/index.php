@@ -106,11 +106,12 @@ include __DIR__ . '/inc/layout_head.php';
                         </tr>
                     <?php else:
                         $statusMap = [
-                            'active' => ['tag-ok', $textbotlang['panel']['dashStatusActive']],
-                            'end_of_time' => ['tag-warn', $textbotlang['panel']['dashStatusExpired']],
-                            'end_of_volume' => ['tag-no', $textbotlang['panel']['dashStatusVolumeFinished']],
-                            'sendedwarn' => ['tag-warn', $textbotlang['panel']['dashStatusWarning']],
-                            'send_on_hold' => ['tag-plain', $textbotlang['panel']['dashStatusWaiting']],
+                            'active'         => ['tag-ok',    $textbotlang['panel']['dashStatusActive']],
+                            'end_of_time'    => ['tag-warn',  $textbotlang['panel']['dashStatusExpired']],
+                            'end_of_volume'  => ['tag-no',    $textbotlang['panel']['dashStatusVolumeFinished']],
+                            'sendedwarn'     => ['tag-warn',  $textbotlang['panel']['dashStatusWarning']],
+                            'send_on_hold'   => ['tag-plain', $textbotlang['panel']['dashStatusWaiting']],
+                            'unpaid'         => ['tag-warn',  $textbotlang['panel']['invoiceStatusUnpaid']],
                         ];
                         foreach ($recentInvoices as $inv):
                             [$tagClass, $label] = $statusMap[$inv['Status'] ?? ''] ?? ['tag-plain', $inv['Status'] ?? '—'];
