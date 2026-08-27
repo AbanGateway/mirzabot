@@ -3643,7 +3643,7 @@ ID пользователя : %s
                 'help' => '📚 Инструкция',
                 'iranPay1' => '💸 Риаловый платёжный шлюз',
                 'iranPay2' => '💸 Второй риаловый платёжный шлюз',
-                'iranPay3' => '💸 Третий риаловый платёжный шлюз',
+                'iranPay3' => '💸 cubpay',
                 'manual' => '✅ Сервис успешно создан
 
 👤 Имя пользователя сервиса : {username}
@@ -3786,9 +3786,9 @@ ID пользователя : %s
                 'cashbackAqayePardakht' => '💰 Кэшбэк Aghaye Pardakht',
                 'cashbackCartToCart' => '💰 Кэшбэк карта на карту',
                 'cashbackIranPay1' => '💰 Кэшбэк риаловой валюты',
-                'cashbackIranPay2' => '💰 Кэшбэк второй риаловой валюты',
-                'feeStatusIranPay2' => '🧾 Комиссия CubePay (вкл/выкл)',
-                'feeAmountIranPay2' => '💵 Значение комиссии CubePay',
+                'cashbackIranPay2' => '💰 Кэшбэк cubpay',
+                'feeStatusIranPay2' => '🧾 Комиссия cubpay (вкл/выкл)',
+                'feeAmountIranPay2' => '💵 Значение комиссии cubpay',
                 'cashbackIranPay3' => '💰 Кэшбэк третьей риаловой валюты',
                 'cashbackNowPayment' => '💰 Кэшбэк nowpayment',
                 'cashbackPlisio' => '💰 Кэшбэк plisio',
@@ -3928,7 +3928,7 @@ ID пользователя : %s
                 'infoRefreshed' => '♻️ Информация обновлена',
                 'infoUpdated' => 'Информация обновлена',
                 'iranPay1Label' => '📌 Первая риаловая валюта',
-                'iranPay2Label' => '📌 Вторая риаловая валюта',
+                'iranPay2Label' => '📌 cubpay',
                 'iranPay3Label' => '📌Третья риаловая валюта',
                 'lastHourStats' => '⏱️ Последний час',
                 'lastMonth' => '⛅️ Предыдущий месяц',
@@ -3948,7 +3948,7 @@ ID пользователя : %s
                 'maxAmountCartToCart' => '⬆️ Максимальная сумма карта на карту',
                 'maxAmountCryptoOffline' => '⬆️ Максимальная сумма офлайн-крипто',
                 'maxAmountIranPay1' => '⬆️ Максимальная сумма риаловой валюты',
-                'maxAmountIranPay2' => '⬆️ Максимальная сумма второй риаловой валюты',
+                'maxAmountIranPay2' => '⬆️ Максимальная сумма cubpay',
                 'maxAmountIranPay3' => '⬆️ Максимальная сумма третьей риаловой валюты',
                 'maxAmountNowPayment' => '⬆️ Максимальная сумма nowpayment',
                 'maxAmountPlisio' => '⬆️ Максимальная сумма plisio',
@@ -3963,7 +3963,7 @@ ID пользователя : %s
                 'minAmountCartToCart' => '⬇️ Минимальная сумма карта на карту',
                 'minAmountCryptoOffline' => '⬇️ Минимальная сумма офлайн-крипто',
                 'minAmountIranPay1' => '⬇️ Минимальная сумма риаловой валюты',
-                'minAmountIranPay2' => '⬇️ Минимальная сумма второй риаловой валюты',
+                'minAmountIranPay2' => '⬇️ Минимальная сумма cubpay',
                 'minAmountIranPay3' => '⬇️ Минимальная сумма третьей риаловой валюты',
                 'minAmountNowPayment' => '⬇️ Минимальная сумма nowpayment',
                 'minAmountPlisio' => '⬇️ Минимальная сумма plisio',
@@ -4055,7 +4055,7 @@ ID пользователя : %s
                 'setEducationCartToCart' => '📚 Установить инструкцию карта на карту',
                 'setEducationCryptoOffline' => '📚 Установить инструкцию офлайн-валюты ',
                 'setEducationIranPay1' => '📚 Установить инструкцию первой риаловой валюты',
-                'setEducationIranPay2' => '📚 Установить инструкцию второй риаловой валюты',
+                'setEducationIranPay2' => '📚 Установить инструкцию cubpay',
                 'setEducationIranPay3' => '📚 Установить инструкцию третьей риаловой валюты',
                 'setEducationNowPayment' => '📚 Установить инструкцию nowpayment',
                 'setEducationPlisio' => '📚 Установить инструкцию plisio',
@@ -4696,7 +4696,7 @@ ID пользователя : %s
 - 👤 Имя пользователя : @%s
 - 🆔Числовой ID пользователя : %s
 - 💸 Сумма транзакции %s
-- 💳 Способ оплаты : Rial Currency 2 (CubePay)',
+- 💳 Способ оплаты : cubpay',
                 'reportNowpayment' => '💵 Новый платёж
 - 👤 Имя пользователя : @%s
 - 🆔Числовой ID пользователя : %s
