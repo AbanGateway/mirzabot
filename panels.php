@@ -2065,7 +2065,6 @@ class ManagePanel
     }
     function extend($Method_extend, $new_limit, $time_day, $username, $code_product, $name_panel)
     {
-        global $textbotlang;
         $panel = select("marzban_panel", "*", "code_panel", $name_panel, "select");
         $product = select("product", "*", "code_product", $code_product, "select");
         $invoice = select("invoice", "*", "username", $username, "select");
@@ -2106,7 +2105,8 @@ class ManagePanel
         }
         update("invoice", 'uuid', null, "username", $username);
         update("invoice", 'Status', "active", "username", $username);
-        if ($Method_extend == $textbotlang['keyboard']['resetVolumeTime']) {
+        $Method_extend = extendMethodKey($Method_extend);
+        if ($Method_extend == "resetVolumeTime") {
             $reset = $this->ResetUserDataUsage($username, $panel['name_panel']);
             if ($reset['status'] == false) {
                 return array(
@@ -2114,12 +2114,12 @@ class ManagePanel
                     'msg' => 'error reset : ' . $reset['msg']
                 );
             }
-        } elseif ($Method_extend == $textbotlang['keyboard']['addTimeVolumeNextMonth']) {
+        } elseif ($Method_extend == "addTimeVolumeNextMonth") {
             $data_limit_new = $data_limit_new_add;
             $time_new = $time_new_add;
-        } elseif ($Method_extend == $textbotlang['keyboard']['resetTimeAddVolume']) {
+        } elseif ($Method_extend == "resetTimeAddVolume") {
             $data_limit_new = $data_limit_new_add;
-        } elseif ($Method_extend == $textbotlang['keyboard']['resetVolumeAddTime']) {
+        } elseif ($Method_extend == "resetVolumeAddTime") {
             $reset = $this->ResetUserDataUsage($username, $panel['name_panel']);
             if ($reset['status'] == false) {
                 return array(
@@ -2128,7 +2128,7 @@ class ManagePanel
                 );
             }
             $time_new = $time_new_add;
-        } elseif ($Method_extend == $textbotlang['keyboard']['addTimeConvertVolume']) {
+        } elseif ($Method_extend == "addTimeConvertVolume") {
             $reset = $this->ResetUserDataUsage($username, $panel['name_panel']);
             if ($reset['status'] == false) {
                 return array(
@@ -2233,7 +2233,7 @@ class ManagePanel
                 "usage_limit_GB" => $data_limit_new / pow(1024, 3),
                 "start_date" => null
             );
-            if (in_array($Method_extend, [$textbotlang['keyboard']['resetVolumeTime'], $textbotlang['keyboard']['resetVolumeAddTime'], $textbotlang['keyboard']['addTimeConvertVolume']])) {
+            if (in_array($Method_extend, ["resetVolumeTime", "resetVolumeAddTime", "addTimeConvertVolume"], true)) {
                 $data['current_usage_GB'] = "0";
             }
         } elseif ($panel['type'] == "s_ui") {

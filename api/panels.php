@@ -164,7 +164,7 @@ function panel_panel_add(array $data, string $method): void
             'config' => empty($data['config']) ? "offconfig" : $data['config'],
             'type' => empty($data['type']) ? "marzban" : $data['type'],
             'MethodUsername' => empty($data['MethodUsername']) ? null : $data['MethodUsername'],
-            'Methodextend' => empty($data['Methodextend']) ? null : $data['Methodextend'],
+            'Methodextend' => empty($data['Methodextend']) ? null : extendMethodKey($data['Methodextend']),
             'TestAccount' => empty($data['TestAccount']) ? "ONTestAccount" : $data['TestAccount'],
             'limit_panel' => empty($data['limit_panel']) ? "unlimted" : $data['limit_panel'],
             'namecustom' => empty($data['namecustom']) ? "vpn" : $data['namecustom'],
@@ -253,6 +253,10 @@ function panel_panel_edit(array $data, string $method): void
 
         if ($panelData === []) {
             sendJsonResponse(false, "nothing to update", [], 200);
+        }
+
+        if (isset($panelData['Methodextend'])) {
+            $panelData['Methodextend'] = extendMethodKey($panelData['Methodextend']);
         }
 
         foreach (['url_panel', 'username_panel', 'password_panel', 'linksubx'] as $rawColumn) {

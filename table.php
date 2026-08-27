@@ -430,7 +430,7 @@ try {
         addFieldToTable("marzban_panel", "linksubx", null, "VARCHAR(200)");
         addFieldToTable("marzban_panel", "conecton", "offconecton", "VARCHAR(100)");
         addFieldToTable("marzban_panel", "type", "marzban", "VARCHAR(50)");
-        addFieldToTable("marzban_panel", "Methodextend", $textbotlang['keyboard']['resetVolumeTime'], "VARCHAR(100)");
+        addFieldToTable("marzban_panel", "Methodextend", "resetVolumeTime", "VARCHAR(100)");
         addFieldToTable("marzban_panel", "namecustom", "vpn", "VARCHAR(100)");
         addFieldToTable("marzban_panel", "limit_panel", "unlimted", "VARCHAR(50)");
         addFieldToTable("marzban_panel", "TestAccount", "ONTestAccount", "VARCHAR(50)");
@@ -438,6 +438,14 @@ try {
         addFieldToTable("marzban_panel", "sublink", "onsublink", "VARCHAR(50)");
         addFieldToTable("marzban_panel", "config", "offconfig", "VARCHAR(50)");
         addFieldToTable("marzban_panel", "version_panel", "0", "VARCHAR(60)");
+        $stmt = $pdo->query("SELECT id, Methodextend FROM marzban_panel");
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $method_key = extendMethodKey($row['Methodextend'], null);
+            if ($method_key === null || $method_key === $row['Methodextend'])
+                continue;
+            $stmt_method = $pdo->prepare("UPDATE marzban_panel SET Methodextend = ? WHERE id = ?");
+            $stmt_method->execute([$method_key, $row['id']]);
+        }
         $max_stmt = $pdo->prepare("SELECT MAX(CAST(SUBSTRING(code_panel, 3) AS UNSIGNED)) as max_num FROM marzban_panel WHERE code_panel LIKE '7e%'");
         $max_stmt->execute();
         $max_row = $max_stmt->fetch(PDO::FETCH_ASSOC);

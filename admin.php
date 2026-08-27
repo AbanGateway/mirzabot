@@ -718,7 +718,7 @@ if (in_array($text, $textadmin) || $datain == "admin") {
     $MethodUsername = $textbotlang['keyboard']['numericIdRandom'];
     $status = "active";
     $ONTestAccount = "ONTestAccount";
-    $extendtextadd = $textbotlang['keyboard']['resetVolumeTime'];
+    $extendtextadd = "resetVolumeTime";
     $namecustoms = "none";
     $type = "marzban";
     $conecton = "offconecton";
@@ -6123,7 +6123,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
         sendmessage($from_id, $textbotlang['Admin']['algorithmExtend']['invalidMethod'], null, 'HTML');
         return;
     }
-    update("marzban_panel", "Methodextend", $text, "name_panel", $user['Processing_value']);
+    update("marzban_panel", "Methodextend", extendMethodKey($text), "name_panel", $user['Processing_value']);
     $typepanel = select("marzban_panel", "*", "name_panel", $user['Processing_value'], "select");
     outtypepanel($typepanel['type'], $textbotlang['Admin']['algorithmExtend']['saveData']);
     step('home', $from_id);

@@ -1818,6 +1818,42 @@ function bottext_apply_overrides(array &$base, $lang)
         }
     }
 }
+function extendMethodKeys()
+{
+    return ['resetVolumeTime', 'addTimeVolumeNextMonth', 'resetTimeAddVolume', 'resetVolumeAddTime', 'addTimeConvertVolume'];
+}
+function extendMethodLabels()
+{
+    static $labels = null;
+    if ($labels !== null)
+        return $labels;
+    $labels = [];
+    foreach (['fa', 'en', 'ru', 'zh'] as $lang) {
+        $file = __DIR__ . '/lang/' . $lang . '.php';
+        if (!file_exists($file))
+            continue;
+        $texts = require $file;
+        if (!is_array($texts))
+            continue;
+        bottext_apply_overrides($texts, $lang);
+        foreach (extendMethodKeys() as $key) {
+            $label = $texts['keyboard'][$key] ?? null;
+            if (is_string($label) && trim($label) !== '')
+                $labels[trim($label)] = $key;
+        }
+    }
+    return $labels;
+}
+function extendMethodKey($value, $default = 'resetVolumeTime')
+{
+    $value = is_string($value) ? trim($value) : '';
+    if ($value === '')
+        return $default;
+    if (in_array($value, extendMethodKeys(), true))
+        return $value;
+    $labels = extendMethodLabels();
+    return $labels[$value] ?? $default;
+}
 function generateAuthStr($length = 10)
 {
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
