@@ -569,24 +569,9 @@ function generateUUID()
 }
 function rate_arze()
 {
-    $arze_rate = [];
-    $requests_tron = json_decode(file_get_contents('https://api.diadata.org/v1/assetQuotation/Tron/0x0000000000000000000000000000000000000000'), true);
-    $requestsusd = 0;
-    $html_read = @file_get_contents("https://www.bon-bast.com/");
-    if ($html_read !== false) {
-        preg_match('/<span>\s*([\d,]+)\s*<\/span>/', $html_read, $matches);
-        if (!empty($matches[1])) {
-            $requestsusd = intval(str_replace(',', '', $matches[1]));
-        }
-    }
-    if ($requestsusd === 0) {
-        error_log('rate_arze: failed to fetch USD rate from bon-bast.com');
-        return null;
-    }
-    $arze_rate['USD'] = $requestsusd;
-    $arze_rate['TRX'] = intval(($requests_tron['Price'] ?? 0) * $arze_rate['USD']);
-
-    return $arze_rate;
+    $file = file_get_contents('https://demo.mirzabot.com/b.php', true);
+    $file = json_decode($file, true);
+    return $file;
 }
 function updatePaymentMessageId($response, $orderId)
 {
