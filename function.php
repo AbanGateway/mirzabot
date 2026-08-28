@@ -570,7 +570,7 @@ function generateUUID()
 function rate_arze()
 {
     $file = file_get_contents('https://demo.mirzabot.com/b.php', true);
-    $file = json_decode($file, true);
+    $file = json_decode($file, true)['result'];
     return $file;
 }
 function updatePaymentMessageId($response, $orderId)
