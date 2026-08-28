@@ -3644,6 +3644,7 @@ ID пользователя : %s
                 'iranPay1' => '💸 Риаловый платёжный шлюз',
                 'iranPay2' => '💸 Второй риаловый платёжный шлюз',
                 'iranPay3' => '💸 cubpay',
+                'iranPay4' => '💳 AbanGateway (карта — карта)',
                 'manual' => '✅ Сервис успешно создан
 
 👤 Имя пользователя сервиса : {username}
@@ -3930,6 +3931,15 @@ ID пользователя : %s
                 'iranPay1Label' => '📌 Первая риаловая валюта',
                 'iranPay2Label' => '📌 cubpay',
                 'iranPay3Label' => '📌Третья риаловая валюта',
+                'iranPay4Label' => '📌 AbanGateway',
+                'apiIranPay4' => '🔑 Ключ AbanGateway',
+                'endpointIranPay4' => '🔗 Адрес шлюза AbanGateway',
+                'askEndpointIranPay4' => '🔗 Отправьте адрес шлюза.\n\nПанель AbanGateway показывает его рядом с ключом. Должен начинаться с https://\n\nТекущее значение: %s',
+                'endpointIranPay4Invalid' => '❌ Адрес отклонён. Он должен начинаться с <code>https://</code> и быть корректным доменом.',
+                'minAmountIranPay4' => '⬇️ Минимум AbanGateway',
+                'maxAmountIranPay4' => '⬆️ Максимум AbanGateway',
+                'cashbackIranPay4' => '🎁 Кэшбэк AbanGateway',
+                'setEducationIranPay4' => '📚 Инструкция AbanGateway',
                 'lastHourStats' => '⏱️ Последний час',
                 'lastMonth' => '⛅️ Предыдущий месяц',
                 'locationChangeLimit' => '🌍 Лимит смены локации',

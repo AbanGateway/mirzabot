@@ -6429,6 +6429,65 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     ));
 } elseif ($datain == "iranpay2setting" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['users']['selectoption'], $trnado, 'HTML');
+} elseif ($text == $textbotlang['keyboard']['apiIranPay4'] && $adminrulecheck['rule'] == "administrator") {
+    $current = getPaySettingValue('apiiranpay4', '0');
+    sendmessage($from_id, sprintf($textbotlang['Admin']['gateway']['askMerchant'], $current), $backadmin, 'HTML');
+    step('apiiranpay4', $from_id);
+} elseif ($user['step'] == "apiiranpay4") {
+    update("PaySetting", "ValuePay", trim($text), "NamePay", "apiiranpay4");
+    sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $abangatewaykeyboard, 'HTML');
+    step('home', $from_id);
+} elseif ($text == $textbotlang['keyboard']['endpointIranPay4'] && $adminrulecheck['rule'] == "administrator") {
+    $current = getPaySettingValue('endpointiranpay4', '0');
+    sendmessage($from_id, sprintf($textbotlang['keyboard']['askEndpointIranPay4'], $current), $backadmin, 'HTML');
+    step('endpointiranpay4', $from_id);
+} elseif ($user['step'] == "endpointiranpay4") {
+    // Validated before it is stored, not before it is used. The key travels to
+    // this address as a bearer token, so `http://` would put it on the wire in
+    // clear — and an address that is not a public https host is not one this
+    // bot should be posting a shop's takings to.
+    $candidate = rtrim(trim($text), '/');
+    $parts = parse_url($candidate);
+    $host = $parts['host'] ?? '';
+    $validHost = $host !== '' && filter_var('https://' . $host, FILTER_VALIDATE_URL) !== false && str_contains($host, '.');
+    if (($parts['scheme'] ?? '') !== 'https' || !$validHost) {
+        sendmessage($from_id, $textbotlang['keyboard']['endpointIranPay4Invalid'], $abangatewaykeyboard, 'HTML');
+        step('home', $from_id);
+    } else {
+        update("PaySetting", "ValuePay", $candidate, "NamePay", "endpointiranpay4");
+        sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $abangatewaykeyboard, 'HTML');
+        step('home', $from_id);
+    }
+} elseif ($text == $textbotlang['keyboard']['minAmountIranPay4'] && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['Admin']['gateway']['askMinAmount'] ?? $textbotlang['users']['selectoption'], $backadmin, 'HTML');
+    step("getmainiranpay4", $from_id);
+} elseif ($user['step'] == "getmainiranpay4") {
+    update("PaySetting", "ValuePay", intval($text), "NamePay", "minbalanceiranpay4");
+    sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $abangatewaykeyboard, 'HTML');
+    step('home', $from_id);
+} elseif ($text == $textbotlang['keyboard']['maxAmountIranPay4'] && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['Admin']['gateway']['askMaxAmount'] ?? $textbotlang['users']['selectoption'], $backadmin, 'HTML');
+    step("getmaaxiranpay4", $from_id);
+} elseif ($user['step'] == "getmaaxiranpay4") {
+    update("PaySetting", "ValuePay", intval($text), "NamePay", "maxbalanceiranpay4");
+    sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $abangatewaykeyboard, 'HTML');
+    step('home', $from_id);
+} elseif ($text == $textbotlang['keyboard']['cashbackIranPay4'] && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['Admin']['gateway']['askCashback'] ?? $textbotlang['users']['selectoption'], $backadmin, 'HTML');
+    step("getcashiranpay4", $from_id);
+} elseif ($user['step'] == "getcashiranpay4") {
+    update("PaySetting", "ValuePay", intval($text), "NamePay", "chashbackiranpay4");
+    sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $abangatewaykeyboard, 'HTML');
+    step('home', $from_id);
+} elseif ($text == $textbotlang['keyboard']['setEducationIranPay4'] && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['Admin']['gateway']['askEducation'] ?? $textbotlang['users']['selectoption'], $backadmin, 'HTML');
+    step("helpiranpay4", $from_id);
+} elseif ($user['step'] == "helpiranpay4") {
+    update("PaySetting", "ValuePay", $text, "NamePay", "helpiranpay4");
+    sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $abangatewaykeyboard, 'HTML');
+    step('home', $from_id);
+} elseif ($datain == "iranpay4setting" && $adminrulecheck['rule'] == "administrator") {
+    sendmessage($from_id, $textbotlang['users']['selectoption'], $abangatewaykeyboard, 'HTML');
 } elseif ($datain == "iranpay3setting" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['users']['selectoption'], $iranpaykeyboard, 'HTML');
 }elseif ($text == "API T" && $adminrulecheck['rule'] == "administrator") {
@@ -6853,6 +6912,10 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     }
     $arzireyali2 = getPaySettingValue('statustarnado', 'offternado');
     $arzireyali3 = getPaySettingValue('statusiranpay3', 'offiranpay3');
+    $abangateway4 = getPaySettingValue('statusiranpay4', 'offiranpay4');
+    $abangateway4text = $abangateway4 == 'oniranpay4'
+        ? $textbotlang['Admin']['Status']['statuson']
+        : $textbotlang['Admin']['Status']['statusoff'];
     $aqayepardakht = getPaySettingValue('statusaqayepardakht', 'offaqayepardakht');
     $zarinpal = getPaySettingValue('zarinpalstatus', 'offzarinpal');
     $affilnecurrency = getPaySettingValue('digistatus', 'offdigi');
@@ -6930,6 +6993,11 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "iranpay2setting"],
                 ['text' => $arzireyali2status, 'callback_data' => "editpayment-arzireyali2-$arzireyali2"],
                 ['text' => $textbotlang['keyboard']['iranPay2Label'], 'callback_data' => "arzireyali2"],
+            ],
+            [
+                ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "iranpay4setting"],
+                ['text' => $abangateway4text, 'callback_data' => "editpayment-oniranpay4-$abangateway4"],
+                ['text' => $textbotlang['keyboard']['iranPay4Label'], 'callback_data' => "oniranpay4"],
             ],
             [
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "iranpay3setting"],
@@ -7044,6 +7112,9 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
             $valuenew = "ondigi";
         }
         update("PaySetting", "ValuePay", $valuenew, "NamePay", "digistatus");
+    } elseif ($type == "oniranpay4") {
+        $valuenew = $value == "oniranpay4" ? "offiranpay4" : "oniranpay4";
+        update("PaySetting", "ValuePay", $valuenew, "NamePay", "statusiranpay4");
     } elseif ($type == "oniranpay3") {
         if ($value == "oniranpay3") {
             $valuenew = "offiranpay3";
@@ -7074,6 +7145,10 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     $aqayepardakht = getPaySettingValue('statusaqayepardakht', 'offaqayepardakht');
     $affilnecurrency = getPaySettingValue('digistatus', 'offdigi');
     $arzireyali3 = getPaySettingValue('statusiranpay3', 'offiranpay3');
+    $abangateway4 = getPaySettingValue('statusiranpay4', 'offiranpay4');
+    $abangateway4text = $abangateway4 == 'oniranpay4'
+        ? $textbotlang['Admin']['Status']['statuson']
+        : $textbotlang['Admin']['Status']['statusoff'];
     $paymentstatussnotverify = getPaySettingValue('paymentstatussnotverify', 'offpaymentstatus');
     $paymentsstartelegram = getPaySettingValue('statusstar', '0');
     $payment_status_nowpayment = getPaySettingValue('statusnowpayment', '0');
@@ -7148,6 +7223,11 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "iranpay2setting"],
                 ['text' => $arzireyali2status, 'callback_data' => "editpayment-arzireyali2-$arzireyali2"],
                 ['text' => $textbotlang['keyboard']['iranPay2Label'], 'callback_data' => "arzireyali2"],
+            ],
+            [
+                ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "iranpay4setting"],
+                ['text' => $abangateway4text, 'callback_data' => "editpayment-oniranpay4-$abangateway4"],
+                ['text' => $textbotlang['keyboard']['iranPay4Label'], 'callback_data' => "oniranpay4"],
             ],
             [
                 ['text' => $textbotlang['keyboard']['settings'], 'callback_data' => "iranpay3setting"],
