@@ -1,3 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{DOCUMENT_ROOT}/install/index.php -f
+    RewriteRule ^ - [F,L]
+</IfModule>
+
 <Files "utils.php">
     Require all denied
 </Files>

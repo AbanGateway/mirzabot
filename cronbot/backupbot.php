@@ -4,6 +4,10 @@ require_once '../function.php';
 $textbotlang = languagechange();
 require_once '../botapi.php';
 
+if (!isShellExecAvailable() || !isExecAvailable()) {
+    return;
+}
+
 $reportbackup = select("topicid", "idreport", "report", "backupfile", "select")['idreport'];
 $destination = getcwd();
 $setting = select("setting", "*");

@@ -706,6 +706,11 @@ if ($text == "📞 تنظیم نام کاربری پشتیبانی") {
     $textupdate = "📍 مدیر عزیز  برای آپدیت گزینه زیر را انتخاب نمایید";
     sendmessage($from_id, $textupdate, $Response, 'HTML');
 } elseif ($datain == "update") {
+    if (!isShellExecAvailable()) {
+        sendmessage($from_id, "❌ آپدیت روی این سرور امکان‌پذیر نیست.\n\nتابع shell_exec غیرفعال است و فایل‌های نسخه جدید بدون آن کپی نمی‌شوند. برای آپدیت باید ربات روی سروری با دسترسی shell_exec اجرا شود.", null, 'HTML');
+        return;
+    }
+
     $source = dirname(__DIR__) . "/update";
     $getversionnow = file_get_contents($source . '/version');
 

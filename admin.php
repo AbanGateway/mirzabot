@@ -1924,7 +1924,6 @@ elseif ($datain == "systemsms") {
         update("setting", "statuscopycart", $valuenew);
     } elseif ($type == "score") {
         if ($value == "1") {
-            if (isShellExecAvailable()) {
                 $crontabBinary = getCrontabBinary();
                 if ($crontabBinary === null) {
                     error_log('Unable to locate crontab executable; cannot remove lottery cron job.');
@@ -1941,9 +1940,6 @@ elseif ($datain == "systemsms") {
                         unlink($tempCronFile);
                     }
                 }
-            } else {
-                error_log('Unable to remove lottery cron job because shell_exec is unavailable.');
-            }
             $valuenew = "0";
         } else {
             $phpFilePath = "https://$domainhosts/cronbot/lottery.php";

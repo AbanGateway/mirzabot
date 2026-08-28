@@ -1,3 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{DOCUMENT_ROOT}/install/index.php -f
+    RewriteCond %{REQUEST_URI} !^/install/
+    RewriteRule ^ - [F,L]
+</IfModule>
+
 <Files "*.txt">
     Require all denied
 </Files>

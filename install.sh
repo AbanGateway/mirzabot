@@ -1803,6 +1803,7 @@ function install_bot() {
             echo -e "\e[91mError: Extracted source folder not found (bad or empty download).\033[0m"
             install_pause "Locating extracted files"
         fi
+        rm -rf "$EXTRACTED_DIR/install"
         mv "$EXTRACTED_DIR"/* "$BOT_DIR" || {
             echo -e "\e[91mError: Failed to move extracted files.\033[0m"
             install_pause "Moving bot files"
@@ -2248,6 +2249,7 @@ function update_bot() {
         exit 1
     }
     sudo mkdir -p "$BOT_DIR"
+    sudo rm -rf "$EXTRACTED_DIR/install" "$BOT_DIR/install"
     sudo mv "$EXTRACTED_DIR"/* "$BOT_DIR/" || {
         echo -e "\e[91mFile transfer failed!\033[0m"
         exit 1
@@ -2578,6 +2580,7 @@ function migrate_to_pro() {
         echo -e "\033[31mError: Extracted source folder not found. Aborting migration.\033[0m"
         rm -rf "$TEMP_DIR"; exit 1
     fi
+    rm -rf "$EXTRACTED_DIR/install"
     mv "$EXTRACTED_DIR"/* "$NEW_BOT_DIR"
     rm -rf "$TEMP_DIR"
     NEW_SECRET_TOKEN=$(openssl rand -base64 10 | tr -dc 'a-zA-Z0-9' | cut -c1-8)

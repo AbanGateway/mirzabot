@@ -45,6 +45,29 @@ function isShellExecAvailable()
     return $isAvailable;
 }
 
+function isExecAvailable()
+{
+    static $isAvailable;
+
+    if ($isAvailable !== null) {
+        return $isAvailable;
+    }
+
+    if (!function_exists('exec')) {
+        $isAvailable = false;
+        return $isAvailable;
+    }
+
+    $disabledFunctions = ini_get('disable_functions');
+    if (!empty($disabledFunctions) && preg_match('/(^|,)\s*exec\s*(,|$)/i', $disabledFunctions)) {
+        $isAvailable = false;
+        return $isAvailable;
+    }
+
+    $isAvailable = true;
+    return $isAvailable;
+}
+
 function getCrontabBinary()
 {
     static $resolvedPath;
@@ -2186,4 +2209,53 @@ function parseConfigs($input)
     }
 
     return $configs;
+}
+
+function mirzaRemoveInstallerPath($path)
+{
+    if (is_link($path) || is_file($path)) {
+        return @unlink($path);
+    }
+    if (!is_dir($path)) {
+        return true;
+    }
+
+    $entries = @scandir($path);
+    if ($entries === false) {
+        return false;
+    }
+
+    $removed = true;
+    foreach ($entries as $entry) {
+        if ($entry === '.' || $entry === '..') {
+            continue;
+        }
+        $removed = mirzaRemoveInstallerPath($path . '/' . $entry) && $removed;
+    }
+
+    return @rmdir($path) && $removed;
+}
+
+function mirzaStopForInstaller($message)
+{
+    error_log($message);
+    if (!headers_sent()) {
+        http_response_code(503);
+        header('Content-Type: text/plain; charset=utf-8');
+        header('Cache-Control: no-store');
+    }
+    echo $message;
+    exit;
+}
+
+function mirzaEnsureInstallerRemoved()
+{
+    $installerDirectory = __DIR__ . '/install';
+    if (!is_dir($installerDirectory)) {
+        return;
+    }
+
+    if (!mirzaRemoveInstallerPath($installerDirectory)) {
+        mirzaStopForInstaller('Mirza install folder still exists and could not be removed automatically; delete it manually to enable the bot.');
+    }
 }
