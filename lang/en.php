@@ -3644,6 +3644,7 @@ After joining, click the check membership button',
                 'iranPay1' => '💸 Rial payment gateway',
                 'iranPay2' => '💸 Second Rial payment gateway',
                 'iranPay3' => '💸 cubpay',
+                'iranPay4' => '💳 AbanGateway (card to card)',
                 'manual' => '✅ Service was created successfully
 
 👤 Service username : {username}
@@ -3930,6 +3931,15 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'iranPay1Label' => '📌 First Rial currency',
                 'iranPay2Label' => '📌 cubpay',
                 'iranPay3Label' => '📌Third Rial currency',
+                'iranPay4Label' => '📌 AbanGateway',
+                'apiIranPay4' => '🔑 AbanGateway API key',
+                'endpointIranPay4' => '🔗 AbanGateway endpoint',
+                'askEndpointIranPay4' => '🔗 Send the gateway endpoint.\n\nThe AbanGateway panel shows it next to the connection key. It must start with https://\n\nCurrent value: %s',
+                'endpointIranPay4Invalid' => '❌ Address rejected. It must start with <code>https://</code> and be a valid domain.',
+                'minAmountIranPay4' => '⬇️ AbanGateway minimum',
+                'maxAmountIranPay4' => '⬆️ AbanGateway maximum',
+                'cashbackIranPay4' => '🎁 AbanGateway cashback',
+                'setEducationIranPay4' => '📚 AbanGateway guide',
                 'lastHourStats' => '⏱️ Last hour',
                 'lastMonth' => '⛅️ Previous month',
                 'locationChangeLimit' => '🌍 Location change limit',

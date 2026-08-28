@@ -697,6 +697,71 @@ function cubepayPayableAmount($price)
 
     return cubepayApplyFee($price, cubepayFeeValue());
 }
+/**
+ * Ask AbanGateway for a payment page — Rial gateway 4.
+ *
+ * The endpoint is the shop's own, pasted by the admin, so it is validated
+ * before use rather than trusted: a `http://` address would put the bearer key
+ * on the wire in clear, and a host that is not this gateway is a request the
+ * bot should not make at all.
+ */
+function abangatewayEndpoint(): ?string
+{
+    $endpoint = trim((string) getPaySettingValue('endpointiranpay4', ''));
+    if ($endpoint === '' || $endpoint === '0') {
+        return null;
+    }
+
+    $parts = parse_url($endpoint);
+    if (!is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || ($parts['host'] ?? '') === '') {
+        return null;
+    }
+
+    return rtrim($endpoint, '/');
+}
+
+function createPayiranpay4($price, $order_id)
+{
+    global $domainhosts;
+
+    $api_key = trim((string) getPaySettingValue('apiiranpay4', ''));
+    $endpoint = abangatewayEndpoint();
+    if ($api_key === '' || $api_key === '0' || $endpoint === null) {
+        return ['success' => false, 'message' => 'iranpay4: key or endpoint is unset'];
+    }
+
+    // `https://` written here, not left to $domainhosts. That variable is a
+    // bare host — every other call site in this file prefixes it, and a
+    // callback without a scheme is either refused by the gateway or resolved
+    // as plain HTTP.
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $endpoint . '/create',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 25,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: Bearer ' . $api_key,
+        ],
+        CURLOPT_POSTFIELDS => json_encode([
+            'amount' => intval($price),
+            'order_id' => $order_id,
+            'callback_url' => "https://$domainhosts/payment/iranpay4.php",
+        ], JSON_UNESCAPED_UNICODE),
+    ]);
+
+    $response = curl_exec($curl);
+    if ($response === false) {
+        curl_close($curl);
+        return ['success' => false, 'message' => 'iranpay4: gateway unreachable'];
+    }
+    curl_close($curl);
+
+    return json_decode($response, true) ?: ['success' => false, 'message' => 'iranpay4: bad response'];
+}
+
 function trnado($order_id, $price)
 {
     global $domainhosts;

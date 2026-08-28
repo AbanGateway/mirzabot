@@ -5103,6 +5103,70 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         }
         $message_id = sendmessage($from_id, $textnowpayments, $paymentkeyboard, 'HTML');
         updatePaymentMessageId($message_id, $randomString);
+    } elseif ($datain == "iranpay4") {
+        $mainbalance = getPaySettingValue('minbalanceiranpay4', '0');
+        $maxbalance = getPaySettingValue('maxbalanceiranpay4', '0');
+        if ($user['Processing_value'] < $mainbalance || $user['Processing_value'] > $maxbalance) {
+            $mainbalance = number_format($mainbalance);
+            $maxbalance = number_format($maxbalance);
+            sendmessage($from_id, strtr($textbotlang['users']['Balance']['depositRangePlisio'], ['{mainbalance}' => $mainbalance, '{maxbalance}' => $maxbalance]), null, 'HTML');
+            return;
+        }
+
+        // The daily spend throttle every other rial gateway has. Scoped to this
+        // gateway's own rows — the copy on `iranpay3` reads `Currency Rial 1`,
+        // which throttles the wrong gateway, so it is not copied verbatim.
+        $dateacc = date('Y/m/d');
+        $stmt = $pdo->prepare("SELECT SUM(price) as price FROM Payment_report WHERE Payment_Method = 'AbanGateway' AND time LIKE :today");
+        $stmt->execute([':today' => '%' . $dateacc . '%']);
+        $sumpayment = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (intval($sumpayment['price']) > 1000000) {
+            sendmessage($from_id, $textbotlang['users']['Balance']['queueBusy'], null, 'HTML');
+            return;
+        }
+
+        deletemessage($from_id, $message_id);
+        sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
+        $dateacc = date('Y/m/d H:i:s');
+        $randomString = bin2hex(random_bytes(5));
+        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
+
+        // The row is written before the link is asked for. A confirmation that
+        // arrives while the gateway is still answering finds an order to attach
+        // itself to instead of being told it does not exist.
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $Payment_Method = "AbanGateway";
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], "Unpaid", $Payment_Method, $invoice]);
+
+        $pay = createPayiranpay4($user['Processing_value'], $randomString);
+        if (empty($pay['success']) || empty($pay['payment_link'])) {
+            $text_error = json_encode($pay);
+            sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
+            step('home', $from_id);
+            $ErrorsLinkPayment = sprintf($textbotlang['Admin']['reportgroup']['errorPaymentLink3'], $text_error, $from_id, $Payment_Method, $username);
+            if (strlen($setting['Channel_Report']) > 0) {
+                telegram('sendmessage', [
+                    'chat_id' => $setting['Channel_Report'],
+                    'message_thread_id' => $errorreport,
+                    'text' => $ErrorsLinkPayment,
+                    'parse_mode' => "HTML"
+                ]);
+            }
+            return;
+        }
+
+        $pricetoman = number_format($user['Processing_value'], 0);
+        $paymentkeyboard = json_encode([
+            'inline_keyboard' => [
+                [
+                    ['text' => $textbotlang['users']['Balance']['payments'], 'url' => $pay['payment_link']]
+                ]
+            ]
+        ]);
+        $textiranpay4 = sprintf($textbotlang['users']['Balance']['transactionCreated3'], $randomString, $pricetoman);
+        $message_id = sendmessage($from_id, $textiranpay4, $paymentkeyboard, 'HTML');
+        updatePaymentMessageId($message_id, $randomString);
+        step('home', $from_id);
     } elseif ($datain == "iranpay3") {
         $dateacc = date('Y/m/d');
         $query = "SELECT SUM(price) as price FROM Payment_report WHERE  Payment_Method = 'Currency Rial 1' AND  time LIKE '%$dateacc%'";
