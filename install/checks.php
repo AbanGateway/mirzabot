@@ -766,21 +766,139 @@ function mirza_install_write_config(array $values): array
     return ['ok' => true, 'error' => ''];
 }
 
+function mirza_install_database_version_check(string $version): array
+{
+    $isMariaDb = stripos($version, 'mariadb') !== false;
+    preg_match('/(\d+)\.(\d+)\.(\d+)/', $version, $matches);
+    $numeric = isset($matches[0]) ? $matches[0] : '0.0.0';
+
+    if ($isMariaDb) {
+        return version_compare($numeric, '10.2.0', '>=')
+            ? mirza_install_item('ok', 'نسخه دیتابیس', 'MariaDB ' . $numeric)
+            : mirza_install_item('fail', 'نسخه دیتابیس', 'MariaDB ' . $numeric, 'حداقل MariaDB 10.2 لازم است؛ جداول ربات از ستون JSON و utf8mb4 استفاده می‌کنند.');
+    }
+
+    return version_compare($numeric, '5.7.8', '>=')
+        ? mirza_install_item('ok', 'نسخه دیتابیس', 'MySQL ' . $numeric)
+        : mirza_install_item('fail', 'نسخه دیتابیس', 'MySQL ' . $numeric, 'حداقل MySQL 5.7.8 لازم است؛ جداول ربات از ستون JSON و utf8mb4 استفاده می‌کنند.');
+}
+
 function mirza_install_test_database(array $values): array
 {
+    $items = [];
+
     try {
         $dsn = 'mysql:host=' . $values['dbhost'] . ';dbname=' . $values['dbname'] . ';charset=utf8mb4';
         $pdo = new PDO($dsn, $values['usernamedb'], $values['passworddb'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_TIMEOUT => 10,
         ]);
-        $version = (string) $pdo->query('SELECT VERSION()')->fetchColumn();
-        $pdo->query('SELECT 1');
-
-        return ['ok' => true, 'error' => '', 'version' => $version];
     } catch (Throwable $exception) {
-        return ['ok' => false, 'error' => $exception->getMessage(), 'version' => ''];
+        return [
+            'ok' => false,
+            'error' => $exception->getMessage(),
+            'items' => [mirza_install_item('fail', 'اتصال به دیتابیس', 'ناموفق', mirza_install_database_hint($exception->getMessage()))],
+        ];
     }
+
+    $version = (string) $pdo->query('SELECT VERSION()')->fetchColumn();
+    $items[] = mirza_install_item('ok', 'اتصال به دیتابیس', 'برقرار شد', 'میزبان: ' . $values['dbhost']);
+    $items[] = mirza_install_database_version_check($version);
+
+    $activeDatabase = (string) $pdo->query('SELECT DATABASE()')->fetchColumn();
+    $items[] = $activeDatabase === $values['dbname']
+        ? mirza_install_item('ok', 'دیتابیس فعال', $activeDatabase)
+        : mirza_install_item('fail', 'دیتابیس فعال', $activeDatabase === '' ? 'انتخاب نشده' : $activeDatabase, 'دیتابیس متصل با نام واردشده یکی نیست.');
+
+    $collation = $pdo->query("SHOW COLLATION LIKE 'utf8mb4_unicode_ci'")->fetch();
+    $items[] = $collation
+        ? mirza_install_item('ok', 'پشتیبانی utf8mb4', 'utf8mb4_unicode_ci موجود است', 'برای ذخیره متن فارسی و ایموجی لازم است.')
+        : mirza_install_item('fail', 'پشتیبانی utf8mb4', 'موجود نیست', 'سرور دیتابیس از utf8mb4_unicode_ci پشتیبانی نمی‌کند و جداول ساخته نمی‌شوند.');
+
+    $innodb = false;
+    foreach ($pdo->query('SHOW ENGINES')->fetchAll() as $engine) {
+        if (strcasecmp((string) ($engine['Engine'] ?? ''), 'InnoDB') === 0
+            && in_array(strtoupper((string) ($engine['Support'] ?? '')), ['YES', 'DEFAULT'], true)) {
+            $innodb = true;
+        }
+    }
+    $items[] = $innodb
+        ? mirza_install_item('ok', 'موتور InnoDB', 'فعال است')
+        : mirza_install_item('fail', 'موتور InnoDB', 'فعال نیست', 'همه جداول ربات با ENGINE=InnoDB ساخته می‌شوند.');
+
+    $privilege = mirza_install_database_privilege_check($pdo);
+    $items[] = $privilege;
+
+    try {
+        $tableCount = (int) $pdo->query('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()')->fetchColumn();
+        if ($tableCount === 0) {
+            $items[] = mirza_install_item('ok', 'وضعیت دیتابیس', 'خالی است', 'نصب تازه انجام می‌شود.');
+        } else {
+            $items[] = mirza_install_item('warn', 'وضعیت دیتابیس', $tableCount . ' جدول موجود است', 'جداول موجود پاک نمی‌شوند؛ اگر این دیتابیس قبلاً برای ربات استفاده شده، اطلاعات حفظ و ساختار به‌روزرسانی می‌شود.');
+        }
+    } catch (Throwable $exception) {
+        $items[] = mirza_install_item('warn', 'وضعیت دیتابیس', 'قابل خواندن نیست', $exception->getMessage());
+    }
+
+    try {
+        $packet = (int) $pdo->query("SELECT @@max_allowed_packet")->fetchColumn();
+        $items[] = $packet >= 4194304
+            ? mirza_install_item('ok', 'max_allowed_packet', round($packet / 1048576, 1) . ' مگابایت')
+            : mirza_install_item('warn', 'max_allowed_packet', round($packet / 1048576, 1) . ' مگابایت', 'مقدار کم است و ارسال پیام‌ها یا پشتیبان‌های بزرگ ممکن است خطا بدهد.');
+    } catch (Throwable $exception) {
+        $items[] = mirza_install_item('warn', 'max_allowed_packet', 'قابل خواندن نیست', $exception->getMessage());
+    }
+
+    $failed = 0;
+    foreach ($items as $item) {
+        if ($item['status'] === 'fail') {
+            $failed++;
+        }
+    }
+
+    return ['ok' => $failed === 0, 'error' => '', 'items' => $items, 'version' => $version];
+}
+
+function mirza_install_database_privilege_check(PDO $pdo): array
+{
+    $table = 'mirza_install_probe';
+
+    try {
+        $pdo->exec('DROP TABLE IF EXISTS `' . $table . '`');
+        $pdo->exec('CREATE TABLE `' . $table . '` (id INT AUTO_INCREMENT PRIMARY KEY, payload JSON NOT NULL, note VARCHAR(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci');
+        $pdo->exec('INSERT INTO `' . $table . '` (payload, note) VALUES (\'{"ok":true}\', \'آزمایش فارسی\')');
+        $stored = (string) $pdo->query('SELECT note FROM `' . $table . '` LIMIT 1')->fetchColumn();
+        $pdo->exec('ALTER TABLE `' . $table . '` ADD COLUMN extra VARCHAR(50) NULL');
+        $pdo->exec('CREATE INDEX mirza_probe_idx ON `' . $table . '` (note)');
+        $pdo->exec('UPDATE `' . $table . '` SET extra = \'1\'');
+        $pdo->exec('DELETE FROM `' . $table . '`');
+        $pdo->exec('DROP TABLE `' . $table . '`');
+
+        if ($stored !== 'آزمایش فارسی') {
+            return mirza_install_item('fail', 'ذخیره متن فارسی', 'ناموفق', 'متن فارسی درست بازخوانی نشد؛ کدگذاری دیتابیس را روی utf8mb4 تنظیم کنید.');
+        }
+
+        return mirza_install_item('ok', 'دسترسی‌های کاربر دیتابیس', 'کامل است', 'CREATE، ALTER، INDEX، INSERT، UPDATE، DELETE و DROP تست و تأیید شد.');
+    } catch (Throwable $exception) {
+        @$pdo->exec('DROP TABLE IF EXISTS `' . $table . '`');
+
+        return mirza_install_item('fail', 'دسترسی‌های کاربر دیتابیس', 'ناکافی', 'اجرای تست ساخت جدول شکست خورد: ' . $exception->getMessage() . ' — در کنترل پنل هاست به این کاربر ALL PRIVILEGES بدهید.');
+    }
+}
+
+function mirza_install_database_hint(string $message): string
+{
+    if (stripos($message, 'access denied') !== false) {
+        return 'نام کاربری یا رمز دیتابیس اشتباه است، یا این کاربر به دیتابیس دسترسی ندارد: ' . $message;
+    }
+    if (stripos($message, 'unknown database') !== false) {
+        return 'دیتابیس با این نام وجود ندارد. روی هاست‌های اشتراکی معمولاً نام دیتابیس با پیشوند اکانت شماست: ' . $message;
+    }
+    if (stripos($message, 'connection refused') !== false || stripos($message, 'no such host') !== false || stripos($message, 'getaddrinfo') !== false) {
+        return 'میزبان دیتابیس در دسترس نیست؛ معمولاً باید localhost باشد: ' . $message;
+    }
+
+    return $message;
 }
 
 function mirza_install_telegram(string $token, string $method, array $parameters = []): array
@@ -814,32 +932,6 @@ function mirza_install_telegram_request(string $token, string $method, array $pa
     unset($handle);
 
     return ['body' => is_string($body) ? $body : '', 'error' => $error];
-}
-
-function mirza_install_bootstrap_database(): array
-{
-    $root = mirza_install_root();
-    $previousDirectory = getcwd();
-    @chdir($root);
-    @set_time_limit(300);
-
-    ob_start();
-    try {
-        require_once $root . '/db/bootstrap.php';
-        $output = trim((string) ob_get_clean());
-        if ($previousDirectory !== false) {
-            @chdir($previousDirectory);
-        }
-
-        return ['ok' => true, 'error' => '', 'output' => $output];
-    } catch (Throwable $exception) {
-        $output = trim((string) ob_get_clean());
-        if ($previousDirectory !== false) {
-            @chdir($previousDirectory);
-        }
-
-        return ['ok' => false, 'error' => $exception->getMessage(), 'output' => $output];
-    }
 }
 
 function mirza_install_cron_jobs(): array

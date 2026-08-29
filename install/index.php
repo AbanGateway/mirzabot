@@ -117,7 +117,7 @@ if ($action !== '') {
         mirza_install_json(['ok' => true, 'values' => $values]);
     }
 
-    if ($action === 'config_save') {
+    if ($action === 'config_check') {
         $values = [
             'dbhost' => trim((string) ($_POST['dbhost'] ?? '')),
             'dbname' => trim((string) ($_POST['dbname'] ?? '')),
@@ -126,59 +126,142 @@ if ($action !== '') {
             'APIKEY' => trim((string) ($_POST['APIKEY'] ?? '')),
             'adminnumber' => trim((string) ($_POST['adminnumber'] ?? '')),
             'domainhosts' => mirza_install_host(),
-            'usernamebot' => ltrim(trim((string) ($_POST['usernamebot'] ?? '')), '@'),
+            'usernamebot' => '',
         ];
 
-        $steps = [];
-
         if ($values['dbname'] === '' || $values['usernamedb'] === '' || $values['APIKEY'] === '' || $values['adminnumber'] === '') {
-            mirza_install_json(['ok' => false, 'error' => 'نام دیتابیس، کاربر دیتابیس، توکن ربات و آیدی عددی مدیر الزامی هستند.', 'steps' => []], 400);
+            mirza_install_json(['ok' => false, 'error' => 'نام دیتابیس، کاربر دیتابیس، توکن ربات و آیدی عددی مدیر الزامی هستند.', 'items' => []], 400);
+        }
+        if ($values['dbhost'] === '') {
+            $values['dbhost'] = 'localhost';
         }
         if (!preg_match('/^\d{5,15}$/', $values['adminnumber'])) {
-            mirza_install_json(['ok' => false, 'error' => 'آیدی عددی مدیر باید فقط عدد باشد.', 'steps' => []], 400);
+            mirza_install_json(['ok' => false, 'error' => 'آیدی عددی مدیر باید فقط عدد باشد.', 'items' => []], 400);
         }
         if (!preg_match('/^\d{6,}:[A-Za-z0-9_-]{30,}$/', $values['APIKEY'])) {
-            mirza_install_json(['ok' => false, 'error' => 'قالب توکن ربات نادرست است.', 'steps' => []], 400);
+            mirza_install_json(['ok' => false, 'error' => 'قالب توکن ربات نادرست است.', 'items' => []], 400);
         }
 
         $database = mirza_install_test_database($values);
-        if (!$database['ok']) {
-            mirza_install_json(['ok' => false, 'error' => 'اتصال به دیتابیس ناموفق بود: ' . $database['error'], 'steps' => []], 400);
+        $_SESSION['mirza_install_values'] = $values;
+
+        mirza_install_json([
+            'ok' => $database['ok'],
+            'error' => $database['ok'] ? '' : 'بررسی دیتابیس با خطا مواجه شد؛ موارد قرمز را برطرف کنید.',
+            'items' => $database['items'],
+        ], $database['ok'] ? 200 : 400);
+    }
+
+    if ($action === 'config_token') {
+        $values = $_SESSION['mirza_install_values'] ?? null;
+        if (!is_array($values)) {
+            mirza_install_json(['ok' => false, 'error' => 'اطلاعات فرم یافت نشد؛ صفحه را دوباره باز کنید.', 'items' => []], 400);
         }
-        $steps[] = ['status' => 'ok', 'label' => 'اتصال به دیتابیس', 'detail' => 'MySQL ' . $database['version']];
 
         $bot = mirza_install_telegram($values['APIKEY'], 'getMe');
         if (!$bot['ok']) {
-            mirza_install_json(['ok' => false, 'error' => 'توکن ربات معتبر نیست: ' . $bot['error'], 'steps' => $steps], 400);
+            mirza_install_json([
+                'ok' => false,
+                'error' => 'توکن ربات معتبر نیست: ' . $bot['error'],
+                'items' => [mirza_install_item('fail', 'اعتبارسنجی توکن', 'ناموفق', $bot['error'])],
+            ], 400);
         }
+
+        $values['usernamebot'] = ltrim(trim((string) ($bot['result']['username'] ?? '')), '@');
         if ($values['usernamebot'] === '') {
-            $values['usernamebot'] = (string) ($bot['result']['username'] ?? '');
+            mirza_install_json([
+                'ok' => false,
+                'error' => 'یوزرنیم ربات از تلگرام دریافت نشد.',
+                'items' => [mirza_install_item('fail', 'یوزرنیم ربات', 'دریافت نشد', 'پاسخ تلگرام یوزرنیم نداشت؛ توکن را بررسی کنید.')],
+            ], 400);
         }
-        $steps[] = ['status' => 'ok', 'label' => 'اعتبارسنجی توکن ربات', 'detail' => '@' . ($bot['result']['username'] ?? '')];
+        $_SESSION['mirza_install_values'] = $values;
+
+        $items = [
+            mirza_install_item('ok', 'ارتباط با API تلگرام', 'برقرار است'),
+            mirza_install_item('ok', 'ربات شناسایی شد', '@' . $values['usernamebot'], (string) ($bot['result']['first_name'] ?? '')),
+        ];
+
+        mirza_install_json(['ok' => true, 'error' => '', 'items' => $items]);
+    }
+
+    if ($action === 'config_write') {
+        $values = $_SESSION['mirza_install_values'] ?? null;
+        if (!is_array($values) || $values['usernamebot'] === '') {
+            mirza_install_json(['ok' => false, 'error' => 'ابتدا باید توکن ربات تأیید شود.', 'items' => []], 400);
+        }
 
         $written = mirza_install_write_config($values);
         if (!$written['ok']) {
-            mirza_install_json(['ok' => false, 'error' => $written['error'], 'steps' => $steps], 500);
+            mirza_install_json([
+                'ok' => false,
+                'error' => $written['error'],
+                'items' => [mirza_install_item('fail', 'نوشتن config.php', 'ناموفق', $written['error'])],
+            ], 500);
         }
-        $steps[] = ['status' => 'ok', 'label' => 'ساخت فایل config.php', 'detail' => 'دامنه: ' . $values['domainhosts']];
 
         $_SESSION['mirza_install_authorized'] = true;
 
-        mirza_install_json(['ok' => true, 'error' => '', 'steps' => $steps, 'usernamebot' => $values['usernamebot']]);
+        mirza_install_json([
+            'ok' => true,
+            'error' => '',
+            'items' => [
+                mirza_install_item('ok', 'فایل config.php ساخته شد', $values['domainhosts'], 'نسخه قبلی در install/state بکاپ گرفته شد.'),
+            ],
+        ]);
     }
 
     if ($action === 'bootstrap') {
-        $bootstrap = mirza_install_bootstrap_database();
-        if (!$bootstrap['ok']) {
-            mirza_install_json(['ok' => false, 'error' => 'ساخت جداول ناموفق بود: ' . $bootstrap['error']], 500);
+        $mirzaRoot = mirza_install_root();
+        $mirzaPreviousDirectory = getcwd();
+        @chdir($mirzaRoot);
+        @set_time_limit(300);
+        $mirzaBootstrapError = '';
+        $mirzaBootstrapCompleted = false;
+
+        register_shutdown_function(static function () use (&$mirzaBootstrapCompleted) {
+            if ($mirzaBootstrapCompleted) {
+                return;
+            }
+            $output = ob_get_level() > 0 ? trim((string) ob_get_clean()) : '';
+            if (!headers_sent()) {
+                http_response_code(500);
+                header('Content-Type: application/json; charset=utf-8');
+            }
+            echo json_encode([
+                'ok' => false,
+                'error' => 'ساخت جداول نیمه‌کاره متوقف شد: ' . ($output !== '' ? $output : 'خطای نامشخص سرور'),
+                'items' => [mirza_install_item('fail', 'ساخت جداول', 'متوقف شد', $output !== '' ? $output : 'پاسخی از سرور دریافت نشد.')],
+            ], JSON_UNESCAPED_UNICODE);
+        });
+
+        ob_start();
+        try {
+            require_once $mirzaRoot . '/db/bootstrap.php';
+        } catch (Throwable $mirzaBootstrapException) {
+            $mirzaBootstrapError = $mirzaBootstrapException->getMessage();
+        }
+        ob_end_clean();
+        $mirzaBootstrapCompleted = true;
+
+        if ($mirzaPreviousDirectory !== false) {
+            @chdir($mirzaPreviousDirectory);
+        }
+
+        if ($mirzaBootstrapError !== '') {
+            mirza_install_json([
+                'ok' => false,
+                'error' => 'ساخت جداول ناموفق بود: ' . $mirzaBootstrapError,
+                'items' => [mirza_install_item('fail', 'ساخت جداول', 'ناموفق', $mirzaBootstrapError)],
+            ], 500);
         }
 
         mirza_install_json([
             'ok' => true,
             'error' => '',
-            'steps' => [
-                ['status' => 'ok', 'label' => 'ساخت و به‌روزرسانی جداول دیتابیس', 'detail' => 'جداول، ایندکس‌ها و مهاجرت‌ها اعمال شدند'],
-                ['status' => 'ok', 'label' => 'وبهوک تلگرام', 'detail' => 'در مرحله پایانی ست می‌شود'],
+            'items' => [
+                mirza_install_item('ok', 'جداول دیتابیس', 'ساخته و به‌روزرسانی شد', 'جداول، ایندکس‌ها و مهاجرت‌ها اعمال شدند.'),
+                mirza_install_item('ok', 'وبهوک تلگرام', 'در مرحله پایانی ست می‌شود'),
             ],
         ]);
     }
@@ -303,142 +386,259 @@ $host = mirza_install_host();
     <meta name="robots" content="noindex, nofollow">
     <title>نصب ربات میرزا</title>
     <style>
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("fonts/Vazirmatn-Regular.woff2") format("woff2");
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("fonts/Vazirmatn-Medium.woff2") format("woff2");
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("fonts/Vazirmatn-ExtraBold.woff2") format("woff2");
+            font-weight: 800;
+            font-display: swap;
+        }
+
         :root {
-            --bg: #0f1420;
-            --panel: #161d2c;
-            --panel-2: #1c2537;
-            --line: #263248;
-            --text: #e6ecf7;
-            --muted: #94a3b8;
-            --brand: #3b82f6;
-            --ok: #22c55e;
-            --warn: #f59e0b;
-            --fail: #ef4444;
+            --void: #0d1014;
+            --surface: #141920;
+            --surface-2: #1a2028;
+            --hairline: #242c37;
+            --hairline-soft: #1d242d;
+            --text: #e7ecf3;
+            --dim: #8b96a6;
+            --faint: #616c7c;
+            --pass: #4cc38a;
+            --warn: #ffb454;
+            --fail: #ff6b6b;
+            --live: #6ea8fe;
+            --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            --sans: Vazirmatn, "Segoe UI", system-ui, sans-serif;
         }
 
         * {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            background: var(--bg);
+            background: var(--void);
             color: var(--text);
-            font-family: Vazirmatn, Tahoma, "Segoe UI", system-ui, sans-serif;
-            font-size: 15px;
-            line-height: 1.9;
+            font-family: var(--sans);
+            font-size: 14.5px;
+            line-height: 1.85;
+            -webkit-font-smoothing: antialiased;
         }
 
         .wrap {
-            max-width: 980px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 28px 18px 90px;
+            padding: 0 20px 96px;
         }
 
         header.top {
-            text-align: center;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 26px 0 18px;
             margin-bottom: 26px;
+            border-bottom: 1px solid var(--hairline-soft);
+            animation: rise .45s ease both;
         }
 
         header.top h1 {
-            margin: 0 0 6px;
-            font-size: 24px;
+            margin: 0;
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -.015em;
+        }
+
+        header.top .rule {
+            display: none;
         }
 
         header.top p {
             margin: 0;
-            color: var(--muted);
-            font-size: 14px;
+            font-size: 11.5px;
+            color: var(--faint);
+            letter-spacing: .02em;
+        }
+
+        header.top b {
+            font-family: var(--mono);
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--dim);
         }
 
         .steps {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 22px;
+            gap: 3px;
+            margin-bottom: 28px;
         }
 
         .steps span {
-            font-size: 12.5px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            border: 1px solid var(--line);
-            color: var(--muted);
-            background: var(--panel);
-        }
-
-        .steps span.active {
-            border-color: var(--brand);
-            color: #fff;
-            background: #1e3a8a33;
+            flex: 1;
+            min-width: 0;
+            font-size: 11.5px;
+            font-weight: 500;
+            letter-spacing: .01em;
+            padding: 10px 6px 0;
+            border-top: 2px solid var(--hairline);
+            color: var(--faint);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color .25s ease, border-color .25s ease;
         }
 
         .steps span.done {
-            border-color: var(--ok);
-            color: var(--ok);
+            border-top-color: var(--pass);
+            color: var(--dim);
+        }
+
+        .steps span.active {
+            border-top-color: var(--live);
+            color: var(--text);
+        }
+
+        .progress {
+            display: none;
         }
 
         .card {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--hairline-soft);
+            border-radius: 10px;
+            padding: 0;
+        }
+
+        .card > .inner {
+            padding: 26px 24px 22px;
+            animation: rise .4s ease both;
         }
 
         .card h2 {
-            margin: 0 0 4px;
-            font-size: 19px;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -.01em;
         }
 
         .card .lead {
-            margin: 0 0 18px;
-            color: var(--muted);
-            font-size: 13.5px;
+            margin: 8px 0 22px;
+            color: var(--dim);
+            font-size: 13px;
+            line-height: 1.8;
         }
 
         .group-title {
-            margin: 18px 0 8px;
-            font-size: 13px;
-            color: var(--muted);
-            border-top: 1px dashed var(--line);
-            padding-top: 12px;
+            margin: 26px 0 10px;
+            font-size: 11.5px;
+            font-weight: 500;
+            letter-spacing: .02em;
+            color: var(--faint);
         }
 
         .group-title:first-child {
-            border-top: 0;
             margin-top: 0;
-            padding-top: 0;
+        }
+
+        .meter {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 12px;
+            height: 8px;
+        }
+
+        .meter i {
+            flex: 1;
+            border-radius: 2px;
+            background: var(--hairline);
+            transform: scaleY(.28);
+            transform-origin: bottom;
+            opacity: 0;
+            animation: seg .34s cubic-bezier(.2, .8, .3, 1) forwards;
+        }
+
+        .meter i.ok {
+            background: var(--pass);
+        }
+
+        .meter i.warn {
+            background: var(--warn);
+        }
+
+        .meter i.fail {
+            background: var(--fail);
+        }
+
+        .tally {
+            display: flex;
+            gap: 18px;
+            font-size: 11.5px;
+            color: var(--faint);
+            margin-bottom: 22px;
+            letter-spacing: .02em;
+        }
+
+        .tally b {
+            font-weight: 400;
+        }
+
+        .tally .n {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--dim);
+        }
+
+        .tally .ok .n {
+            color: var(--pass);
+        }
+
+        .tally .warn .n {
+            color: var(--warn);
+        }
+
+        .tally .fail .n {
+            color: var(--fail);
         }
 
         .row {
             display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            padding: 9px 12px;
-            border-radius: 10px;
-            background: var(--panel-2);
-            margin-bottom: 7px;
+            gap: 14px;
+            padding: 11px 14px 11px 14px;
+            background: var(--surface-2);
+            border-radius: 7px;
+            border-right: 2px solid var(--hairline);
+            margin-bottom: 4px;
+            animation: rowIn .3s ease both;
         }
 
-        .dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            margin-top: 11px;
-            flex: 0 0 9px;
+        .row.ok {
+            border-right-color: rgba(76, 195, 138, .4);
         }
 
-        .dot.ok {
-            background: var(--ok);
+        .row.warn {
+            border-right-color: var(--warn);
         }
 
-        .dot.warn {
-            background: var(--warn);
-        }
-
-        .dot.fail {
-            background: var(--fail);
+        .row.fail {
+            border-right-color: var(--fail);
         }
 
         .row .body {
@@ -446,77 +646,114 @@ $host = mirza_install_host();
             min-width: 0;
         }
 
+        .row .line {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            justify-content: space-between;
+        }
+
         .row .label {
-            font-size: 14px;
+            font-size: 13.5px;
+            font-weight: 500;
         }
 
         .row .value {
-            font-size: 13px;
-            color: var(--muted);
+            font-size: 12.5px;
+            color: var(--dim);
+            direction: ltr;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 46%;
+            flex: 0 1 auto;
+        }
+
+        .row.warn .value {
+            color: var(--warn);
+        }
+
+        .row.fail .value {
+            color: var(--fail);
         }
 
         .row .hint {
             font-size: 12.5px;
-            color: #cbd5e1;
+            color: var(--dim);
             margin-top: 3px;
-        }
-
-        .row.fail .hint {
-            color: #fca5a5;
-        }
-
-        .row.warn .hint {
-            color: #fcd34d;
+            line-height: 1.75;
         }
 
         .summary {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 14px;
+            margin-bottom: 18px;
         }
 
         .pill {
-            font-size: 12.5px;
-            padding: 4px 12px;
-            border-radius: 999px;
-            border: 1px solid var(--line);
+            font-family: var(--mono);
+            font-size: 11.5px;
+            padding: 3px 11px;
+            border: 1px solid var(--hairline);
+            border-radius: 20px;
+            color: var(--dim);
         }
 
         .pill.ok {
-            color: var(--ok);
-            border-color: #14532d;
+            color: var(--pass);
+            border-color: rgba(76, 195, 138, .3);
         }
 
         .pill.warn {
             color: var(--warn);
-            border-color: #78350f;
+            border-color: rgba(255, 180, 84, .3);
         }
 
         .pill.fail {
             color: var(--fail);
-            border-color: #7f1d1d;
+            border-color: rgba(255, 107, 107, .3);
         }
 
         button {
-            font-family: inherit;
-            font-size: 14px;
+            font-family: var(--sans);
+            font-size: 13.5px;
+            font-weight: 500;
             padding: 9px 20px;
-            border-radius: 10px;
-            border: 1px solid var(--line);
-            background: var(--panel-2);
-            color: var(--text);
+            border: 1px solid var(--hairline);
+            border-radius: 7px;
+            background: transparent;
+            color: var(--dim);
             cursor: pointer;
+            transition: color .18s ease, border-color .18s ease, background .18s ease;
+        }
+
+        button:hover:not(:disabled) {
+            color: var(--text);
+            border-color: var(--faint);
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--live);
+            outline-offset: 2px;
         }
 
         button.primary {
-            background: var(--brand);
-            border-color: var(--brand);
-            color: #fff;
+            background: var(--text);
+            border-color: var(--text);
+            color: var(--void);
+            font-weight: 700;
+        }
+
+        button.primary:hover:not(:disabled) {
+            background: #fff;
+            border-color: #fff;
+            color: var(--void);
         }
 
         button:disabled {
-            opacity: .45;
+            opacity: .35;
             cursor: not-allowed;
         }
 
@@ -524,7 +761,9 @@ $host = mirza_install_host();
             display: flex;
             gap: 10px;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 26px;
+            padding-top: 18px;
+            border-top: 1px solid var(--hairline-soft);
             flex-wrap: wrap;
         }
 
@@ -536,156 +775,310 @@ $host = mirza_install_host();
 
         label.field {
             display: block;
-            margin-bottom: 13px;
+            margin-bottom: 16px;
         }
 
         label.field span {
             display: block;
-            font-size: 13px;
-            margin-bottom: 5px;
-            color: var(--muted);
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--dim);
         }
 
         input[type=text],
         input[type=password] {
             width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid var(--line);
-            background: var(--panel-2);
+            padding: 10px 13px;
+            border: 1px solid var(--hairline);
+            border-radius: 7px;
+            background: var(--surface-2);
             color: var(--text);
-            font-family: inherit;
-            font-size: 14px;
+            font-family: var(--mono);
+            font-size: 13px;
             direction: ltr;
             text-align: left;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        input[type=text]:focus,
+        input[type=password]:focus {
+            outline: none;
+            border-color: var(--live);
+            box-shadow: 0 0 0 3px rgba(110, 168, 254, .12);
         }
 
         .grid2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0 14px;
-        }
-
-        @media (max-width: 680px) {
-            .grid2 {
-                grid-template-columns: 1fr;
-            }
+            gap: 0 16px;
         }
 
         .notice {
-            border-radius: 10px;
-            padding: 11px 14px;
-            font-size: 13px;
+            padding: 11px 15px;
+            font-size: 12.5px;
+            line-height: 1.8;
             margin-bottom: 14px;
-            border: 1px solid var(--line);
-            background: var(--panel-2);
+            border-radius: 7px;
+            border-right: 2px solid var(--hairline);
+            background: var(--surface-2);
+            color: var(--dim);
+            animation: rowIn .3s ease both;
         }
 
         .notice.bad {
-            border-color: #7f1d1d;
-            color: #fca5a5;
+            border-right-color: var(--fail);
+            color: #ffb3b3;
         }
 
         .notice.good {
-            border-color: #14532d;
-            color: #86efac;
+            border-right-color: var(--pass);
+            color: #9fe0bf;
         }
 
         .notice.info {
-            border-color: #1e3a8a;
-            color: #bfdbfe;
+            border-right-color: var(--live);
+        }
+
+        .notice code,
+        .notice b {
+            font-family: var(--mono);
+            font-weight: 400;
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .notice a {
+            color: var(--live);
         }
 
         pre.cmd {
-            background: #0b1017;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 14px;
+            background: var(--void);
+            border: 1px solid var(--hairline);
+            border-radius: 7px;
+            color: #c8d3e2;
+            padding: 14px 16px;
             overflow-x: auto;
             direction: ltr;
             text-align: left;
-            font-size: 12.5px;
-            line-height: 1.8;
-            margin: 0 0 10px;
+            font-family: var(--mono);
+            font-size: 12px;
+            line-height: 1.9;
+            margin: 0 0 12px;
         }
 
         table.jobs {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12.5px;
         }
 
         table.jobs th,
         table.jobs td {
-            padding: 8px 10px;
-            border-bottom: 1px solid var(--line);
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--hairline-soft);
             text-align: right;
         }
 
         table.jobs th {
-            color: var(--muted);
-            font-weight: normal;
-            font-size: 12.5px;
+            color: var(--faint);
+            font-weight: 500;
+            font-size: 11.5px;
         }
 
         table.jobs td.mono {
             direction: ltr;
             text-align: left;
-            font-family: monospace;
-            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--dim);
         }
 
         .badge {
-            font-size: 12px;
+            font-family: var(--mono);
+            font-size: 11px;
             padding: 2px 9px;
-            border-radius: 999px;
+            border-radius: 20px;
+            border: 1px solid var(--hairline);
+            color: var(--dim);
             white-space: nowrap;
         }
 
         .badge.ok {
-            background: #14532d;
-            color: #bbf7d0;
+            color: var(--pass);
+            border-color: rgba(76, 195, 138, .3);
         }
 
         .badge.warn {
-            background: #78350f;
-            color: #fde68a;
+            color: var(--warn);
+            border-color: rgba(255, 180, 84, .3);
         }
 
         .badge.fail {
-            background: #7f1d1d;
-            color: #fecaca;
+            color: var(--fail);
+            border-color: rgba(255, 107, 107, .3);
         }
 
         .tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .tabs button {
+            font-size: 12.5px;
+            padding: 7px 15px;
         }
 
         .tabs button.active {
-            border-color: var(--brand);
-            color: #fff;
+            color: var(--text);
+            border-color: var(--live);
         }
 
         .checkbox {
             display: flex;
-            gap: 9px;
+            gap: 10px;
             align-items: flex-start;
+            font-size: 13px;
+            color: var(--dim);
+            margin-top: 16px;
+        }
+
+        input[type=checkbox] {
+            accent-color: var(--live);
+            width: 15px;
+            height: 15px;
+            margin-top: 4px;
+        }
+
+        ol.guide {
+            margin: 0 0 16px;
+            padding-right: 18px;
+            font-size: 12.5px;
+            color: var(--dim);
+            line-height: 1.9;
+        }
+
+        ol.stages {
+            list-style: none;
+            margin: 22px 0 0;
+            padding: 0;
+        }
+
+        ol.stages > li {
+            position: relative;
+            padding: 0 40px 10px 0;
+        }
+
+        ol.stages > li::before {
+            content: "";
+            position: absolute;
+            top: 30px;
+            bottom: 0;
+            right: 12px;
+            width: 1px;
+            background: var(--hairline);
+        }
+
+        ol.stages > li:last-child::before {
+            display: none;
+        }
+
+        .stage-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 30px;
+        }
+
+        .stage-mark {
+            position: absolute;
+            right: 0;
+            top: 2px;
+            width: 25px;
+            height: 25px;
+            border: 1px solid var(--hairline);
+            border-radius: 6px;
+            background: var(--surface);
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 11.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .25s ease;
+        }
+
+        .stage-label {
             font-size: 13.5px;
-            margin-top: 14px;
+            font-weight: 500;
+            color: var(--faint);
+            transition: color .25s ease;
+        }
+
+        .stage-note {
+            font-size: 11.5px;
+            color: var(--faint);
+            margin-right: auto;
+            letter-spacing: .02em;
+        }
+
+        li[data-state=running] .stage-mark {
+            border-color: var(--live);
+            color: var(--live);
+        }
+
+        li[data-state=running] .stage-label,
+        li[data-state=running] .stage-note {
+            color: var(--live);
+        }
+
+        li[data-state=done] .stage-mark {
+            border-color: rgba(76, 195, 138, .45);
+            color: var(--pass);
+        }
+
+        li[data-state=done] .stage-label {
+            color: var(--text);
+        }
+
+        li[data-state=fail] .stage-mark {
+            border-color: rgba(255, 107, 107, .5);
+            color: var(--fail);
+        }
+
+        li[data-state=fail] .stage-label,
+        li[data-state=fail] .stage-note {
+            color: var(--fail);
+        }
+
+        .stage-detail {
+            margin-top: 10px;
+        }
+
+        .stage-detail:empty {
+            margin: 0;
         }
 
         .spinner {
             display: inline-block;
-            width: 13px;
-            height: 13px;
-            border: 2px solid #ffffff55;
-            border-top-color: #fff;
+            width: 12px;
+            height: 12px;
+            border: 1.5px solid rgba(110, 168, 254, .25);
+            border-top-color: var(--live);
             border-radius: 50%;
-            animation: spin .7s linear infinite;
-            vertical-align: -2px;
-            margin-left: 6px;
+            animation: spin .65s linear infinite;
+            vertical-align: -1px;
+            margin-left: 7px;
+        }
+
+        button.primary .spinner {
+            border-color: rgba(13, 16, 20, .25);
+            border-top-color: var(--void);
+        }
+
+        .stage-mark .spinner {
+            margin: 0;
         }
 
         @keyframes spin {
@@ -694,11 +1087,79 @@ $host = mirza_install_host();
             }
         }
 
-        ol.guide {
-            margin: 0 0 12px;
-            padding-right: 20px;
-            font-size: 13px;
-            color: #cbd5e1;
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes rowIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes seg {
+            from {
+                opacity: 0;
+                transform: scaleY(.28);
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .grid2 {
+                grid-template-columns: 1fr;
+            }
+
+            .steps span {
+                font-size: 0;
+                padding-top: 8px;
+            }
+
+            .row .line {
+                display: block;
+            }
+
+            .row .value {
+                max-width: 100%;
+                display: block;
+                text-align: right;
+                direction: ltr;
+            }
+
+            header.top {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+
+            .meter i {
+                opacity: 1;
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -706,18 +1167,18 @@ $host = mirza_install_host();
 <body>
     <div class="wrap">
         <header class="top">
-            <h1>نصب ربات میرزا روی هاست</h1>
-            <p>دامنه شناسایی‌شده: <b><?php echo htmlspecialchars($host, ENT_QUOTES, 'UTF-8'); ?></b></p>
+            <h1>نصب ربات میرزا</h1>
+            <p>دامنه <b><?php echo htmlspecialchars($host, ENT_QUOTES, 'UTF-8'); ?></b></p>
         </header>
 
         <?php if ($locked): ?>
-            <div class="card">
+            <div class="card"><div class="inner">
                 <h2>نصب قبلاً انجام شده است</h2>
                 <p class="lead">برای امنیت، نصب‌کننده قفل شده است.</p>
                 <div class="notice good">پوشه <code>install</code> را از هاست حذف کنید. اگر می‌خواهید دوباره نصب کنید، فایل <code>install/.installed</code> را پاک کنید.</div>
-            </div>
+            </div></div>
         <?php elseif (!$authorized): ?>
-            <div class="card">
+            <div class="card"><div class="inner">
                 <h2>تأیید هویت</h2>
                 <p class="lead">ربات قبلاً روی این هاست پیکربندی شده است. برای اجرای دوباره نصب‌کننده، توکن ربات یا آیدی عددی مدیر را وارد کنید.</p>
                 <div id="authError" class="notice bad" style="display:none"></div>
@@ -729,7 +1190,7 @@ $host = mirza_install_host();
                     <span></span>
                     <button class="primary" id="authButton">ورود</button>
                 </div>
-            </div>
+            </div></div>
             <script>
                 const authButton = document.getElementById('authButton');
                 authButton.addEventListener('click', async () => {
@@ -752,7 +1213,7 @@ $host = mirza_install_host();
             </script>
         <?php else: ?>
             <div class="steps" id="steps"></div>
-            <div class="card" id="card"></div>
+            <div class="card"><div class="inner" id="card"></div></div>
         <?php endif; ?>
     </div>
     <?php if (!$locked && $authorized): ?>
@@ -790,6 +1251,13 @@ $host = mirza_install_host();
                     const cls = index === current ? 'active' : (index < current ? 'done' : '');
                     return '<span class="' + cls + '">' + (index + 1) + '. ' + step.title + '</span>';
                 }).join('');
+                const bar = document.getElementById('progressBar');
+                if (bar) {
+                    bar.style.width = Math.round((current / (STEPS.length - 1)) * 100) + '%';
+                }
+                card.style.animation = 'none';
+                void card.offsetWidth;
+                card.style.animation = '';
             }
 
             function escapeHtml(value) {
@@ -797,30 +1265,39 @@ $host = mirza_install_host();
                     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             }
 
+            function rowHtml(item, index) {
+                return '<div class="row ' + item.status + '" style="animation-delay:' + Math.min(index * 32, 480) + 'ms">'
+                    + '<div class="body">'
+                    + '<div class="line"><span class="label">' + escapeHtml(item.label) + '</span>'
+                    + (item.value ? '<span class="value' + (/^[\x20-\x7E]+$/.test(item.value) ? ' mono' : '') + '">' + escapeHtml(item.value) + '</span>' : '')
+                    + '</div>'
+                    + (item.hint ? '<div class="hint">' + escapeHtml(item.hint) + '</div>' : '')
+                    + '</div></div>';
+            }
+
+            function meterHtml(result) {
+                const segments = result.items.map((item, index) =>
+                    '<i class="' + item.status + '" style="animation-delay:' + Math.min(index * 24, 800) + 'ms"></i>').join('');
+                const passed = result.items.length - result.failed - result.warned;
+                return '<div class="meter">' + segments + '</div>'
+                    + '<div class="tally">'
+                    + '<span class="ok">سالم <span class="n">' + passed + '</span></span>'
+                    + '<span class="warn">هشدار <span class="n">' + result.warned + '</span></span>'
+                    + '<span class="fail">خطا <span class="n">' + result.failed + '</span></span>'
+                    + '</div>';
+            }
+
             function renderItems(result) {
                 let html = '';
                 let lastGroup = null;
-                result.items.forEach(item => {
+                result.items.forEach((item, index) => {
                     if (item.group && item.group !== lastGroup) {
                         lastGroup = item.group;
                         html += '<div class="group-title">' + escapeHtml(item.group) + '</div>';
                     }
-                    html += '<div class="row ' + item.status + '">'
-                        + '<div class="dot ' + item.status + '"></div>'
-                        + '<div class="body">'
-                        + '<div class="label">' + escapeHtml(item.label)
-                        + (item.value ? ' <span class="value">— ' + escapeHtml(item.value) + '</span>' : '')
-                        + '</div>'
-                        + (item.hint ? '<div class="hint">' + escapeHtml(item.hint) + '</div>' : '')
-                        + '</div></div>';
+                    html += rowHtml(item, index);
                 });
-                const passed = result.items.length - result.failed - result.warned;
-                const summary = '<div class="summary">'
-                    + '<span class="pill ok">' + passed + ' مورد سالم</span>'
-                    + '<span class="pill warn">' + result.warned + ' هشدار</span>'
-                    + '<span class="pill fail">' + result.failed + ' خطا</span>'
-                    + '</div>';
-                return summary + html;
+                return meterHtml(result) + html;
             }
 
             function actionsHtml(nextLabel, nextEnabled, extra = '') {
@@ -868,12 +1345,23 @@ $host = mirza_install_host();
                 bindNav(null, () => renderCheckStep(action, title, lead, blockingNote));
             }
 
+            const INSTALL_STAGES = [
+                { action: 'config_check', label: 'بررسی اتصال و دسترسی‌های دیتابیس' },
+                { action: 'config_token', label: 'اعتبارسنجی توکن ربات' },
+                { action: 'config_write', label: 'ساخت فایل config.php' },
+                { action: 'bootstrap', label: 'ساخت جداول دیتابیس' }
+            ];
+
+            function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
             async function renderConfigStep() {
                 loading('در حال خواندن تنظیمات');
                 const data = await api('config_load');
                 const values = data.values || {};
                 card.innerHTML = '<h2>تنظیمات ربات</h2>'
-                    + '<p class="lead">اطلاعات دیتابیس و ربات را وارد کنید. فایل config.php ساخته می‌شود و جداول دیتابیس ایجاد می‌شوند. وبهوک تلگرام در مرحله پایانی ست می‌شود.</p>'
+                    + '<p class="lead">اطلاعات دیتابیس و ربات را وارد کنید. با زدن دکمه شروع نصب، مراحل زیر یکی‌یکی اجرا و نتیجه هرکدام نمایش داده می‌شود.</p>'
                     + '<div id="configMsg"></div>'
                     + '<div class="grid2">'
                     + field('dbhost', 'هاست دیتابیس', values.dbhost || 'localhost')
@@ -882,14 +1370,12 @@ $host = mirza_install_host();
                     + field('passworddb', 'رمز دیتابیس', '', 'password')
                     + '</div>'
                     + field('APIKEY', 'توکن ربات تلگرام', values.APIKEY || '', 'password')
-                    + '<div class="grid2">'
                     + field('adminnumber', 'آیدی عددی مدیر', values.adminnumber || '')
-                    + field('usernamebot', 'یوزرنیم ربات (اختیاری)', values.usernamebot || '')
-                    + '</div>'
-                    + '<div id="configSteps"></div>'
-                    + actionsHtml('ذخیره و ادامه', true);
+                    + '<div class="group-title">مراحل نصب</div>'
+                    + '<ol class="stages" id="stageList">' + stagesHtml() + '</ol>'
+                    + actionsHtml('شروع نصب', true);
                 document.getElementById('recheckBtn').style.display = 'none';
-                bindNav(saveConfig, null);
+                bindNav(runInstall, null);
             }
 
             function field(name, label, value, type = 'text') {
@@ -897,45 +1383,72 @@ $host = mirza_install_host();
                     + '<input type="' + type + '" id="f_' + name + '" value="' + escapeHtml(value) + '" autocomplete="off"></label>';
             }
 
-            async function saveConfig() {
+            function stagesHtml() {
+                return INSTALL_STAGES.map((stage, index) =>
+                    '<li data-state="pending" id="stg_' + index + '">'
+                    + '<span class="stage-mark">' + (index + 1) + '</span>'
+                    + '<div class="stage-head"><span class="stage-label">' + escapeHtml(stage.label) + '</span>'
+                    + '<span class="stage-note" id="stgnote_' + index + '">در انتظار</span></div>'
+                    + '<div class="stage-detail" id="stgdetail_' + index + '"></div></li>'
+                ).join('');
+            }
+
+            function setStage(index, state, note) {
+                const item = document.getElementById('stg_' + index);
+                if (!item) {
+                    return;
+                }
+                item.dataset.state = state;
+                const marks = { done: '✓', fail: '✕', running: '<span class="spinner" style="margin:0"></span>' };
+                item.querySelector('.stage-mark').innerHTML = marks[state] || String(index + 1);
+                document.getElementById('stgnote_' + index).textContent = note;
+            }
+
+            async function runInstall() {
                 const message = document.getElementById('configMsg');
                 const nextBtn = document.getElementById('nextBtn');
                 message.innerHTML = '';
                 nextBtn.disabled = true;
                 nextBtn.innerHTML = 'در حال نصب<span class="spinner"></span>';
+                document.getElementById('stageList').innerHTML = stagesHtml();
 
                 const payload = {};
-                ['dbhost', 'dbname', 'usernamedb', 'passworddb', 'APIKEY', 'adminnumber', 'usernamebot'].forEach(name => {
+                ['dbhost', 'dbname', 'usernamedb', 'passworddb', 'APIKEY', 'adminnumber'].forEach(name => {
                     payload[name] = document.getElementById('f_' + name).value;
                 });
 
-                const saved = await api('config_save', payload);
-                renderConfigSteps(saved.steps || []);
-                if (!saved.ok) {
-                    message.innerHTML = '<div class="notice bad">' + escapeHtml(saved.error || saved.errorText || 'ذخیره ناموفق بود.') + '</div>';
-                    nextBtn.disabled = false;
-                    nextBtn.textContent = 'ذخیره و ادامه';
-                    return;
+                for (let index = 0; index < INSTALL_STAGES.length; index++) {
+                    setStage(index, 'running', 'در حال اجرا…');
+                    await delay(320);
+                    const result = await api(INSTALL_STAGES[index].action, index === 0 ? payload : {});
+                    renderItemsInto('stgdetail_' + index, result.items || []);
+                    if (!result.ok) {
+                        setStage(index, 'fail', 'ناموفق');
+                        for (let rest = index + 1; rest < INSTALL_STAGES.length; rest++) {
+                            setStage(rest, 'pending', 'اجرا نشد');
+                        }
+                        message.innerHTML = '<div class="notice bad">' + escapeHtml(result.error || 'اجرای این مرحله ناموفق بود.') + '</div>';
+                        nextBtn.disabled = false;
+                        nextBtn.textContent = 'تلاش مجدد';
+                        return;
+                    }
+                    setStage(index, 'done', 'انجام شد');
+                    await delay(220);
                 }
 
-                const bootstrapped = await api('bootstrap');
-                renderConfigSteps((saved.steps || []).concat(bootstrapped.steps || []));
-                if (!bootstrapped.ok) {
-                    message.innerHTML = '<div class="notice bad">' + escapeHtml(bootstrapped.error || 'ساخت جداول ناموفق بود.') + '</div>';
-                    nextBtn.disabled = false;
-                    nextBtn.textContent = 'تلاش مجدد';
-                    return;
-                }
-
-                message.innerHTML = '<div class="notice good">نصب پایگاه داده و وبهوک با موفقیت انجام شد.</div>';
+                message.innerHTML = '<div class="notice good">پیکربندی و پایگاه داده با موفقیت آماده شد.</div>';
                 nextBtn.disabled = false;
                 nextBtn.textContent = 'مرحله بعد';
                 nextBtn.replaceWith(nextBtn.cloneNode(true));
                 document.getElementById('nextBtn').addEventListener('click', () => { current++; render(); });
             }
 
-            function renderConfigSteps(steps) {
-                renderConfigStepsInto('configSteps', steps);
+            function renderItemsInto(containerId, items) {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+                container.innerHTML = items.map((item, index) => rowHtml(item, index)).join('');
             }
 
             let cronPlan = null;
@@ -983,10 +1496,12 @@ $host = mirza_install_host();
                     + '<div class="group-title">۱. تست اجرای کرون روی هاست</div>'
                     + '<p class="lead">این یک خط <b>موقت</b> است و فقط برای اثبات فعال بودن کرون هاست استفاده می‌شود. بعد از پایان نصب آن را از کنترل پنل حذف کنید.</p>'
                     + '<pre class="cmd" id="probeBox">' + escapeHtml(cronTab === 'curl' ? probe.command_curl : probe.command_php) + '</pre>'
-                    + '<div class="row ' + (probe.verified ? 'ok' : 'fail') + '"><div class="dot ' + (probe.verified ? 'ok' : 'fail') + '"></div>'
-                    + '<div class="body"><div class="label">وضعیت کرون هاست <span class="value">— '
-                    + escapeHtml(probe.count + ' اجرا ثبت شده، آخرین اجرا: ' + probe.last_run_human) + '</span></div>'
-                    + '<div class="hint">' + escapeHtml(probe.message || '') + '</div></div></div>'
+                    + rowHtml({
+                        status: probe.verified ? 'ok' : 'fail',
+                        label: 'وضعیت کرون هاست',
+                        value: probe.count + ' اجرا / ' + probe.last_run_human,
+                        hint: probe.message || ''
+                    }, 0)
                     + '<div class="actions" style="margin:10px 0 0"><div class="left">'
                     + '<button id="copyProbe">کپی دستور تست</button><button id="resetProbe">شروع دوباره تست</button>'
                     + '</div><div class="right"></div></div>'
@@ -1035,12 +1550,13 @@ $host = mirza_install_host();
             function jobRow(job) {
                 const checked = confirmedJobs.has(job.job);
                 return '<div class="row ' + (checked ? 'ok' : (job.optional ? 'warn' : 'fail')) + '">'
-                    + '<input type="checkbox" id="chk_' + job.job + '"' + (checked ? ' checked' : '') + ' style="margin-top:10px">'
-                    + '<div class="body"><div class="label">' + escapeHtml(job.title)
-                    + (job.optional ? ' <span class="value">(اختیاری)</span>' : '') + '</div>'
-                    + '<div class="hint" style="direction:ltr;text-align:left;font-family:monospace;font-size:12px">'
+                    + '<input type="checkbox" id="chk_' + job.job + '"' + (checked ? ' checked' : '') + '>'
+                    + '<div class="body">'
+                    + '<div class="line"><span class="label">' + escapeHtml(job.title) + '</span>'
+                    + (job.optional ? '<span class="value">اختیاری</span>' : '') + '</div>'
+                    + '<div class="hint" style="direction:ltr;text-align:left;font-family:var(--mono);font-size:11.5px">'
                     + escapeHtml(commandOf(job)) + '</div></div>'
-                    + '<button id="cpy_' + job.job + '" style="padding:4px 10px;font-size:12px">کپی</button></div>';
+                    + '<button id="cpy_' + job.job + '" style="padding:5px 11px;font-size:11.5px">کپی</button></div>';
             }
 
             function copyText(text, buttonId) {
@@ -1086,10 +1602,8 @@ $host = mirza_install_host();
                 if (!container) {
                     return;
                 }
-                container.innerHTML = steps.map(step =>
-                    '<div class="row ' + step.status + '"><div class="dot ' + step.status + '"></div>'
-                    + '<div class="body"><div class="label">' + escapeHtml(step.label) + '</div>'
-                    + '<div class="hint">' + escapeHtml(step.detail) + '</div></div></div>'
+                container.innerHTML = steps.map((step, index) =>
+                    rowHtml({ status: step.status, label: step.label, value: '', hint: step.detail }, index)
                 ).join('');
             }
 
