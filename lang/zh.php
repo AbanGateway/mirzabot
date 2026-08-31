@@ -2061,6 +2061,7 @@ support 权限级别可访问用户服务和客服消息回复部分',
                         'invalidCredentials' => '❌ 面板用户名或密码错误',
                         'fetchErrorCode' => '❌ 获取数据时发生错误。错误代码：',
                         'fetchError' => '❌ 获取数据时发生错误。错误：',
+                        'protocolsNotConfigured' => '⚠️ 此位置的协议和入站尚未配置。在配置完成之前，机器人无法创建可用的配置。请前往面板管理 > 协议与入站设置，并发送一个示例配置的用户名。',
                         'panelConnection' => [
                                 'timeout' => '⏳ <b>面板在 %s 秒内未响应。</b>
 

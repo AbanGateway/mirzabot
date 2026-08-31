@@ -2061,6 +2061,7 @@ To activate, you must go to Panel Management > Set Group Name and send the defau
                         'invalidCredentials' => '❌ The panel username or password is incorrect',
                         'fetchErrorCode' => '❌ An error occurred while retrieving data. Error code: ',
                         'fetchError' => '❌ An error occurred while retrieving data. Error: ',
+                        'protocolsNotConfigured' => '⚠️ Protocols and inbounds are not configured for this location. Until they are, the bot cannot build a working config. Go to panel management > protocol and inbound settings and send the username of a sample config.',
                         'panelConnection' => [
                                 'timeout' => '⏳ <b>The panel did not respond within %s seconds.</b>
 

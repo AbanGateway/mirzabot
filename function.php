@@ -959,12 +959,21 @@ function DirectPayment($order_id, $image = 'images.jpg')
             'username' => $Balance_id['username'],
             'type' => 'buy'
         );
+        $invoiceStatusBefore = $get_invoice['Status'] ?? null;
+        $invoiceClaimed = false;
+        if (!empty($get_invoice['id_invoice'])) {
+            $claimInvoice = $pdo->prepare("UPDATE invoice SET Status = 'active' WHERE id_invoice = ? AND Status <> 'active'");
+            $claimInvoice->execute([$get_invoice['id_invoice']]);
+            clearSelectCache('invoice');
+            if ($claimInvoice->rowCount() === 0) {
+                return;
+            }
+            $invoiceClaimed = true;
+        }
         $dataoutput = $ManagePanel->createUser($marzban_list_get['name_panel'], $info_product['code_product'], $username_ac, $datac);
         if (!is_array($dataoutput) || empty($dataoutput['username'])) {
-            clearSelectCache('invoice');
-            $invoice_now = select("invoice", "*", "id_invoice", $get_invoice['id_invoice'], "select");
-            if ($invoice_now && $invoice_now['Status'] == "active") {
-                return;
+            if ($invoiceClaimed) {
+                update("invoice", "Status", $invoiceStatusBefore, "id_invoice", $get_invoice['id_invoice']);
             }
             $dataoutput['msg'] = json_encode($dataoutput['msg'] ?? $dataoutput ?? 'unknown error');
             $balance = $Balance_id['Balance'] + $Payment_report['price'];
@@ -1880,6 +1889,40 @@ function panelErrorText($rawError)
         $text .= sprintf($messages['detail'], htmlspecialchars($raw, ENT_NOQUOTES, 'UTF-8'));
     }
     return $text;
+}
+function panelProtocolsConfigured($rawProxies)
+{
+    $decoded = json_decode((string) $rawProxies, true);
+    return is_array($decoded) && count($decoded) > 0;
+}
+
+function panelProtocolsMissingError($panelName = '')
+{
+    global $textbotlang;
+    $panelName = (string) $panelName;
+    $message = $textbotlang['Admin']['managepanel']['protocolsNotConfigured'] ?? null;
+    if ($message === null) {
+        $message = 'Protocols and inbounds are not configured for this location. Open panel management and run the protocol/inbound setup before selling.';
+    }
+    error_log('Panel protocols not configured' . ($panelName !== '' ? " [$panelName]" : ''));
+    return array('error' => $message);
+}
+function absoluteSubscriptionUrl($subUrl, $panelUrl)
+{
+    $subUrl = trim((string) $subUrl);
+    if ($subUrl === '') {
+        return '';
+    }
+    if (preg_match('#^[a-zA-Z][a-zA-Z0-9+.\-]*://#', $subUrl)) {
+        return $subUrl;
+    }
+    if ($subUrl[0] !== '/') {
+        $firstSegment = explode('/', $subUrl)[0];
+        if (preg_match('/[.:]/', $firstSegment)) {
+            return $subUrl;
+        }
+    }
+    return rtrim((string) $panelUrl, '/') . '/' . ltrim($subUrl, '/');
 }
 function normalizePanelUrl($url)
 {

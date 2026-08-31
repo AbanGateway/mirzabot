@@ -226,6 +226,9 @@ function adduser($location, $data_limit, $username_ac, $timestamp, $note = '', $
             $inbounds = json_decode($marzban_list_get['inbounds'], true);
         }
     }
+    if (!panelProtocolsConfigured($marzban_list_get['proxies'])) {
+        return panelProtocolsMissingError($marzban_list_get['name_panel']);
+    }
     if ($marzban_list_get['version_panel'] == "1") {
         $data = array(
             "proxy_settings" => json_decode($marzban_list_get['proxies']),

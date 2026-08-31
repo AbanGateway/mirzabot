@@ -85,9 +85,7 @@ class ManagePanel
                     $Output['msg'] = '';
                 }
             } else {
-                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $data_Output['subscription_url'])) {
-                    $data_Output['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($data_Output['subscription_url'], "/");
-                }
+                $data_Output['subscription_url'] = absoluteSubscriptionUrl($data_Output['subscription_url'], $Get_Data_Panel['url_panel']);
                 if ($Get_Data_Panel['version_panel'] == "1") {
                     $out_put_link = outputlink($data_Output['subscription_url']);
 
@@ -132,9 +130,7 @@ class ManagePanel
                     $Output['msg'] = '';
                 }
             } else {
-                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $data_Output['subscription_url'])) {
-                    $data_Output['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($data_Output['subscription_url'], "/");
-                }
+                $data_Output['subscription_url'] = absoluteSubscriptionUrl($data_Output['subscription_url'], $Get_Data_Panel['url_panel']);
                 $data_Output['links'] = outputlink($data_Output['subscription_url']);
                 if (isBase64($data_Output['links'])) {
                     $data_Output['links'] = base64_decode($data_Output['links']);
@@ -432,9 +428,7 @@ class ManagePanel
                 $Output['msg'] = $data_Output['detail'] ?? 'Unsuccessful';
             } else {
                 $sub_url = $data_Output['subscription_url'];
-                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $sub_url)) {
-                    $sub_url = $Get_Data_Panel['url_panel'] . "/" . ltrim($sub_url, "/");
-                }
+                $sub_url = absoluteSubscriptionUrl($sub_url, $Get_Data_Panel['url_panel']);
                 if ($invoice != false) {
                     $sub_url = "https://$domainhosts/sub/" . $invoice['id_invoice'];
                 }
@@ -485,9 +479,7 @@ class ManagePanel
                         'msg' => is_array($UsernameData) ? ($UsernameData['detail'] ?? 'Unsuccessful') : 'Unsuccessful'
                     );
                 }
-                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $UsernameData['subscription_url'] ?? '')) {
-                    $UsernameData['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($UsernameData['subscription_url'] ?? '', "/");
-                }
+                $UsernameData['subscription_url'] = absoluteSubscriptionUrl($UsernameData['subscription_url'] ?? '', $Get_Data_Panel['url_panel']);
                 if ($Get_Data_Panel['version_panel'] == "1") {
                     $UsernameData['expire'] = strtotime($UsernameData['expire'] ?? '');
                     $links = $UsernameData['links'] ?? base64_decode(outputlink($UsernameData['subscription_url']));
@@ -562,9 +554,7 @@ class ManagePanel
                         'msg' => "Unsuccessful"
                     );
                 } else {
-                    if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $UsernameData['subscription_url'])) {
-                        $UsernameData['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($UsernameData['subscription_url'], "/");
-                    }
+                    $UsernameData['subscription_url'] = absoluteSubscriptionUrl($UsernameData['subscription_url'], $Get_Data_Panel['url_panel']);
                     $UsernameData['status'] = "active";
                     if (!$UsernameData['enabled']) {
                         $UsernameData['status'] = "disabled";
@@ -1040,9 +1030,7 @@ class ManagePanel
                     );
                 } else {
                     $sub_url = $UsernameData['subscription_url'];
-                    if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $sub_url)) {
-                        $sub_url = $Get_Data_Panel['url_panel'] . "/" . ltrim($sub_url, "/");
-                    }
+                    $sub_url = absoluteSubscriptionUrl($sub_url, $Get_Data_Panel['url_panel']);
                     if ($invoice != false) {
                         $sub_url = "https://$domainhosts/sub/" . $invoice['id_invoice'];
                     }
@@ -1090,9 +1078,7 @@ class ManagePanel
                 );
             } else {
                 $Data_User = $this->DataUser($name_panel, $username);
-                if (!preg_match('/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?((\/[^\s\/]+)+)?$/', $Data_User['subscription_url'])) {
-                    $Data_User['subscription_url'] = $Get_Data_Panel['url_panel'] . "/" . ltrim($Data_User['subscription_url'], "/");
-                }
+                $Data_User['subscription_url'] = absoluteSubscriptionUrl($Data_User['subscription_url'], $Get_Data_Panel['url_panel']);
                 $Output = array(
                     'status' => 'successful',
                     'configs' => $Data_User['links'],

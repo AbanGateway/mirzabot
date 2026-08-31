@@ -103,6 +103,9 @@ function adduserm($location,$data_limit,$username_ac,$timestamp,$name_product,$n
     if($product['inbounds'] != null){
      $marzban_list_get['proxies'] = $product['inbounds'];   
     }
+    if (!panelProtocolsConfigured($marzban_list_get['proxies'])) {
+        return panelProtocolsMissingError($marzban_list_get['name_panel']);
+    }
     $Check_token = token_panelm($marzban_list_get['code_panel']);
     $data = array(
             'service_ids' => json_decode($marzban_list_get['proxies'],true),
