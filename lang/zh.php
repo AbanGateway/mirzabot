@@ -1241,6 +1241,17 @@ https://t.me/%s?start=%s',
 <code>%s</code>',
                 'invalidValue' => '❌ 值无效',
                 'mainAdminOnly' => '❌ 此部分仅主管理员可用',
+                'installerNotice' => [
+                        'user' => '⛔️ <b>机器人暂时不可用。</b>
+
+服务正在维护中。请几分钟后重试，或联系客服。',
+                        'admin' => '⛔️ <b>机器人已停止：安装目录未被删除。</b>
+
+服务器上仍存在 <code>install</code> 目录，机器人无法自动删除它。只要该目录存在，机器人就不会回应任何用户。
+
+🔹 请通过 SSH 连接服务器，删除机器人目录下的 <code>install</code> 文件夹。
+🔹 然后检查机器人目录的属主和权限，确保 Web 服务器用户有删除权限。',
+                ],
                 'notUser' => '未找到具有此ID的用户',
                 'panelAdmin' => '👨‍💼 管理面板',
                 'saved' => '✅ 已保存。',

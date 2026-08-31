@@ -1241,6 +1241,17 @@ Example:
 <code>%s</code>',
                 'invalidValue' => '❌ Invalid value',
                 'mainAdminOnly' => '❌ This section is only available to the main admin',
+                'installerNotice' => [
+                        'user' => '⛔️ <b>The bot is temporarily unavailable.</b>
+
+The service is under maintenance. Please try again in a few minutes or contact support.',
+                        'admin' => '⛔️ <b>The bot is halted: the install folder was not removed.</b>
+
+The <code>install</code> folder still exists on the server and the bot could not remove it automatically. While that folder remains, the bot will not answer any user.
+
+🔹 Connect to the server over SSH and delete the <code>install</code> folder from the bot directory.
+🔹 Then check the ownership and permissions of the bot directory so the web server user is allowed to delete it.',
+                ],
                 'notUser' => 'No user was found with this ID',
                 'panelAdmin' => '👨‍💼 Management panel',
                 'saved' => '✅ Saved.',

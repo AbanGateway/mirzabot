@@ -1881,13 +1881,6 @@ function panelErrorText($rawError)
     }
     return $text;
 }
-function panelResponseError($response)
-{
-    if (is_array($response) && !empty($response['error'])) {
-        return panelErrorText($response['error']);
-    }
-    return panelErrorText($response);
-}
 function normalizePanelUrl($url)
 {
     $url = trim((string) $url);
@@ -2283,11 +2276,59 @@ function mirzaRemoveInstallerPath($path)
     return @rmdir($path) && $removed;
 }
 
+function mirzaInstallerNoticeTexts()
+{
+    global $textbotlang;
+    $lang = is_array($textbotlang) && !empty($textbotlang) ? $textbotlang : null;
+    if ($lang === null) {
+        $lang = @include __DIR__ . '/lang/fa.php';
+    }
+    $notice = is_array($lang) ? ($lang['Admin']['installerNotice'] ?? null) : null;
+    return [
+        'user' => $notice['user'] ?? 'The bot is temporarily unavailable. Please try again later.',
+        'admin' => $notice['admin'] ?? 'The install folder still exists on the server and the bot could not remove it. Delete it manually to bring the bot back.',
+    ];
+}
+
+function mirzaShouldAlertInstallerAdmin($cooldown = 3600)
+{
+    $cacheDir = __DIR__ . '/storage/cache';
+    if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0775, true) && !is_dir($cacheDir)) {
+        return true;
+    }
+    $marker = $cacheDir . '/installer_notice';
+    $last = @file_get_contents($marker);
+    if ($last !== false && (time() - intval($last)) < $cooldown) {
+        return false;
+    }
+    @file_put_contents($marker, (string) time());
+    return true;
+}
+
+function mirzaNotifyInstallerBlocked()
+{
+    global $from_id, $adminnumber;
+    if (!function_exists('sendmessage')) {
+        return;
+    }
+    $texts = mirzaInstallerNoticeTexts();
+    $adminId = isset($adminnumber) ? trim((string) $adminnumber) : '';
+    $userId = isset($from_id) ? trim((string) $from_id) : '';
+    $userIsAdmin = $adminId !== '' && $userId === $adminId;
+    if ($userId !== '' && !isTelegramChatIdEmpty($userId)) {
+        sendmessage($userId, $userIsAdmin ? $texts['admin'] : $texts['user'], null, 'HTML');
+    }
+    if (!$userIsAdmin && $adminId !== '' && mirzaShouldAlertInstallerAdmin()) {
+        sendmessage($adminId, $texts['admin'], null, 'HTML');
+    }
+}
+
 function mirzaStopForInstaller($message)
 {
     error_log($message);
+    mirzaNotifyInstallerBlocked();
     if (!headers_sent()) {
-        http_response_code(503);
+        http_response_code(200);
         header('Content-Type: text/plain; charset=utf-8');
         header('Cache-Control: no-store');
     }
