@@ -1516,6 +1516,20 @@ fetch_bot_username() {
 valid_db_ident() { [[ "$1" =~ ^[A-Za-z0-9_]{1,32}$ ]]; }
 valid_db_pass()  { [[ "$1" =~ ^[A-Za-z0-9_]{6,64}$ ]]; }
 
+purge_installer_dir() {
+    local target="$1"
+    [ -z "$target" ] && return 0
+    [ -e "$target/install" ] || return 0
+    rm -rf "$target/install" 2>/dev/null
+    [ -e "$target/install" ] && sudo rm -rf "$target/install" 2>/dev/null
+    if [ -e "$target/install" ]; then
+        printf "    ${C_BAD}●${CR} ${C_BAD}Could not remove the web installer at %s/install.${CR}\n" "$target"
+        printf "    ${C_BAD}●${CR} ${C_BAD}Delete it manually - the bot refuses to answer users while it exists.${CR}\n"
+        return 1
+    fi
+    return 0
+}
+
 # Whole-server pre-flight before installing
 preflight() {
     local ok=1
@@ -1803,11 +1817,12 @@ function install_bot() {
             echo -e "\e[91mError: Extracted source folder not found (bad or empty download).\033[0m"
             install_pause "Locating extracted files"
         fi
-        rm -rf "$EXTRACTED_DIR/install"
+        purge_installer_dir "$EXTRACTED_DIR"
         mv "$EXTRACTED_DIR"/* "$BOT_DIR" || {
             echo -e "\e[91mError: Failed to move extracted files.\033[0m"
             install_pause "Moving bot files"
         }
+        purge_installer_dir "$BOT_DIR"
         rm -rf "$TEMP_DIR"
         sudo chown -R www-data:www-data "$BOT_DIR"
         sudo chmod -R 755 "$BOT_DIR"
@@ -2249,11 +2264,13 @@ function update_bot() {
         exit 1
     }
     sudo mkdir -p "$BOT_DIR"
-    sudo rm -rf "$EXTRACTED_DIR/install" "$BOT_DIR/install"
+    purge_installer_dir "$EXTRACTED_DIR"
+    purge_installer_dir "$BOT_DIR"
     sudo mv "$EXTRACTED_DIR"/* "$BOT_DIR/" || {
         echo -e "\e[91mFile transfer failed!\033[0m"
         exit 1
     }
+    purge_installer_dir "$BOT_DIR"
     if [ -f "$TEMP_CONFIG" ]; then
         sudo mv "$TEMP_CONFIG" "$CONFIG_PATH" || {
             echo -e "\e[91mConfig file restore failed!\033[0m"
@@ -2580,8 +2597,9 @@ function migrate_to_pro() {
         echo -e "\033[31mError: Extracted source folder not found. Aborting migration.\033[0m"
         rm -rf "$TEMP_DIR"; exit 1
     fi
-    rm -rf "$EXTRACTED_DIR/install"
+    purge_installer_dir "$EXTRACTED_DIR"
     mv "$EXTRACTED_DIR"/* "$NEW_BOT_DIR"
+    purge_installer_dir "$NEW_BOT_DIR"
     rm -rf "$TEMP_DIR"
     NEW_SECRET_TOKEN=$(openssl rand -base64 10 | tr -dc 'a-zA-Z0-9' | cut -c1-8)
     cat <<EOF > "$NEW_BOT_DIR/config.php"
