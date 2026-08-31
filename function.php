@@ -886,7 +886,6 @@ function outputlink($text)
     curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
     $response = curl_exec($ch);
     if ($response === false) {
-        $error = curl_error($ch);
         return null;
     } else {
         return $response;
@@ -1283,10 +1282,6 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $nameloc = select("invoice", "*", "username", $steppay[0], "select");
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
         $Balance_Low_user = 0;
-        $inboundid = $marzban_list_get['inboundid'];
-        if ($nameloc['inboundid'] != null) {
-            $inboundid = $nameloc['inboundid'];
-        }
         update("user", "Balance", $Balance_Low_user, "id", $Balance_id['id']);
         $DataUserOut = $ManagePanel->DataUser($nameloc['Service_location'], $steppay[0]);
         $data_for_database = json_encode(array(
@@ -1359,10 +1354,6 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $nameloc = select("invoice", "*", "username", $steppay[0], "select");
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
         $Balance_Low_user = 0;
-        $inboundid = $marzban_list_get['inboundid'];
-        if ($nameloc['inboundid'] != false) {
-            $inboundid = $nameloc['inboundid'];
-        }
         update("user", "Balance", $Balance_Low_user, "id", $nameloc['id_user']);
         $DataUserOut = $ManagePanel->DataUser($nameloc['Service_location'], $steppay[0]);
         $data_for_database = json_encode(array(
@@ -1372,8 +1363,6 @@ function DirectPayment($order_id, $image = 'images.jpg')
         ));
         $dateacc = date('Y/m/d H:i:s');
         $type = "extra_time_user";
-        $timeservice = $DataUserOut['expire'] - time();
-        $day = floor($timeservice / 86400);
         $extra_time = $ManagePanel->extra_time($nameloc['username'], $marzban_list_get['code_panel'], $tmieextra);
         if ($extra_time['status'] == false) {
             $extra_time['msg'] = json_encode($extra_time['msg']);
@@ -1747,7 +1736,6 @@ function activecron()
 }
 function createInvoice($amount)
 {
-    global $from_id, $domainhosts;
     $PaySetting = select("PaySetting", "*", "NamePay", "apiiranpay", "select")['ValuePay'];
     $walletaddress = select("PaySetting", "*", "NamePay", "walletaddress", "select")['ValuePay'];
 
@@ -1773,9 +1761,7 @@ function createInvoice($amount)
 }
 function verifpay($id)
 {
-    global $from_id, $domainhosts;
     $PaySetting = select("PaySetting", "*", "NamePay", "apiiranpay", "select")['ValuePay'];
-    $walletaddress = select("PaySetting", "*", "NamePay", "walletaddress", "select")['ValuePay'];
     $curl = curl_init();
 
     curl_setopt_array($curl, array(

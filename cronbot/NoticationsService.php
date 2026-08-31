@@ -131,7 +131,7 @@ class ServiceMonitor
         $daysRemaining = intval($timeService / 86400);
         $removalThreshold = intval("-" . $this->setting['removedayc']);
         $result = $daysRemaining <= $removalThreshold;
-        $statusText = $statusMap = [
+        $statusText = [
             'active' => $this->textBotLang['users']['status']['active'],
             'limited' => $this->textBotLang['users']['status']['limited'],
             'disabled' => $this->textBotLang['users']['status']['disabled'],

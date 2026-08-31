@@ -22,7 +22,6 @@ function get_Clients_ui($username, $namepanel)
         ),
         CURLOPT_COOKIEFILE => 'cookie.txt',
     ));
-    $output = [];
     $response = curl_exec($curl);
     if (!isset($response))
         return [];
@@ -68,12 +67,6 @@ function GetClientsS_UI($username, $namepanel)
 function addClientS_ui($namepanel, $usernameac, $Expire, $Total, $inboundid, $note)
 {
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $namepanel, "select");
-    if ($Expire == 0) {
-        $timeservice = 0;
-    } else {
-        $timelast = $Expire - time();
-        $timeservice = -intval(($timelast / 86400) * 86400000);
-    }
     if ($usernameac == null)
         return json_encode(array(
             'status' => false,

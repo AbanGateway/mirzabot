@@ -455,7 +455,6 @@ return [
                         'invalidCode' => '❌ 优惠码无效',
                         'expired' => '❌ 优惠码时间已过期。',
                         'useLimit' => '⭕️ 此码仅可使用 {useuser}  次',
-                        'appliedRenew' => '🤩 您的优惠码有效，发票已应用 {discount_price}% 折扣。',
                         'applied' => '🤩 您的优惠码有效，发票已应用 {discount_price}% 折扣。',
                         'notAllowed' => '❌ 无法使用此优惠码购买',
                 ],
@@ -684,7 +683,6 @@ https://t.me/%s?start=%s',
                         'planNotAvailable' => '❌ 无法使用当前套餐续费。请从头执行各步骤并选择其他套餐。',
                         'restartError' => '❌ 发生了错误。请从头执行续费步骤。',
                         'errorSupport' => '❌ 续费服务时发生错误；请联系客服',
-                        'errorSupport2' => '❌ 续费服务时发生错误；请联系客服',
                         'genericError' => '❌ 续费过程中发生错误。请联系客服',
                         'giftCharged' => '恭喜 🎉
 📌 作为续费礼品，金额 %s 托曼已充值到您的账户',
@@ -1232,9 +1230,6 @@ https://t.me/%s?start=%s',
                 'errorCode5' => '❌  发生了错误。错误代码：%s',
                 'errorCode6' => '❌  发生了错误。错误代码：%s',
                 'errorOccurred' => '发生了错误',
-                'errorReason' => '错误原因： 
-%s',
-                'errorReason2' => '错误原因 %s',
                 'errorRestart' => '❌ 发生了错误；请从头执行各步骤。',
                 'getStats' => '如果您想查看其他日期范围的统计数据，请先发送开始日期。
 例如：
@@ -1382,8 +1377,6 @@ n2',
                         'rejected' => '⭕️ 支付已成功拒绝，并已向用户发送消息',
                         'reviewedPayment' => '❌ 该支付已被其他管理员审核过',
                         'reviewReceiptsFirst' => '⚠️ 如需批准用户请求，请先审核并批准购买或续费收据。然后批准钱包充值收据。 ',
-                        'disableAutoConfirmFirst' => '❌ 请先关闭无需审核的自动批准。',
-                        'disableAutoConfirmFirst2' => '❌ 请先关闭自动批准。',
                         'autoConfirmDesc' => '📌 激活此功能后，在您不在线的时段，机器人会自动批准所有卡对卡交易；待您上线后，您再审核收据，如果发送的是虚假收据，则取消该交易',
                         'noPending' => '❌ 您没有未批准的付款。',
                         'pendingIntro' => '📌 未批准的卡对卡付款 
@@ -1517,7 +1510,6 @@ n2',
                         'activePanel' => '⭕️ 在此部分，您可以开启或关闭面板的销售功能',
                         'activePanelOff' => '❌ 面板已关闭',
                         'activePanelOn' => '✅ 面板已开启',
-                        'autoConfirmCard' => '卡转卡收据自动确认状态',
                         'botTitle' => '📌 在此部分，您可以指定以下功能是否启用。',
                         'btn' => '📊 机器人统计',
                         'cardStatusOffPv' => '⭕ 私聊中的离线网关状态已关闭',
@@ -1814,7 +1806,6 @@ trojan://xyz',
                         'cubepayFeeAsk' => "💵 请发送手续费数值：\n\n▫️ <b>0 到 100</b> → 按<b>百分比</b>收取（可含小数，如 <code>9.9</code>）\n▫️ <b>大于 100</b> → 按<b>固定土曼金额</b>收取（如 <code>5000</code>）\n\n当前数值：<b>%s</b>",
                         'cubepayFeeSavedPercent' => "✅ 已保存 — <b>%s%%</b> 百分比手续费\n\n示例：100,000 土曼的订单，客户需支付 <b>%s</b> 土曼。",
                         'cubepayFeeSavedFixed' => "✅ 已保存 — <b>%s 土曼</b> 固定手续费\n\n示例：100,000 土曼的订单，客户需支付 <b>%s</b> 土曼。",
-                        'tronadoDesc' => '在此部分，您可以关闭或开启 Tornado 网关',
                         'off' => '已关闭',
                         'on' => '已开启',
                         'intro' => '📌 在下方列表中，您可以管理网关。
@@ -2152,7 +2143,6 @@ support 权限级别可访问用户服务和客服消息回复部分',
                         'notFound' => '❌ 未找到所需的面板。',
                         'errorCode' => '❌ 发生错误，错误代码：%s',
                         'xuiErrorCode' => '❌ 发生错误。错误代码：  ',
-                        'xuiErrorReason' => '❌ 发生错误。原因：  ',
                         'eylanErrorCode' => '❌  发生错误。错误代码：  %s',
                         'eylanUserNotExist' => '❌ 用户在面板中不存在。',
                         'eylanPanelOutput' => '面板输出：',
@@ -3625,17 +3615,6 @@ f,n.n2',
 ‼️存款错误的责任由您承担。
 🔝付款后，点击我已付款按钮，然后发送收据图片
 💵您的付款经管理员批准后，您的钱包将被充值，如果您有订单，将会处理',
-                'cartAuto' => '如需即时批准，请准确存入以下金额。否则，您的付款批准可能会延迟。⚠️
-            要增加余额，请将 <code>{price}</code>  里亚尔  存入下方账号 👇🏻
-
-        ==================== 
-        <code>{card_number}</code>
-        {name_card}
-        ====================
-        
-💰请准确存入上述金额，以便即时批准。
-‼️无法从钱包中提取资金。
-🔝无需发送收据，但如果一段时间后您的存款未获批准，请发送您的收据图片。',
                 'cartToCart' => '💳 卡对卡',
                 'channel' => '   
         ⚠️ 尊敬的用户；您不是我们频道的成员
@@ -3933,7 +3912,6 @@ f,n.n2',
                 'editUsername' => '👤 编辑用户名',
                 'educationBtn' => '教程按钮',
                 'educationCategory' => '📗教程分类',
-                'educationFeature' => '教程功能',
                 'educationSection' => '📚 教程部分',
                 'enableShowCard' => '💰 激活卡号显示',
                 'excludeUser' => '➕ 例外用户',
@@ -4146,7 +4124,6 @@ f,n.n2',
                 'supportInPv' => '👤 私聊客服',
                 'supportSection' => '🤙 客服部分',
                 'testAccountBtn' => '测试账户按钮',
-                'testAccountFeature' => '测试账户功能',
                 'testAccountLimit' => '➕ 测试账户限制',
                 'testAccountVolume' => '💾 测试账户流量',
                 'testServiceTime' => '⏳ 测试服务时间',
@@ -4176,7 +4153,6 @@ f,n.n2',
                 'usersWithBalance' => '有余额的用户列表。',
                 'usersWithNegativeBalance' => '余额为负的用户列表',
                 'verifyChannelMembership' => '📑 频道成员资格验证',
-                'viewAccountInfoFeature' => '账户信息查看功能',
                 'viewInfo' => '查看信息',
                 'viewTutorial' => '📚 查看使用教程 ',
                 'volume' => '流量',
@@ -4455,7 +4431,6 @@ f,n.n2',
                 'productSearchPlaceholder' => '搜索...',
                 'productThirtyValue' => '۳۰',
                 'productTomanUnit' => '取消',
-                'productTypeExample' => 'VPN、套餐、...',
                 'productUnlimitedLabel' => '说明',
                 'productVolumeGbSuffix' => '流量 (GB)',
                 'productZeroValue' => '۰',
@@ -4739,7 +4714,6 @@ f,n.n2',
                 'statusFailed' => '失败',
                 'descThanks' => '感谢您完成交易！',
                 'giftReport' => '🎁 尊敬的用户，%s 托曼已作为礼物存入您的账户。',
-                'lowAmount' => '❌ 用户存入的金额少于指定金额。',
                 'reportZarinpal' => '💵 新付款
         
 用户数字 ID：%s
@@ -4760,14 +4734,6 @@ f,n.n2',
 用户用户名：%s
 交易金额 %s
 支付方式：第一里亚尔货币',
-                'reportCard' => '机器人批准了一张收据
-
-信息：
-💰 付款金额：%s
-👤  用户数字 ID：%s 
-👤 用户用户名：@%s 
-用户余额：%s 托曼
-付款跟踪码：%s',
                 'reportTronado' => '💵 新付款
 - 👤 用户用户名：@%s
 - 🆔用户数字 ID：%s

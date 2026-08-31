@@ -390,7 +390,6 @@ class IBSng
         $used_traffic_pos3 = strpos($used_traffic_trim2, $used_traffic_pattern3);
         $used_traffic_trim3 = substr($used_traffic_trim2, 0, $used_traffic_pos3);
         $used_traffic = trim($used_traffic_trim3);
-        $used_traffics = strpos($used_traffic,"M");
         $used_traffic = str_replace('G','',$used_traffic);
         $used_traffic = str_replace('M','',$used_traffic);
         if($used_traffic == false){

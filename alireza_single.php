@@ -33,7 +33,6 @@ function login($code_panel, $verify = true)
     if ($panel['datelogin'] != null && $verify) {
         $date = json_decode($panel['datelogin'], true);
         if (isset($date['time'])) {
-            $timecurrent = time();
             $start_date = time() - strtotime($date['time']);
             if ($start_date <= 3000) {
                 file_put_contents('cookie.txt', $date['access_token']);

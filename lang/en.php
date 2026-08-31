@@ -455,7 +455,6 @@ Use the button below to pay👇🏻',
                         'invalidCode' => '❌ The discount code is invalid',
                         'expired' => '❌ The discount code time has expired.',
                         'useLimit' => '⭕️ This code can only be used {useuser}  times',
-                        'appliedRenew' => '🤩 Your discount code was valid and {discount_price} percent discount was applied to your invoice.',
                         'applied' => '🤩 Your discount code was valid and {discount_price} percent discount was applied to your invoice.',
                         'notAllowed' => '❌ Purchase with this discount code is not possible',
                 ],
@@ -684,7 +683,6 @@ You can now use the bot ✔️',
                         'planNotAvailable' => '❌ Renewal with the current plan is not possible. Go through the steps from the beginning and select another plan.',
                         'restartError' => '❌ An error occurred. Perform the renewal steps from the beginning.',
                         'errorSupport' => '❌ An error occurred while renewing the service; contact support',
-                        'errorSupport2' => '❌ An error occurred while renewing the service; contact support',
                         'genericError' => '❌ An error occurred during renewal. Contact support',
                         'giftCharged' => 'Congratulations 🎉
 📌 As a renewal gift, an amount of %s Toman was credited to your account',
@@ -1232,9 +1230,6 @@ This step is mandatory',
                 'errorCode5' => '❌  An error occurred. Error code:  %s',
                 'errorCode6' => '❌  An error occurred. Error code:  %s',
                 'errorOccurred' => 'An error occurred',
-                'errorReason' => 'Error reason: 
-%s',
-                'errorReason2' => 'Error reason %s',
                 'errorRestart' => '❌ An error occurred; go through the steps from the beginning.',
                 'getStats' => 'If you want to view the statistics for a different date range, first send the start date.
 Example: 
@@ -1382,8 +1377,6 @@ Note: To select all panels, send the word <code>/all</code>',
                         'rejected' => '⭕️ The payment was successfully rejected and a message was sent to the user',
                         'reviewedPayment' => '❌ This payment has already been reviewed by another admin',
                         'reviewReceiptsFirst' => '⚠️ To approve user requests, first review and approve the purchase or subscription renewal receipts. Then approve the wallet top-up receipt. ',
-                        'disableAutoConfirmFirst' => '❌ First turn off automatic approval without review.',
-                        'disableAutoConfirmFirst2' => '❌ First turn off automatic approval.',
                         'autoConfirmDesc' => '📌 By activating this feature, during the times when you are not online, the bot automatically approves all card-to-card transactions; then after you come online, you review the receipts, and if a fake receipt was sent, you cancel the transaction',
                         'noPending' => '❌ You have no unapproved payments.',
                         'pendingIntro' => '📌 Unapproved card-to-card payments 
@@ -1517,7 +1510,6 @@ Number of products sold: %s
                         'activePanel' => '⭕️ In this section you can turn the panel off or on for sales',
                         'activePanelOff' => '❌ The panel was turned off',
                         'activePanelOn' => '✅ The panel was turned on',
-                        'autoConfirmCard' => 'Auto-confirmation status for card-to-card receipts',
                         'botTitle' => '📌 In this section you can specify whether the following features are enabled or not.',
                         'btn' => '📊 Bot statistics',
                         'cardStatusOffPv' => '⭕ The offline gateway status in PV was turned off',
@@ -1814,7 +1806,6 @@ Current time: ',
                         'cubepayFeeAsk' => "💵 Send the fee value:\n\n▫️ <b>0 to 100</b> → a <b>percentage</b> fee (decimals allowed, e.g. <code>9.9</code>)\n▫️ <b>above 100</b> → a <b>fixed amount in toman</b> (e.g. <code>5000</code>)\n\nCurrent value: <b>%s</b>",
                         'cubepayFeeSavedPercent' => "✅ Saved — <b>%s%%</b> percentage fee\n\nExample: a 100,000 toman order becomes <b>%s</b> toman for the customer.",
                         'cubepayFeeSavedFixed' => "✅ Saved — <b>%s toman</b> fixed fee\n\nExample: a 100,000 toman order becomes <b>%s</b> toman for the customer.",
-                        'tronadoDesc' => 'In this section you can turn the Tornado gateway off or on',
                         'off' => 'Turned off',
                         'on' => 'Turned on',
                         'intro' => '📌 From the list below you can manage the gateways.
@@ -2152,7 +2143,6 @@ To hide a panel, select your panels from the list below, then send the /end_hide
                         'notFound' => '❌ The requested panel was not found.',
                         'errorCode' => '❌ An error occurred. Error code: %s',
                         'xuiErrorCode' => '❌ An error occurred. Error code:  ',
-                        'xuiErrorReason' => '❌ An error occurred. Reason:  ',
                         'eylanErrorCode' => '❌  An error occurred. Error code:  %s',
                         'eylanUserNotExist' => '❌ User does not exist in the panel.',
                         'eylanPanelOutput' => 'Panel output: ',
@@ -3625,17 +3615,6 @@ Connection link:
 ‼️Responsibility for incorrect deposits is yours.
 🔝After payment, press the I have paid button, then send the receipt image
 💵After your payment is approved by the admin, your wallet will be charged, and if you have an order, it will be processed',
-                'cartAuto' => 'For immediate approval, please deposit exactly the amount below. Otherwise, the approval of your payment may be delayed.⚠️
-            To increase your balance, deposit the amount of <code>{price}</code>  Rials  to the account number below 👇🏻
-
-        ==================== 
-        <code>{card_number}</code>
-        {name_card}
-        ====================
-        
-💰Deposit exactly the amount mentioned above so it is approved instantly.
-‼️Withdrawing money from the wallet is not possible.
-🔝There is no need to send a receipt, but if your deposit is not approved after some time, send your receipt image.',
                 'cartToCart' => '💳 Card to card',
                 'channel' => '   
         ⚠️ Dear user; you are not a member of our channel
@@ -3933,7 +3912,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'editUsername' => '👤 Edit username',
                 'educationBtn' => 'Tutorial button',
                 'educationCategory' => '📗Tutorial category',
-                'educationFeature' => 'Tutorial feature',
                 'educationSection' => '📚 Tutorial section',
                 'enableShowCard' => '💰 Activate card number display',
                 'excludeUser' => '➕ Exempt user',
@@ -4146,7 +4124,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'supportInPv' => '👤 Support in PV',
                 'supportSection' => '🤙 Support section',
                 'testAccountBtn' => 'Test account button',
-                'testAccountFeature' => 'Test account feature',
                 'testAccountLimit' => '➕ Test account limit',
                 'testAccountVolume' => '💾 Test account volume',
                 'testServiceTime' => '⏳ Test service time',
@@ -4176,7 +4153,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'usersWithBalance' => 'List of users who have a balance.',
                 'usersWithNegativeBalance' => 'List of users who have a negative balance',
                 'verifyChannelMembership' => '📑 Channel membership verification',
-                'viewAccountInfoFeature' => 'Account information viewing feature',
                 'viewInfo' => 'View information',
                 'viewTutorial' => '📚 View usage tutorial ',
                 'volume' => 'Volume',
@@ -4455,7 +4431,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'productSearchPlaceholder' => 'Search...',
                 'productThirtyValue' => '۳۰',
                 'productTomanUnit' => 'Cancel',
-                'productTypeExample' => 'VPN, package, ...',
                 'productUnlimitedLabel' => 'Description',
                 'productVolumeGbSuffix' => 'Volume (GB)',
                 'productZeroValue' => '۰',
@@ -4739,7 +4714,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'statusFailed' => 'Failed',
                 'descThanks' => 'Thank you for completing the transaction!',
                 'giftReport' => '🎁 Dear user, the amount of %s Toman has been deposited into your account as a gift.',
-                'lowAmount' => '❌ The user deposited less than the specified amount.',
                 'reportZarinpal' => '💵 New payment
         
 User numeric ID : %s
@@ -4760,14 +4734,6 @@ User numeric ID : %s
 User username : %s
 Transaction amount %s
 Payment method : First Rial currency',
-                'reportCard' => 'A receipt was approved by the bot
-
-Information :
-💰 Payment amount : %s
-👤  User numeric ID : %s 
-👤 User username : @%s 
-User balance : %s Toman
-Payment tracking code : %s',
                 'reportTronado' => '💵 New payment
 - 👤 User username : @%s
 - 🆔User numeric ID : %s

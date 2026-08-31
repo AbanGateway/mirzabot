@@ -12,7 +12,6 @@ $paymentreports = select("topicid", "idreport", "report", "paymentreport", "sele
 
 function statusplisio($tx_id)
 {
-    global $pdo;
     $api_key = getPaySettingValue('apinowpayment');
     $url = 'https://api.plisio.net/api/v1/operations?';
     $url .= '&api_key=' . urlencode($api_key);
@@ -21,8 +20,6 @@ function statusplisio($tx_id)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     return json_decode($response, true);
-    curl_close($ch);
-
 }
 $list_service = $pdo->prepare("SELECT * FROM Payment_report WHERE payment_Status = 'Unpaid' AND Payment_Method = 'plisio'");
 $list_service->execute();

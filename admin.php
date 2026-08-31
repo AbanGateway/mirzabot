@@ -1252,28 +1252,10 @@ elseif ($datain == "systemsms") {
             $userslist = json_encode($stmt->fetchAll());
         } else {
             if ($typeusermessage == "all") {
-                if ($typeusermessage == "all") {
-                    $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.last_message_time < :time");
-                    $stmt->bindParam(':time', $timenouser, PDO::PARAM_STR);
-                    $stmt->execute();
-                    $userslist = json_encode($stmt->fetchAll());
-                } elseif ($typeusermessage == "customer") {
-                    if ($userdata['selectpanel'] == "all") {
-                        $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.last_message_time < :time AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);");
-                    } else {
-                        $panel = select("marzban_panel", "*", "code_panel", $userdata['selectpanel'], "select");
-                        $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.last_message_time < :time AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id AND i.Service_location = :location);");
-                        $stmt->bindParam(':location', $panel['name_panel'], PDO::PARAM_STR);
-                    }
-                    $stmt->bindParam(':time', $timenouser, PDO::PARAM_STR);
-                    $stmt->execute();
-                    $userslist = json_encode($stmt->fetchAll());
-                } elseif ($typeusermessage == "nonecustomer") {
-                    $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.last_message_time < :time AND NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);");
-                    $stmt->bindParam(':time', $timenouser, PDO::PARAM_STR);
-                    $stmt->execute();
-                    $userslist = json_encode($stmt->fetchAll());
-                }
+                $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.last_message_time < :time");
+                $stmt->bindParam(':time', $timenouser, PDO::PARAM_STR);
+                $stmt->execute();
+                $userslist = json_encode($stmt->fetchAll());
             } elseif ($typeusermessage == "customer") {
                 if ($userdata['selectpanel'] == "all") {
                     $stmt = $pdo->prepare("SELECT u.id FROM user u WHERE u.agent =  :agent AND u.last_message_time < :time AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);");
@@ -1964,13 +1946,6 @@ elseif ($datain == "systemsms") {
             $valuenew = "onaffiliates";
         }
         update("setting", "affiliatesstatus", $valuenew);
-    } elseif ($type == "verifybyuser") {
-        if ($value == "onverify") {
-            $valuenew = "offverify";
-        } else {
-            $valuenew = "onverify";
-        }
-        update("setting", "verifybucodeuser", $valuenew);
     } elseif ($type == "btn_status_category") {
         if ($value == "1") {
             $valuenew = "0";

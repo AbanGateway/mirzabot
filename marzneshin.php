@@ -5,7 +5,6 @@ function token_panelm($code_panel){
     if($panel['datelogin'] != null){
         $date = json_decode($panel['datelogin'],true);
         if(isset($date['time'])){
-        $timecurrent = time();
         $start_date = time() - strtotime($date['time']);
         if($start_date <= 3600){
             return $date;
@@ -97,7 +96,6 @@ function revoke_subm($username_account,$location)
 #-----------------------------#
 function adduserm($location,$data_limit,$username_ac,$timestamp,$name_product,$note ='',$data_limit_reset = 'no_reset')
 {
-    global $pdo;
     $product = select('product',"*","name_product",$name_product,"select");
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $location,"select");
     if($product['inbounds'] != null){
