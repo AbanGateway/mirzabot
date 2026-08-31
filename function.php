@@ -878,7 +878,7 @@ function outputlink($text)
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $text);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT_MS, 10000);
+    curl_setopt($ch, CURLOPT_TIMEOUT_MS, ($GLOBALS['request_exec_timeout'] ?? null) ?: 10000);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -1840,6 +1840,53 @@ function sanitizeUserName($userName)
     }
 
     return $userName;
+}
+function panelErrorText($rawError)
+{
+    global $textbotlang, $request_exec_timeout;
+    if (is_array($rawError) || is_object($rawError)) {
+        $raw = json_encode($rawError, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    } else {
+        $raw = trim((string) $rawError);
+    }
+    if ($raw === '') {
+        $raw = 'unknown error';
+    }
+    error_log('Panel connection error: ' . $raw);
+    $messages = $textbotlang['Admin']['managepanel']['panelConnection'] ?? [];
+    if (empty($messages)) {
+        return $raw;
+    }
+    $needle = strtolower($raw);
+    if (str_contains($needle, 'timed out') || str_contains($needle, 'timeout') || str_contains($needle, 'operation too slow')) {
+        $seconds = 0;
+        if (preg_match('/after (\d+) milliseconds/', $needle, $matched)) {
+            $seconds = (int) round(intval($matched[1]) / 1000);
+        }
+        if ($seconds < 1) {
+            $seconds = (int) round(intval($request_exec_timeout ?: 10000) / 1000);
+        }
+        $text = sprintf($messages['timeout'], $seconds);
+    } elseif (str_contains($needle, 'could not resolve') || str_contains($needle, 'name or service not known') || str_contains($needle, 'name lookup')) {
+        $text = $messages['dns'];
+    } elseif (str_contains($needle, 'connection refused') || str_contains($needle, 'failed to connect') || str_contains($needle, "couldn't connect") || str_contains($needle, 'connection reset')) {
+        $text = $messages['refused'];
+    } elseif (str_contains($needle, 'ssl') || str_contains($needle, 'certificate')) {
+        $text = $messages['ssl'];
+    } else {
+        $text = $messages['generic'];
+    }
+    if (!empty($messages['detail'])) {
+        $text .= sprintf($messages['detail'], htmlspecialchars($raw, ENT_NOQUOTES, 'UTF-8'));
+    }
+    return $text;
+}
+function panelResponseError($response)
+{
+    if (is_array($response) && !empty($response['error'])) {
+        return panelErrorText($response['error']);
+    }
+    return panelErrorText($response);
 }
 function normalizePanelUrl($url)
 {

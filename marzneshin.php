@@ -20,7 +20,7 @@ function token_panelm($code_panel){
     $options = array(
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST => true,
-        CURLOPT_TIMEOUT_MS => 6000,
+        CURLOPT_TIMEOUT_MS => ($GLOBALS['request_exec_timeout'] ?? null) ?: 6000,
         CURLOPT_POSTFIELDS => http_build_query($data_token),
         CURLOPT_HTTPHEADER => array(
             'Content-Type: application/x-www-form-urlencoded',

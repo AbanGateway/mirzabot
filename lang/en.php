@@ -2050,6 +2050,39 @@ To activate, you must go to Panel Management > Set Group Name and send the defau
                         'invalidCredentials' => '❌ The panel username or password is incorrect',
                         'fetchErrorCode' => '❌ An error occurred while retrieving data. Error code: ',
                         'fetchError' => '❌ An error occurred while retrieving data. Error: ',
+                        'panelConnection' => [
+                                'timeout' => '⏳ <b>The panel did not respond within %s seconds.</b>
+
+This is not a bot fault — the request reached your panel, but the panel did not answer in time.
+
+🔹 Check that the panel server is up and reachable.
+🔹 If your panel is under heavy load, raise <code>$request_exec_timeout</code> in <code>config.php</code> (in milliseconds, e.g. 25000).',
+                                'refused' => '🚫 <b>Could not connect to the panel.</b>
+
+This is not a bot fault — the panel server refused the connection.
+
+🔹 Check the panel address and port.
+🔹 Make sure the panel service is running and the firewall allows the port.',
+                                'dns' => '🌐 <b>The panel domain could not be resolved.</b>
+
+This is not a bot fault — the panel address did not resolve to an IP.
+
+🔹 Check the spelling of the panel address.
+🔹 Check the domain DNS records.',
+                                'ssl' => '🔐 <b>Secure connection to the panel failed.</b>
+
+This is not a bot fault — the panel SSL certificate was invalid or the handshake failed.
+
+🔹 Check the panel SSL certificate and its expiry date.',
+                                'generic' => '⚠️ <b>Could not reach the panel.</b>
+
+This is not a bot fault — the request to the panel failed.
+
+🔹 Check the status of the panel server.',
+                                'detail' => '
+
+<i>Technical detail:</i> <code>%s</code>',
+                        ],
                         'invalidUrl' => '❌ The panel link was sent incorrectly',
                         'notConnected' => 'Panel is not connected',
                         'askUserGroup' => '📌 Send the user type
