@@ -68,5 +68,5 @@ foreach ($list_keyboard as $key) {
 echo json_encode([
     'keylist' => $keyboard,
     'userlist' => $keyboardmain['keyboard'],
-    'text' => $textbotlang['textbot']
+    'text' => array_map('stripCustomEmojiTags', $textbotlang['textbot'])
 ], JSON_UNESCAPED_UNICODE);

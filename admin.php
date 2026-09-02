@@ -716,7 +716,7 @@ if (in_array($text, $textadmin) || $datain == "admin") {
     }
     $sublink = "onsublink";
     $configstatus = "offconfig";
-    $MethodUsername = $textbotlang['keyboard']['numericIdRandom'];
+    $methodusernameadd = 'numericIdRandom';
     $status = "active";
     $ONTestAccount = "ONTestAccount";
     $extendtextadd = "resetVolumeTime";
@@ -755,7 +755,7 @@ if (in_array($text, $textadmin) || $datain == "admin") {
     $stmt->bindParam(':name_panel', $userdata['namepanel'], PDO::PARAM_STR);
     $stmt->bindParam(':sublink', $sublink);
     $stmt->bindParam(':config', $configstatus);
-    $stmt->bindParam(':MethodUsername', $MethodUsername);
+    $stmt->bindParam(':MethodUsername', $methodusernameadd);
     $stmt->bindParam(':TestAccount', $ONTestAccount);
     $stmt->bindParam(':status', $status);
     $stmt->bindParam(':limit_panel', $text);
@@ -3362,14 +3362,19 @@ elseif ($datain == "systemsms") {
     sendmessage($from_id, $text_username, $MethodUsername, 'HTML');
     step('updatemethodusername', $from_id);
 } elseif ($user['step'] == "updatemethodusername") {
-    update("marzban_panel", "MethodUsername", $text, "name_panel", $user['Processing_value']);
+    $methodusername = usernameMethodKey($text, null);
+    if ($methodusername === null) {
+        sendmessage($from_id, $textbotlang['Admin']['algorithmUsername']['selectMethod'], $MethodUsername, 'HTML');
+        return;
+    }
+    update("marzban_panel", "MethodUsername", $methodusername, "name_panel", $user['Processing_value']);
     $typepanel = select("marzban_panel", "*", "name_panel", $user['Processing_value'], "select");
-    if ($text == $textbotlang['keyboard']['customTextRandom'] || $text == $textbotlang['keyboard']['customTextSequential'] || $text == $textbotlang['keyboard']['agentCustomTextSequential']) {
+    if (in_array($methodusername, ['customTextRandom', 'customTextSequential', 'agentCustomTextSequential'], true)) {
         step('getnamecustom', $from_id);
         sendmessage($from_id, $textbotlang['Admin']['managepanel']['customNameSend'], $backadmin, 'HTML');
         return;
     }
-    if ($text == $textbotlang['keyboard']['usernameSequential']) {
+    if ($methodusername === 'usernameSequential') {
         step('getnamecustom', $from_id);
         sendmessage($from_id, $textbotlang['Admin']['algorithmUsername']['askFallbackName'], $backadmin, 'HTML');
         return;

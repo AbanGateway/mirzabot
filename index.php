@@ -13,6 +13,7 @@ require_once 'keyboard.php';
 require_once 'vendor/autoload.php';
 require_once 'panels.php';
 $textbotlang = languagechange();
+$text = restoreCustomEmojiLabel($text);
 #-----------telegram_ip_ranges------------#
 if (!checktelegramip())
     die("Unauthorized access");
@@ -2968,7 +2969,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         }
     }
     $marzban_list_get = select("marzban_panel", "*", "code_panel", $location, "select");
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         if ($user['step'] != "createusertest") {
             step('createusertest', $from_id);
             update("user", "Processing_value_one", $location, "id", $from_id);
@@ -3082,10 +3083,10 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     sendMessageService($marzban_list_get, $dataoutput['configs'], $output_config_link, $dataoutput['username'], $usertestinfo, $textcreatuser, $randomString);
     sendmessage($from_id, $textbotlang['users']['selectoption'], $keyboard, 'HTML');
     step('home', $from_id);
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['usernameSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['numericIdSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'usernameSequential', 'numericIdSequential', 'agentCustomTextSequential'], true)) {
         $value = intval($user['number_username']) + 1;
         update("user", "number_username", $value, "id", $from_id);
-        if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+        if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'agentCustomTextSequential'], true)) {
             $value = intval($setting['numbercount']) + 1;
             update("setting", "numbercount", $value);
         }
@@ -3493,7 +3494,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
                 $queryParams = [':loc' => $location, ':agent' => $user['agent']];
                 $marzban_list_get = select("marzban_panel", "*", "name_panel", $location, "select");
                 $statuscustomvolume = json_decode($marzban_list_get['customvolume'], true)[$user['agent']];
-                if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+                if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
                     $datakeyboard = "prodcutservices_";
                 } else {
                     $datakeyboard = "prodcutservice_";
@@ -3588,7 +3589,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
             $query = "SELECT * FROM product WHERE (Location = :loc OR Location = '/all') AND agent = :agent";
             $queryParams = [':loc' => $location, ':agent' => $user['agent']];
             $statuscustomvolume = json_decode($marzban_list_get['customvolume'], true)[$user['agent']];
-            if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+            if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
                 $datakeyboard = "prodcutservices_";
             } else {
                 $datakeyboard = "prodcutservice_";
@@ -3631,7 +3632,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     }
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
     $statuscustomvolume = json_decode($marzban_list_get['customvolume'], true)[$user['agent']];
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         $datakeyboard = "prodcutservices_";
     } else {
         $datakeyboard = "prodcutservice_";
@@ -3673,7 +3674,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $queryParams = [':loc' => $userdate['name_panel'], ':agent' => $user['agent'], ':stime' => $monthenumber];
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "select");
         $statuscustomvolume = json_decode($marzban_list_get['customvolume'] ?? '[]', true)[$user['agent']] ?? null;
-        if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+        if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
             $datakeyboard = "prodcutservices_";
         } else {
             $datakeyboard = "prodcutservice_";
@@ -3724,7 +3725,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     update("user", "Processing_value_one", $text, "id", $from_id);
     $textcustom = sprintf($textbotlang['users']['sell']['customTimePrompt2'], $customtimevalueprice, $maintime, $maxtime);
     sendmessage($from_id, $textcustom, $backuser, 'html');
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         step('getvolumecustomusername', $from_id);
     } else {
         step('getvolumecustomuser', $from_id);
@@ -3790,7 +3791,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         step("home", $from_id);
         return;
     }
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         if (!preg_match('~(?!_)^[a-z][a-z\d_]{2,32}(?<!_)$~i', $text)) {
             sendmessage($from_id, $textbotlang['users']['invalidusername'], $backuser, 'HTML');
             return;
@@ -3856,7 +3857,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     if (intval($info_product['Volume_constraint']) == 0) {
         $textin = str_replace($textbotlang['common']['units']['gb'], "", $textin);
     }
-    if ($user['step'] != "getvolumecustomuser" && !in_array($marzban_list_get['MethodUsername'], [$textbotlang['common']['labels']['customUsername'], $textbotlang['common']['labels']['customUsernameRandom']])) {
+    if ($user['step'] != "getvolumecustomuser" && !in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         Editmessagetext($from_id, $message_id, $textin, $payment);
     } else {
         sendmessage($from_id, $textin, $payment, 'HTML');
@@ -4075,10 +4076,10 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $Balance_prim = $user['Balance'] - $priceproduct;
         update("user", "Balance", $Balance_prim, "id", $from_id);
     }
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['usernameSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['numericIdSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'usernameSequential', 'numericIdSequential', 'agentCustomTextSequential'], true)) {
         $value = intval($user['number_username']) + 1;
         update("user", "number_username", $value, "id", $from_id);
-        if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+        if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'agentCustomTextSequential'], true)) {
             $value = intval($setting['numbercount']) + 1;
             update("setting", "numbercount", $value);
         }
@@ -4319,7 +4320,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     }
     update("user", "Processing_value", $location, "id", $from_id);
     $statuscustomvolume = json_decode($marzban_list_get['customvolume'], true)[$user['agent']];
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         $datakeyboard = "prodcutservicesom_";
     } else {
         $datakeyboard = "prodcutserviceom_";
@@ -4365,7 +4366,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
     $textcustom = sprintf($textbotlang['users']['sell']['timePrompt'], $customtimevalueprice, $maintime, $maxtime);
     sendmessage($from_id, $textcustom, $backuser, 'html');
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $user['Processing_value'], "select");
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         step('getvolumecustomusernameom', $from_id);
     } else {
         step('getvolumecustomuserom', $from_id);
@@ -4418,7 +4419,7 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         $prodcut = $dataget[1];
     }
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $user['Processing_value'], "select");
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         if (!preg_match('~(?!_)^[a-z][a-z\d_]{2,32}(?<!_)$~i', $text)) {
             sendmessage($from_id, $textbotlang['users']['invalidusername'], $backuser, 'HTML');
             return;
@@ -4526,10 +4527,10 @@ if ($user['step'] == "createusertest" || preg_match('/locationtest_(.*)/', $data
         }
     }
     $datep = strtotime("+" . $info_product['Service_time'] . "days");
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['usernameSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['numericIdSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'usernameSequential', 'numericIdSequential', 'agentCustomTextSequential'], true)) {
         $value = intval($user['number_username']) + $user['Processing_value_four'];
         update("user", "number_username", $value, "id", $from_id);
-        if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+        if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'agentCustomTextSequential'], true)) {
             $value = intval($setting['numbercount']) + $user['Processing_value_four'];
             update("setting", "numbercount", $value);
         }
@@ -6581,7 +6582,7 @@ if (isset($update['message']['successful_payment'])) {
         return;
     }
     $statuscustomvolume = json_decode($marzban_list_get['customvolume'] ?? '[]', true)[$user['agent']] ?? null;
-    if ($marzban_list_get['MethodUsername'] == $textbotlang['users']['customusername'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customUsernameRandom']) {
+    if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customUsername', 'customUsernameRandom'], true)) {
         $datakeyboard = "prodcutservicesom_";
     } else {
         $datakeyboard = "prodcutserviceom_";

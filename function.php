@@ -847,41 +847,50 @@ function formatBytes($bytes, $precision = 2): string
 }
 function generateUsername($from_id, $Metode, $username, $randomString, $text, $namecustome, $usernamecustom)
 {
-    global $textbotlang;
     $setting = select("setting", "*", null, null, "select");
     $user = select("user", "*", "id", $from_id, "select");
     if ($user == false) {
-        $user = array();
-        $user = array(
-            'number_username' => '',
-        );
+        $user = array('number_username' => '');
     }
-    if ($Metode == $textbotlang['keyboard']['numericIdRandom']) {
-        return $from_id . "_" . $randomString;
-    } elseif ($Metode == $textbotlang['keyboard']['usernameSequential']) {
-        if ($username == "NOT_USERNAME") {
-            if (preg_match('/^\w{3,32}$/', $namecustome)) {
+    $randomString = trim((string) $randomString);
+    if ($randomString === '')
+        $randomString = bin2hex(random_bytes(4));
+    $fallback = $from_id . "_" . $randomString;
+    switch (usernameMethodKey($Metode)) {
+        case 'usernameSequential':
+            if ($username == "NOT_USERNAME" && preg_match('/^\w{3,32}$/', (string) $namecustome))
                 $username = $namecustome;
-            }
-        }
-        return $username . "_" . $user['number_username'];
-    } elseif ($Metode == $textbotlang['keyboard']['customUsername'])
-        return $text;
-    elseif ($Metode == $textbotlang['keyboard']['customUsernameRandom']) {
-        $random_number = rand(1000000, 9999999);
-        return $text . "_" . $random_number;
-    } elseif ($Metode == $textbotlang['keyboard']['customTextRandom']) {
-        return $namecustome . "_" . $randomString;
-    } elseif ($Metode == $textbotlang['keyboard']['customTextSequential']) {
-        return $namecustome . "_" . $setting['numbercount'];
-    } elseif ($Metode == $textbotlang['keyboard']['numericIdSequential']) {
-        return $from_id . "_" . $user['number_username'];
-    } elseif ($Metode == $textbotlang['keyboard']['agentCustomTextSequential']) {
-        if ($usernamecustom == "none") {
-            return $namecustome . "_" . $setting['numbercount'];
-        }
-        return $usernamecustom . "_" . $user['number_username'];
+            $generated = $username . "_" . $user['number_username'];
+            break;
+        case 'customUsername':
+            $generated = $text;
+            break;
+        case 'customUsernameRandom':
+            $generated = $text . "_" . rand(1000000, 9999999);
+            break;
+        case 'customTextRandom':
+            $generated = $namecustome . "_" . $randomString;
+            break;
+        case 'customTextSequential':
+            $generated = $namecustome . "_" . $setting['numbercount'];
+            break;
+        case 'numericIdSequential':
+            $generated = $from_id . "_" . $user['number_username'];
+            break;
+        case 'agentCustomTextSequential':
+            if ($usernamecustom == "none")
+                $generated = $namecustome . "_" . $setting['numbercount'];
+            else
+                $generated = $usernamecustom . "_" . $user['number_username'];
+            break;
+        case 'numericIdRandom':
+        default:
+            $generated = $fallback;
     }
+    $generated = trim((string) $generated, " _");
+    if (strlen($generated) < 3)
+        $generated = $fallback;
+    return $generated;
 }
 function outputlink($text)
 {
@@ -1104,10 +1113,10 @@ function DirectPayment($order_id, $image = 'images.jpg')
                 sendmessage($Balance_id['affiliates'], $textadd, null, 'HTML');
             }
         }
-        if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['usernameSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['numericIdSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+        if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'usernameSequential', 'numericIdSequential', 'agentCustomTextSequential'], true)) {
             $value = intval($Balance_id['number_username']) + 1;
             update("user", "number_username", $value, "id", $Balance_id['id']);
-            if ($marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['customTextSequential'] || $marzban_list_get['MethodUsername'] == $textbotlang['keyboard']['agentCustomTextSequential']) {
+            if (in_array(usernameMethodKey($marzban_list_get['MethodUsername']), ['customTextSequential', 'agentCustomTextSequential'], true)) {
                 $value = intval($setting['numbercount']) + 1;
                 update("setting", "numbercount", $value);
             }
@@ -1935,6 +1944,48 @@ function publickey()
         'preshared_key' => $presharedKey
     ];
 }
+function stripCustomEmojiTags($value)
+{
+    if (!is_string($value) || stripos($value, '<tg-emoji') === false) {
+        return $value;
+    }
+    $stripped = preg_replace('#<tg-emoji\b[^>]*>(.*?)</tg-emoji>#isu', '$1', $value);
+    return is_string($stripped) ? $stripped : $value;
+}
+function customEmojiLabels($labels = null)
+{
+    static $map = [];
+    if (is_array($labels)) {
+        $map = $labels;
+    }
+    return $map;
+}
+function restoreCustomEmojiLabel($value)
+{
+    if (!is_string($value) || $value === '' || stripos($value, '<tg-emoji') !== false) {
+        return $value;
+    }
+    $map = customEmojiLabels();
+    return $map[$value] ?? $value;
+}
+function applyKeyboardLabels($rows, array $labels)
+{
+    if (!is_array($rows)) {
+        return [];
+    }
+    foreach ($rows as $rowKey => $row) {
+        if (!is_array($row)) {
+            unset($rows[$rowKey]);
+            continue;
+        }
+        foreach ($row as $btnKey => $button) {
+            if (is_array($button) && isset($button['text']) && is_string($button['text']) && isset($labels[$button['text']])) {
+                $rows[$rowKey][$btnKey]['text'] = $labels[$button['text']];
+            }
+        }
+    }
+    return array_values($rows);
+}
 function languagechange($path_dir = null, string $lang = 'fa')
 {
     global $from_id;
@@ -1951,6 +2002,7 @@ function languagechange($path_dir = null, string $lang = 'fa')
 }
 function bottext_apply_overrides(array &$base, $lang)
 {
+    customEmojiLabels([]);
     $row = select("setting", "*", null, null, "select");
     $raw = is_array($row) ? ($row['text_edit'] ?? null) : null;
     if (!is_string($raw) || $raw === '')
@@ -1961,16 +2013,22 @@ function bottext_apply_overrides(array &$base, $lang)
     $langMap = $map[$lang] ?? null;
     if (!is_array($langMap))
         return;
+    $emojiLabels = [];
     foreach ($langMap as $group => $pairs) {
         if (!is_array($pairs))
             continue;
         if (!isset($base[$group]) || !is_array($base[$group]))
             $base[$group] = [];
         foreach ($pairs as $k => $v) {
-            if (is_string($v))
-                $base[$group][$k] = $v;
+            if (!is_string($v))
+                continue;
+            $base[$group][$k] = $v;
+            $plain = stripCustomEmojiTags($v);
+            if ($plain !== $v && $plain !== '')
+                $emojiLabels[$plain] = $v;
         }
     }
+    customEmojiLabels($emojiLabels);
 }
 function extendMethodKeys()
 {
@@ -2006,6 +2064,55 @@ function extendMethodKey($value, $default = 'resetVolumeTime')
     if (in_array($value, extendMethodKeys(), true))
         return $value;
     $labels = extendMethodLabels();
+    return $labels[$value] ?? $default;
+}
+function usernameMethodKeys()
+{
+    return ['usernameSequential', 'numericIdRandom', 'customUsername', 'customUsernameRandom', 'customTextRandom', 'customTextSequential', 'numericIdSequential', 'agentCustomTextSequential'];
+}
+function usernameMethodLabels()
+{
+    static $labels = null;
+    if ($labels !== null)
+        return $labels;
+    $labels = [];
+    $aliases = [
+        'customUsername' => ['users.customusername'],
+        'agentCustomTextSequential' => ['keyboard.usernameMethodAgentCustom'],
+    ];
+    foreach (['fa', 'en', 'ru', 'zh'] as $lang) {
+        $file = __DIR__ . '/lang/' . $lang . '.php';
+        if (!file_exists($file))
+            continue;
+        $texts = require $file;
+        if (!is_array($texts))
+            continue;
+        bottext_apply_overrides($texts, $lang);
+        foreach (usernameMethodKeys() as $key) {
+            $candidates = [
+                $texts['keyboard'][$key] ?? null,
+                $texts['common']['labels'][$key] ?? null,
+            ];
+            foreach ($aliases[$key] ?? [] as $alias) {
+                [$group, $name] = explode('.', $alias, 2);
+                $candidates[] = $texts[$group][$name] ?? null;
+            }
+            foreach ($candidates as $label) {
+                if (is_string($label) && trim($label) !== '')
+                    $labels[trim($label)] = $key;
+            }
+        }
+    }
+    return $labels;
+}
+function usernameMethodKey($value, $default = 'numericIdRandom')
+{
+    $value = is_string($value) ? trim($value) : '';
+    if ($value === '')
+        return $default;
+    if (in_array($value, usernameMethodKeys(), true))
+        return $value;
+    $labels = usernameMethodLabels();
     return $labels[$value] ?? $default;
 }
 function generateAuthStr($length = 10)
