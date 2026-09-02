@@ -4736,6 +4736,11 @@ f,n.n2',
 用户用户名：%s
 交易金额 %s
 支付方式：第一里亚尔货币',
+                'reportAbanGateway' => '💵 新付款
+- 👤 用户名 : @%s
+- 🆔 用户 ID : %s
+- 💸 金额 %s
+- 💳 支付方式 : AbanGateway',
                 'reportTronado' => '💵 新付款
 - 👤 用户用户名：@%s
 - 🆔用户数字 ID：%s

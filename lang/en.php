@@ -4736,6 +4736,11 @@ User numeric ID : %s
 User username : %s
 Transaction amount %s
 Payment method : First Rial currency',
+                'reportAbanGateway' => '💵 New payment
+- 👤 Username : @%s
+- 🆔 User ID : %s
+- 💸 Amount %s
+- 💳 Method : AbanGateway',
                 'reportTronado' => '💵 New payment
 - 👤 User username : @%s
 - 🆔User numeric ID : %s
