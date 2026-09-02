@@ -8,6 +8,18 @@
 <Files "*.txt">
     Require all denied
 </Files>
+<Files "error_log">
+    Require all denied
+</Files>
+<Files "*.sh">
+    Require all denied
+</Files>
+<Files "composer.lock">
+    Require all denied
+</Files>
+<IfModule mod_alias.c>
+    RedirectMatch 404 /\.git
+</IfModule>
 <Files "*.json">
     Require all denied
 </Files>

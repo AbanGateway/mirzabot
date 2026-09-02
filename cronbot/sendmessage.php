@@ -76,8 +76,11 @@ $keyboardaddbalance = json_encode([
         ]
     ]);
 for ($i = 0; $i < 20; $i++) {
-    $iduser = $userid[$i];
-    unset($userid[$i]);
+    if (!isset($userid[0])) {
+        break;
+    }
+    $iduser = $userid[0];
+    unset($userid[0]);
     $userid = array_values($userid);
     if ($info['type'] == "unpinmessage") {
         unpinmessage($iduser->id);

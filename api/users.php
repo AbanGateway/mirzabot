@@ -309,10 +309,15 @@ function usr_withdrawal(array $data, string $method): void
         sendJsonResponse(false, "user-id empty", [], 200);
     }
     $amount = requireInt($data, 'amount', 1);
-    $stmt = $pdo->prepare("UPDATE user SET Balance = Balance - :amount WHERE id = :user_id");
+    $stmt = $pdo->prepare("UPDATE user SET Balance = Balance - :amount WHERE id = :user_id AND Balance >= :amount2");
     $stmt->bindValue(':user_id', intval($data['chat_id']), PDO::PARAM_INT);
     $stmt->bindValue(':amount', $amount, PDO::PARAM_INT);
+    $stmt->bindValue(':amount2', $amount, PDO::PARAM_INT);
     $stmt->execute();
+    clearSelectCache('user');
+    if ($stmt->rowCount() === 0) {
+        sendJsonResponse(false, "insufficient balance", [], 200);
+    }
     $text_balance = sprintf($textbotlang['users']['Balance']['deducted'], $amount);
     sendmessage($data['chat_id'], $text_balance, null, 'html');
     sendJsonResponse(true, "Successful");
@@ -427,6 +432,10 @@ function usr_transfer_account(array $data, string $method): void
         sendJsonResponse(false, "new_userid empty", [], 200);
     if ($data["chat_id"] == $data["new_userid"])
         sendJsonResponse(false, "inavlid user_id", [], 200);
+    if (!ctype_digit((string) $data["new_userid"]) || !ctype_digit((string) $data["chat_id"]))
+        sendJsonResponse(false, "inavlid user_id", [], 200);
+    if (!rowExists("user", "id", $data['chat_id']))
+        sendJsonResponse(false, "source user not found", [], 200);
     $stmt = $pdo->prepare("DELETE FROM user WHERE id = :id_user");
     $stmt->execute([':id_user' => $data["new_userid"]]);
     update("user", "id", $data["new_userid"], "id", $data['chat_id']);
@@ -668,7 +677,7 @@ function usr_remove_agent_bot(array $data, string $method): void
     if (!$contentbot)
         sendJsonResponse(false, "User does not have an active bot.", [], 200);
     $destination = dirname(__DIR__);
-    $dirsource = "$destination/vpnbot/{$data['chat_id']}{$contentbot['username']}";
+    $dirsource = "$destination/vpnbot/" . intval($data['chat_id']) . $contentbot['username'];
     if (is_dir($dirsource) && !deleteDirectory($dirsource)) {
         error_log('Failed to remove bot directory: ' . $dirsource);
     }

@@ -20,10 +20,9 @@ function get_Clients_ui($username, $namepanel)
         CURLOPT_HTTPHEADER => array(
             'Token: ' . $marzban_list_get['password_panel']
         ),
-        CURLOPT_COOKIEFILE => 'cookie.txt',
     ));
     $response = curl_exec($curl);
-    if (!isset($response))
+    if ($response === false)
         return [];
     $response = json_decode($response, true);
     if (!$response['success'])
@@ -57,21 +56,21 @@ function GetClientsS_UI($username, $namepanel)
         ),
     ));
     $response = curl_exec($curl);
-    if (!isset($response))
+    if ($response === false)
         return [];
-    $response = json_decode(curl_exec($curl), true);
-    if (!$response['success'])
+    $response = json_decode($response, true);
+    if (empty($response['success']))
         return [];
-    return $response['obj']['clients'][0];
+    return $response['obj']['clients'][0] ?? [];
 }
 function addClientS_ui($namepanel, $usernameac, $Expire, $Total, $inboundid, $note)
 {
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $namepanel, "select");
     if ($usernameac == null)
-        return json_encode(array(
-            'status' => false,
+        return array(
+            'success' => false,
             'msg' => "error"
-        ));
+        );
     $password = bin2hex(random_bytes(16));
     $configpanel = array(
         "object" => 'clients',

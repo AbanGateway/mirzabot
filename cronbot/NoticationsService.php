@@ -68,9 +68,9 @@ class ServiceMonitor
     private function getActiveInvoices()
     {
         $time_hours = time() - 3600;
-        $QUERY = "SELECT * FROM invoice WHERE (Status = 'active' OR Status = 'end_of_time' OR Status = 'end_of_volume' OR Status = 'sendedwarn' OR Status = 'send_on_hold') AND name_product != '{$this->textBotLang['common']['labels']['testServiceName']}' AND (time_cron <= '$time_hours' OR time_cron IS NULL) ORDER BY time_cron  LIMIT 30";
+        $QUERY = "SELECT * FROM invoice WHERE (Status = 'active' OR Status = 'end_of_time' OR Status = 'end_of_volume' OR Status = 'sendedwarn' OR Status = 'send_on_hold') AND name_product != :testName AND (time_cron <= :timeHours OR time_cron IS NULL) ORDER BY time_cron  LIMIT 30";
         $stmt = $this->pdo->prepare($QUERY);
-        $stmt->execute();
+        $stmt->execute([':testName' => $this->textBotLang['common']['labels']['testServiceName'], ':timeHours' => $time_hours]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -237,6 +237,9 @@ class ServiceMonitor
 
     private function send_notifactions($invoice, $status_cron_user, $message, $keyboard_active, $bot_token)
     {
+        if (is_array($status_cron_user)) {
+            $status_cron_user = $status_cron_user['status_cron'] ?? 1;
+        }
         if (intval($status_cron_user) == 0)
             return;
         $keyboard = $this->createExtendServiceKeyboard($invoice['id_invoice']);

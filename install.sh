@@ -451,8 +451,9 @@ export -f resolve_php_ver
 # Configure MySQL root login (all output captured by run_step's log).
 setup_mysql_root() {
     sudo mkdir -p /root/confmirza || return 1
+    sudo chmod 700 /root/confmirza || return 1
     touch /root/confmirza/dbrootmirza.txt || return 1
-    sudo chmod -R 777 /root/confmirza/dbrootmirza.txt || return 1
+    sudo chmod 600 /root/confmirza/dbrootmirza.txt || return 1
     local randomdbpasstxt passs userrr RANDOM_NUMBER
     randomdbpasstxt=$(openssl rand -base64 10 | tr -dc 'a-zA-Z0-9' | cut -c1-8)
     RANDOM_NUMBER=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | cut -c1-12)
@@ -1749,9 +1750,11 @@ function install_bot() {
             || { show_step_error; install_pause "Setting PHP ${PHP_VER} as default"; }
 
         echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | sudo debconf-set-selections
-        echo 'phpmyadmin phpmyadmin/app-password-confirm password mirzahipass' | sudo debconf-set-selections
-        echo 'phpmyadmin phpmyadmin/mysql/admin-pass password mirzahipass' | sudo debconf-set-selections
-        echo 'phpmyadmin phpmyadmin/mysql/app-pass password mirzahipass' | sudo debconf-set-selections
+        local pma_pass
+        pma_pass=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | cut -c1-16)
+        echo "phpmyadmin phpmyadmin/app-password-confirm password ${pma_pass}" | sudo debconf-set-selections
+        echo "phpmyadmin phpmyadmin/mysql/admin-pass password ${pma_pass}" | sudo debconf-set-selections
+        echo "phpmyadmin phpmyadmin/mysql/app-pass password ${pma_pass}" | sudo debconf-set-selections
         echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | sudo debconf-set-selections
         run_step "Installing phpMyAdmin" \
             "DEBIAN_FRONTEND=noninteractive apt-get install -y phpmyadmin" \
@@ -2129,12 +2132,9 @@ EOF
 \$dbname = '$dbname';
 \$usernamedb = '$dbuser';
 \$passworddb = '$dbpass';
-\$connect = mysqli_connect(\$dbhost, \$usernamedb, \$passworddb, \$dbname);
-if (\$connect->connect_error) { die("error" . \$connect->connect_error); }
-mysqli_set_charset(\$connect, "utf8mb4");
-\$options = [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false, ];
+\$options = [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false, PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci", ];
 \$dsn = "mysql:host=\$dbhost;dbname=\$dbname;charset=utf8mb4";
-try { \$pdo = new PDO(\$dsn, \$usernamedb, \$passworddb, \$options); } catch (\PDOException \$e) { error_log("Database connection failed: " . \$e->getMessage()); }
+try { \$pdo = new PDO(\$dsn, \$usernamedb, \$passworddb, \$options); } catch (\PDOException \$e) { error_log("Database connection failed: " . \$e->getMessage()); die("error: database connection failed"); }
 \$APIKEY = '${YOUR_BOT_TOKEN}';
 \$adminnumber = '${YOUR_CHAT_ID}';
 \$domainhosts = '${YOUR_DOMAIN}';
@@ -2142,6 +2142,7 @@ try { \$pdo = new PDO(\$dsn, \$usernamedb, \$passworddb, \$options); } catch (\P
 ?>
 EOF
         sudo chown www-data:www-data /var/www/html/mirzaprobotconfig/config.php 2>/dev/null
+        sudo chmod 640 /var/www/html/mirzaprobotconfig/config.php 2>/dev/null
         mark_phase CONFIG
     else
         secrettoken="$(state_get SECRET)"
@@ -2611,12 +2612,9 @@ function migrate_to_pro() {
 \$dbname = '$NEW_DB';
 \$usernamedb = '$NEW_DB_USER';
 \$passworddb = '$NEW_DB_PASS';
-\$connect = mysqli_connect(\$dbhost, \$usernamedb, \$passworddb, \$dbname);
-if (\$connect->connect_error) { die("error" . \$connect->connect_error); }
-mysqli_set_charset(\$connect, "utf8mb4");
-\$options = [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false, ];
+\$options = [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false, PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci", ];
 \$dsn = "mysql:host=\$dbhost;dbname=\$dbname;charset=utf8mb4";
-try { \$pdo = new PDO(\$dsn, \$usernamedb, \$passworddb, \$options); } catch (\PDOException \$e) { error_log("Database connection failed: " . \$e->getMessage()); }
+try { \$pdo = new PDO(\$dsn, \$usernamedb, \$passworddb, \$options); } catch (\PDOException \$e) { error_log("Database connection failed: " . \$e->getMessage()); die("error: database connection failed"); }
 \$APIKEY = '${OLD_API_KEY}';
 \$adminnumber = '${OLD_ADMIN_ID}';
 \$domainhosts = '${DOMAIN_NAME}';

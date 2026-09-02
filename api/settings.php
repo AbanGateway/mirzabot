@@ -80,7 +80,16 @@ function setting_save_setting_shop(array $data, string $method): void
             if (($row['type'] ?? '') === "shop") {
                 update("shopSetting", "value", $value, "Namevalue", $row['name_value']);
             } else {
-                update("setting", $row['name_value'], $value, null, null);
+                $settingField = (string) $row['name_value'];
+                if (!preg_match('/^[A-Za-z0-9_]{1,64}$/', $settingField)) {
+                    sendJsonResponse(false, "invalid setting name", [], 200);
+                }
+                $columnCheck = $GLOBALS['pdo']->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?');
+                $columnCheck->execute(['setting', $settingField]);
+                if ((int) $columnCheck->fetchColumn() === 0) {
+                    sendJsonResponse(false, "invalid setting name", [], 200);
+                }
+                update("setting", $settingField, $value, null, null);
             }
         }
 

@@ -937,11 +937,6 @@ elseif ($datain == "systemsms") {
         Editmessagetext($from_id, $message_id, $textbotlang['Admin']['messageBulk']['askPin'], $listbtn);
         return;
     }
-    if ($userdata['typeservice'] == "xdaynotmessage") {
-        step("gettextday", $from_id);
-        sendmessage($from_id, $textbotlang['Admin']['messageBulk']['askInactiveDays'], $backadmin, 'HTML');
-        return;
-    }
     step("gettextSystemMessage", $from_id);
     sendmessage($from_id, $textbotlang['Admin']['messageBulk']['askText'], $backadmin, 'HTML');
 } elseif (preg_match('/^locationmessage_(\w+)/', $datain, $dataget)) {
@@ -966,11 +961,6 @@ elseif ($datain == "systemsms") {
             ]
         ]);
         Editmessagetext($from_id, $message_id, $textbotlang['Admin']['messageBulk']['askPin'], $listbtn);
-        return;
-    }
-    if ($userdata['typeservice'] == "xdaynotmessage") {
-        step("gettextday", $from_id);
-        sendmessage($from_id, $textbotlang['Admin']['messageBulk']['askInactiveDays'], $backadmin, 'HTML');
         return;
     }
     step("gettextSystemMessage", $from_id);
@@ -1289,9 +1279,12 @@ elseif ($datain == "systemsms") {
         file_put_contents('cronbot/info', $data);
     }
 } elseif ($datain == "cancel_sendmessage") {
-    file_put_contents('users.json', json_encode(array()));
-    unlink('cronbot/users.json');
-    unlink('cronbot/info');
+    if (is_file('cronbot/users.json')) {
+        unlink('cronbot/users.json');
+    }
+    if (is_file('cronbot/info')) {
+        unlink('cronbot/info');
+    }
     deletemessage($from_id, $message_id);
     sendmessage($from_id, $textbotlang['Admin']['messageBulk']['canceled'], null, 'HTML');
 } elseif (preg_match('/sendmessageuser_(\w+)/', $datain, $dataget)) {
@@ -2194,10 +2187,6 @@ elseif ($datain == "systemsms") {
         '1' => $textbotlang['Admin']['Status']['statuson'],
         '0' => $textbotlang['Admin']['Status']['statusoff']
     ][$setting['statusnoteforf']];
-    $statusnotef = [
-        '1' => $textbotlang['Admin']['Status']['statuson'],
-        '0' => $textbotlang['Admin']['Status']['statusoff']
-    ][$setting['statusnoteforf']];
     $status_copy_cart = [
         '1' => $textbotlang['Admin']['Status']['statuson'],
         '0' => $textbotlang['Admin']['Status']['statusoff']
@@ -3075,30 +3064,30 @@ elseif ($datain == "systemsms") {
 } elseif ($user['step'] == "getmeesagestatus") {
     $userdata = json_decode($user['Processing_value'], true);
     sendmessage($from_id, $textbotlang['Admin']['Balance']['addBalanceUsers'], $keyboardadmin, 'HTML');
-    $query_where = "";
     if ($userdata['agent'] == "all") {
-        if ($userdata['typecustomer'] == "all") {
+        if ($userdata['typecustomer'] == "customer") {
+            $query_where = " WHERE EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id)";
+        } elseif ($userdata['typecustomer'] == "notcustomer") {
+            $query_where = " WHERE NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id)";
+        } else {
             $query_where = "";
-        } elseif ($userdata['typecustomer'] == "customer") {
-            $query_where = "WHERE EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);";
-        } elseif ($userdata['typecustomer'] == "notcustomer") {
-            $query_where = "WHERE  NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);";
         }
+        $query_params = [];
     } else {
-        if ($userdata['typecustomer'] == "all") {
-            $query_where = null;
-            ;
-        } elseif ($userdata['typecustomer'] == "customer") {
-            $query_where = " WHERE u.agent =  '{$userdata['agent']}' AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);";
+        if ($userdata['typecustomer'] == "customer") {
+            $query_where = " WHERE u.agent = :agent AND EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id)";
         } elseif ($userdata['typecustomer'] == "notcustomer") {
-            $query_where = " WHERE u.agent =  '{$userdata['agent']}' AND NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id);";
+            $query_where = " WHERE u.agent = :agent AND NOT EXISTS ( SELECT 1 FROM invoice i WHERE i.id_user = u.id)";
+        } else {
+            $query_where = " WHERE u.agent = :agent";
         }
+        $query_params = [':agent' => $userdata['agent']];
     }
-    $stmt = $pdo->prepare("SELECT u.id FROM user u " . $query_where);
-    $stmt->execute();
+    $stmt = $pdo->prepare("SELECT u.id FROM user u" . $query_where);
+    $stmt->execute($query_params);
     $Balance_user = $stmt->fetchAll();
-    $stmt = $pdo->prepare("UPDATE user as u SET  Balance = Balance + {$userdata['price']} " . $query_where);
-    $stmt->execute();
+    $stmt = $pdo->prepare("UPDATE user as u SET Balance = Balance + :price" . $query_where);
+    $stmt->execute($query_params + [':price' => intval($userdata['price'])]);
     step('home', $from_id);
     if ($text == "1") {
         $cancelmessage = json_encode([
@@ -3704,7 +3693,6 @@ elseif ($datain == "systemsms") {
     }
     $typepanel = select("marzban_panel", "*", "name_panel", $user['Processing_value'], "select");
     outtypepanel($typepanel['type'], $textbotlang['Admin']['managepanel']['changedNamePanel']);
-    update("user", "Processing_value", $text, "id", $from_id);
     update("marzban_panel", "name_panel", $text, "name_panel", $user['Processing_value']);
     update("invoice", "Service_location", $text, "Service_location", $user['Processing_value']);
     update("product", "Location", $text, "Location", $user['Processing_value']);
@@ -4554,7 +4542,7 @@ elseif ($datain == "systemsms") {
     $keyboard_json = json_encode($keyboardlists);
     update("user", "pagenumber", $next_page, "id", $from_id);
     Editmessagetext($from_id, $message_id, $textbotlang['Admin']['manageUser']['manageUserBtnDesc'], $keyboard_json);
-} elseif (preg_match('/addbalanceuser_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/addbalanceuser_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     update("user", "Processing_value", $iduser, "id", $from_id);
     telegram('sendmessage', [
@@ -4600,7 +4588,7 @@ elseif ($datain == "systemsms") {
             'parse_mode' => "HTML"
         ]);
     }
-} elseif (preg_match('/lowbalanceuser_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/lowbalanceuser_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     update("user", "Processing_value", $iduser, "id", $from_id);
     telegram('sendmessage', [
@@ -4645,7 +4633,7 @@ elseif ($datain == "systemsms") {
             'parse_mode' => "HTML"
         ]);
     }
-} elseif ((preg_match('/banuserlist_(\w+)/', $datain, $dataget) || preg_match('/blockuserfake_(\w+)/', $datain, $dataget))) {
+} elseif ((preg_match('/banuserlist_(\w+)/', $datain, $dataget) || preg_match('/blockuserfake_(\w+)/', $datain, $dataget)) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     $userdata = select("user", "*", "id", $iduser, "select");
     if ($userdata['User_Status'] == "block") {
@@ -4689,7 +4677,7 @@ elseif ($datain == "systemsms") {
             'reply_markup' => $Response
         ]);
     }
-} elseif (preg_match('/verify_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/verify_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     update("user", "verify", "1", "id", $iduser);
     sendmessage($from_id, $textbotlang['Admin']['manageUser']['verifiedSuccess'], null, 'HTML');
@@ -4700,7 +4688,7 @@ elseif ($datain == "systemsms") {
     sendmessage($from_id, $textbotlang['Admin']['manageUser']['unverifiedSuccess'], null, 'HTML');
 
 
-} elseif (preg_match('/unbanuserr_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/unbanuserr_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     $userdata = select("user", "*", "id", $iduser, "select");
     if ($userdata['User_Status'] == "Active") {
@@ -4729,7 +4717,7 @@ elseif ($datain == "systemsms") {
     sendmessage($from_id, $textbotlang['Admin']['manageUser']['userUnblocked'], $keyboardadmin, 'HTML');
     sendmessage($iduser, $textbotlang['users']['block']['unblockedNotice'], $keyboard, 'HTML');
     step('home', $from_id);
-} elseif (preg_match('/confirmnumber_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/confirmnumber_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     update("user", "number", "confrim number by admin", "id", $iduser);
     sendmessage($from_id, $textbotlang['Admin']['phone']['active'], $keyboardadmin, 'HTML');
@@ -4895,7 +4883,6 @@ elseif ($datain == "systemsms") {
         sendmessage($from_id, $textbotlang['Admin']['Discount']['userLimitTooHigh'], $backadmin, 'HTML');
         return;
     }
-    step('getlocdiscount', $from_id);
     savedata("save", "useuser", $text);
     sendmessage($from_id, $textbotlang['Admin']['Discount']['askProductLocation'], $json_list_marzban_panel, 'HTML');
     step('getlocdiscount', $from_id);
@@ -5178,7 +5165,7 @@ elseif ($datain == "systemsms") {
     $balancemaax = json_encode($balancemaax);
     sendmessage($from_id, $textbotlang['Admin']['SettingnowPayment']['saveApi'], $keyboardadmin, 'HTML');
     update("PaySetting", "ValuePay", $balancemaax, "NamePay", "maxbalance");
-} elseif (preg_match('/removeagent_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/removeagent_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $id_user = $dataget[1];
     telegram('sendmessage', [
         'chat_id' => $from_id,
@@ -5192,7 +5179,7 @@ elseif ($datain == "systemsms") {
     $stmt = $pdo->prepare("DELETE FROM Requestagent WHERE id = :mp7");
     $stmt->execute([':mp7' => $id_user]);
     step('home', $from_id);
-} elseif (preg_match('/addagent_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/addagent_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $id_user = $dataget[1];
     update("user", "Processing_value", $id_user, "id", $from_id);
     telegram('sendmessage', [
@@ -5213,7 +5200,7 @@ elseif ($datain == "systemsms") {
     update("user", "expire", null, "id", $user['Processing_value']);
     update("user", "agent", $text, "id", $user['Processing_value']);
     step('home', $from_id);
-} elseif (preg_match('/Percentlow_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/Percentlow_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $id_user = $dataget[1];
     update("user", "Processing_value", $id_user, "id", $from_id);
     telegram('sendmessage', [
@@ -5232,7 +5219,7 @@ elseif ($datain == "systemsms") {
     sendmessage($from_id, $textbotlang['Admin']['changesSaved'], $keyboardadmin, 'HTML');
     update("user", "pricediscount", $text, "id", $user['Processing_value']);
     step('home', $from_id);
-} elseif (preg_match('/maxbuyagent_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/maxbuyagent_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $id_user = $dataget[1];
     update("user", "Processing_value", $id_user, "id", $from_id);
     sendmessage($from_id, $textbotlang['Admin']['Balance']['askMaxNegative'], $backadmin, 'HTML');
@@ -6116,7 +6103,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     update("admin", "username", $from_id, "id_admin", $from_id);
     update("admin", "password", password_hash($randomString, PASSWORD_BCRYPT, ['cost' => 12]), "id_admin", $from_id);
     sendmessage($from_id, sprintf($textbotlang['Admin']['webpanel']['activated'], $domainhosts, $from_id, $randomString), null, 'HTML');
-} elseif (preg_match('/addordermanualـ(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/addordermanualـ(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     update("user", "Processing_value", $iduser, "id", $from_id);
     sendmessage($from_id, $textbotlang['Admin']['addorder']['stepTwo'], $backadmin, 'HTML');
@@ -6541,7 +6528,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     Editmessagetext($from_id, $message_id, $optimizebot, null);
     $time = time();
     $logss = "optimize_{$countunpiadorder}_{$countdisableorder}_{$countremoveadminorder}_{$countdisableordtester}_$time";
-    file_put_contents('log.txt', "\n" . $logss, FILE_APPEND);
+    @file_put_contents(__DIR__ . '/storage/log.txt', "\n" . $logss, FILE_APPEND);
 } elseif ($datain == "settimecornvolume") {
     sendmessage($from_id, $textbotlang['Admin']['cronjob']['askVolumeAlert'], $backadmin, 'HTML');
     step("getvolumewarn", $from_id);
@@ -8464,7 +8451,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
         ]
     ]);
     Editmessagetext($from_id, $message_id, $textbotlang['Admin']['card']['afterFirstPayOn'], $keyboardverify);
-} elseif (preg_match('/transferaccount_(\w+)/', $datain, $dataget)) {
+} elseif (preg_match('/transferaccount_(\w+)/', $datain, $dataget) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     update("user", "Processing_value", $iduser, "id", $from_id);
     sendmessage($from_id, $textbotlang['Admin']['manageUser']['askTransferTargetId'], $backadmin, 'HTML');
@@ -8598,10 +8585,8 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
         }
     } elseif ($panel['type'] == "ibsng" || $panel['type'] == "mikrotik") {
         update("marzban_panel", "proxies", $text, "name_panel", $user['Processing_value']);
-    } elseif ($panel['type'] == "ibsng") {
-        sendmessage($from_id, $textbotlang['Admin']['managepanel']['groupNameSaved'], $optionibsng, 'HTML');
-    } elseif ($panel['type'] == "mikrotik") {
-        sendmessage($from_id, $textbotlang['Admin']['managepanel']['groupNameSaved'], $option_mikrotik, 'HTML');
+        $groupSavedKeyboard = $panel['type'] == "ibsng" ? $optionibsng : $option_mikrotik;
+        sendmessage($from_id, $textbotlang['Admin']['managepanel']['groupNameSaved'], $groupSavedKeyboard, 'HTML');
     } elseif ($panel['type'] == "x-ui_single") {
         $data = get_clinets($text, $panel);
         if (!empty($data['error'])) {
@@ -8673,7 +8658,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     }
     update("user", "joinchannel", "active", "id", $iduser);
     sendmessage($from_id, $textbotlang['Admin']['channel']['joinExempt'], $keyboardadmin, 'HTML');
-} elseif ((preg_match('/zerobalance-(\w+)/', $datain, $dataget))) {
+} elseif ((preg_match('/zerobalance-(\w+)/', $datain, $dataget)) && $adminrulecheck['rule'] == "administrator") {
     $iduser = $dataget[1];
     $userdata = select("user", "*", "id", $iduser, "select");
     update("user", "Balance", "0", "id", $iduser);
@@ -9428,7 +9413,7 @@ if (isset($update["inline_query"])) {
     $keyboard_json = json_encode($keyboardlists);
     update("user", "pagenumber", $next_page, "id", $from_id);
     Editmessagetext($from_id, $message_id, $textbotlang['Admin']['manageUser']['manageUserBtnDesc'], $keyboard_json);
-} elseif (preg_match('/createbot_(\w+)/', $datain, $datagetr)) {
+} elseif (preg_match('/createbot_(\w+)/', $datain, $datagetr) && $adminrulecheck['rule'] == "administrator") {
     $id_user = $datagetr[1];
     $checkbot = select("botsaz", "*", "id_user", $id_user, "count");
     if ($checkbot != 0) {
@@ -10165,6 +10150,11 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
         return;
     }
     step("home", $from_id);
+    $userdate = json_decode($user['Processing_value'], true);
+    if (!is_array($userdate) || empty($userdate['id_user'])) {
+        sendmessage($from_id, $textbotlang['common']['invalidInput'], $keyboardadmin, 'HTML');
+        return;
+    }
     update("user", "limitchangeloc", $text, "id", $userdate['id_user']);
     sendmessage($from_id, $textbotlang['Admin']['changeLocation']['userLimitSaved'], $keyboardadmin, 'HTML');
 } elseif (preg_match('/hidepanel_(\w+)/', $datain, $datagetr)) {
@@ -10237,7 +10227,7 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['Admin']['managepanel']['panelSelectedRemove'], null, 'HTML');
 } elseif ($datain == "voloume_or_day_all") {
     if (is_file('cronbot/username.json')) {
-        $userslist = json_decode(file_get_contents('cronbot/users.json'), true);
+        $userslist = json_decode(file_get_contents('cronbot/username.json'), true);
         if (is_array($userslist) and count($userslist) != 0) {
             sendmessage($from_id, $textbotlang['Admin']['gift']['busy'], $keyboardadmin, 'HTML');
             return;
@@ -10313,11 +10303,15 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     file_put_contents('cronbot/gift', json_encode($userdata));
     file_put_contents('cronbot/username.json', $userslist);
 } elseif ($datain == "cancel_gift") {
-    unlink('cronbot/username.json');
-    unlink('cronbot/gift');
+    if (is_file('cronbot/username.json')) {
+        unlink('cronbot/username.json');
+    }
+    if (is_file('cronbot/gift')) {
+        unlink('cronbot/gift');
+    }
     deletemessage($from_id, $message_id);
     sendmessage($from_id, $textbotlang['Admin']['gift']['canceled'], null, 'HTML');
-} elseif (preg_match('/expireset_(\w+)/', $datain, $datagetr)) {
+} elseif (preg_match('/expireset_(\w+)/', $datain, $datagetr) && $adminrulecheck['rule'] == "administrator") {
     $id_user = $datagetr[1];
     savedata("clear", "id_user", $id_user);
     sendmessage($from_id, $textbotlang['Admin']['agent']['askExpiry'], $backadmin, 'HTML');
@@ -10329,7 +10323,7 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     }
     step("home", $from_id);
     $userdate = json_decode($user['Processing_value'], true);
-    $timestamp = time() + (intval(value: $text) * 86400);
+    $timestamp = time() + (intval($text) * 86400);
     update("user", "expire", $timestamp, "id", $userdate['id_user']);
     sendmessage($from_id, $textbotlang['Admin']['agent']['expirySaved'], $keyboardadmin, 'HTML');
 } elseif ($text == $textbotlang['keyboard']['groupShowCard']) {
@@ -10509,7 +10503,10 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     sendmessage($from_id, $textbotlang['Admin']['managepanel']['panelsHiddenProduct'], $shopkeyboard, 'HTML');
     step("home", $from_id);
 } elseif ($user['step'] == "getlistpanel") {
-    $list_panel = json_decode(select("product", "hide_panel", "id", $user['Processing_value'], "select")['hide_panel'], true);
+    $list_panel = json_decode(select("product", "hide_panel", "id", $user['Processing_value'], "select")['hide_panel'] ?? '', true);
+    if (!is_array($list_panel)) {
+        $list_panel = [];
+    }
     if (in_array($text, $list_panel)) {
         sendmessage($from_id, $textbotlang['Admin']['managepanel']['alreadyAdded'], null, 'HTML');
         return;
@@ -10881,12 +10878,12 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
         return;
     }
     $list_panel = get_panel_list($panel);
-    if (!empty($data['error'])) {
-        sendmessage($from_id, panelErrorText($data['error']), null, 'HTML');
+    if (!empty($list_panel['error'])) {
+        sendmessage($from_id, panelErrorText($list_panel['error']), null, 'HTML');
         return;
     }
-    if (!empty($data['status']) && $data['status'] != 200) {
-        sendmessage($from_id, sprintf($textbotlang['Admin']['managepanel']['errorCode'], $data['status']), null, 'HTML');
+    if (!empty($list_panel['status']) && $list_panel['status'] != 200) {
+        sendmessage($from_id, sprintf($textbotlang['Admin']['managepanel']['errorCode'], $list_panel['status']), null, 'HTML');
         return;
     }
     $list_panel = json_decode($list_panel['body'], true)['obj'] ?? [];

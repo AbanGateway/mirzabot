@@ -841,7 +841,7 @@ class ManagePanel
                     $status = "expired";
                 }
                 $data_useage = ($UsernameData['total_data'] * pow(1024, 3)) + ($UsernameData['cumu_data'] * pow(1024, 3));
-                if (($jobvolume['Value'] * pow(1024, 3)) < $data_useage) {
+                if (isset($jobvolume['Value']) && ($jobvolume['Value'] * pow(1024, 3)) < $data_useage) {
                     $status = "limited";
                 }
                 $download_config = downloadconfig($Get_Data_Panel['name_panel'], $UsernameData['id']);
@@ -1362,10 +1362,11 @@ class ManagePanel
             }
         } elseif ($Get_Data_Panel['type'] == "alireza_single") {
             $UsernameData = removeClientalireza_single($Get_Data_Panel['name_panel'], $username);
-            if (!$UsernameData['success']) {
+            $alirezaBody = is_array($UsernameData) ? json_decode($UsernameData['body'] ?? '', true) : null;
+            if (!empty($UsernameData['error']) || !is_array($alirezaBody) || empty($alirezaBody['success'])) {
                 $Output = array(
                     'status' => 'Unsuccessful',
-                    'msg' => $UsernameData['msg']
+                    'msg' => $UsernameData['error'] ?? ($alirezaBody['msg'] ?? 'delete failed')
                 );
             } else {
                 $Output = array(
@@ -1375,11 +1376,18 @@ class ManagePanel
             }
         } elseif ($Get_Data_Panel['type'] == "hiddify") {
             $data_user = getdatauser($username, $name_panel);
-            removeuserhi($name_panel, $data_user['uuid']);
-            $Output = array(
-                'status' => 'successful',
-                'msg' => ""
-            );
+            if (!is_array($data_user) || empty($data_user['uuid'])) {
+                $Output = array(
+                    'status' => 'Unsuccessful',
+                    'msg' => 'user not found on panel'
+                );
+            } else {
+                removeuserhi($name_panel, $data_user['uuid']);
+                $Output = array(
+                    'status' => 'successful',
+                    'msg' => ""
+                );
+            }
         } elseif ($Get_Data_Panel['type'] == "Manualsale") {
             update("manualsell", "status", "delete", "username", $username);
             $Output = array(
@@ -1414,10 +1422,11 @@ class ManagePanel
             }
         } elseif ($Get_Data_Panel['type'] == "ibsng") {
             $UsernameData = deleteUserIBSng($Get_Data_Panel['name_panel'], $username);
-            if (!$UsernameData['status']) {
+            $ibsngDeleted = $UsernameData === true || (is_array($UsernameData) && !empty($UsernameData['status']));
+            if (!$ibsngDeleted) {
                 $Output = array(
                     'status' => 'Unsuccessful',
-                    'msg' => $UsernameData['msg']
+                    'msg' => is_array($UsernameData) ? ($UsernameData['msg'] ?? 'delete failed') : 'delete failed'
                 );
             } else {
                 $Output = array(
@@ -2138,10 +2147,12 @@ class ManagePanel
                 }
                 $count += 1;
             }
-            $datam = array(
-                "Job" => $datauser['jobs'][$count],
-            );
-            deletejob($panel['name_panel'], $datam);
+            if (isset($datauser['jobs'][$count])) {
+                $datam = array(
+                    "Job" => $datauser['jobs'][$count],
+                );
+                deletejob($panel['name_panel'], $datam);
+            }
             $count = 0;
             foreach ($datauser['jobs'] as $jobsvolume) {
                 if ($jobsvolume['Field'] == "total_data") {
@@ -2149,10 +2160,12 @@ class ManagePanel
                 }
                 $count += 1;
             }
-            $datam = array(
-                "Job" => $datauser['jobs'][$count],
-            );
-            deletejob($panel['name_panel'], $datam);
+            if (isset($datauser['jobs'][$count])) {
+                $datam = array(
+                    "Job" => $datauser['jobs'][$count],
+                );
+                deletejob($panel['name_panel'], $datam);
+            }
             $time_new = date("Y-m-d H:i:s", $time_new);
             if ($time_day != 0) {
                 setjob($panel['name_panel'], "date", $time_new, $datauser['id']);

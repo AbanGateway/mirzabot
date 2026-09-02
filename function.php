@@ -418,10 +418,16 @@ function update($table, $field, $newValue, $whereField = null, $whereValue = nul
     if (!isset($user['step'])) {
         $user['step'] = '';
     }
-    $logValue = is_scalar($valueToStore) ? $valueToStore : json_encode($valueToStore, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $sensitiveFields = ['password', 'token', 'password_panel', 'secret_code', 'datelogin'];
+    $logValue = in_array(strtolower((string) $field), $sensitiveFields, true)
+        ? '[redacted]'
+        : (is_scalar($valueToStore) ? $valueToStore : json_encode($valueToStore, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     $logss = "{$table}_{$field}_{$logValue}_{$whereField}_{$whereValue}_{$user['step']}_$date";
     if ($field != "message_count" && $field != "last_message_time") {
-        file_put_contents('log.txt', "\n" . $logss, FILE_APPEND);
+        $logDir = __DIR__ . '/storage';
+        if (is_dir($logDir) || @mkdir($logDir, 0775, true)) {
+            @file_put_contents($logDir . '/log.txt', "\n" . $logss, FILE_APPEND);
+        }
     }
 
     clearSelectCache($table);
@@ -592,9 +598,21 @@ function generateUUID()
 }
 function rate_arze()
 {
-    $file = file_get_contents('https://demo.mirzabot.com/b.php', true);
-    $file = json_decode($file, true)['result'];
-    return $file;
+    $ch = curl_init('https://demo.mirzabot.com/b.php');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    $response = curl_exec($ch);
+    if ($response === false) {
+        error_log('rate_arze failed: ' . curl_error($ch));
+        return null;
+    }
+    $decoded = json_decode($response, true);
+    if (!is_array($decoded) || !isset($decoded['result']) || !is_array($decoded['result'])) {
+        error_log('rate_arze: unexpected response');
+        return null;
+    }
+    return $decoded['result'];
 }
 function updatePaymentMessageId($response, $orderId)
 {
@@ -694,6 +712,10 @@ function isValidDate($date)
 {
     return (strtotime($date) != false);
 }
+function invoiceBelongsToUser($invoice, $userId)
+{
+    return is_array($invoice) && isset($invoice['id_user']) && (string) $invoice['id_user'] === (string) $userId;
+}
 function cubepayFeeValue()
 {
     $raw = select("PaySetting", "ValuePay", "NamePay", "feeternado", "select")['ValuePay'] ?? '0';
@@ -720,14 +742,6 @@ function cubepayPayableAmount($price)
 
     return cubepayApplyFee($price, cubepayFeeValue());
 }
-/**
- * Ask AbanGateway for a payment page — Rial gateway 4.
- *
- * The endpoint is the shop's own, pasted by the admin, so it is validated
- * before use rather than trusted: a `http://` address would put the bearer key
- * on the wire in clear, and a host that is not this gateway is a request the
- * bot should not make at all.
- */
 function abangatewayEndpoint(): ?string
 {
     $endpoint = trim((string) getPaySettingValue('endpointiranpay4', ''));
@@ -753,10 +767,6 @@ function createPayiranpay4($price, $order_id)
         return ['success' => false, 'message' => 'iranpay4: key or endpoint is unset'];
     }
 
-    // `https://` written here, not left to $domainhosts. That variable is a
-    // bare host — every other call site in this file prefixes it, and a
-    // callback without a scheme is either refused by the gateway or resolved
-    // as plain HTTP.
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => $endpoint . '/create',
@@ -936,12 +946,6 @@ function DirectPayment($order_id, $image = 'images.jpg')
             $info_product['code_product'] = "customvolume";
             $info_product['Service_time'] = $get_invoice['Service_time'];
             $info_product['price_product'] = $get_invoice['price_product'];
-        } else {
-            $stmt = $pdo->prepare("SELECT * FROM product WHERE name_product = :name_product AND (Location = :Service_location  or Location = '/all')");
-            $stmt->bindParam(':name_product', $get_invoice['name_product'], PDO::PARAM_STR);
-            $stmt->bindParam(':Service_location', $get_invoice['Service_location'], PDO::PARAM_STR);
-            $stmt->execute();
-            $info_product = $stmt->fetch(PDO::FETCH_ASSOC);
         }
         $username_ac = $get_invoice['username'];
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $get_invoice['Service_location'], "select");
@@ -1403,8 +1407,8 @@ function DirectPayment($order_id, $image = 'images.jpg')
         }
         $textextratime = sprintf($textbotlang['users']['extraTime']['successFn'], $steppay[0], $tmieextra, $volumesformat);
         sendmessage($Balance_id['id'], $textextratime, $keyboardextrafnished, 'HTML');
+        $volumes = $tmieextra;
         if ($Payment_report['Payment_Method'] == "cart to cart") {
-            $volumes = $tmieextra;
             $textconfrom = sprintf($textbotlang['Admin']['reportgroup']['paymentConfirmedExtraTime'], $volumes, $steppay[0], $Balance_id['id'], $Payment_report['id_order'], $Balance_id['username'], $Balance_id['Balance'], $format_price_cart);
             if (!isTelegramChatIdEmpty($from_id) && intval($message_id) != 0) {
                 Editmessagetext($from_id, $message_id, $textconfrom, $Confirm_pay);
@@ -1507,7 +1511,6 @@ function addFieldToTable($tableName, $fieldName, $defaultValue = null, $datatype
         $stmt->bindParam(1, $defaultValue);
         $stmt->execute();
     }
-    echo "The $fieldName field was added ✅";
 }
 function outtypepanel($typepanel, $message)
 {
@@ -2008,7 +2011,12 @@ function extendMethodKey($value, $default = 'resetVolumeTime')
 function generateAuthStr($length = 10)
 {
     $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    return substr(str_shuffle(str_repeat($characters, ceil($length / strlen($characters)))), 0, $length);
+    $max = strlen($characters) - 1;
+    $result = '';
+    for ($i = 0; $i < $length; $i++) {
+        $result .= $characters[random_int(0, $max)];
+    }
+    return $result;
 }
 function createqrcode($contents)
 {
@@ -2119,8 +2127,6 @@ function sendMessageService($panel_info, $config, $sub_link, $username_service, 
     }
     $STATUS_SEND_MESSAGE_PHOTO = $panel_info['config'] == "onconfig" && (is_array($config) ? count($config) : 0) != 1 ? false : true;
     $out_put_qrcode = "";
-    if ($panel_info['type'] == "Manualsale" || $panel_info['type'] == "ibsng" || $panel_info['type'] == "mikrotik") {
-    }
     if ($panel_info['sublink'] == "onsublink" && $panel_info['config']) {
         $out_put_qrcode = $sub_link;
     } elseif ($panel_info['sublink'] == "onsublink") {

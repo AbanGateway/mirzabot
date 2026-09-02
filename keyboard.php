@@ -1308,13 +1308,13 @@ $keyboardlinkapp = json_encode([
     ],
     'resize_keyboard' => true
 ]);
-function KeyboardProduct($location, $query, $pricediscount, $datakeyboard, $statuscustom = false, $backuser = "backuser", $valuetow = null, $customvolume = "customsellvolume")
+function KeyboardProduct($location, $query, $pricediscount, $datakeyboard, $statuscustom = false, $backuser = "backuser", $valuetow = null, $customvolume = "customsellvolume", $queryParams = [])
 {
     global $pdo, $textbotlang, $from_id;
     $product = ['inline_keyboard' => []];
     $statusshowprice = select("shopSetting", "*", "Namevalue", "statusshowprice", "select")['value'];
     $stmt = $pdo->prepare($query);
-    $stmt->execute();
+    $stmt->execute($queryParams);
     if ($valuetow != null) {
         $valuetow = "-$valuetow";
     } else {
