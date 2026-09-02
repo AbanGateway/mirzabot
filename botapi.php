@@ -14,7 +14,7 @@ function isTelegramChatIdEmpty($chat_id): bool
     }
     return is_numeric($chat_id) && (int) $chat_id === 0;
 }
-function stripCustomEmojiFromMarkup($replyMarkup)
+function walkKeyboardButtons($replyMarkup, callable $handler)
 {
     if (!is_string($replyMarkup) || stripos($replyMarkup, '<tg-emoji') === false) {
         return $replyMarkup;
@@ -23,6 +23,7 @@ function stripCustomEmojiFromMarkup($replyMarkup)
     if (!is_array($markup)) {
         return $replyMarkup;
     }
+    $changed = false;
     foreach (['keyboard', 'inline_keyboard'] as $markupKey) {
         if (!isset($markup[$markupKey]) || !is_array($markup[$markupKey])) {
             continue;
@@ -32,16 +33,43 @@ function stripCustomEmojiFromMarkup($replyMarkup)
                 continue;
             }
             foreach ($row as $btnKey => $button) {
-                if (is_array($button) && isset($button['text']) && is_string($button['text'])) {
-                    $markup[$markupKey][$rowKey][$btnKey]['text'] = stripCustomEmojiTags($button['text']);
+                if (!is_array($button) || !isset($button['text']) || !is_string($button['text'])) {
+                    continue;
+                }
+                $updated = $handler($button);
+                if ($updated !== $button) {
+                    $markup[$markupKey][$rowKey][$btnKey] = $updated;
+                    $changed = true;
                 }
             }
         }
     }
+    if (!$changed) {
+        return $replyMarkup;
+    }
     $encoded = json_encode($markup, JSON_UNESCAPED_UNICODE);
     return $encoded === false ? $replyMarkup : $encoded;
 }
-function telegram($method, $datas = [], $token = null)
+function applyCustomEmojiToMarkup($replyMarkup)
+{
+    return walkKeyboardButtons($replyMarkup, function ($button) {
+        $label = splitCustomEmojiLabel($button['text']);
+        $button['text'] = $label['text'];
+        if ($label['icon'] !== '' && !isset($button['icon_custom_emoji_id'])) {
+            $button['icon_custom_emoji_id'] = $label['icon'];
+        }
+        return $button;
+    });
+}
+function stripCustomEmojiFromMarkup($replyMarkup)
+{
+    return walkKeyboardButtons($replyMarkup, function ($button) {
+        $button['text'] = stripCustomEmojiTags($button['text']);
+        unset($button['icon_custom_emoji_id']);
+        return $button;
+    });
+}
+function telegram($method, $datas = [], $token = null, $allowEmojiFallback = true)
 {
     global $APIKEY;
 
@@ -62,8 +90,10 @@ function telegram($method, $datas = [], $token = null)
         unset($datas['message_thread_id']);
     }
 
-    if (isset($datas['reply_markup']) && function_exists('stripCustomEmojiTags')) {
-        $datas['reply_markup'] = stripCustomEmojiFromMarkup($datas['reply_markup']);
+    $premiumEmojiMarkup = null;
+    if (isset($datas['reply_markup']) && function_exists('splitCustomEmojiLabel')) {
+        $premiumEmojiMarkup = $datas['reply_markup'];
+        $datas['reply_markup'] = applyCustomEmojiToMarkup($premiumEmojiMarkup);
     }
 
     $ch = curl_init($url);
@@ -111,6 +141,16 @@ function telegram($method, $datas = [], $token = null)
     if (isset($decodedResponse['ok']) && !$decodedResponse['ok']) {
         $errorCode = $decodedResponse['error_code'] ?? 0;
         $description = $decodedResponse['description'] ?? '';
+        if (
+            $allowEmojiFallback
+            && $errorCode === 400
+            && stripos($description, 'emoji') !== false
+            && is_string($premiumEmojiMarkup)
+            && stripos($premiumEmojiMarkup, '<tg-emoji') !== false
+        ) {
+            $datas['reply_markup'] = stripCustomEmojiFromMarkup($premiumEmojiMarkup);
+            return telegram($method, $datas, $token, false);
+        }
         $silent = $errorCode === 403
             || ($errorCode === 400 && (
                 str_contains($description, 'message is not modified')
