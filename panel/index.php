@@ -12,7 +12,7 @@ $txToday = 0;
 
 try {
     $totalUsers = db_count($pdo, "SELECT COUNT(*) FROM user");
-    $newToday = db_count($pdo, "SELECT COUNT(*) FROM user WHERE register > ?", [strtotime('today')]);
+    $newToday = db_count($pdo, "SELECT COUNT(*) FROM user WHERE CAST(register AS UNSIGNED) >= ?", [strtotime('today')]);
 } catch (Exception $e) {
 }
 
@@ -24,7 +24,7 @@ try {
 
 try {
     $pendingPay = db_count($pdo, "SELECT COUNT(*) FROM Payment_report WHERE payment_Status='waiting'");
-    $txToday = db_count($pdo, "SELECT COUNT(*) FROM Payment_report WHERE time > ?", [strtotime('today')]);
+    $txToday = db_count($pdo, "SELECT COUNT(*) FROM Payment_report WHERE time LIKE ?", [date('Y/m/d') . '%']);
 } catch (Exception $e) {
 }
 

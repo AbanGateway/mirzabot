@@ -917,7 +917,7 @@ elseif ($datain == "systemsms") {
     }
     savedata("save", "agent", $type);
     if ($userdata['typeusermessage'] == "customer") {
-        $stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE agent = :agent OR agent = 'all'");
+        $stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE agent = :agent OR agent = 'all' ORDER BY display_order, id");
         $stmt->bindParam(':agent', $type);
         $stmt->execute();
         $list_panel = ['inline_keyboard' => []];
@@ -1640,6 +1640,7 @@ elseif ($datain == "systemsms") {
     $stmt->bindParam(':note', $text, PDO::PARAM_STR);
     $stmt->bindParam(':hide_panel', $varhide_panel, PDO::PARAM_STR);
     $stmt->execute();
+    $pdo->prepare("UPDATE product SET display_order = id WHERE id = ?")->execute([$pdo->lastInsertId()]);
     sendmessage($from_id, $textbotlang['Admin']['Product']['saveProduct'], $shopkeyboard, 'HTML');
     step('home', $from_id);
 } elseif ($text == $textbotlang['keyboard']['adminSection'] && $adminrulecheck['rule'] == "administrator") {
@@ -1848,7 +1849,7 @@ elseif ($datain == "systemsms") {
     update("user", "Processing_value_tow", $typeagent, "id", $from_id);
     $product = [];
     $panel = select("marzban_panel", "*", "code_panel", $user['Processing_value_one'], "select");
-    $getdataproduct = $pdo->prepare("SELECT * FROM product WHERE (Location = ? or Location = '/all') AND agent = ?");
+    $getdataproduct = $pdo->prepare("SELECT * FROM product WHERE (Location = ? or Location = '/all') AND agent = ? ORDER BY display_order, id");
     $getdataproduct->bindValue(1, $panel['name_panel'], PDO::PARAM_STR);
     $getdataproduct->bindValue(2, $typeagent, PDO::PARAM_STR);
     $getdataproduct->execute();
@@ -5885,7 +5886,7 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     update("PaySetting", "ValuePay", $text, "NamePay", "chashbackvariza");
 } elseif ($text == $textbotlang['keyboard']['addConfig']) {
     $product = [];
-    $stmt = $pdo->prepare("SELECT * FROM product WHERE Location = :text or Location = '/all' ");
+    $stmt = $pdo->prepare("SELECT * FROM product WHERE Location = :text or Location = '/all' ORDER BY display_order, id");
     $stmt->bindParam(':text', $user['Processing_value'], PDO::PARAM_STR);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -9059,6 +9060,7 @@ if ($datain == "settimecornday" && $adminrulecheck['rule'] == "administrator") {
     $stmt = $pdo->prepare("INSERT INTO category (remark) VALUES (?)");
     $stmt->bindParam(1, $text);
     $stmt->execute();
+    $pdo->prepare("UPDATE category SET display_order = id WHERE id = ?")->execute([$pdo->lastInsertId()]);
 } elseif ($text == $textbotlang['keyboard']['deleteCategory']) {
     sendmessage($from_id, $textbotlang['Admin']['category']['selectDelete'], KeyboardCategoryadmin(), 'HTML');
     step("removecategory", $from_id);

@@ -522,6 +522,10 @@ function select($table, $field, $whereField = null, $whereValue = null, $type = 
         $query .= " WHERE $whereField = :whereValue";
     }
 
+    if (in_array($table, ['product', 'marzban_panel', 'category'], true) && ($type == "fetchAll" || $type == "FETCH_COLUMN")) {
+        $query .= " ORDER BY $table.display_order, $table.id";
+    }
+
     if ($type != "count" && $type != "fetchAll" && $type != "FETCH_COLUMN") {
         $query .= " LIMIT 1";
     }
@@ -1611,6 +1615,7 @@ function finishAddPanel()
     ];
     $stmt = $pdo->prepare("INSERT INTO marzban_panel (" . implode(',', array_keys($panelData)) . ") VALUES (:" . implode(', :', array_keys($panelData)) . ")");
     $stmt->execute($panelData);
+    $pdo->prepare("UPDATE marzban_panel SET display_order = id WHERE id = ?")->execute([$pdo->lastInsertId()]);
     step("home", $from_id);
     sendmessage($from_id, $textbotlang['Admin']['managepanel']['addedPanel'] . " 🥳", $keyboardadmin, 'HTML');
     $panelNotes = [

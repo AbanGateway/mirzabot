@@ -368,7 +368,7 @@ function mini_countries(array $data, string $method): void
     }
     $user_info = select("user", "*", "token", $tokencheck, "select");
     if ($user_info) {
-        $stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE status = 'active' AND (agent = :agent OR agent = 'all') AND type != 'Manualsale'");
+        $stmt = $pdo->prepare("SELECT * FROM marzban_panel WHERE status = 'active' AND (agent = :agent OR agent = 'all') AND type != 'Manualsale' ORDER BY display_order, id");
         $stmt->bindParam(':agent', $user_info['agent']);
         $stmt->execute();
         $panel_list = [];
@@ -438,7 +438,7 @@ function mini_categories(array $data, string $method): void
             ));
             return;
         }
-        $stmt = $pdo->prepare("SELECT * FROM category");
+        $stmt = $pdo->prepare("SELECT * FROM category ORDER BY display_order, id");
         $stmt->execute();
         $category_list = [];
         $panel = select("marzban_panel", "*", "code_panel", $data['id_panel'], "select");
@@ -668,7 +668,7 @@ function mini_services(array $data, string $method): void
             $time_range_day = "AND Service_time = :trd";
             $queryParams[':trd'] = $data['time_range_day'];
         }
-        $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :loc OR Location = '/all')AND agent= :ag AND status_product != 'disable' $category_remarks $time_range_day");
+        $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :loc OR Location = '/all')AND agent= :ag AND status_product != 'disable' $category_remarks $time_range_day ORDER BY display_order, id");
         $stmt->execute($queryParams);
         $product_list = [];
         $countorder = null;

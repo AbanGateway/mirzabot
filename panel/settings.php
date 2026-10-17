@@ -62,7 +62,7 @@ include __DIR__ . '/inc/layout_head.php';
     <?php foreach ($tabs as $key => $tab_data): ?>
         <a href="?tab=<?= $key ?>"
             style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;font-size:.82rem;font-weight:600;white-space:nowrap;flex-shrink:0;transition:all .15s;text-decoration:none;
-                  <?= $tab === $key ? 'background:var(--ac);color:#fff;box-shadow:0 0 14px var(--acg)' : 'color:var(--mute)' ?>">
+                  <?= $tab === $key ? 'background:var(--ac);color:var(--btn-ac-text, #fff);box-shadow:0 0 14px var(--acg)' : 'color:var(--mute)' ?>">
             <?= icon($tab_data['icon'], 15) ?>     <?= $tab_data['label'] ?>
         </a>
     <?php endforeach; ?>
