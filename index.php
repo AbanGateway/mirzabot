@@ -1803,25 +1803,21 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             return;
         } else {
             $Balance_prim = $pricelastextend - $user['Balance'];
-            update("user", "Processing_value", $Balance_prim, "id", $from_id);
-            sendmessage($from_id, $textbotlang['users']['sell']['noCredit'], $step_payment, 'HTML');
-            step('get_step_payment', $from_id);
-            $stmt = $pdo->prepare("INSERT IGNORE INTO service_other (id_user, username,value,type,time,price,output,status) VALUES (?, ?,?, ?, ?,?,?,?)");
-            $dateacc = date('Y/m/d H:i:s');
-            $value = json_encode(array(
+            cancelPendingGatewayOrders($from_id);
+            $stmt = $pdo->prepare("INSERT INTO service_other (id_user, username, value, type, time, price, status, output, payable_amount) VALUES (?, ?, ?, ?, ?, ?, 'unpaid', '', ?)");
+            $stmt->execute([$from_id, $nameloc['username'], json_encode([
                 "volumebuy" => $prodcut['Volume_constraint'],
                 "Service_time" => $prodcut['Service_time'],
                 "oldvolume" => $DataUserOut['data_limit'],
                 "oldtime" => $DataUserOut['expire'],
                 'code_product' => $prodcut['code_product'],
                 'id_order' => $randomString
-            ));
-            $type = "extend_user";
-            $status = "unpaid";
-            $extend = '';
-            $stmt->execute([$from_id, $nameloc['username'], $value, $type, $dateacc, $prodcut['price_product'], $extend, $status]);
-            update("user", "Processing_value_one", "{$nameloc['username']}%$randomString", "id", $from_id);
-            update("user", "Processing_value_tow", "getextenduser", "id", $from_id);
+            ]), 'extend_user', date('Y/m/d H:i:s'), $pricelastextend, $Balance_prim]);
+            $service_order_id = $pdo->lastInsertId();
+            update("user", "Processing_value", $Balance_prim, "id", $from_id);
+            update("user", "Processing_value_one", $service_order_id, "id", $from_id);
+            sendmessage($from_id, $textbotlang['users']['sell']['noCredit'], $step_payment, 'HTML');
+            step('get_step_payment_service', $from_id);
             return;
         }
     }
@@ -2092,11 +2088,20 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
                 sendmessage($from_id, sprintf($textbotlang['users']['Discount']['discountapplied'], $user['pricediscount']), null, 'HTML');
             }
             $Balance_prim = $volume - $user['Balance'];
+            $DataUserOut = $ManagePanel->DataUser($nameloc['Service_location'], $nameloc['username']);
+            cancelPendingGatewayOrders($from_id);
+            $stmt = $pdo->prepare("INSERT INTO service_other (id_user, username, value, type, time, price, status, output, payable_amount) VALUES (?, ?, ?, ?, ?, ?, 'unpaid', '', ?)");
+            $stmt->execute([$from_id, $nameloc['username'], json_encode([
+                'volume_value' => $valuevolume,
+                'priceـper_gig' => $extrapricevalue,
+                'old_volume' => $DataUserOut['data_limit'],
+                'expire_old' => $DataUserOut['expire']
+            ]), 'extra_user', date('Y/m/d H:i:s'), $volume, $Balance_prim]);
+            $service_order_id = $pdo->lastInsertId();
             update("user", "Processing_value", $Balance_prim, "id", $from_id);
+            update("user", "Processing_value_one", $service_order_id, "id", $from_id);
             Editmessagetext($from_id, $message_id, $textbotlang['users']['sell']['noCredit'], $step_payment);
-            step('get_step_payment', $from_id);
-            update("user", "Processing_value_one", "{$nameloc['username']}%{$valuevolume}", "id", $from_id);
-            update("user", "Processing_value_tow", "getextravolumeuser", "id", $from_id);
+            step('get_step_payment_service', $from_id);
             return;
         }
     }
@@ -2634,11 +2639,20 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             if (intval($pricelasttime) != 0) {
                 $Balance_prim = $pricelasttime - $user['Balance'];
+                $DataUserOut = $ManagePanel->DataUser($nameloc['Service_location'], $nameloc['username']);
+                cancelPendingGatewayOrders($from_id);
+                $stmt = $pdo->prepare("INSERT INTO service_other (id_user, username, value, type, time, price, status, output, payable_amount) VALUES (?, ?, ?, ?, ?, ?, 'unpaid', '', ?)");
+                $stmt->execute([$from_id, $nameloc['username'], json_encode([
+                    'day' => $valuetime,
+                    'priceـper_day' => $extratimepricevalue,
+                    'old_volume' => $DataUserOut['data_limit'],
+                    'expire_old' => $DataUserOut['expire']
+                ]), 'extra_time_user', date('Y/m/d H:i:s'), $pricelasttime, $Balance_prim]);
+                $service_order_id = $pdo->lastInsertId();
                 update("user", "Processing_value", $Balance_prim, "id", $from_id);
+                update("user", "Processing_value_one", $service_order_id, "id", $from_id);
                 Editmessagetext($from_id, $message_id, $textbotlang['users']['sell']['noCredit'], $step_payment);
-                step('get_step_payment', $from_id);
-                update("user", "Processing_value_one", "{$nameloc['username']}%{$valuetime}", "id", $from_id);
-                update("user", "Processing_value_tow", "getextratimeuser", "id", $from_id);
+                step('get_step_payment_service', $from_id);
                 return;
             }
         }
@@ -3828,6 +3842,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $text = strtolower($text);
     $username_ac = generateUsername($from_id, $marzban_list_get['MethodUsername'], $username, $randomString, $text, $marzban_list_get['namecustom'], $user['namecustom']);
     $username_ac = strtolower($username_ac);
+    cancelPendingGatewayOrders($from_id);
     $DataUserOut = $ManagePanel->DataUser($marzban_list_get['name_panel'], $username_ac);
     $random_number = rand(1000000, 9999999);
     if (isset($DataUserOut['username']) || rowExists("invoice", "username", $username_ac)) {
@@ -3921,6 +3936,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     } else {
         $priceproduct = $info_product['price_product'];
     }
+    cancelPendingGatewayOrders($from_id);
     $username_ac = strtolower($user['Processing_value_tow']);
     $DataUserOut = $ManagePanel->DataUser($marzban_list_get['name_panel'], $username_ac);
     if (isset($DataUserOut['username']) || rowExists("invoice", "username", $username_ac)) {
@@ -3975,11 +3991,11 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             Editmessagetext($from_id, $message_id, sprintf($textbotlang['users']['Balance']['insufficientbalance'], $minbalance, $maxbalance), $bakinfos, 'HTML');
             step('getprice', $from_id);
         } else {
+            update("invoice", "payable_amount", $Balance_prim, "id_invoice", $randomString);
             update("user", "Processing_value", $Balance_prim, "id", $from_id);
+            update("user", "Processing_value_one", $randomString, "id", $from_id);
             sendmessage($from_id, $textbotlang['users']['sell']['noCredit'], $step_payment, 'HTML');
-            step('get_step_payment', $from_id);
-            update("user", "Processing_value_one", $username_ac, "id", $from_id);
-            update("user", "Processing_value_tow", "getconfigafterpay", "id", $from_id);
+            step('get_step_payment_buy', $from_id);
             if ($datain == "confirmandgetserviceDiscount")
                 update("user", "Processing_value_four", "dis_{$partsdic[0]}", "id", $from_id);
         }
@@ -4685,7 +4701,24 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     update("user", "Processing_value", $balancelast, "id", $from_id);
     sendmessage($from_id, $textbotlang['users']['Balance']['selectPayment'], $step_payment, 'HTML');
     step('get_step_payment', $from_id);
-} elseif ($user['step'] == "get_step_payment" && in_array($datain, ["cart_to_offline", "aqayepardakht", "zarinpal", "variza", "plisio", "nowpayment", "iranpay1", "iranpay2", "iranpay4", "iranpay3", "digitaltron", "startelegrams"])) {
+} elseif (in_array($user['step'], ["get_step_payment", "get_step_payment_buy", "get_step_payment_service"]) && in_array($datain, ["cart_to_offline", "aqayepardakht", "zarinpal", "variza", "plisio", "nowpayment", "iranpay1", "iranpay2", "iranpay4", "iranpay3", "digitaltron", "startelegrams"])) {
+    if ($user['step'] == "get_step_payment_buy") {
+        $pending_order = select("invoice", "*", "id_invoice", $user['Processing_value_one'], "select");
+        if ($pending_order == false || $pending_order['Status'] != "unpaid") {
+            sendmessage($from_id, $textbotlang['users']['sell']['restartFromStart'], $keyboard, 'HTML');
+            step('home', $from_id);
+            return;
+        }
+        $user['Processing_value'] = $pending_order['payable_amount'];
+    } elseif ($user['step'] == "get_step_payment_service") {
+        $pending_order = select("service_other", "*", "id", $user['Processing_value_one'], "select");
+        if ($pending_order == false || $pending_order['status'] != "unpaid") {
+            sendmessage($from_id, $textbotlang['users']['sell']['restartFromStart'], $keyboard, 'HTML');
+            step('home', $from_id);
+            return;
+        }
+        $user['Processing_value'] = $pending_order['payable_amount'];
+    }
     if ($datain == "cart_to_offline") {
         $mainbalance = select("PaySetting", "ValuePay", "NamePay", "minbalancecart", "select")['ValuePay'];
         $maxbalance = select("PaySetting", "ValuePay", "NamePay", "maxbalancecart", "select")['ValuePay'];
@@ -4724,13 +4757,13 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         ];
         $price_copy = intval($user['Processing_value'] . "0");
         $textcart = strtr($textbotlang['textbot']['cart'], $replacements);
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "cart to cart";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
+        linkPaymentToOrder($randomString, $user);
         deletemessage($from_id, $message_id);
         if ($setting['statuscopycart'] == "1") {
             $sendresidcart = json_encode([
@@ -4786,7 +4819,6 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         }
         deletemessage($from_id, $message_id);
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
         $pay = createPayaqayepardakht($user['Processing_value'], $randomString);
@@ -4805,10 +4837,11 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "aqayepardakht";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -4863,12 +4896,12 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
         $dateacc = date('Y/m/d H:i:s');
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice,dec_not_confirmed) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,dec_not_confirmed) VALUES (?,?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "zarinpal";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice, $pay['data']['authority']]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $pay['data']['authority']]);
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -4923,12 +4956,12 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
         $dateacc = date('Y/m/d H:i:s');
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice,dec_not_confirmed) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,dec_not_confirmed) VALUES (?,?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "variza";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice, $pay['slug'] ?? $randomString]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $pay['slug'] ?? $randomString]);
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -4978,12 +5011,11 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
         $pay = plisio($randomString, $usdprice, $from_id);
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice,dec_not_confirmed) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,dec_not_confirmed) VALUES (?,?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "plisio";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice, $pay['txn_id']]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $pay['txn_id']]);
         if (isset($pay['message'])) {
             $text_error = $pay['message'];
             sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
@@ -4999,6 +5031,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -5045,12 +5078,11 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
         $pay = nowPayments('invoice', $usdprice, $randomString, 'TopUp - ' . $from_id);
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice,dec_not_confirmed) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,dec_not_confirmed) VALUES (?,?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "nowpayment";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice, $pay['id']]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $pay['id']]);
         if (!isset($pay['id'])) {
             $text_error = json_encode($pay);
             sendmessage($from_id, $textbotlang['users']['Balance']['errorLinkPayment'], $keyboard, 'HTML');
@@ -5066,6 +5098,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -5112,11 +5145,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "Currency Rial 1";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
         $pay = createInvoiceiranpay1($user['Processing_value'], $randomString);
         if ($pay['status'] != "100") {
             $text_error = $pay['message'];
@@ -5133,6 +5165,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
         update("Payment_report", "dec_not_confirmed", $pay['Authority'], "id_order", $randomString);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
@@ -5169,11 +5202,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "Currency Rial 2";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
         $payment = trnado($randomString, $user['Processing_value']);
         if (empty($payment['success'])) {
             $text_error = json_encode($payment);
@@ -5190,6 +5222,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -5242,14 +5275,13 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
 
         // The row is written before the link is asked for. A confirmation that
         // arrives while the gateway is still answering finds an order to attach
         // itself to instead of being told it does not exist.
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $Payment_Method = "AbanGateway";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], "Unpaid", $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], "Unpaid", $Payment_Method]);
 
         $pay = createPayiranpay4($user['Processing_value'], $randomString);
         if (empty($pay['success']) || empty($pay['payment_link'])) {
@@ -5267,6 +5299,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
 
         $pricetoman = number_format($user['Processing_value'], 0);
         $paymentkeyboard = json_encode([
@@ -5312,11 +5345,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], null, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "Currency Rial 3";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
         $paylink = createInvoice($trxprice);
         if (!$paylink['success']) {
             $text_error = $paylink['message'];
@@ -5333,6 +5365,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
         update("Payment_report", "dec_not_confirmed", $paylink['data']['id'], "id_order", $randomString);
         $pricetoman = number_format($user['Processing_value'], 0);
         $paymentkeyboard = json_encode([
@@ -5384,11 +5417,11 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "arze digital offline";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
+        linkPaymentToOrder($randomString, $user);
         $affilnecurrency = select("PaySetting", "*", "NamePay", "walletaddress", "select")['ValuePay'];
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
@@ -5435,11 +5468,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         sendmessage($from_id, $textbotlang['users']['Balance']['linkpayments'], $keyboard, 'HTML');
         $dateacc = date('Y/m/d H:i:s');
         $randomString = bin2hex(random_bytes(5));
-        $invoice = "{$user['Processing_value_tow']}|{$user['Processing_value_one']}";
-        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method,id_invoice) VALUES (?,?,?,?,?,?,?)");
+        $stmt = $pdo->prepare("INSERT INTO Payment_report (id_user,id_order,time,price,payment_Status,Payment_Method) VALUES (?,?,?,?,?,?)");
         $payment_Status = "Unpaid";
         $Payment_Method = "Star Telegram";
-        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method, $invoice]);
+        $stmt->execute([$from_id, $randomString, $dateacc, $user['Processing_value'], $payment_Status, $Payment_Method]);
         $affilnecurrency = select("PaySetting", "*", "NamePay", "walletaddress", "select")['ValuePay'];
         $straCreateLink = telegram('createInvoiceLink', [
             'title' => "Buy for Price {$user['Processing_value']}",
@@ -5468,6 +5500,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             }
             return;
         }
+        linkPaymentToOrder($randomString, $user);
         $paymentkeyboard = json_encode([
             'inline_keyboard' => [
                 [
@@ -5560,28 +5593,15 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     ]);
     $textdiscount = "";
     $format_price_cart = number_format($PaymentReport['price'], 0);
-    if ($user['Processing_value_tow'] == "getconfigafterpay") {
-        $get_invoice = select("invoice", "*", "username", $user['Processing_value_one'], "select");
-        if ($get_invoice == false) {
-            sendmessage($from_id, $textbotlang['users']['Balance']['restartPurchaseOrPay'], $keyboard, 'HTML');
-            return;
-        }
+    $payment_order = paymentOrder($PaymentReport['id_order']);
+    $get_invoice = $payment_order['invoice'];
+    $service_order = $payment_order['service'];
+    $service_value = $service_order ? json_decode($service_order['value'], true) : [];
+    if ($get_invoice) {
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentService'], $get_invoice['username'], $get_invoice['name_product'], $get_invoice['Volume'], $get_invoice['Service_time'], $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $Paymentusercount, $format_price_cart, $caption, $text);
-    } elseif ($user['Processing_value_tow'] == "getextenduser") {
-        $partsdic = explode("%", $user['Processing_value_one']);
-        $usernamepanel = $partsdic[0];
-        $sql = "SELECT * FROM service_other WHERE username = :username  AND value  LIKE CONCAT('%', :value, '%') AND id_user = :id_user ";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':username', $usernamepanel, PDO::PARAM_STR);
-        $stmt->bindParam(':value', $partsdic[1], PDO::PARAM_STR);
-        $stmt->bindParam(':id_user', $from_id);
-        $stmt->execute();
-        $service_other = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($service_other == false) {
-            sendmessage($from_id, $textbotlang['users']['infoFetchErrorRestart'], $keyboard, 'HTML');
-            return;
-        }
-        $service_other = json_decode($service_other['value'], true);
+    } elseif ($service_order && $service_order['type'] == "extend_user") {
+        $usernamepanel = $service_order['username'];
+        $service_other = $service_value;
         $nameloc = select("invoice", "*", "username", $usernamepanel, "select");
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
         $eextraprice = json_decode($marzban_list_get['pricecustomvolume'], true);
@@ -5620,15 +5640,13 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
             ]
         ]);
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentRenew'], $usernamepanel, $prodcut['name_product'], $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $Paymentusercount, $format_price_cart, $caption, $text);
-    } elseif ($user['Processing_value_tow'] == "getextravolumeuser") {
-        $partsdic = explode("%", $user['Processing_value_one']);
-        $usernamepanel = $partsdic[0];
-        $volumes = $partsdic[1];
+    } elseif ($service_order && $service_order['type'] == "extra_user") {
+        $usernamepanel = $service_order['username'];
+        $volumes = $service_value['volume_value'];
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentExtraVolume'], $usernamepanel, $volumes, $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $Paymentusercount, $format_price_cart, $caption, $text);
-    } elseif ($user['Processing_value_tow'] == "getextratimeuser") {
-        $partsdic = explode("%", $user['Processing_value_one']);
-        $usernamepanel = $partsdic[0];
-        $time = $partsdic[1];
+    } elseif ($service_order && $service_order['type'] == "extra_time_user") {
+        $usernamepanel = $service_order['username'];
+        $time = $service_value['day'];
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentExtraTime'], $usernamepanel, $time, $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $Paymentusercount, $format_price_cart, $caption, $text);
     } else {
 
@@ -5648,7 +5666,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         }
         sendmessage($id_admin, $textsendrasid, $Confirm_pay, 'HTML');
     }
-    if ($user['Processing_value_tow'] == "getconfigafterpay") {
+    if ($get_invoice) {
         sendmessage($from_id, $textbotlang['users']['Balance']['sendReceiptAndConfig'], $keyboard, 'HTML');
     } else {
         sendmessage($from_id, $textbotlang['users']['Balance']['sendReceipt'], $keyboard, 'HTML');
@@ -5682,31 +5700,17 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         ]
     ]);
     $format_price_cart = number_format($PaymentReport['price'], 0);
-    $split_data = explode('|', $PaymentReport['id_invoice']);
-    if ($split_data[0] == "getconfigafterpay") {
-        $get_invoice = select("invoice", "*", "username", $split_data[1], "select");
-        if ($get_invoice == false) {
-            sendmessage($from_id, $textbotlang['users']['Balance']['restartPurchaseOrPay'], $keyboard, 'HTML');
-            return;
-        }
+    $payment_order = paymentOrder($PaymentReport['id_order']);
+    $get_invoice = $payment_order['invoice'];
+    $service_order = $payment_order['service'];
+    $service_value = $service_order ? json_decode($service_order['value'], true) : [];
+    if ($get_invoice) {
         $textdiscount = "";
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentService2'], $get_invoice['username'], $get_invoice['name_product'], $get_invoice['Volume'], $get_invoice['Service_time'], $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $format_price_cart);
         sendmessage($from_id, $textbotlang['users']['Balance']['sendReceiptAndConfig'], $keyboard, 'HTML');
-    } elseif ($split_data[0] == "getextenduser") {
-        $partsdic = explode("%", $split_data[1]);
-        $usernamepanel = $partsdic[0];
-        $sql = "SELECT * FROM service_other WHERE username = :username  AND value  LIKE CONCAT('%', :value, '%') AND id_user = :id_user ";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':username', $usernamepanel, PDO::PARAM_STR);
-        $stmt->bindParam(':value', $partsdic[1], PDO::PARAM_STR);
-        $stmt->bindParam(':id_user', $from_id);
-        $stmt->execute();
-        $service_other = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($service_other == false) {
-            sendmessage($from_id, $textbotlang['users']['infoFetchErrorRestart'], $keyboard, 'HTML');
-            return;
-        }
-        $service_other = json_decode($service_other['value'], true);
+    } elseif ($service_order && $service_order['type'] == "extend_user") {
+        $usernamepanel = $service_order['username'];
+        $service_other = $service_value;
         $nameloc = select("invoice", "*", "username", $usernamepanel, "select");
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
         $eextraprice = json_decode($marzban_list_get['pricecustomvolume'], true);
@@ -5746,16 +5750,14 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         ]);
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentRenew2'], $usernamepanel, $prodcut['name_product'], $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $format_price_cart);
         sendmessage($from_id, $textbotlang['users']['Balance']['receiptSentRenew'], $keyboard, 'HTML');
-    } elseif ($split_data[0] == "getextravolumeuser") {
-        $partsdic = explode("%", $split_data[1]);
-        $usernamepanel = $partsdic[0];
-        $volumes = $partsdic[1];
+    } elseif ($service_order && $service_order['type'] == "extra_user") {
+        $usernamepanel = $service_order['username'];
+        $volumes = $service_value['volume_value'];
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentExtraVolume2'], $usernamepanel, $volumes, $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $format_price_cart);
         sendmessage($from_id, $textbotlang['users']['Balance']['receiptSentExtraVolume'], $keyboard, 'HTML');
-    } elseif ($split_data[0] == "getextratimeuser") {
-        $partsdic = explode("%", $split_data[1]);
-        $usernamepanel = $partsdic[0];
-        $time = $partsdic[1];
+    } elseif ($service_order && $service_order['type'] == "extra_time_user") {
+        $usernamepanel = $service_order['username'];
+        $time = $service_value['day'];
         $textsendrasid = sprintf($textbotlang['Admin']['reportgroup']['newPaymentExtraTime2'], $usernamepanel, $time, $first_name, $from_id, $from_id, $format_balance, $PaymentReport['id_order'], $username, $format_price_cart);
         sendmessage($from_id, $textbotlang['users']['Balance']['receiptSentExtraTime'], $keyboard, 'HTML');
     } else {
