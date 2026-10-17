@@ -819,7 +819,7 @@ function createPayiranpay4($price, $order_id)
     return json_decode($response, true) ?: ['success' => false, 'message' => 'iranpay4: bad response'];
 }
 
-function trnado($order_id, $price)
+function cubepay($order_id, $price, $customer_user_id)
 {
     global $domainhosts;
     $token_cubepay = select("PaySetting", "*", "NamePay", "apiternado", "select")['ValuePay'];
@@ -844,6 +844,7 @@ function trnado($order_id, $price)
         'order_id' => $order_id,
         'callback_url' => "https://$domainhosts/payment/iranpay2.php",
         'redirect_after_payment' => false,
+        'customer_user_id' => (string) $customer_user_id,
     ], JSON_UNESCAPED_UNICODE));
 
     $response = curl_exec($curl);
