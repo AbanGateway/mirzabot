@@ -28,6 +28,16 @@ $dataBase = select("botsaz", "*", "bot_token", $ApiToken, "select");
 $agentWebhookSecret = ensureAgentWebhookSecret($dataBase);
 if (!$agentWebhookSecret['created'] && $agentWebhookSecret['secret'] !== '' && !webhookSecretMatches($agentWebhookSecret['secret']))
     die("Unauthorized access");
+if (intval($from_id) != 0) {
+    $userLock = $pdo->prepare("SELECT GET_LOCK(?, 0)");
+    $userLock->execute(["mirza_user_" . $from_id]);
+    if ((int) $userLock->fetchColumn() !== 1) {
+        if ($callback_query_id) {
+            telegram('answerCallbackQuery', ['callback_query_id' => $callback_query_id]);
+        }
+        return;
+    }
+}
 $admin_ids = json_decode($dataBase['admin_ids']);
 $setting = json_decode($dataBase['setting'], true);
 if (!empty($setting['channel'])) {
@@ -600,7 +610,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     if (($locationproduct)->rowCount() == 1) {
         $location = ($locationproduct)->fetch(PDO::FETCH_ASSOC)['name_panel'];
         $locationproduct = select("marzban_panel", "*", "name_panel", $location, "select");
-        $query = "SELECT * FROM product WHERE (Location = '{$locationproduct['name_panel']}' OR Location = '/all')AND agent= '{$userbot['agent']}'";
+        $query = "SELECT * FROM product WHERE (Location = '{$locationproduct['name_panel']}' OR Location = '/all')AND agent= '{$userbot['agent']}' AND status_product != 'disable'";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         $productnotexits = $stmt->rowCount();
@@ -703,7 +713,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
             return;
         }
     }
-    $query = "SELECT * FROM product WHERE (Location = '{$locationproduct['name_panel']}' OR Location = '/all')AND agent= '{$userbot['agent']}'";
+    $query = "SELECT * FROM product WHERE (Location = '{$locationproduct['name_panel']}' OR Location = '/all')AND agent= '{$userbot['agent']}' AND status_product != 'disable'";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $productnotexits = $stmt->rowCount();
@@ -750,7 +760,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     $categorynames = select("category", "remark", "id", $categorynames, "select")['remark'];
     $userdate = json_decode($user['Processing_value'], true);
     $locationproduct = select("marzban_panel", "*", "name_panel", $userdate['name_panel'], "seelct");
-    $query = "SELECT * FROM product WHERE (Location = '{$locationproduct['name_panel']}' OR Location = '/all') AND category = '$categorynames' AND agent= '{$userbot['agent']}' ";
+    $query = "SELECT * FROM product WHERE (Location = '{$locationproduct['name_panel']}' OR Location = '/all') AND category = '$categorynames' AND agent= '{$userbot['agent']}' AND status_product != 'disable'";
     $statuscustomvolume = json_decode($locationproduct['customvolume'], true)[$userbot['agent']];
     if ($statuscustomvolume == "1" && $locationproduct['type'] != "Manualsale") {
         $statuscustom = true;
@@ -859,7 +869,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     }
     if (!in_array($user['step'], ["endstepuserscustom", "getvolumecustomuser"])) {
         $product = select("product", "*", "code_product", $code_product);
-        if ($product == false) {
+        if ($product == false || ($product['status_product'] ?? '') == "disable") {
             sendmessage($from_id, "❌ خطایی در هنگام خرید رخ داده لطفا مراحل را از اول طی کنید", $keyboard, 'html');
             step("home", $from_id);
             return;
@@ -949,7 +959,7 @@ if ($text == $text_bot_var['btn_keyboard']['buy'] && $setting['active_step_note'
     if (isset($userdate['code_product'])) {
         $product = $userdate['code_product'];
         $product = select("product", "*", "code_product", $product);
-        if ($product == false || ($product['Location'] != $marzban_list_get['name_panel'] && $product['Location'] != "/all")) {
+        if ($product == false || ($product['status_product'] ?? '') == "disable" || ($product['Location'] != $marzban_list_get['name_panel'] && $product['Location'] != "/all")) {
             sendmessage($from_id, "❌ خطایی رخ داده است مراحل خرید را از اول انجام دهید", $keyboard, 'html');
             step("home", $from_id);
             return;

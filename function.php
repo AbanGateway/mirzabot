@@ -1380,6 +1380,9 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $type = "extra_user";
         $extra_volume = $ManagePanel->extra_volume($nameloc['username'], $marzban_list_get['code_panel'], $volume);
         if ($extra_volume['status'] == false) {
+            $balance = $Balance_id['Balance'] + $Payment_report['price'];
+            update("user", "Balance", $balance, "id", $Balance_id['id']);
+            sendmessage($Balance_id['id'], sprintf($textbotlang['users']['Balance']['addedNotice5'], number_format($Payment_report['price'])), null, 'HTML');
             $extra_volume['msg'] = json_encode($extra_volume['msg']);
             $textreports = sprintf($textbotlang['Admin']['reportgroup']['errorExtraVolumeFn'], $marzban_list_get['name_panel'], $nameloc['username'], $extra_volume['msg']);
             sendmessage($nameloc['id_user'], $textbotlang['users']['extraVolume']['serviceError'], null, 'HTML');
@@ -1441,7 +1444,7 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $nameloc = select("invoice", "*", "username", $steppay[0], "select");
         $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
         $Balance_Low_user = 0;
-        update("user", "Balance", $Balance_Low_user, "id", $nameloc['id_user']);
+        update("user", "Balance", $Balance_Low_user, "id", $Balance_id['id']);
         $DataUserOut = $ManagePanel->DataUser($nameloc['Service_location'], $steppay[0]);
         $data_for_database = json_encode(array(
             'day' => $tmieextra,
@@ -1452,9 +1455,12 @@ function DirectPayment($order_id, $image = 'images.jpg')
         $type = "extra_time_user";
         $extra_time = $ManagePanel->extra_time($nameloc['username'], $marzban_list_get['code_panel'], $tmieextra);
         if ($extra_time['status'] == false) {
+            $balance = $Balance_id['Balance'] + $Payment_report['price'];
+            update("user", "Balance", $balance, "id", $Balance_id['id']);
+            sendmessage($Balance_id['id'], sprintf($textbotlang['users']['Balance']['addedNotice5'], number_format($Payment_report['price'])), null, 'HTML');
             $extra_time['msg'] = json_encode($extra_time['msg']);
             $textreports = sprintf($textbotlang['Admin']['reportgroup']['errorExtraTimeFn'], $marzban_list_get['name_panel'], $nameloc['username'], $extra_time['msg']);
-            sendmessage($from_id, $textbotlang['users']['extraVolume']['serviceError'], null, 'HTML');
+            sendmessage($Balance_id['id'], $textbotlang['users']['extraVolume']['serviceError'], null, 'HTML');
             if (strlen($setting['Channel_Report']) > 0) {
                 telegram('sendmessage', [
                     'chat_id' => $setting['Channel_Report'],
@@ -1957,7 +1963,7 @@ function verifpay($id)
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://pay.melorinabeauty.ir/api/factor/status?id=' . $id,
+        CURLOPT_URL => 'https://pay.melorinabeauty.com/api/factor/status?id=' . $id,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,

@@ -54,6 +54,14 @@ if (is_array($keyboard_check) && preg_match('/[\x{600}-\x{6FF}\x{FB50}-\x{FDFF}]
 
 if (intval($from_id) == 0)
     return;
+$userLock = $pdo->prepare("SELECT GET_LOCK(?, 0)");
+$userLock->execute(["mirza_user_" . $from_id]);
+if ((int) $userLock->fetchColumn() !== 1) {
+    if ($callback_query_id) {
+        telegram('answerCallbackQuery', ['callback_query_id' => $callback_query_id]);
+    }
+    return;
+}
 #-------------Variable----------#
 $otherreport = select("topicid", "idreport", "report", "otherreport", "select")['idreport'];
 if ($setting['statusnewuser'] == "onnewuser" && !rowExists("user", "id", $from_id)) {
@@ -1589,7 +1597,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         $product['Volume_constraint'] = $userdate['volume'];
         step("home", $from_id);
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :service_location OR Location = '/all') AND agent = :agent AND code_product = :code_product");
+        $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :service_location OR Location = '/all') AND agent = :agent AND code_product = :code_product AND one_buy_status = '0'");
         $stmt->execute([
             ':service_location' => $nameloc['Service_location'],
             ':agent' => $user['agent'],
@@ -1742,7 +1750,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         $prodcut['Volume_constraint'] = $userdata['data_limit'];
         $prodcut['inbounds'] = $marzban_list_get['inboundid'];
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :service_location OR Location = '/all') AND agent = :agent AND code_product = :code_product");
+        $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :service_location OR Location = '/all') AND agent = :agent AND code_product = :code_product AND one_buy_status = '0'");
         $stmt->execute([
             ':service_location' => $nameloc['Service_location'],
             ':agent' => $user['agent'],
@@ -1756,10 +1764,19 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         return;
     }
     if ($datain == "confirmserdiscount") {
-        $SellDiscountlimit = select("DiscountSell", "*", "codeDiscount", $partsdic[1], "select");
-        if ($SellDiscountlimit != false) {
-            $pricelastextend = $partsdic[2];
+        $stmt = $pdo->prepare("SELECT * FROM DiscountSell WHERE (code_product = :code_product OR code_product = 'all') AND (code_panel = :code_panel OR code_panel = '/all') AND codeDiscount = :codeDiscount AND (agent = :agent OR agent = 'allusers') AND (type = 'all' OR type = 'extend')");
+        $stmt->execute([
+            ':code_product' => $userdata['code_product'],
+            ':code_panel' => $marzban_list_get['code_panel'],
+            ':codeDiscount' => $partsdic[1],
+            ':agent' => $user['agent']
+        ]);
+        $SellDiscountlimit = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($SellDiscountlimit == false || (intval($SellDiscountlimit['time']) != 0 && time() >= intval($SellDiscountlimit['time'])) || $SellDiscountlimit['limitDiscount'] <= $SellDiscountlimit['usedDiscount']) {
+            sendmessage($from_id, $textbotlang['users']['Discount']['notAllowed'], null, 'HTML');
+            return;
         }
+        $pricelastextend = max(0, round($pricelastextend - ($SellDiscountlimit['price'] / 100) * $pricelastextend));
     }
     if (intval($user['pricediscount']) != 0) {
         $result = ($pricelastextend * $user['pricediscount']) / 100;
@@ -2227,7 +2244,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $Pricechange = $marzban_list_get_new['priceChangeloc'];
     if ($nameloc['name_product'] == $textbotlang['users']['customSellVolume']['btnVolume'] || $nameloc['name_product'] == $textbotlang['users']['customSellVolume']['btnService']) {
         $prodcut['code_product'] = $textbotlang['users']['customSellVolume']['btnVolume'];
-        $product['inbounds'] = null;
+        $prodcut['inbounds'] = null;
     } else {
         $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :service_location OR Location = '/all') AND agent= :agent AND name_product = :name_product");
         $stmt->execute([
@@ -2237,7 +2254,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         ]);
         $prodcut = $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    if ($product['inbounds'] != null) {
+    if (!empty($prodcut['inbounds'])) {
         $marzban_list_get_new['inboundid'] = $prodcut['inbounds'];
     }
     if ($marzban_list_get_new['type'] == "Manualsale" && $marzban_list_get['url_panel'] == $marzban_list_get_new['url_panel']) {
@@ -2313,7 +2330,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $stmt = $pdo->prepare("INSERT IGNORE INTO service_other (id_user, username,value,type,time,price) VALUES (?, ?, ?, ?,?,?)");
     $dateacc = date('Y/m/d H:i:s');
     $type = "change_location";
-    $stmt->execute([$from_id, $nameloc['username'], $value, $type, $dateacc, $prodcut['price_product']]);
+    $stmt->execute([$from_id, $nameloc['username'], $value, $type, $dateacc, $Pricechange]);
     if ($DataUserOut['data_limit'] == 0 || $DataUserOut['data_limit'] == null) {
         $data_limit = 0;
     } else {
@@ -2641,7 +2658,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $DataUserOut = $ManagePanel->DataUser($nameloc['Service_location'], $nameloc['username']);
     $data_for_database = json_encode(array(
         'day' => $extratimeday,
-        'priceـper_day' => $extratimeday,
+        'priceـper_day' => $extratimepricevalue,
         'old_volume' => $DataUserOut['data_limit'],
         'expire_old' => $DataUserOut['expire']
     ));
@@ -2761,6 +2778,9 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     }
     $id_invoice = $dataget[1];
     $nameloc = select("invoice", "*", "id_invoice", $id_invoice, "select");
+    if (!invoiceBelongsToUser($nameloc, $from_id)) {
+        return;
+    }
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $nameloc['Service_location'], "select");
     $stmt = $pdo->prepare("INSERT IGNORE INTO cancel_service (id_user, username,description,status) VALUES (?, ?, ?, ?)");
     $descriptions = "0";
@@ -3865,22 +3885,39 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         $info_product['price_product'] = ($parts[2] * $custompricevalue) + ($parts[1] * $customtimevalueprice);
         $info_product['data_limit_reset'] = "no_reset";
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM product WHERE code_product = :code_product AND (Location = :location OR Location = '/all') LIMIT 1");
+        $stmt = $pdo->prepare("SELECT * FROM product WHERE code_product = :code_product AND (Location = :location OR Location = '/all') AND agent = :agent AND status_product != 'disable' LIMIT 1");
         $stmt->execute([
             ':code_product' => $user['Processing_value_one'],
-            ':location' => $userdate['name_panel']
+            ':location' => $userdate['name_panel'],
+            ':agent' => $user['agent']
         ]);
         $info_product = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (($info_product['one_buy_status'] ?? '0') == "1") {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM invoice WHERE Status != 'Unpaid' AND id_user = ?");
+            $stmt->execute([$from_id]);
+            if ((int) $stmt->fetchColumn() != 0) {
+                $info_product = false;
+            }
+        }
     }
-    if (!isset($info_product['price_product']))
+    if (!isset($info_product['price_product'])) {
+        sendmessage($from_id, $textbotlang['users']['sell']['productNotFound'], null, 'HTML');
         return;
+    }
     if ($datain == "confirmandgetserviceDiscount") {
-        $discountcode = select("DiscountSell", "*", "codeDiscount", $partsdic[0], "count");
-        if ($discountcode == 0) {
+        $stmt = $pdo->prepare("SELECT * FROM DiscountSell WHERE (code_product = :code_product OR code_product = 'all') AND (code_panel = :code_panel OR code_panel = '/all') AND codeDiscount = :codeDiscount AND (agent = :agent OR agent = 'allusers') AND (type = 'all' OR type = 'buy')");
+        $stmt->execute([
+            ':code_product' => $info_product['code_product'],
+            ':code_panel' => $marzban_list_get['code_panel'],
+            ':codeDiscount' => $partsdic[0],
+            ':agent' => $user['agent']
+        ]);
+        $discountcode = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($discountcode == false || (intval($discountcode['time']) != 0 && time() >= intval($discountcode['time'])) || $discountcode['limitDiscount'] <= $discountcode['usedDiscount']) {
             sendmessage($from_id, $textbotlang['users']['Discount']['notAllowed'], null, 'HTML');
             return;
         }
-        $priceproduct = $partsdic[1];
+        $priceproduct = max(0, round($info_product['price_product'] - ($discountcode['price'] / 100) * $info_product['price_product']));
     } else {
         $priceproduct = $info_product['price_product'];
     }
@@ -4448,9 +4485,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         $info_product['price_product'] = ($parts[2] * $custompricevalue) + ($parts[1] * $customtimevalueprice);
         $info_product['data_limit_reset'] = "no_reset";
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM product WHERE code_product = :code_product AND (Location = :location OR Location = '/all') LIMIT 1");
+        $stmt = $pdo->prepare("SELECT * FROM product WHERE code_product = :code_product AND (Location = :location OR Location = '/all') AND agent = :agent AND status_product != 'disable' AND one_buy_status = '0' LIMIT 1");
         $stmt->bindValue(':code_product', $user['Processing_value_one'], PDO::PARAM_STR);
         $stmt->bindValue(':location', $user['Processing_value'], PDO::PARAM_STR);
+        $stmt->bindValue(':agent', $user['agent'], PDO::PARAM_STR);
         $stmt->execute();
         $info_product = $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -6556,7 +6594,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     if ($Payment_report == false) {
         return;
     }
-    if ($Payment_report['payment_Status'] == "paid") {
+    if (!claimPaymentPaid($Payment_report['id_order'])) {
         return;
     }
     update("Payment_report", "dec_not_confirmed", $Payment_report['dec_not_confirmed'] . json_encode($update['message']['successful_payment']), "id_order", $Payment_report['id_order']);
@@ -6574,11 +6612,10 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
         telegram('sendmessage', [
             'chat_id' => $setting['Channel_Report'],
             'message_thread_id' => $paymentreports,
-            'text' => sprintf($textbotlang['Admin']['reportgroup']['newPaymentStar'], $Balance_id['username'], $Balance_id['id'], $Payment_report['price'], $update['pre_checkout_query']['total_amount']),
+            'text' => sprintf($textbotlang['Admin']['reportgroup']['newPaymentStar'], $Balance_id['username'], $Balance_id['id'], $Payment_report['price'], $update['message']['successful_payment']['total_amount']),
             'parse_mode' => "HTML"
         ]);
     }
-    update("Payment_report", "payment_Status", "paid", "id_order", $Payment_report['id_order']);
 } elseif (preg_match('/extends_(\w+)_(.*)/', $datain, $dataget)) {
     $username = $dataget[1];
     $location = select("marzban_panel", "*", "code_panel", $user['Processing_value_four'], "select");
@@ -6612,7 +6649,7 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     deletemessage($from_id, $message_id);
     $codeproduct = $dataget[1];
     $username = $dataget[2];
-    $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :processing_value OR Location = '/all') AND agent = :agent AND code_product = :code_product");
+    $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :processing_value OR Location = '/all') AND agent = :agent AND code_product = :code_product AND one_buy_status = '0'");
     $stmt->execute([
         ':processing_value' => $user['Processing_value'],
         ':agent' => $user['agent'],
@@ -6635,13 +6672,17 @@ if ($text == "/start" || $datain == "start" || $text == "start") {
     $codeproduct = $dataget[1];
     $usernamePanelExtends = $dataget[2];
     deletemessage($from_id, $message_id);
-    $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :processing_value OR Location = '/all') AND agent = :agent AND code_product = :code_product");
+    $stmt = $pdo->prepare("SELECT * FROM product WHERE (Location = :processing_value OR Location = '/all') AND agent = :agent AND code_product = :code_product AND one_buy_status = '0'");
     $stmt->execute([
         ':processing_value' => $user['Processing_value'],
         ':agent' => $user['agent'],
         ':code_product' => $codeproduct,
     ]);
     $prodcut = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($prodcut == false) {
+        sendmessage($from_id, $textbotlang['users']['extend']['renewalerror'], $keyboard, 'HTML');
+        return;
+    }
     $marzban_list_get = select("marzban_panel", "*", "name_panel", $user['Processing_value'], "select");
     $DataUserOut = $ManagePanel->DataUser($marzban_list_get['name_panel'], $usernamePanelExtends);
     if ($DataUserOut['status'] == "Unsuccessful") {
