@@ -2372,6 +2372,8 @@ f,n.n2',
                         'reportCron' => '📝 通知报告',
                         'reportNight' => '🌙 夜间报告',
                         'btnDontShowAgain' => '不再显示 ⛓️‍💥',
+                        'btnDonate' => '💖 支持（捐赠）',
+                        'adminMenuHint' => '👇 管理菜单',
                         'msgHidden' => '
 
 ✅ 此消息将不再向您显示。',
@@ -2396,18 +2398,6 @@ f,n.n2',
 7 - 将删除已过期的付款
 8 - 将删除超过 7 天的 API 日志
 9 - 将优化数据库表',
-                        'botReportIntro' => '💬 | 机器人反馈
-
-🔹 | 如果您在机器人运行中遇到<b>错误或问题</b>，请将其报告给我们以便审核。
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | 如果您遇到<b>严重错误</b>或异常行为，请尽快报告以便修复。
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | 如果您有<b>添加新功能</b>的建议或改进机器人性能的想法，我们很乐意听取。
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | 此外，如果您需要<b>指导</b>或帮助，可以通过私信联系客服团队。
-
-📩 | 要发送报告、建议或请求指导，请在 <b>Mirza 群组</b>中留言：
-<a href="https://t.me/mirzapanelgroup" rel="nofollow" target="_blank">Mirza Group</a>',
                         'aboutBot' => '💎 | Version Bot: %s
 📌 | Version Mini App: 0.1.1
 
@@ -2417,7 +2407,7 @@ f,n.n2',
 
 <blockquote>🔹 | 如果您发现任何出售或收费行为，请追踪并追回您的款项。</blockquote>
 
-<blockquote>🐞 | 如果您在机器人运行中遇到错误或问题，请通过管理面板中的 **📬 机器人反馈** 按钮联系我们。</blockquote>',
+<blockquote>🐞 | 如需报告问题，请在 <a href="https://t.me/mirzapanel?direct">Mirza 频道私信</a> 中留言。</blockquote>',
                         'gatewayRow' => '
 📌 网关名称：<code>%s</code>
  - 成功支付次数：<code>%s</code>
@@ -3800,7 +3790,6 @@ f,n.n2',
                 'backupError' => '❌❌❌❌❌❌ 备份出错 ',
                 'baseTimePrice' => '⏳ 时间基础价格',
                 'baseVolumePrice' => '🔋 流量基础价格',
-                'botReport' => '📬 机器人反馈',
                 'botReports' => '📣 机器人反馈',
                 'both' => '两者',
                 'broadcastForward' => '群发转发',
@@ -4554,6 +4543,13 @@ f,n.n2',
                 'settingsPasswordMinLength' => '密码必须至少 6 个字符。',
                 'settingsPasswordStrengthLabel' => '更改密码',
                 'settingsPhpMemory' => 'PHP 内存',
+                'settingsReportIssue' => '报告问题',
+                'settingsReportIssueLink' => 'Mirza 频道私信',
+                'settingsDonate' => '支持',
+                'settingsDonateLink' => '捐赠',
+                'donatePopupTitle' => '💖 支持 Mirza',
+                'donatePopupText' => '本机器人和面板是免费开发的。如果它们对您有帮助，一笔小额捐赠将有助于持续开发和支持。',
+                'donatePopupLater' => '稍后',
                 'settingsSaveBtn' => '当前密码',
                 'settingsSecuritySection' => '开启',
                 'settingsServerTime' => '服务器时间',

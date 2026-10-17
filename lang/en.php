@@ -2372,6 +2372,8 @@ Current amount: %s',
                         'reportCron' => '📝 Notification reports',
                         'reportNight' => '🌙 Nightly report',
                         'btnDontShowAgain' => 'Don\'t show again ⛓️‍💥',
+                        'btnDonate' => '💖 Support (donate)',
+                        'adminMenuHint' => '👇 Admin menu',
                         'msgHidden' => '
 
 ✅ This message will no longer be shown to you.',
@@ -2396,18 +2398,6 @@ Current amount: %s',
 7 - Expired payments will be deleted
 8 - API logs older than 7 days will be deleted
 9 - Database tables will be optimized',
-                        'botReportIntro' => '💬 | Bot report
-
-🔹 | If you encounter a <b>bug or problem</b> in the bot\'s operation, please report it to us for review.
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | If you encounter a <b>serious bug</b> or abnormal behavior, report it faster so it can be fixed.
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | If you have a suggestion for <b>adding a new feature</b> or an idea to improve the bot\'s performance, we\'d be happy to hear it.
-➖➖➖➖➖➖➖➖➖➖➖
-🔹 | Also, if you need <b>guidance</b> or help, you can contact the support team via direct message.
-
-📩 | To send a report, suggestion, or request for guidance, leave a message in the <b>Mirza group</b>:
-<a href="https://t.me/mirzapanelgroup" rel="nofollow" target="_blank">Mirza Group</a>',
                         'aboutBot' => '💎 | Version Bot: %s
 📌 | Version Mini App: 0.1.1
 
@@ -2417,7 +2407,7 @@ Current amount: %s',
 
 <blockquote>🔹 | If you see any sale or charging of money, please track and reclaim your money.</blockquote>
 
-<blockquote>🐞 | If you encounter a bug or problem in the bot\'s operation, contact us via the **📬 Bot report** button in the admin panel.</blockquote>',
+<blockquote>🐞 | To report a problem, message the <a href="https://t.me/mirzapanel?direct">Mirza channel direct</a>.</blockquote>',
                         'gatewayRow' => '
 📌 Gateway name: <code>%s</code>
  - Number of successful payments: <code>%s</code>
@@ -3800,7 +3790,6 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'backupError' => '❌❌❌❌❌❌ Error in backup ',
                 'baseTimePrice' => '⏳ Base time price',
                 'baseVolumePrice' => '🔋 Base volume price',
-                'botReport' => '📬 Bot report',
                 'botReports' => '📣 Bot reports',
                 'both' => 'Both',
                 'broadcastForward' => 'Broadcast forward',
@@ -4554,6 +4543,13 @@ We hope you had a good experience with the ease and speed of your service. If yo
                 'settingsPasswordMinLength' => 'The password must be at least 6 characters.',
                 'settingsPasswordStrengthLabel' => 'Change password',
                 'settingsPhpMemory' => 'PHP memory',
+                'settingsReportIssue' => 'Report a problem',
+                'settingsReportIssueLink' => 'Mirza channel direct',
+                'settingsDonate' => 'Support',
+                'settingsDonateLink' => 'Donate',
+                'donatePopupTitle' => '💖 Support Mirza',
+                'donatePopupText' => 'This bot and panel are developed for free. If you find them useful, a small donation helps keep development and support going.',
+                'donatePopupLater' => 'Later',
                 'settingsSaveBtn' => 'Current password',
                 'settingsSecuritySection' => 'On',
                 'settingsServerTime' => 'Server time',

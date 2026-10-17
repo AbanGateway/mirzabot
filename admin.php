@@ -3,6 +3,7 @@
 $version = file_get_contents('version');
 $textadmin = ["panel", "/panel", $textbotlang['Admin']['panelAdmin']];
 $text_panel_admin_login_template = sprintf($textbotlang['Admin']['report']['aboutBot'], $version);
+$aboutBotKeyboard = json_encode(['inline_keyboard' => [[['text' => $textbotlang['Admin']['report']['btnDonate'], 'url' => 'https://nowpayments.io/donation/mahdi']]]]);
 
 if (!in_array($from_id, $admin_ids))
     return;
@@ -130,7 +131,8 @@ if ($datain == "paygwback") {
     $version_mini_app = file_get_contents('app/version');
     activecron();
     $text_admin = sprintf($text_panel_admin_login_template, $version, $version_mini_app);
-    sendmessage($from_id, $text_admin, $keyboardadmin, 'HTML');
+    sendmessage($from_id, $textbotlang['Admin']['report']['adminMenuHint'], $keyboardadmin, 'HTML');
+    sendmessage($from_id, $text_admin, $aboutBotKeyboard, 'HTML');
     $miniAppInstructionHidden = isset($user['hide_mini_app_instruction']) ? (string) $user['hide_mini_app_instruction'] : '0';
     if ($miniAppInstructionHidden !== '1') {
         $miniAppInstructionKeyboard = json_encode([
@@ -149,7 +151,8 @@ if ($datain == "paygwback") {
     }
     $version_mini_app = file_get_contents('app/version');
     $text_admin = sprintf($text_panel_admin_login_template, $version, $version_mini_app);
-    sendmessage($from_id, $text_admin, $keyboardadmin, 'HTML');
+    sendmessage($from_id, $textbotlang['Admin']['report']['adminMenuHint'], $keyboardadmin, 'HTML');
+    sendmessage($from_id, $text_admin, $aboutBotKeyboard, 'HTML');
     step('home', $from_id);
     return;
 } elseif ($datain == "hide_mini_app_instruction") {
@@ -5507,10 +5510,6 @@ if ($datain == "settimecornremove" && $adminrulecheck['rule'] == "administrator"
     }
     update("user", "Processing_value", $userdata['idpanel'], "id", $from_id);
     step("home", $from_id);
-} elseif ($text == $textbotlang['keyboard']['botReport'] && $adminrulecheck['rule'] == "administrator") {
-    $textupdate = $textbotlang['Admin']['report']['botReportIntro'];
-    sendmessage($from_id, $textupdate, null, 'HTML');
-    step('home', $from_id);
 } elseif ($text == $textbotlang['keyboard']['manageNodes'] || $datain == "bakcnode") {
     if ($adminnumber != $from_id) {
         sendmessage($from_id, $textbotlang['Admin']['mainAdminOnly'], null, 'HTML');

@@ -156,7 +156,6 @@ if ($adminrulecheck['rule'] == "administrator") {
             [['text' => $textbotlang['Admin']['btnKeyboard']['manageUser']], ['text' => $textbotlang['keyboard']['shopSettings']]],
             [['text' => $textbotlang['keyboard']['financial']], ['text' => $textbotlang['keyboard']['cronStatus']]],
             [['text' => $textbotlang['keyboard']['supportSection']], ['text' => $textbotlang['keyboard']['educationSection']]],
-            [['text' => $textbotlang['keyboard']['botReport']]],
             [['text' => $textbotlang['keyboard']['generalSettings']], ['text' => $textbotlang['keyboard']['pendingReceipts']]],
             [['text' => $textbotlang['bottext']['open_button']]],
             [['text' => $textbotlang['users']['backbtn']]]
